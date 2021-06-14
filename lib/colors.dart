@@ -29,7 +29,3 @@ Map<int, Color> secondaryColorMap = {
   800: Color.fromRGBO(174,174,178, .9),
   900: Color.fromRGBO(174,174,178, 1),
 };
-
-
-
-
