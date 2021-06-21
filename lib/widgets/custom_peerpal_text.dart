@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class CustomPeerPALText extends StatelessWidget {
-  String text = "";
-  double fontSize;
-  FontWeight fontWeight;
-  Color color;
-  TextAlign textAlign;
+  final String? text;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final Color? color;
+  final TextAlign? textAlign;
 
 
   CustomPeerPALText({this.text, this.fontSize, this.color, this.fontWeight, this.textAlign});
@@ -15,7 +14,7 @@ class CustomPeerPALText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       style: TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight, fontFamily: "CustomPeerPalFontFamily"),
       textAlign: textAlign,
     );
