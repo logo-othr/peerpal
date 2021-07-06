@@ -38,9 +38,7 @@ class AuthenticationRepository {
   }
 
   AppUser get currentUser {
-    return _firebaseAuth.currentUser == null
-        ? AppUser.empty
-        : _getUserFromFirebaseUser()!;
+    return _getUserFromFirebaseUser();
   }
 
   Future<void> signUp({required String email, required String password}) async {
@@ -132,7 +130,7 @@ class AuthenticationRepository {
   AppUser _getUserFromFirebaseUser() {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
     return (firebaseUser == null
-        ? null
+        ? AppUser.empty
         : AppUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 }
