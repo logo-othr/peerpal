@@ -1,6 +1,8 @@
 name: peerpal
 description: The PeerPAL Project
 
+uses-material-design: true
+
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none'
@@ -24,6 +26,8 @@ dependencies:
   cloud_firestore: ^2.2.2
   firebase_storage: ^8.1.3
   email_validator: ^2.0.1
+  very_good_analysis: ^2.1.0
+  zxcvbn: ^1.0.0
 
 dev_dependencies:
   flutter_test:
