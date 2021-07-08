@@ -95,7 +95,6 @@ class AgeSelectionForm extends StatelessWidget {
                       context
                           .flow<AppUser>()
                           .update((s) => s.copyWith(age: selectedAge));
-                      var appUser = context.flow<AppUser>().state;
                     },
                   );
                 }
