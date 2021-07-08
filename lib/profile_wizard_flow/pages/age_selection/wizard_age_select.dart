@@ -82,21 +82,20 @@ class AgeSelectionForm extends StatelessWidget {
             BlocBuilder<AgeSelectionCubit, AgeSelectionState>(
               builder: (context, state) {
                 if (state is AgeSelectionPosting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else {
                   return CustomPeerPALButton(
-                    text: "Weiter",
+                    text: 'Weiter',
                     onPressed: () async {
                       await context
                           .read<AgeSelectionCubit>()
                           .postAge(state.selectedAge);
 
-                      int selectedAge = state.selectedAge;
+                      var selectedAge = state.selectedAge;
                       context
                           .flow<AppUser>()
                           .update((s) => s.copyWith(age: selectedAge));
-                      AppUser appUser = context.flow<AppUser>().state;
-                      print(appUser.age);
+                      var appUser = context.flow<AppUser>().state;
                     },
                   );
                 }
