@@ -43,42 +43,41 @@ class AgeSelectionForm extends StatelessWidget {
           children: [
             BlocBuilder<AgeSelectionCubit, AgeSelectionState>(
                 builder: (context, state) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          const SizedBox(
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(
                         height: 40,
                       ),
-                          CustomPeerPALHeading1("Willkommen bei PeerPAL"),
-                          const SizedBox(
+                      CustomPeerPALHeading1('Willkommen bei PeerPAL'),
+                      const SizedBox(
                         height: 40,
                       ),
-                          Container(
-                            height: 100,
-                            width: 100,
-                            //   decoration: peerpalLogo,
-                          ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          CustomPeerPALHeading1("Wie alt bist du?"),
-                          AgePicker(
-                            hint: const Text('Alter auswählen'),
-                            items: state.ages.map((el) => el.toString()).toList(),
-                            value: state.selectedAge,
-                            onChanged: (value) =>
-                                context.read<AgeSelectionCubit>().ageSelected(
+                      const SizedBox(
+                        height: 100,
+                        width: 100,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      CustomPeerPALHeading1('Wie alt bist du?'),
+                      AgePicker(
+                        hint: const Text('Alter auswählen'),
+                        items: state.ages.map((el) => el.toString()).toList(),
+                        value: state.selectedAge,
+                        onChanged: (value) =>
+                            context.read<AgeSelectionCubit>().ageSelected(
                                   (state.ages[value!]),
                                 ),
-                          ),
-                        ],
                       ),
-                    ),
-                  );
-                }),
+                    ],
+                  ),
+                ),
+              );
+            }),
             Spacer(),
             BlocBuilder<AgeSelectionCubit, AgeSelectionState>(
               builder: (context, state) {
