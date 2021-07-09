@@ -67,17 +67,19 @@ class LoginCubit extends Cubit<LoginState> {
    * ToDo: Move to repository
    */
   bool _isLoginLocked() {
-    const int maxLoginAttempts = 3;
+    const maxLoginAttempts = 3;
     if (state.loginCounter > maxLoginAttempts) {
-      const int syntheticDelay = maxLoginAttempts * 60 * 1000;
-      final int timeSinceLastLoginAttempt =
+      const syntheticDelay = maxLoginAttempts * 60 * 1000;
+      final timeSinceLastLoginAttempt =
           DateTime.now().millisecondsSinceEpoch - state.lastAttempt;
       if (timeSinceLastLoginAttempt >= syntheticDelay) {
         emit(state.copyWith(loginCounter: 0));
         return false;
-      } else
+      } else {
         return true;
-    } else
+      }
+    } else {
       return false;
+    }
   }
 }
