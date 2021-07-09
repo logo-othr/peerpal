@@ -11,14 +11,14 @@ class SignUpFailure implements Exception {
   final String message;
 }
 
-class LoginFailure implements Exception {
-  LoginFailure({this.message = 'Fehler beim Login.'});
+class LoginException implements Exception {
+  LoginException({this.message = 'Fehler beim Login.'});
 
   final String message;
 }
 
-class LogoutFailure implements Exception {
-  LogoutFailure({this.message = 'Fehler beim Ausloggen.'});
+class LogoutException implements Exception {
+  LogoutException({this.message = 'Fehler beim Ausloggen.'});
 
   final String message;
 }
@@ -85,23 +85,23 @@ class AuthenticationRepository {
       switch (e.code) {
         case 'wrong-password':
         case 'user-not-found':
-          throw LoginFailure(
+        throw LoginException(
               message:
                   'Falsches Passwort oder die der Nutzer existiert nicht.');
         case 'user-disabled':
-          throw LoginFailure(message: 'Der Account wurde deaktiviert.');
+          throw LoginException(message: 'Der Account wurde deaktiviert.');
         case 'invalid-email':
-          throw LoginFailure(message: 'Die E-Mail ist ungültig.');
+          throw LoginException(message: 'Die E-Mail ist ungültig.');
         case 'too-many-requests':
-          throw LoginFailure(
+          throw LoginException(
               message:
                   'Der Server ist ausgelastet. Bitte versuche es später oder '
                   "morgen noch einmal.");
         default:
-          throw LoginFailure();
+          throw LoginException();
       }
     } on Exception {
-      throw LoginFailure();
+      throw LoginException();
     }
   }
 
@@ -111,7 +111,7 @@ class AuthenticationRepository {
         _firebaseAuth.signOut(),
       ]);
     } on Exception {
-      throw LogoutFailure();
+      throw LogoutException();
     }
   }
 
