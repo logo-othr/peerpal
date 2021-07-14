@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logger/logger.dart';
+import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/app_user.dart';
 
 class SignUpFailure implements Exception {
@@ -23,8 +25,8 @@ class LogoutException implements Exception {
   final String message;
 }
 
-class AuthenticationRepository {
-  AuthenticationRepository({
+class AppUserRepository {
+  AppUserRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
@@ -115,16 +117,41 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> updateAge(int selectedAge) async {
-    return _firestore.collection('users').doc(currentUser.id).set({
-      'age': selectedAge,
-    }, SetOptions(merge: true));
-  }
+  Future<void> updateUser(AppUser user) async {
+    Logger().i('Update user in firebase');
+    if (user == currentUser) return;
 
-  Future<void> updateName(int selectedAge) async {
-    return _firestore.collection('users').doc(currentUser.id).set({
-      'age': selectedAge,
-    }, SetOptions(merge: true));
+    var userCollection =
+        _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
+
+    // ToDo: Check if this optimization reduces fb writes and if not remove it
+    if (user.age != currentUser.age) {
+      Logger().i('Update age @ Firebase for user id ${currentUser.id}');
+      await userCollection.set({
+        UserDatabaseContract.userAge: user.age,
+      }, SetOptions(merge: true));
+    }
+
+    if (user.name != currentUser.name) {
+      Logger().i('Update name @ Firebase for user id ${currentUser.id}');
+      await userCollection.set({
+        UserDatabaseContract.userName: user.name,
+      }, SetOptions(merge: true));
+    }
+
+    if (user.phoneNumber != currentUser.phoneNumber) {
+      Logger().i('Update phoneNumber @ Firebase for user id ${currentUser.id}');
+      await userCollection.set({
+        UserDatabaseContract.userPhoneNumber: user.phoneNumber,
+      }, SetOptions(merge: true));
+    }
+
+    if (user.imagePath != currentUser.imagePath) {
+      Logger().i('Update imagePath @ Firebase for user id ${currentUser.id}');
+      await userCollection.set({
+        UserDatabaseContract.userImagePath: user.imagePath,
+      }, SetOptions(merge: true));
+    }
   }
 
   AppUser _getUserFromFirebaseUser() {

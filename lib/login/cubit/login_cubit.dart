@@ -2,14 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/email_model.dart';
-import 'package:peerpal/repository/auth_repository.dart';
+import 'package:peerpal/repository/app_user_repository.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationRepository) : super(const LoginState());
 
-  final AuthenticationRepository _authenticationRepository;
+  final AppUserRepository _authenticationRepository;
 
   void passwordChanged(String password) {
     emit(state.copyWith(
