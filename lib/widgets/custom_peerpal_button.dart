@@ -7,15 +7,21 @@ import 'package:peerpal/widgets/custom_peerpal_text.dart';
 class CustomPeerPALButton extends StatelessWidget {
   String? text;
   VoidCallback? onPressed;
+  Key? key;
 
-  CustomPeerPALButton({required this.text, this.onPressed});
+  CustomPeerPALButton({this.key, required this.text, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
+        key: key,
         onPressed: onPressed,
-        child:
-        CustomPeerPALText(text: text, fontSize: 18, color: Colors.white, fontWeight: FontWeight.normal,),
+        child: CustomPeerPALText(
+          text: text,
+          fontSize: 18,
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+        ),
         style: TextButton.styleFrom(
           minimumSize: Size(300, 45),
           backgroundColor: primaryColor,

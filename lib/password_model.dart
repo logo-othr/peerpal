@@ -49,7 +49,7 @@ class PasswordModel extends FormzInput<String, PasswordError> {
     final result = zxcvbn.evaluate(password);
 
     if(result.score == 0) return PasswordError.veryWeak;
-    
+
     if(result.score == 1) return PasswordError.weak;
 
     // The password meets the criteria
