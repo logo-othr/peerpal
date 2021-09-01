@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/app_user.dart';
+import 'package:peerpal/repository/models/user_information.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -134,45 +135,40 @@ class AppUserRepository {
     }
   }
 
-  Future<void> updateUser(AppUser user) async {
+  Future<void> updateUserInformation(
+      UserInformation updatedUserInformation) async {
     Logger().i('Update user in firebase');
-    if (user == currentUser) return;
 
     var userCollection =
         _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
 
-    // ToDo: Check if this optimization reduces fb writes and if not remove it
-    if (user.age != currentUser.age) {
-      Logger().i('Update age @ Firebase for user id ${currentUser.id}');
-      await userCollection.set({
-        UserDatabaseContract.userAge: user.age,
-      }, SetOptions(merge: true));
-    }
+    await userCollection.set({
+      UserDatabaseContract.userAge: updatedUserInformation.age,
+      UserDatabaseContract.userName: updatedUserInformation.name
+    }, SetOptions(merge: true));
+  }
 
-    if (user.name != currentUser.name) {
-      Logger().i('Update name @ Firebase for user id ${currentUser.id}');
-      await userCollection.set({
-        UserDatabaseContract.userName: user.name,
-      }, SetOptions(merge: true));
-    }
+  Future<UserInformation> getCurrentUserInformation() async {
+    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    if (user.phoneNumber != currentUser.phoneNumber) {
-      Logger().i('Update phoneNumber @ Firebase for user id ${currentUser.id}');
-      await userCollection.set({
-        UserDatabaseContract.userPhoneNumber: user.phoneNumber,
-      }, SetOptions(merge: true));
+    UserInformation userInformation = UserInformation.empty;
+    if (firebaseUser != null) {
+      DocumentSnapshot userDocumentSnapshot = await _firestore
+          .collection(UserDatabaseContract.users)
+          .doc(firebaseUser.uid)
+          .get();
+      if (userDocumentSnapshot.exists) {
+        var age = userDocumentSnapshot['age'];
+        var name = userDocumentSnapshot['name'];
+        userInformation = UserInformation(age: age, name: name);
+      }
     }
-
-    if (user.imagePath != currentUser.imagePath) {
-      Logger().i('Update imagePath @ Firebase for user id ${currentUser.id}');
-      await userCollection.set({
-        UserDatabaseContract.userImagePath: user.imagePath,
-      }, SetOptions(merge: true));
-    }
+    return userInformation;
   }
 
   AppUser _getUserFromFirebaseUser() {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+
     return (firebaseUser == null
         ? AppUser.empty
         : AppUser(id: firebaseUser.uid, email: firebaseUser.email));
