@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:peerpal/email_model.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/sign_up/models/email_model.dart';
 
 part 'login_state.dart';
 
