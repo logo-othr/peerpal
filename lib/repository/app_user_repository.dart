@@ -39,6 +39,23 @@ class AppUserRepository {
     });
   }
 
+  // ToDo: Remove when not used in the future
+  Stream<UserInformation> get userInformation {
+    return _firestore
+        .collection(UserDatabaseContract.users)
+        .doc(currentUser.id)
+        .snapshots()
+        .map((DocumentSnapshot snapshot) {
+      if (snapshot.exists) {
+        var age = snapshot['age'];
+        var name = snapshot['name'];
+        return UserInformation(age: age, name: name);
+      } else {
+        return UserInformation.empty;
+      }
+    });
+  }
+
   AppUser get currentUser {
     return _getUserFromFirebaseUser();
   }
