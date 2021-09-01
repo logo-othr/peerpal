@@ -15,8 +15,10 @@ class AgeSelectionCubit extends Cubit<AgeSelectionState> {
 
   Future<void> postAge(int selectedAge) async {
     emit(AgeSelectionPosting(selectedAge));
-    var appUser = _authRepository.currentUser;
-    await _authRepository.updateUser(appUser.copyWith(age: selectedAge));
+    var userInformation = await _authRepository.getCurrentUserInformation();
+
+    await _authRepository
+        .updateUserInformation(userInformation.copyWith(age: selectedAge));
     emit(AgeSelectionPosted(selectedAge));
   }
 }
