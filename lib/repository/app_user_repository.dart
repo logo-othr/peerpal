@@ -40,7 +40,7 @@ class AppUserRepository {
     });
   }
 
-  // ToDo: Remove when not used in the future
+  // ToDo: Remove if not used in the future
   Stream<UserInformation> get userInformation {
     return _firestore
         .collection(UserDatabaseContract.users)
@@ -153,13 +153,19 @@ class AppUserRepository {
 
     UserInformation userInformation = UserInformation.empty;
     if (firebaseUser != null) {
-      DocumentSnapshot userDocumentSnapshot = await _firestore
+      DocumentSnapshot<Map<String, dynamic>> userDocumentSnapshot = await _firestore
           .collection(UserDatabaseContract.users)
           .doc(firebaseUser.uid)
           .get();
-      if (userDocumentSnapshot.exists) {
-        var age = userDocumentSnapshot['age'];
-        var name = userDocumentSnapshot['name'];
+      if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
+        var data = userDocumentSnapshot.data();
+
+        var age = data!.containsKey(UserDatabaseContract.userAge) ?
+        userDocumentSnapshot.get(UserDatabaseContract.userAge) : null;
+
+        var name = data.containsKey(UserDatabaseContract.userName) ?
+        userDocumentSnapshot.get(UserDatabaseContract.userName) : null;
+
         userInformation = UserInformation(age: age, name: name);
       }
     }
