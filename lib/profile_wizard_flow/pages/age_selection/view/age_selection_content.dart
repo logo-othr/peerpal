@@ -1,8 +1,9 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/profile_wizard_flow/pages/age_selection/cubit/age_selection_cubit.dart';
-import 'package:peerpal/repository/models/app_user.dart';
+import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -12,9 +13,14 @@ class AgeSelectionContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
         title: const Text('Alter'),
-        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            key: const Key('ageselection_logout_button'),
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
+          )
+        ],
       ),
       body: Center(
         child: Column(
@@ -72,7 +78,7 @@ class AgeSelectionContent extends StatelessWidget {
 
                       var selectedAge = state.selectedAge;
                       context
-                          .flow<AppUser>()
+                          .flow<UserInformation>()
                           .update((s) => s.copyWith(age: selectedAge));
                     },
                   );
