@@ -1,4 +1,4 @@
-part of 'age_selection_cubit.dart';
+part of 'age_input_cubit.dart';
 
 @immutable
 abstract class AgeSelectionState extends Equatable {

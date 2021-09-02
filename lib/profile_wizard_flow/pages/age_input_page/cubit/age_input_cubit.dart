@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 
-part 'age_selection_state.dart';
+part 'age_input_state.dart';
 
 class AgeSelectionCubit extends Cubit<AgeSelectionState> {
   final AppUserRepository _authRepository;
