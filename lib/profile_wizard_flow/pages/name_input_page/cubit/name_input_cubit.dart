@@ -8,8 +8,7 @@ import 'package:peerpal/repository/models/user_information.dart';
 part 'name_input_state.dart';
 
 class NameInputCubit extends Cubit<NameInputState> {
-  NameInputCubit(this._appUserRepository)
-      : super(const NameInputState());
+  NameInputCubit(this._appUserRepository) : super(const NameInputState());
 
   final AppUserRepository _appUserRepository;
 
@@ -24,11 +23,10 @@ class NameInputCubit extends Cubit<NameInputState> {
   Future<void> postName() async {
     if (!state.formValidationStatus.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    var userInformation = await _appUserRepository.getCurrentUserInformation();
 
     try {
-      await _appUserRepository.updateAllUserInformation(
-          userInformation.copyWith(name: state.username.value));
+      await _appUserRepository.updateUserInformation(
+          Map.from({UserInformationField.userName: state.username.value}));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception catch (e) {
       emit(state.copyWith(

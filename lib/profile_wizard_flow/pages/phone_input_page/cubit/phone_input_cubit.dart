@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/models/user_information.dart';
 
 part 'phone_input_state.dart';
 
@@ -16,10 +17,9 @@ class PhoneInputCubit extends Cubit<PhoneInputState> {
 
   Future<void> updatePhoneNumber(String phoneNumber) async {
     emit(PhoneInputPosting(phoneNumber));
-    var userInformation = await _authRepository.getCurrentUserInformation();
 
-    await _authRepository
-        .updateAllUserInformation(userInformation.copyWith(phoneNumber: phoneNumber));
+    await _authRepository.updateUserInformation(
+        Map.from({UserInformationField.userPhoneNumber: phoneNumber}));
     emit(PhoneInputPosted(phoneNumber));
   }
 }

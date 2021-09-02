@@ -12,13 +12,11 @@ extension UserInformationFieldExtension on UserInformationField {
   String get fieldName {
     switch (this) {
       case UserInformationField.userAge:
-        return UserDatabaseContract.userName;
-      case UserInformationField.userName:
         return UserDatabaseContract.userAge;
+      case UserInformationField.userName:
+        return UserDatabaseContract.userName;
       case UserInformationField.userPhoneNumber:
         return UserDatabaseContract.userPhoneNumber;
-      default:
-        return 'Undefined field name';
     }
   }
 }
