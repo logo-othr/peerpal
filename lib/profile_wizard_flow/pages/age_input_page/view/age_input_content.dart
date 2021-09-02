@@ -8,7 +8,7 @@ import 'package:peerpal/widgets/age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-class AgeSelectionContent extends StatelessWidget {
+class AgeInputContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +26,7 @@ class AgeSelectionContent extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BlocBuilder<AgeSelectionCubit, AgeSelectionState>(
+            BlocBuilder<AgeInputCubit, AgeInputState>(
                 builder: (context, state) {
               return Center(
                 child: Padding(
@@ -54,7 +54,7 @@ class AgeSelectionContent extends StatelessWidget {
                         items: state.ages.map((el) => el.toString()).toList(),
                         value: state.selectedAge,
                         onChanged: (value) =>
-                            context.read<AgeSelectionCubit>().ageSelected(
+                            context.read<AgeInputCubit>().ageChanged(
                                   (state.ages[value!]),
                                 ),
                       ),
@@ -64,16 +64,16 @@ class AgeSelectionContent extends StatelessWidget {
               );
             }),
             const Spacer(),
-            BlocBuilder<AgeSelectionCubit, AgeSelectionState>(
+            BlocBuilder<AgeInputCubit, AgeInputState>(
               builder: (context, state) {
-                if (state is AgeSelectionPosting) {
+                if (state is AgeInputPosting) {
                   return const CircularProgressIndicator();
                 } else {
                   return CustomPeerPALButton(
                     text: 'Weiter',
                     onPressed: () async {
                       await context
-                          .read<AgeSelectionCubit>()
+                          .read<AgeInputCubit>()
                           .postAge(state.selectedAge);
 
                       var selectedAge = state.selectedAge;

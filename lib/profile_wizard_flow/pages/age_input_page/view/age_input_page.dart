@@ -5,9 +5,9 @@ import 'package:peerpal/profile_wizard_flow/pages/age_input_page/cubit/age_input
 import 'package:peerpal/profile_wizard_flow/pages/age_input_page/view/age_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 
-class AgeSelection extends StatelessWidget {
+class AgeInputPage extends StatelessWidget {
   static MaterialPage<void> page() {
-    return MaterialPage<void>(child: AgeSelection());
+    return MaterialPage<void>(child: AgeInputPage());
   }
 
   @override
@@ -16,9 +16,9 @@ class AgeSelection extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return AgeSelectionCubit(context.read<AppUserRepository>());
+          return AgeInputCubit(context.read<AppUserRepository>());
         },
-        child: AgeSelectionContent(),
+        child: AgeInputContent(),
       ),
     );
   }

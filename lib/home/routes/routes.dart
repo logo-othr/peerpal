@@ -7,7 +7,7 @@ import 'package:peerpal/repository/models/user_information.dart';
 List<Page> onGenerateHomeViewPages(
     UserInformation userInformation, List<Page<dynamic>> pages) {
   return [
-    AgeSelection.page(),
+    AgeInputPage.page(),
     if (userInformation.age != null) NameInputPage.page(),
     if (userInformation.name != null) MyTabView.page(),
   ];
