@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/profile_wizard_flow/pages/name_input_page/cubit/name_selection_cubit.dart';
+import 'package:peerpal/profile_wizard_flow/pages/name_input_page/cubit/name_input_cubit.dart';
 import 'package:peerpal/repository/models/app_user.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -11,17 +11,17 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:formz/formz.dart';
 
-class NameSelectionForm extends StatefulWidget {
+class NameInputContent extends StatefulWidget {
   @override
-  _NameSelectionFormState createState() => _NameSelectionFormState();
+  _NameInputContentState createState() => _NameInputContentState();
 }
 
-class _NameSelectionFormState extends State<NameSelectionForm> {
+class _NameInputContentState extends State<NameInputContent> {
   TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NameSelectionCubit, NameSelectionState>(
+    return BlocListener<NameInputCubit, NameInputState>(
       listener: (context, state) {
         if (state.formValidationStatus.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
@@ -61,7 +61,7 @@ class _NameSelectionFormState extends State<NameSelectionForm> {
 class _UsernameInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NameSelectionCubit, NameSelectionState>(
+    return BlocBuilder<NameInputCubit, NameInputState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return TextField(
@@ -74,7 +74,7 @@ class _UsernameInputField extends StatelessWidget {
             ),
             key: const Key('name_selection_username_field'),
             onChanged: (username) =>
-                context.read<NameSelectionCubit>().nameChanged(username),
+                context.read<NameInputCubit>().nameChanged(username),
             keyboardType: TextInputType.name);
       },
     );
@@ -84,7 +84,7 @@ class _UsernameInputField extends StatelessWidget {
 class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NameSelectionCubit, NameSelectionState>(
+    return BlocBuilder<NameInputCubit, NameInputState>(
       buildWhen: (previous, current) =>
           previous.formValidationStatus != current.formValidationStatus,
       builder: (context, state) {
@@ -94,7 +94,7 @@ class _NextButton extends StatelessWidget {
                 key: const Key('name_selection_next_button'),
                 onPressed: () async {
                   if (state.formValidationStatus.isValidated) {
-                    await context.read<NameSelectionCubit>().postName();
+                    await context.read<NameInputCubit>().postName();
 
                     var selectedName = state.username;
                     context

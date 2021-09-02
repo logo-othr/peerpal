@@ -5,11 +5,11 @@ import 'package:peerpal/profile_wizard_flow/pages/name_input_page/models/usernam
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
-part 'name_selection_state.dart';
+part 'name_input_state.dart';
 
-class NameSelectionCubit extends Cubit<NameSelectionState> {
-  NameSelectionCubit(this._appUserRepository)
-      : super(const NameSelectionState());
+class NameInputCubit extends Cubit<NameInputState> {
+  NameInputCubit(this._appUserRepository)
+      : super(const NameInputState());
 
   final AppUserRepository _appUserRepository;
 
