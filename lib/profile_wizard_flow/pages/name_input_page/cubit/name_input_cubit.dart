@@ -27,7 +27,7 @@ class NameInputCubit extends Cubit<NameInputState> {
     var userInformation = await _appUserRepository.getCurrentUserInformation();
 
     try {
-      await _appUserRepository.updateUserInformation(
+      await _appUserRepository.updateAllUserInformation(
           userInformation.copyWith(name: state.username.value));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception catch (e) {

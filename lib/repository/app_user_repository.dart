@@ -105,7 +105,7 @@ class AppUserRepository {
       switch (e.code) {
         case 'wrong-password':
         case 'user-not-found':
-        throw LoginException(
+          throw LoginException(
               message:
                   'Falsches Passwort oder die der Nutzer existiert nicht.');
         case 'user-disabled':
@@ -136,15 +136,27 @@ class AppUserRepository {
   }
 
   Future<void> updateUserInformation(
+      Map<UserInformationField, dynamic> updatedUserInformation) async {
+
+    var userCollection =
+        _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
+
+    for (var updatedUserInformation in updatedUserInformation.entries) {
+      await userCollection.set({
+        updatedUserInformation.key.fieldName: updatedUserInformation.value,
+      }, SetOptions(merge: true));
+    }
+  }
+
+  Future<void> updateAllUserInformation(
       UserInformation updatedUserInformation) async {
-    Logger().i('Update user in firebase');
 
     var userCollection =
         _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
 
     await userCollection.set({
-      UserDatabaseContract.userAge: updatedUserInformation.age,
-      UserDatabaseContract.userName: updatedUserInformation.name
+      UserInformationField.userName.fieldName: updatedUserInformation.age,
+      UserInformationField.userAge.fieldName: updatedUserInformation.name
     }, SetOptions(merge: true));
   }
 
@@ -153,18 +165,21 @@ class AppUserRepository {
 
     UserInformation userInformation = UserInformation.empty;
     if (firebaseUser != null) {
-      DocumentSnapshot<Map<String, dynamic>> userDocumentSnapshot = await _firestore
-          .collection(UserDatabaseContract.users)
-          .doc(firebaseUser.uid)
-          .get();
+      DocumentSnapshot<Map<String, dynamic>> userDocumentSnapshot =
+          await _firestore
+              .collection(UserDatabaseContract.users)
+              .doc(firebaseUser.uid)
+              .get();
       if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
         var data = userDocumentSnapshot.data();
 
-        var age = data!.containsKey(UserDatabaseContract.userAge) ?
-        userDocumentSnapshot.get(UserDatabaseContract.userAge) : null;
+        var age = data!.containsKey(UserDatabaseContract.userAge)
+            ? userDocumentSnapshot.get(UserDatabaseContract.userAge)
+            : null;
 
-        var name = data.containsKey(UserDatabaseContract.userName) ?
-        userDocumentSnapshot.get(UserDatabaseContract.userName) : null;
+        var name = data.containsKey(UserDatabaseContract.userName)
+            ? userDocumentSnapshot.get(UserDatabaseContract.userName)
+            : null;
 
         userInformation = UserInformation(age: age, name: name);
       }

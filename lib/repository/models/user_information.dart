@@ -1,13 +1,31 @@
-
 import 'package:equatable/equatable.dart';
+import 'package:peerpal/repository/contracts/user_database_contract.dart';
+
+enum UserInformationField {
+  userAge,
+  userName,
+  userPhoneNumber,
+}
+
+// ToDo: Move field names from UserDatabaseContract to this extension
+extension UserInformationFieldExtension on UserInformationField {
+  String get fieldName {
+    switch (this) {
+      case UserInformationField.userAge:
+        return UserDatabaseContract.userName;
+      case UserInformationField.userName:
+        return UserDatabaseContract.userAge;
+      case UserInformationField.userPhoneNumber:
+        return UserDatabaseContract.userPhoneNumber;
+      default:
+        return 'Undefined field name';
+    }
+  }
+}
 
 class UserInformation extends Equatable {
   const UserInformation(
-      {
-        this.name,
-        this.age,
-        this.phoneNumber,
-        this.imagePath});
+      {this.name, this.age, this.phoneNumber, this.imagePath});
 
   final String? name;
   final int? age;
