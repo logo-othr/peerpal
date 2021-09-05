@@ -10,6 +10,7 @@ import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+
 class PhoneInputContent extends StatefulWidget {
   @override
   _PhoneInputContentState createState() => _PhoneInputContentState();
@@ -61,40 +62,38 @@ class _PhonenumberInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
-      buildWhen: (previous, current) => previous.phoneNumber != current.phoneNumber,
+      buildWhen: (previous, current) =>
+          previous.phoneNumber != current.phoneNumber,
       builder: (context, state) {
-        return Expanded(
-          child: Container(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
-                child: TextFormField(keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly],
-                  style: TextStyle(fontSize: 22),
-                  key: const Key('phone_input_phone_number_field'),
-                  onChanged: (phoneNumber) =>
-                      context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(30, 30, 0, 30),
-                    //prefixIcon: Icon(Icons.description),
-                    labelText: 'Telefonnummer',
-
-                    border: OutlineInputBorder(
+        return Container(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                style: TextStyle(fontSize: 22),
+                key: const Key('phone_input_phone_number_field'),
+                onChanged: (phoneNumber) =>
+                    context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
+                maxLines: 1,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(30, 30, 0, 30),
+                  labelText: 'Telefonnummer',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide: BorderSide(
+                      color: primaryColor,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide: BorderSide(
                         color: primaryColor,
-                      ),
-                    ),
-
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(
-                          color: primaryColor,
-                          width: 3,
-                        )),
-                  ),
+                        width: 3,
+                      )),
                 ),
               ),
             ),
@@ -108,7 +107,7 @@ class _PhonenumberInputField extends StatelessWidget {
 class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return             BlocBuilder<PhoneInputCubit, PhoneInputState>(
+    return BlocBuilder<PhoneInputCubit, PhoneInputState>(
       builder: (context, state) {
         if (state is AgeInputPosting) {
           return const CircularProgressIndicator();
