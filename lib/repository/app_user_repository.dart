@@ -181,7 +181,15 @@ class AppUserRepository {
             ? userDocumentSnapshot.get(UserDatabaseContract.userName)
             : null;
 
-        userInformation = UserInformation(age: age, name: name);
+        var phoneNumber = data.containsKey(UserDatabaseContract.userPhoneNumber)
+            ? userDocumentSnapshot.get(UserDatabaseContract.userPhoneNumber)
+            : null;
+
+        var imageURL = data.containsKey(UserDatabaseContract.userProfilePicturePath)
+            ? userDocumentSnapshot.get(UserDatabaseContract.userProfilePicturePath)
+            : null;
+
+        userInformation = UserInformation(age: age, name: name, phoneNumber: phoneNumber, imagePath: imageURL);
       }
     }
     return userInformation;
