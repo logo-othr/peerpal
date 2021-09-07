@@ -17,28 +17,28 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
 
   Future<void> pickProfilePictureFromGallery() async {
     var profilePicture =
-        (await ImagePicker().getImage(source: ImageSource.gallery))!;
+        (await ImagePicker().pickImage(source: ImageSource.gallery))!;
     profilePictureChanged(profilePicture);
   }
 
   Future<void> pickProfilePictureFromCamera() async {
     var profilePicture =
-        (await ImagePicker().getImage(source: ImageSource.camera))!;
+        (await ImagePicker().pickImage(source: ImageSource.camera))!;
     profilePictureChanged(profilePicture);
   }
 
-  void profilePictureChanged(PickedFile profilePicture) {
+  void profilePictureChanged(XFile profilePicture) {
     emit(ProfilePicturePicked(profilePicture));
   }
 
-  Future<void> updateProfilePicture(PickedFile profilePicture) async {
+  Future<void> updateProfilePicture(XFile profilePicture) async {
     emit(ProfilePicturePosting(profilePicture));
     var profilePictureURL = await _uploadProfilePicture(profilePicture);
     await _updateProfilePicturePath(profilePictureURL);
     emit(ProfilePicturePosted(profilePictureURL));
   }
 
-  Future<String> _uploadProfilePicture(PickedFile profilePicture) async {
+  Future<String> _uploadProfilePicture(XFile profilePicture) async {
     var uid = Uuid();
 
     firebase_storage.UploadTask uploadTask;
