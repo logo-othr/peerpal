@@ -3,5 +3,5 @@ class UserDatabaseContract {
   static const userAge = 'age';
   static const userName = 'name';
   static const userPhoneNumber = 'phone_number';
-  static const userImagePath = 'avatar_path';
+  static const userProfilePicturePath = 'avatar_path';
 }
