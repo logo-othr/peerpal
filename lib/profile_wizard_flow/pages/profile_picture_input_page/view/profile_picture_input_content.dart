@@ -1,0 +1,134 @@
+import 'dart:ffi';
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flow_builder/flow_builder.dart';
+import 'package:peerpal/colors.dart';
+import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/cubit/profile_picture_cubit.dart';
+import 'package:peerpal/repository/models/user_information.dart';
+import 'package:peerpal/widgets/custom_peerpal_button.dart';
+import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+
+class ProfilePictureInputContent extends StatefulWidget {
+  final String? imagePath;
+
+  ProfilePictureInputContent({Key? key, this.imagePath}) : super(key: key);
+
+  @override
+  _ProfilePictureInputContentState createState() =>
+      _ProfilePictureInputContentState();
+}
+
+class _ProfilePictureInputContentState
+    extends State<ProfilePictureInputContent> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              CustomPeerPALHeading1('Nimm ein Foto von dir auf'),
+              const Spacer(),
+              InkWell(
+                onTap: () async => context
+                    .read<ProfilePictureCubit>()
+                    .pickProfilePictureFromGallery(),
+                customBorder: new CircleBorder(),
+                child: Container(
+                    child: _Avatar()),
+              ),
+              const Spacer(),
+              BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
+                builder: (context, state) {
+                  return CustomPeerPALButton(
+                    text: 'Weiter',
+                    onPressed: () async {
+                      if (state is ProfilePicturePicked) {
+                        await context
+                            .read<ProfilePictureCubit>()
+                            .updateProfilePicture(state.profilePicture);
+                      }
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Avatar extends StatelessWidget {
+  const _Avatar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
+        builder: (context, state) {
+      if (state is ProfilePictureInitial) {
+
+        var imageURL = context.flow<UserInformation>().state.imagePath;
+        if (imageURL != null && imageURL.isNotEmpty) {
+          return Container(
+            width: 150.0,
+            height: 150.0,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(imageURL),
+              ),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: primaryColor,
+                width: 4.0,
+              ),
+            ),
+
+          );
+        }
+      } else if (state is ProfilePicturePicked) {
+        return Container(
+          width: 150.0,
+          height: 150.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: FileImage(File(state.profilePicture.path)),
+          ),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: primaryColor,
+              width: 4.0,
+            ),
+          ),
+
+        );
+      }
+      return Container(
+        width: 150.0,
+        height: 150.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: primaryColor,
+            width: 4.0,
+          ),
+        ),
+        child: Icon(
+          Icons.camera_alt_outlined,
+          size: 110,
+          color: primaryColor,
+        ));
+    });
+  }
+}
