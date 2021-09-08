@@ -68,8 +68,6 @@ class _ProfilePictureInputContentState
       var profilePictureURL = await context
           .read<ProfilePictureCubit>()
           .updateProfilePicture(state.profilePicture);
-
-
       if (widget.isInFlowContext) {
         context.flow<UserInformation>().complete((s) => s.copyWith(imagePath: profilePictureURL));
       } else {
