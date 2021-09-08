@@ -31,11 +31,12 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     emit(ProfilePicturePicked(profilePicture));
   }
 
-  Future<void> updateProfilePicture(XFile profilePicture) async {
+  Future<String> updateProfilePicture(XFile profilePicture) async {
     emit(ProfilePicturePosting(profilePicture));
     var profilePictureURL = await _uploadProfilePicture(profilePicture);
     await _updateProfilePicturePath(profilePictureURL);
     emit(ProfilePicturePosted(profilePictureURL));
+    return profilePictureURL;
   }
 
   Future<String> _uploadProfilePicture(XFile profilePicture) async {

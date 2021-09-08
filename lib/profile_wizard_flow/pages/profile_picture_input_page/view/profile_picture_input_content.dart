@@ -15,9 +15,10 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class ProfilePictureInputContent extends StatefulWidget {
-  final String? imagePath;
+  final bool isInFlowContext;
 
-  ProfilePictureInputContent({Key? key, this.imagePath}) : super(key: key);
+  ProfilePictureInputContent({Key? key, required this.isInFlowContext})
+      : super(key: key);
 
   @override
   _ProfilePictureInputContentState createState() =>
@@ -42,21 +43,16 @@ class _ProfilePictureInputContentState
                     .read<ProfilePictureCubit>()
                     .pickProfilePictureFromGallery(),
                 customBorder: new CircleBorder(),
-                child: Container(
-                    child: _Avatar()),
+                child: Container(child: _Avatar()),
               ),
               const Spacer(),
               BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
                 builder: (context, state) {
                   return CustomPeerPALButton(
                     text: 'Weiter',
-                    onPressed: () async {
-                      if (state is ProfilePicturePicked) {
-                        await context
-                            .read<ProfilePictureCubit>()
-                            .updateProfilePicture(state.profilePicture);
-                      }
-                    },
+                    onPressed: (state is ProfilePicturePicked)
+                        ? () async => updatePicture(state)
+                        : null,
                   );
                 },
               ),
@@ -65,6 +61,21 @@ class _ProfilePictureInputContentState
         ),
       ),
     );
+  }
+
+  Future<void> updatePicture(ProfilePictureState state) async {
+    if (state is ProfilePicturePicked) {
+      var profilePictureURL = await context
+          .read<ProfilePictureCubit>()
+          .updateProfilePicture(state.profilePicture);
+
+
+      if (widget.isInFlowContext) {
+        context.flow<UserInformation>().complete((s) => s.copyWith(imagePath: profilePictureURL));
+      } else {
+        Navigator.pop(context);
+      }
+    }
   }
 }
 
@@ -75,8 +86,7 @@ class _Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
-      if (state is ProfilePictureInitial) {
-
+      if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
         var imageURL = context.flow<UserInformation>().state.imagePath;
         if (imageURL != null && imageURL.isNotEmpty) {
           return Container(
@@ -93,7 +103,6 @@ class _Avatar extends StatelessWidget {
                 width: 4.0,
               ),
             ),
-
           );
         }
       } else if (state is ProfilePicturePicked) {
@@ -102,33 +111,58 @@ class _Avatar extends StatelessWidget {
           height: 150.0,
           decoration: BoxDecoration(
             image: DecorationImage(
-                fit: BoxFit.cover,
-                image: FileImage(File(state.profilePicture.path)),
-          ),
+              fit: BoxFit.cover,
+              image: FileImage(File(state.profilePicture.path)),
+            ),
             shape: BoxShape.circle,
             border: Border.all(
               color: primaryColor,
               width: 4.0,
             ),
           ),
-
+        );
+      } else if (state is ProfilePicturePosting) {
+        return Container(
+          width: 150.0,
+          height: 150.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: primaryColor,
+              width: 4.0,
+            ),
+          ),
+          child: const CircularProgressIndicator(),
+        );
+      } else if (state is ProfilePicturePosting) {
+        return Container(
+          width: 150.0,
+          height: 150.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: primaryColor,
+              width: 4.0,
+            ),
+          ),
+          child: const CircularProgressIndicator(),
         );
       }
       return Container(
-        width: 150.0,
-        height: 150.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: primaryColor,
-            width: 4.0,
+          width: 150.0,
+          height: 150.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: primaryColor,
+              width: 4.0,
+            ),
           ),
-        ),
-        child: Icon(
-          Icons.camera_alt_outlined,
-          size: 110,
-          color: primaryColor,
-        ));
+          child: Icon(
+            Icons.camera_alt_outlined,
+            size: 110,
+            color: primaryColor,
+          ));
     });
   }
 }

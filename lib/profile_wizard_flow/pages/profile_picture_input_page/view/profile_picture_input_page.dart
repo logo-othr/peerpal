@@ -8,10 +8,14 @@ import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/vie
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
-
 class ProfilePictureInputPage extends StatelessWidget {
-  static MaterialPage<void> page() {
-    return MaterialPage<void>(child: ProfilePictureInputPage());
+  final bool isInFlowContext;
+
+  ProfilePictureInputPage({required this.isInFlowContext});
+
+  static MaterialPage<void> page({required bool isInFlowContext}) {
+    return MaterialPage<void>(
+        child: ProfilePictureInputPage(isInFlowContext: isInFlowContext));
   }
 
   @override
@@ -24,7 +28,7 @@ class ProfilePictureInputPage extends StatelessWidget {
           create: (_) {
             return ProfilePictureCubit(context.read<AppUserRepository>());
           },
-          child: ProfilePictureInputContent(),
+          child: ProfilePictureInputContent(isInFlowContext: isInFlowContext),
         ),
       ),
     );
