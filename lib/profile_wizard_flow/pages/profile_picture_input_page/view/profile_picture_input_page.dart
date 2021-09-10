@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/cubit/phone_input_cubit.dart';
-import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/view/phone_input_content.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/cubit/profile_picture_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/view/profile_picture_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';

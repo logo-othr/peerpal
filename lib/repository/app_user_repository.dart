@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:logger/logger.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
-import 'package:peerpal/repository/memory_cache.dart';
 import 'package:peerpal/repository/models/app_user.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 

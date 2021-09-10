@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/user_information.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
 
 part 'profile_picture_state.dart';

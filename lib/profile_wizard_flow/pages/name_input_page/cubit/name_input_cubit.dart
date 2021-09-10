@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/profile_wizard_flow/pages/name_input_page/models/username_model.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/user_information.dart';
 
 part 'name_input_state.dart';
 
