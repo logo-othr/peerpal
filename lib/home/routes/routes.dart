@@ -13,7 +13,7 @@ List<Page> onGenerateHomeViewPages(
     if (userInformation.age != null) NameInputPage.page(),
     if (userInformation.name != null)  PhoneInputPage.page(),
      if(userInformation.phoneNumber != null) ProfilePictureInputPage.page(isInFlowContext: true),
-    if(userInformation.filename != null) MyTabView.page(),
+    if(userInformation.imagePath != null) MyTabView.page(),
 
   ];
 }
