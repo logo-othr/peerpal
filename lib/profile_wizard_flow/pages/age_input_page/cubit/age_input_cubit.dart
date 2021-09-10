@@ -7,9 +7,9 @@ import 'package:peerpal/repository/models/user_information.dart';
 part 'age_input_state.dart';
 
 class AgeInputCubit extends Cubit<AgeInputState> {
-  final AppUserRepository _authRepository;
+  final AppUserRepository _appUserRepository;
 
-  AgeInputCubit(this._authRepository) : super(AgeInputInitial(10));
+  AgeInputCubit(this._appUserRepository) : super(AgeInputInitial(10));
 
   void ageChanged(int selectedAge) {
     emit(AgeInputInitial(selectedAge));
@@ -18,8 +18,12 @@ class AgeInputCubit extends Cubit<AgeInputState> {
   Future<void> postAge(int selectedAge) async {
     emit(AgeInputPosting(selectedAge));
 
-    await _authRepository.updateUserInformation(
-        Map.from({UserInformationField.userAge: selectedAge}));
+    var userInformation =
+    await _appUserRepository.getCurrentUserInformation();
+    var updatedUserInformation =
+    userInformation.copyWith(age: selectedAge);
+    await _appUserRepository.updateUserInformation(updatedUserInformation);
+
     emit(AgeInputPosted(selectedAge));
   }
 }

@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
+import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
+import 'package:peerpal/repository/memory_cache.dart';
 import 'package:peerpal/repository/models/app_user.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
@@ -29,8 +31,10 @@ class LogoutException implements Exception {
 class AppUserRepository {
   AppUserRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
+    required this.cache,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
+  final Cache cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -39,6 +43,8 @@ class AppUserRepository {
       return firebaseUser == null ? AppUser.empty : _getUserFromFirebaseUser();
     });
   }
+
+
 
   // ToDo: Remove if not used in the future
   Stream<UserInformation> get userInformation {
@@ -135,41 +141,41 @@ class AppUserRepository {
     }
   }
 
-  Future<void> updateUserInformation(
-      Map<UserInformationField, dynamic> updatedUserInformation) async {
-
-    var userCollection =
+  Future<void> updateUserInformation(UserInformation userInformation) async {
+    var userDocument =
         _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
 
-    for (var updatedUserInformation in updatedUserInformation.entries) {
-      await userCollection.set({
-        updatedUserInformation.key.fieldName: updatedUserInformation.value,
-      }, SetOptions(merge: true));
-    }
-  }
+    cache.set<UserInformation>(
+        key: '{$currentUser.uid}-userinformation', value: userInformation);
 
-  Future<void> updateAllUserInformation(
-      UserInformation updatedUserInformation) async {
-
-    var userCollection =
-        _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
-
-    await userCollection.set({
-      UserInformationField.userName.fieldName: updatedUserInformation.age,
-      UserInformationField.userAge.fieldName: updatedUserInformation.name
+    await userDocument.set({
+      UserInformationField.age.fieldName: userInformation.age,
+      UserInformationField.name.fieldName: userInformation.name,
+      UserInformationField.phone.fieldName: userInformation.phoneNumber,
+      UserInformationField.pictureUrl.fieldName: userInformation.imagePath
     }, SetOptions(merge: true));
   }
 
-  Future<UserInformation> getCurrentUserInformation() async {
+  /* Future<void> updateAllUserInformation(
+      UserInformation updatedUserInformation) async {
+    var userDocument =
+    _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
+
+    await userDocument.set({
+      UserInformationField.userName.fieldName: updatedUserInformation.age,
+      UserInformationField.userAge.fieldName: updatedUserInformation.name
+    }, SetOptions(merge: true));
+  }*/
+
+  Future<UserInformation> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    UserInformation userInformation = UserInformation.empty;
-    if (firebaseUser != null) {
-      DocumentSnapshot<Map<String, dynamic>> userDocumentSnapshot =
-          await _firestore
-              .collection(UserDatabaseContract.users)
-              .doc(firebaseUser.uid)
-              .get();
+    var userInformation = UserInformation.empty;
+    if (currentUser != null) {
+      var userDocumentSnapshot = await _firestore
+          .collection(UserDatabaseContract.users)
+          .doc(firebaseUser!.uid)
+          .get();
       if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
         var data = userDocumentSnapshot.data();
 
@@ -185,12 +191,32 @@ class AppUserRepository {
             ? userDocumentSnapshot.get(UserDatabaseContract.userPhoneNumber)
             : null;
 
-        var imageURL = data.containsKey(UserDatabaseContract.userProfilePicturePath)
-            ? userDocumentSnapshot.get(UserDatabaseContract.userProfilePicturePath)
-            : null;
+        var imageURL =
+            data.containsKey(UserDatabaseContract.userProfilePicturePath)
+                ? userDocumentSnapshot
+                    .get(UserDatabaseContract.userProfilePicturePath)
+                : null;
 
-        userInformation = UserInformation(age: age, name: name, phoneNumber: phoneNumber, imagePath: imageURL);
+        userInformation = UserInformation(
+            age: age,
+            name: name,
+            phoneNumber: phoneNumber,
+            imagePath: imageURL);
       }
+    }
+    return userInformation;
+  }
+
+  Future<UserInformation> getCurrentUserInformation() async {
+    var userInformation = UserInformation.empty;
+    var cachedUserInformation =
+        cache.get<UserInformation>(key: '{$currentUser.uid}-userinformation');
+    if (cachedUserInformation != null) {
+      userInformation = cachedUserInformation;
+    } else {
+      userInformation = await _downloadCurrentUserInformation();
+      cache.set<UserInformation>(
+          key: '{$currentUser.uid}-userinformation', value: userInformation);
     }
     return userInformation;
   }

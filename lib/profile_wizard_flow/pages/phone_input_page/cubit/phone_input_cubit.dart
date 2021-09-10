@@ -17,9 +17,9 @@ class PhoneInputCubit extends Cubit<PhoneInputState> {
 
   Future<void> updatePhoneNumber(String phoneNumber) async {
     emit(PhoneInputPosting(phoneNumber));
-
-    await _authRepository.updateUserInformation(
-        Map.from({UserInformationField.userPhoneNumber: phoneNumber}));
+    var userInformation = await _authRepository.getCurrentUserInformation();
+    var updatedUserInformation = userInformation.copyWith(phoneNumber: phoneNumber);
+    await _authRepository.updateUserInformation(updatedUserInformation);
     emit(PhoneInputPosted(phoneNumber));
   }
 }

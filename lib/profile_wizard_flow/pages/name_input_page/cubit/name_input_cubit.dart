@@ -25,8 +25,11 @@ class NameInputCubit extends Cubit<NameInputState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     try {
-      await _appUserRepository.updateUserInformation(
-          Map.from({UserInformationField.userName: state.username.value}));
+      var userInformation =
+          await _appUserRepository.getCurrentUserInformation();
+      var updatedUserInformation =
+          userInformation.copyWith(name: state.username.value);
+      await _appUserRepository.updateUserInformation(updatedUserInformation);
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception catch (e) {
       emit(state.copyWith(
