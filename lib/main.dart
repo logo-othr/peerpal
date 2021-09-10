@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/memory_cache.dart';
 
 import 'app/app.dart';
 
@@ -10,7 +11,7 @@ Future<void> main() async {
   Bloc.observer = AppBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final authenticationRepository = AppUserRepository();
+  final authenticationRepository = AppUserRepository(cache: MemoryCache());
   await authenticationRepository.user.first;
   runApp(App(authenticationRepository: authenticationRepository));
 }
