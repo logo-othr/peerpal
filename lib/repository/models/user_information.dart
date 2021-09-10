@@ -2,23 +2,23 @@ import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 
 enum UserInformationField {
-  userAge,
-  userName,
-  userPhoneNumber,
-  userProfilePicturePath,
+  age,
+  name,
+  phone,
+  pictureUrl,
 }
 
 // ToDo: Move field names from UserDatabaseContract to this extension
 extension UserInformationFieldExtension on UserInformationField {
   String get fieldName {
     switch (this) {
-      case UserInformationField.userAge:
+      case UserInformationField.age:
         return UserDatabaseContract.userAge;
-      case UserInformationField.userName:
+      case UserInformationField.name:
         return UserDatabaseContract.userName;
-      case UserInformationField.userPhoneNumber:
+      case UserInformationField.phone:
         return UserDatabaseContract.userPhoneNumber;
-      case UserInformationField.userProfilePicturePath:
+      case UserInformationField.pictureUrl:
         return UserDatabaseContract.userProfilePicturePath;
     }
   }
@@ -26,13 +26,12 @@ extension UserInformationFieldExtension on UserInformationField {
 
 class UserInformation extends Equatable {
   const UserInformation(
-      {this.name, this.age, this.phoneNumber, this.imagePath, this.filename});
+      {this.name, this.age, this.phoneNumber, this.imagePath});
 
   final String? name;
   final int? age;
   final String? phoneNumber;
   final String? imagePath;
-  final String? filename;
 
   static const empty = UserInformation();
 
@@ -42,7 +41,7 @@ class UserInformation extends Equatable {
 
 
   @override
-  List<Object?> get props => [name, age, phoneNumber, imagePath, filename];
+  List<Object?> get props => [name, age, phoneNumber, imagePath];
 
   UserInformation copyWith({
     String? name,
@@ -56,7 +55,12 @@ class UserInformation extends Equatable {
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       imagePath: imagePath ?? this.imagePath,
-        filename: filename ?? this.filename
     );
   }
+
+  UserInformation.fromJson(Map<String, dynamic> json)
+      : name = json[UserInformationField.name],
+        age = json[UserInformationField.age],
+  phoneNumber = json[UserInformationField.phone],
+  imagePath = json[UserInformationField.pictureUrl];
 }
