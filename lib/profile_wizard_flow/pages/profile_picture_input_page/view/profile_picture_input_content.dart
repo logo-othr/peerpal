@@ -69,7 +69,7 @@ class _ProfilePictureInputContentState
           .read<ProfilePictureCubit>()
           .updateProfilePicture(state.profilePicture);
       if (widget.isInFlowContext) {
-        context.flow<UserInformation>().complete((s) => s.copyWith(imagePath: profilePictureURL));
+        context.flow<UserInformation>().update((s) => s.copyWith(imagePath: profilePictureURL));
       } else {
         Navigator.pop(context);
       }
