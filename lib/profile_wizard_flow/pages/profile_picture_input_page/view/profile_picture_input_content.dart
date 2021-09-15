@@ -5,6 +5,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/cubit/profile_picture_cubit.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -65,7 +66,14 @@ class _ProfilePictureInputContentState
           .read<ProfilePictureCubit>()
           .updateProfilePicture(state.profilePicture);
       if (widget.isInFlowContext) {
-        context.flow<UserInformation>().update((s) => s.copyWith(imagePath: profilePictureURL));
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfileOverviewPage()),
+        );
+        context
+            .flow<UserInformation>()
+            .complete((s) => s.copyWith(imagePath: profilePictureURL));
+
       } else {
         Navigator.pop(context);
       }
@@ -81,7 +89,7 @@ class _Avatar extends StatelessWidget {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
       if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
-     //   var imageURL = context.flow<UserInformation>().state.imagePath;
+        //   var imageURL = context.flow<UserInformation>().state.imagePath;
         var imageURL = null; // ToDo: Stop using flow state as a source
         if (imageURL != null && imageURL.isNotEmpty) {
           return Container(
