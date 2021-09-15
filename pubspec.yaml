@@ -15,7 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
-  flow_builder: ^0.0.2
+  flow_builder: ^0.0.4
   flutter_bloc: ^7.0.1
   equatable: ^2.0.2
   firebase_auth: ^1.4.1
