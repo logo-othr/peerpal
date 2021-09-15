@@ -195,6 +195,12 @@ class AppUserRepository {
                     .get(UserDatabaseContract.userProfilePicturePath)
                 : null;
 
+
+        if(age == null
+            && name == null
+            && phoneNumber == null
+            && imageURL == null) return UserInformation.empty;
+
         userInformation = UserInformation(
             age: age,
             name: name,
