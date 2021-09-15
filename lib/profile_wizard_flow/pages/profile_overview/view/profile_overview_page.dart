@@ -7,6 +7,7 @@ import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class ProfileOverviewPage extends StatelessWidget {
+
   static MaterialPage<void> page() {
     return MaterialPage<void>(child: ProfileOverviewPage());
   }

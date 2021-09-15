@@ -9,6 +9,11 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class AgeInputContent extends StatelessWidget {
+  final bool isInFlowContext;
+
+  AgeInputContent({Key? key, required this.isInFlowContext})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

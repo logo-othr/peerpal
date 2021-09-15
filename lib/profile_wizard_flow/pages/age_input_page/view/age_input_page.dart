@@ -6,8 +6,13 @@ import 'package:peerpal/profile_wizard_flow/pages/age_input_page/view/age_input_
 import 'package:peerpal/repository/app_user_repository.dart';
 
 class AgeInputPage extends StatelessWidget {
-  static MaterialPage<void> page() {
-    return MaterialPage<void>(child: AgeInputPage());
+  final bool isInFlowContext;
+
+  AgeInputPage({required this.isInFlowContext});
+
+  static MaterialPage<void> page({required bool isInFlowContext}) {
+    return MaterialPage<void>(
+        child: AgeInputPage(isInFlowContext: isInFlowContext));
   }
 
   @override
@@ -18,7 +23,7 @@ class AgeInputPage extends StatelessWidget {
         create: (_) {
           return AgeInputCubit(context.read<AppUserRepository>());
         },
-        child: AgeInputContent(),
+        child: AgeInputContent(isInFlowContext: isInFlowContext),
       ),
     );
   }

@@ -9,6 +9,12 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class NameInputContent extends StatefulWidget {
+
+  final bool isInFlowContext;
+
+  NameInputContent({Key? key, required this.isInFlowContext})
+      : super(key: key);
+
   @override
   _NameInputContentState createState() => _NameInputContentState();
 }

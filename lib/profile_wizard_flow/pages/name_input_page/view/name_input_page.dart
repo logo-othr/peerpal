@@ -7,8 +7,13 @@ import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class NameInputPage extends StatelessWidget {
-  static MaterialPage<void> page() {
-    return MaterialPage<void>(child: NameInputPage());
+  final bool isInFlowContext;
+
+  NameInputPage({required this.isInFlowContext});
+
+  static MaterialPage<void> page({required bool isInFlowContext}) {
+    return MaterialPage<void>(
+        child: NameInputPage(isInFlowContext: isInFlowContext));
   }
 
   @override
@@ -21,7 +26,7 @@ class NameInputPage extends StatelessWidget {
           create: (_) {
             return NameInputCubit(context.read<AppUserRepository>());
           },
-          child: NameInputContent(),
+          child: NameInputContent(isInFlowContext: isInFlowContext),
         ),
       ),
     );
