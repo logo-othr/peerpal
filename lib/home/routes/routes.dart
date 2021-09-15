@@ -14,7 +14,6 @@ List<Page> onGenerateHomeViewPages(
     if (userInformation.age != null) NameInputPage.page(),
     if (userInformation.name != null)  PhoneInputPage.page(),
      if(userInformation.phoneNumber != null) ProfilePictureInputPage.page(isInFlowContext: true),
-    if(userInformation.imagePath != null) ProfileOverviewPage.page(),
 
   ];
 }
