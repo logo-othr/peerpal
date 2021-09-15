@@ -29,7 +29,8 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
-        bloc: BlocProvider.of<HomeCubit>(context)..getCurrentUserInformation(),
+        bloc: BlocProvider.of<HomeCubit>(context)
+          ..getCurrentUserInformation(),
         builder: (context, state) {
           return MaterialApp(
               theme: ThemeData(
@@ -50,17 +51,31 @@ class HomeView extends StatelessWidget {
                           width: 3,
                         )),
                   )),
-              home: (state is HomeLoaded)
-                  ? FlowBuilder<UserInformation>(
-                      state: state.userInformation,
-                      onGeneratePages: onGenerateHomeViewPages,
-                    )
-                  : Container(
-                      child: Text("Nicht geladen"),
-                    ));
+              home: _homePageContent(state, context));
         });
   }
+
+  Widget _homePageContent(HomeState state, BuildContext context) {
+    if (state is HomeLoaded) {
+      return FlowBuilder<UserInformation>(
+        state: state.userInformation,
+        onGeneratePages: onGenerateHomeViewPages,
+        onComplete: (value) =>
+        {
+          context.read<HomeCubit>().completeProfileWizard()
+        },
+      );
+    }
+    else if (state is HomeProfileFlowCompleted) {
+      return MyTabView();
+    } else {
+      return Container(
+        child: Text("Nicht geladen"),
+      );
+    }
+  }
 }
+
 
 class MyTabView extends StatelessWidget {
   MyTabView({Key? key}) : super(key: key);

@@ -63,6 +63,11 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     return returnURL;
   }
 
+  Future<String?> getProfilePicturePath() async {
+    var userInformation = await _authRepository.getCurrentUserInformation();
+    return userInformation.imagePath;
+  }
+
   Future<void> _updateProfilePicturePath(String profilePicturePath) async {
     var userInformation = await _authRepository.getCurrentUserInformation();
     var updatedUserInformation =

@@ -100,6 +100,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                   children: <Widget>[
                     CustomPeerPALButton(
                       text: 'Fertig',
+                    onPressed: () => context.flow<UserInformation>().complete(),
                     ),
                   ],
                 ))

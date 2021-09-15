@@ -1,16 +1,31 @@
 part of 'home_cubit.dart';
 
 @immutable
-abstract class HomeState {
+abstract class HomeState implements Equatable{
   const HomeState();
 }
 
 class HomeInitial extends HomeState {
   const HomeInitial();
+
+  @override
+  List<Object?> get props => [];
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => throw UnimplementedError();
+
 }
 
 class HomeLoading extends HomeState {
   const HomeLoading();
+
+  @override
+  List<Object?> get props => [];
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => throw UnimplementedError();
 }
 
 class HomeLoaded extends HomeState {
@@ -19,14 +34,25 @@ class HomeLoaded extends HomeState {
   const HomeLoaded(this.userInformation);
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is HomeLoaded && o.userInformation == userInformation;
-  }
+  List<Object?> get props => [userInformation];
 
   @override
-  int get hashCode => userInformation.hashCode;
+  // TODO: implement stringify
+  bool? get stringify => throw UnimplementedError();
+}
+
+class HomeProfileFlowCompleted extends HomeState {
+
+
+  const HomeProfileFlowCompleted();
+
+  @override
+  List<Object?> get props => [];
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => throw UnimplementedError();
+
 }
 
 class HomeError extends HomeState {
@@ -35,12 +61,9 @@ class HomeError extends HomeState {
   const HomeError(this.message);
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is HomeError && o.message == message;
-  }
+  List<Object?> get props => [message];
 
   @override
-  int get hashCode => message.hashCode;
+  // TODO: implement stringify
+  bool? get stringify => throw UnimplementedError();
 }

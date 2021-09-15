@@ -81,7 +81,8 @@ class _Avatar extends StatelessWidget {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
       if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
-        var imageURL = context.flow<UserInformation>().state.imagePath;
+     //   var imageURL = context.flow<UserInformation>().state.imagePath;
+        var imageURL = null; // ToDo: Stop using flow state as a source
         if (imageURL != null && imageURL.isNotEmpty) {
           return Container(
             width: 150.0,
