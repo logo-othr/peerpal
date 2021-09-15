@@ -8,9 +8,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final String title;
 
+  final hasBackButton;
+
   CustomAppBar(
     this.title, {
     Key? key,
+        required this.hasBackButton,
   })  : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 
@@ -21,7 +24,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         title: Text(title),
         centerTitle: true,
         leadingWidth: 130,
-        leading: Row(children: <Widget>[
+        leading: hasBackButton ? Row(children: <Widget>[
           Container(
             width: 30,
             child: IconButton(
@@ -42,6 +45,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               fontWeight: FontWeight.normal,
             ),
           )
-        ]));
+        ]) : null);
   }
 }
