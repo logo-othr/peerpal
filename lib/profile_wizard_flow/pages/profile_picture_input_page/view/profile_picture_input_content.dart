@@ -11,19 +11,13 @@ import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-class ProfilePictureInputContent extends StatefulWidget {
+class ProfilePictureInputContent extends StatelessWidget {
   final bool isInFlowContext;
 
   ProfilePictureInputContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
-  @override
-  _ProfilePictureInputContentState createState() =>
-      _ProfilePictureInputContentState();
-}
 
-class _ProfilePictureInputContentState
-    extends State<ProfilePictureInputContent> {
   @override
   Widget build(BuildContext context) {
     return Center(

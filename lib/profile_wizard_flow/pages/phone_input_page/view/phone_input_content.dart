@@ -9,18 +9,13 @@ import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-class PhoneInputContent extends StatefulWidget {
+class PhoneInputContent extends StatelessWidget {
 
   final bool isInFlowContext;
 
   PhoneInputContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
-  @override
-  _PhoneInputContentState createState() => _PhoneInputContentState();
-}
-
-class _PhoneInputContentState extends State<PhoneInputContent> {
   TextEditingController nameController = TextEditingController();
 
   @override

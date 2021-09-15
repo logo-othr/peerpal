@@ -8,18 +8,14 @@ import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-class NameInputContent extends StatefulWidget {
+class NameInputContent extends StatelessWidget {
 
   final bool isInFlowContext;
 
   NameInputContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
-  @override
-  _NameInputContentState createState() => _NameInputContentState();
-}
 
-class _NameInputContentState extends State<NameInputContent> {
   TextEditingController nameController = TextEditingController();
 
   @override
