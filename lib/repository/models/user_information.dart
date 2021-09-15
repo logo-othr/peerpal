@@ -39,6 +39,18 @@ class UserInformation extends Equatable {
 
   bool get isNotEmpty => this != UserInformation.empty;
 
+  bool get isComplete {
+    if (age != null &&
+        name != null &&
+        phoneNumber != null &&
+        imagePath != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool get isNotComplete => isComplete != true;
 
   @override
   List<Object?> get props => [name, age, phoneNumber, imagePath];
@@ -48,7 +60,7 @@ class UserInformation extends Equatable {
     int? age,
     String? phoneNumber,
     String? imagePath,
-    String?  filename,
+    String? filename,
   }) {
     return UserInformation(
       age: age ?? this.age,
@@ -61,6 +73,6 @@ class UserInformation extends Equatable {
   UserInformation.fromJson(Map<String, dynamic> json)
       : name = json[UserInformationField.name],
         age = json[UserInformationField.age],
-  phoneNumber = json[UserInformationField.phone],
-  imagePath = json[UserInformationField.pictureUrl];
+        phoneNumber = json[UserInformationField.phone],
+        imagePath = json[UserInformationField.pictureUrl];
 }
