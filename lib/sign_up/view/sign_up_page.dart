@@ -14,7 +14,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("PeerPAL"),
+      appBar: CustomAppBar("PeerPAL", hasBackButton: true,),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(

@@ -16,7 +16,7 @@ class ProfileOverviewPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar("Username"),
+        appBar: CustomAppBar("Username", hasBackButton: false),
         body: BlocProvider(
           create: (_) {
             return ProfileOverviewCubit(context.read<AppUserRepository>());
