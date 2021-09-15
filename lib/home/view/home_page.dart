@@ -5,6 +5,8 @@ import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/home/routes/routes.dart';
+import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
+import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
@@ -17,7 +19,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeCubit(context.read<AppUserRepository>()),
+      create: (_) => HomeCubit(context.read<AppUserRepository>())..getCurrentUserInformation(),
       child: const HomeView(),
     );
   }
@@ -28,54 +30,31 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-        bloc: BlocProvider.of<HomeCubit>(context)
-          ..getCurrentUserInformation(),
-        builder: (context, state) {
-          return MaterialApp(
-              theme: ThemeData(
-                  primarySwatch: primaryColor,
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  inputDecorationTheme: InputDecorationTheme(
-                    contentPadding: const EdgeInsets.fromLTRB(30, 20, 0, 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: primaryColor,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: primaryColor,
-                          width: 3,
-                        )),
-                  )),
-              home: _homePageContent(state, context));
-        });
-  }
-
-  Widget _homePageContent(HomeState state, BuildContext context) {
-    if (state is HomeLoaded) {
-      return FlowBuilder<UserInformation>(
-        state: state.userInformation,
-        onGeneratePages: onGenerateHomeViewPages,
-        onComplete: (value) =>
-        {
-          context.read<HomeCubit>().completeProfileWizard()
-        },
-      );
-    }
-    else if (state is HomeProfileFlowCompleted) {
-      return MyTabView();
-    } else {
-      return Container(
-        child: Text("Nicht geladen"),
-      );
-    }
+    print("Build method called");
+    return BlocListener<HomeCubit, HomeState>(
+      listener: (context, state) async {
+        if (state is HomeLoaded) {
+          if (state.userInformation.isNotComplete) {
+            await Navigator.of(context).push(
+              ProfileWizardFlow.route(state.userInformation),
+            );
+          }
+          BlocProvider.of<HomeCubit>(context).completeProfileWizard();
+        }
+      },
+      child: BlocBuilder<HomeCubit, HomeState>(
+          bloc: BlocProvider.of<HomeCubit>(context),
+          builder: (context, state) {
+            if (state is HomeProfileFlowCompleted) {
+              return MyTabView();
+            }
+            return Container(
+              child: Text("Nicht geladen"),
+            );
+          }),
+    );
   }
 }
-
 
 class MyTabView extends StatelessWidget {
   MyTabView({Key? key}) : super(key: key);
