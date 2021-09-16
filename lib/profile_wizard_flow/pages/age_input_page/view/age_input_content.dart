@@ -67,19 +67,31 @@ class AgeInputContent extends StatelessWidget {
                 if (state is AgeInputPosting) {
                   return const CircularProgressIndicator();
                 } else {
-                  return CustomPeerPALButton(
-                    text: 'Weiter',
-                    onPressed: () async {
-                      await context
-                          .read<AgeInputCubit>()
-                          .postAge(state.selectedAge);
+                  if(isInFlowContext) {
+                    return CustomPeerPALButton(
+                      text: 'Weiter',
+                      onPressed: () async {
+                        await context
+                            .read<AgeInputCubit>()
+                            .postAge(state.selectedAge);
 
-                      var selectedAge = state.selectedAge;
-                      context
-                          .flow<UserInformation>()
-                          .update((s) => s.copyWith(age: selectedAge));
-                    },
-                  );
+                        var selectedAge = state.selectedAge;
+                        context
+                            .flow<UserInformation>()
+                            .update((s) => s.copyWith(age: selectedAge));
+                      },
+                    );
+                  } else {
+                    return CustomPeerPALButton(
+                      text: 'Speichern',
+                      onPressed: () async {
+                        await context
+                            .read<AgeInputCubit>()
+                            .postAge(state.selectedAge);
+                        Navigator.pop(context);
+                      },
+                    );
+                  }
                 }
               },
             ),

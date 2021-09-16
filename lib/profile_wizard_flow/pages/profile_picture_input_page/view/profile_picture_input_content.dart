@@ -40,7 +40,8 @@ class ProfilePictureInputContent extends StatelessWidget {
               BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
                 builder: (context, state) {
                   return CustomPeerPALButton(
-                    text: 'Weiter',
+                    text: isInFlowContext ? 'Weiter' : 'Speichern',
+
                     onPressed: (state is ProfilePicturePicked)
                         ? () async => updatePicture(state, context)
                         : null,

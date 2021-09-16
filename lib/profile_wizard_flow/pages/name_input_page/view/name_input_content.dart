@@ -9,12 +9,9 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class NameInputContent extends StatelessWidget {
-
   final bool isInFlowContext;
 
-  NameInputContent({Key? key, required this.isInFlowContext})
-      : super(key: key);
-
+  NameInputContent({Key? key, required this.isInFlowContext}) : super(key: key);
 
   TextEditingController nameController = TextEditingController();
 
@@ -46,7 +43,7 @@ class NameInputContent extends StatelessWidget {
                 const SizedBox(height: 30.0),
                 _UsernameInputField(),
                 const SizedBox(height: 8.0),
-                _NextButton(),
+                _NextButton(isInFlowContext),
                 const SizedBox(height: 15.0),
               ],
             ),
@@ -81,6 +78,10 @@ class _UsernameInputField extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
+  final isInFlowContext;
+
+  _NextButton(this.isInFlowContext);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NameInputCubit, NameInputState>(
@@ -96,12 +97,17 @@ class _NextButton extends StatelessWidget {
                     await context.read<NameInputCubit>().postName();
 
                     var selectedName = state.username;
-                    context
-                        .flow<UserInformation>()
-                        .update((s) => s.copyWith(name: selectedName.value));
+                    if (isInFlowContext) {
+                      context
+                          .flow<UserInformation>()
+                          .update((s) => s.copyWith(name: selectedName.value));
+                    } else {
+                      Navigator.pop(context);
+                    }
                   }
                 },
-                text: "Weiter");
+                text: isInFlowContext ? 'Weiter' : 'Speichern',
+              );
       },
     );
   }
