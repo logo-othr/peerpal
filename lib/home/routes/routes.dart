@@ -10,10 +10,11 @@ import 'package:peerpal/repository/models/user_information.dart';
 List<Page> onGenerateHomeViewPages(
     UserInformation userInformation, List<Page<dynamic>> pages) {
   return [
-    AgeInputPage.page(),
-    if (userInformation.age != null) NameInputPage.page(),
-    if (userInformation.name != null)  PhoneInputPage.page(),
-     if(userInformation.phoneNumber != null) ProfilePictureInputPage.page(isInFlowContext: true),
-
+    AgeInputPage.page(isInFlowContext: true),
+    if (userInformation.age != null) NameInputPage.page(isInFlowContext: true),
+    if (userInformation.name != null)
+      PhoneInputPage.page(isInFlowContext: true),
+    if (userInformation.phoneNumber != null)
+      ProfilePictureInputPage.page(isInFlowContext: true),
   ];
 }

@@ -5,6 +5,7 @@ import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/profile_wizard_flow/pages/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/age_picker.dart';
+import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -16,17 +17,9 @@ class AgeInputContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var hasBackButton = (isInFlowContext)? false : true;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Alter'),
-        actions: <Widget>[
-          IconButton(
-            key: const Key('ageselection_logout_button'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
-        ],
-      ),
+      appBar: CustomAppBar("Alter", hasBackButton: hasBackButton, ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

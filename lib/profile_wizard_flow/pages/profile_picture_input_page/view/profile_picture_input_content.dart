@@ -42,7 +42,7 @@ class ProfilePictureInputContent extends StatelessWidget {
                   return CustomPeerPALButton(
                     text: 'Weiter',
                     onPressed: (state is ProfilePicturePicked)
-                        ? () async => updatePicture(state)
+                        ? () async => updatePicture(state, context)
                         : null,
                   );
                 },
@@ -54,12 +54,12 @@ class ProfilePictureInputContent extends StatelessWidget {
     );
   }
 
-  Future<void> updatePicture(ProfilePictureState state) async {
+  Future<void> updatePicture(ProfilePictureState state, BuildContext context) async {
     if (state is ProfilePicturePicked) {
       var profilePictureURL = await context
           .read<ProfilePictureCubit>()
           .updateProfilePicture(state.profilePicture);
-      if (widget.isInFlowContext) {
+      if (isInFlowContext) {
         await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProfileOverviewPage()),

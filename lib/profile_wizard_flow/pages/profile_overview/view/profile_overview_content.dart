@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/profile_wizard_flow/pages/age_input_page/view/age_input_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/name_input_page/cubit/name_input_cubit.dart';
+import 'package:peerpal/profile_wizard_flow/pages/name_input_page/view/name_input_page.dart';
+import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/view/phone_input_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_overview/cubit/profile_overview_cubit.dart';
+import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -78,20 +82,36 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
               heading: 'NAME',
               text: 'Hans',
               isArrowIconVisible: true,
-              onPressed: () => {
-
-              },
+                onPressed: () async => {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NameInputPage(isInFlowContext: false)),
+                  )
+                }
             ),
             CustomSingleTable(
                 heading: 'ALTER',
                 text: '32',
                 isArrowIconVisible: true,
-                onPressed: () => {}),
+                onPressed: () async => {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AgeInputPage(isInFlowContext: false)),
+                  )
+                }),
             CustomSingleTable(
                 heading: 'TELEFONNUMMER',
                 text: '012345567',
                 isArrowIconVisible: true,
-                onPressed: () => {}),
+                onPressed: () async => {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhoneInputPage(isInFlowContext: false)),
+                      )
+                    }),
             const Spacer(),
             Container(
                 color: Colors.transparent,
@@ -100,7 +120,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                   children: <Widget>[
                     CustomPeerPALButton(
                       text: 'Fertig',
-                    onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 ))
