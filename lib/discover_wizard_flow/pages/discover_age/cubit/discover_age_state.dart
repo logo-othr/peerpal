@@ -1,6 +1,45 @@
 part of 'discover_age_cubit.dart';
 
 @immutable
-abstract class DiscoverAgeState {}
+abstract class DiscoverAgeState extends Equatable {
+  final List<int> ages = (List<int>.generate(10, (i) => i + 10));
 
-class DiscoverAgeInitial extends DiscoverAgeState {}
+  final int selctedFromAge;
+  final int selectedToAge;
+
+  DiscoverAgeState(this.selctedFromAge, this.selectedToAge);
+}
+
+class DiscoverAgeInitial extends DiscoverAgeState {
+  DiscoverAgeInitial(int selectedFromAge, int selectedToAge)
+      : super(selectedFromAge, selectedToAge);
+
+  @override
+  List<Object?> get props => [selctedFromAge];
+}
+
+class DiscoverAgePosting extends DiscoverAgeState {
+  DiscoverAgePosting(int selectedFromAge, int selectedToAge)
+      : super(selectedFromAge, selectedToAge);
+
+  @override
+  List<Object?> get props => [selctedFromAge, selectedToAge];
+}
+
+class DiscoverAgePosted extends DiscoverAgeState {
+  DiscoverAgePosted(int selectedFromAge, int selectedToAge)
+      : super(selectedFromAge, selectedToAge);
+
+  @override
+  List<Object?> get props => [selctedFromAge];
+}
+
+class DiscoverAgeError extends DiscoverAgeState {
+  final String message;
+
+  DiscoverAgeError(this.message, int selectedFromAge, int selectedToAge)
+      : super(selectedFromAge, selectedToAge);
+
+  @override
+  List<Object?> get props => [message, selctedFromAge, selectedToAge];
+}
