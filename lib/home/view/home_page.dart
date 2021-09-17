@@ -1,15 +1,10 @@
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
-import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
-import 'package:peerpal/home/routes/routes.dart';
-import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
 class HomePage extends StatelessWidget {

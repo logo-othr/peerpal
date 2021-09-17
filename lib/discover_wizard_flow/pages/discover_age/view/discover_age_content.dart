@@ -20,7 +20,7 @@ class DiscoverAgeContent extends StatelessWidget {
     var hasBackButton = (isInFlowContext) ? false : true;
     return Scaffold(
         appBar: CustomAppBar(
-          "Alter",
+          'Alter',
           hasBackButton: hasBackButton,
         ),
         body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
@@ -31,11 +31,11 @@ class DiscoverAgeContent extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
-                  CustomPeerPALHeading1("Alter"),
-                  SizedBox(
+                  CustomPeerPALHeading1('Alter'),
+                  const SizedBox(
                     height: 100,
                   ),
                   CustomFromToAgePicker(
@@ -46,14 +46,14 @@ class DiscoverAgeContent extends StatelessWidget {
                     toController: toController,
                     fromController: fromController,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Container(
                       color: Colors.transparent,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           CustomPeerPALButton(
-                            text: "Weiter",
+                            text: 'Weiter',
                             onPressed: () => context
                                 .read<DiscoverAgeCubit>()
                                 .postAge(fromController.selectedItem,

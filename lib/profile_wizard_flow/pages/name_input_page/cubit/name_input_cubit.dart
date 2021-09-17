@@ -30,7 +30,7 @@ class NameInputCubit extends Cubit<NameInputState> {
           userInformation.copyWith(name: state.username.value);
       await _appUserRepository.updateUserInformation(updatedUserInformation);
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception catch (e) {
+    } on Exception {
       emit(state.copyWith(
           status: FormzStatus.submissionFailure,
           errorMessage: "Fehler beim aktualisieren."));

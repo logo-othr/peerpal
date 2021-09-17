@@ -25,7 +25,7 @@ class NameInputContent extends StatelessWidget {
             ..showSnackBar(
               SnackBar(
                   content: Text((state.errorMessage.isEmpty
-                      ? "Fehler beim Speichern."
+                      ? 'Fehler beim Speichern.'
                       : state.errorMessage))),
             );
         }
@@ -39,7 +39,7 @@ class NameInputContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 16.0),
-                CustomPeerPALHeading1("Name Input"),
+                CustomPeerPALHeading1('Name Input'),
                 const SizedBox(height: 30.0),
                 _UsernameInputField(),
                 const SizedBox(height: 8.0),

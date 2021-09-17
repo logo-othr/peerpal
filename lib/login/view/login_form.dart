@@ -20,7 +20,7 @@ class LoginForm extends StatelessWidget {
             ..showSnackBar(
               SnackBar(
                   content: Text((state.errorMessage.isEmpty
-                      ? "Fehler beim Login"
+                      ? 'Fehler beim Login'
                       : state.errorMessage))),
             );
         }
@@ -34,7 +34,7 @@ class LoginForm extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 16.0),
-                CustomPeerPALHeading1("Login"),
+                CustomPeerPALHeading1('Login'),
                 const SizedBox(height: 30.0),
                 _EmailInputField(),
                 const SizedBox(height: 8.0),
@@ -163,7 +163,7 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.formValidationStatus.isValidated
                     ? () => context.read<LoginCubit>().login()
                     : null,
-                text: "Login");
+                text: 'Login');
       },
     );
   }

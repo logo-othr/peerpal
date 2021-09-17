@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("PeerPAL", hasBackButton: false,),
+      appBar: CustomAppBar('PeerPAL', hasBackButton: false,),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(

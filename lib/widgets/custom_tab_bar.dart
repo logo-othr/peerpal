@@ -18,26 +18,26 @@ class _CustomTabBarState extends State<CustomTabBar> {
       selectedFontSize: 11,
       unselectedFontSize: 9,
       unselectedLabelStyle: TextStyle(color: primaryColor),
-      selectedLabelStyle: TextStyle(color: Colors.blueAccent),
+      selectedLabelStyle: const TextStyle(color: Colors.blueAccent),
       items: [
         BottomNavigationBarItem(
-            icon: Icon(Icons.face),
+            icon: const Icon(Icons.face),
             label: 'Entdecken',
             backgroundColor: secondaryColor),
         BottomNavigationBarItem(
-            icon: Icon(Icons.nature_people),
+            icon: const Icon(Icons.nature_people),
             label: 'Aktivität',
             backgroundColor: secondaryColor),
         BottomNavigationBarItem(
-            icon: Icon(Icons.people),
+            icon: const Icon(Icons.people),
             label: 'Freunde',
             backgroundColor: secondaryColor),
         BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
+            icon: const Icon(Icons.chat),
             label: 'Chat',
             backgroundColor: secondaryColor),
         BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             label: 'Einstellungen',
             backgroundColor: secondaryColor),
       ],

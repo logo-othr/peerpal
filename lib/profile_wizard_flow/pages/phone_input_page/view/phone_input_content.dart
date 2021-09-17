@@ -73,13 +73,13 @@ class _PhonenumberInputField extends StatelessWidget {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
-                style: TextStyle(fontSize: 22),
+                style: const TextStyle(fontSize: 22),
                 key: const Key('phone_input_phone_number_field'),
                 onChanged: (phoneNumber) =>
                     context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
                 maxLines: 1,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(30, 30, 0, 30),
+                  contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
                   labelText: 'Telefonnummer',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
