@@ -5,11 +5,12 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:provider/provider.dart';
 
 class CustomFromToAgePicker extends StatefulWidget {
-  CustomFromToAgePicker({Key? key, required this.fromMin, required this.fromMax, required this.toMin, required this.toMax}) : super(key: key) {
+  CustomFromToAgePicker({Key? key, required this.fromMin, required this.fromMax, required this.toMin, required this.toMax, required this.fromController, required this.toController}) : super(key: key) {
     fromItems = [for (var i = fromMin; i <= fromMax; i++) i];
     toItems = [for (var i = toMin; i <= toMax; i++) i];
   }
-
+  final  fromController;
+  final  toController;
   final int fromMin;
   final int fromMax;
   final int toMin;
@@ -23,8 +24,7 @@ class CustomFromToAgePicker extends StatefulWidget {
 }
 
 class _CustomFromToAgePickerState extends State<CustomFromToAgePicker> {
-  var fromController =FixedExtentScrollController();
-  var toController =FixedExtentScrollController();
+
   
   @override
   Widget build(BuildContext context) {
@@ -45,9 +45,9 @@ class _CustomFromToAgePickerState extends State<CustomFromToAgePicker> {
                 child: CupertinoPicker(
                   itemExtent: 30,
                   backgroundColor: Colors.transparent,
-                  scrollController: fromController,
+                  scrollController: widget.fromController,
                   onSelectedItemChanged: (int index) {
-                    context.read<DiscoverAgeCubit>().ageChanged(fromController.selectedItem, toController.selectedItem);
+                    context.read<DiscoverAgeCubit>().ageChanged(widget.fromController.selectedItem, widget.toController.selectedItem);
 
                   },
                   children: <Widget>[
@@ -64,11 +64,11 @@ class _CustomFromToAgePickerState extends State<CustomFromToAgePicker> {
                 height: 100,
                 width: 100,
                 child: CupertinoPicker(
-                  scrollController: toController,
+                  scrollController: widget.toController,
                   itemExtent: 30,
                   backgroundColor: Colors.transparent,
                   onSelectedItemChanged: (int index) {
-                    context.read<DiscoverAgeCubit>().ageChanged(fromController.selectedItem, toController.selectedItem);
+                    context.read<DiscoverAgeCubit>().ageChanged(widget.fromController.selectedItem, widget.toController.selectedItem);
                   },
                   children: <Widget>[
                     for (var i = widget.toMin; i <= widget.toMax; i++)

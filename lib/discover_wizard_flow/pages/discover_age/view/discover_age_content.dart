@@ -12,48 +12,59 @@ class DiscoverAgeContent extends StatelessWidget {
   DiscoverAgeContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
+  var fromController = FixedExtentScrollController();
+  var toController = FixedExtentScrollController();
+
   @override
   Widget build(BuildContext context) {
     var hasBackButton = (isInFlowContext) ? false : true;
     return Scaffold(
-      appBar: CustomAppBar(
-        "Alter",
-        hasBackButton: hasBackButton,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 40,
-              ),
-              CustomPeerPALHeading1("Alter"),
-              SizedBox(
-                height: 100,
-              ),
-              BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
-                  builder: (context, state) {
-                return CustomFromToAgePicker(
+        appBar: CustomAppBar(
+          "Alter",
+          hasBackButton: hasBackButton,
+        ),
+        body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
+            builder: (context, state) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
+                  ),
+                  CustomPeerPALHeading1("Alter"),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  CustomFromToAgePicker(
                     fromMin: state.fromMinAge,
                     fromMax: state.fromMaxAge,
                     toMin: state.toMinAge,
-                    toMax: state.toMaxAge);
-              }),
-              Spacer(),
-              Container(
-                  color: Colors.transparent,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      CustomPeerPALButton(text: "Weiter"),
-                    ],
-                  ))
-            ],
-          ),
-        ),
-      ),
-    );
+                    toMax: state.toMaxAge,
+                    toController: toController,
+                    fromController: fromController,
+                  ),
+                  Spacer(),
+                  Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          CustomPeerPALButton(
+                            text: "Weiter",
+                            onPressed: () => context
+                                .read<DiscoverAgeCubit>()
+                                .postAge(fromController.selectedItem,
+                                    toController.selectedItem),
+                          ),
+                        ],
+                      ))
+                ],
+              ),
+            ),
+          );
+        }));
   }
 }
