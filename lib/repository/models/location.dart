@@ -1,43 +1,21 @@
 import 'package:equatable/equatable.dart';
 
 class Location extends Equatable {
-  const Location({
+  const Location( {
     required this.place,
     required this.zipcode,
+    this.street,
+    this.streetNumber,
   });
-
-  factory Location.fromMap(Map<String, dynamic> map) {
-    return Location(
-      place: map['place'] as String,
-      zipcode: map['zipcode'] as String,
-    );
-  }
 
   final String place;
   final String zipcode;
+  final String? street;
+  final String? streetNumber;
 
   @override
-  String toString() {
-    return 'Location{${' place: $place,'}${' zipcode: $zipcode,'}}';
-  }
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 
-  Location copyWith({
-    String? place,
-    String? zipcode,
-  }) {
-    return Location(
-      place: place ?? this.place,
-      zipcode: zipcode ?? this.zipcode,
-    );
-  }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'place': place,
-      'zipcode': zipcode,
-    };
-  }
-
-  @override
-  List<Object?> get props => [place, zipcode];
 }
