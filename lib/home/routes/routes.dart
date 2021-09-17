@@ -7,7 +7,7 @@ import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_
 import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/view/profile_picture_input_page.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
-List<Page> onGenerateHomeViewPages(
+List<Page> onGenerateProfileWizardPages(
     UserInformation userInformation, List<Page<dynamic>> pages) {
   return [
     AgeInputPage.page(isInFlowContext: true),

@@ -18,7 +18,7 @@ class ProfileWizardFlow extends StatelessWidget {
       onWillPop: () async => false,
       child: FlowBuilder<UserInformation>(
         state: flowState,
-        onGeneratePages: onGenerateHomeViewPages,
+        onGeneratePages: onGenerateProfileWizardPages,
       ),
     );
   }
