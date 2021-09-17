@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/home/routes/routes.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
@@ -40,6 +41,9 @@ class HomeView extends StatelessWidget {
             );
           }
           BlocProvider.of<HomeCubit>(context).completeProfileWizard();
+          await Navigator.of(context).push(
+            DiscoverWizardFlow.route(state.userInformation),
+          );
         }
       },
       child: BlocBuilder<HomeCubit, HomeState>(
