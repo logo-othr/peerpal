@@ -21,6 +21,11 @@ enum UserInformationField {
   name,
   phone,
   pictureUrl,
+  discoverFromAge,
+  discoverToAge,
+  discoverCommunicationPreferences,
+  discoverActivities,
+  discoverLocations
 }
 
 // ToDo: Move field names from UserDatabaseContract to this extension
@@ -35,6 +40,16 @@ extension UserInformationFieldExtension on UserInformationField {
         return UserDatabaseContract.userPhoneNumber;
       case UserInformationField.pictureUrl:
         return UserDatabaseContract.userProfilePicturePath;
+      case UserInformationField.discoverFromAge:
+        return UserDatabaseContract.discoverFromAge;
+      case UserInformationField.discoverToAge:
+        return UserDatabaseContract.discoverToAge;
+      case UserInformationField.discoverCommunicationPreferences:
+        return UserDatabaseContract.discoverCommunicationPreferences;
+      case UserInformationField.discoverActivities:
+        return UserDatabaseContract.discoverActivities;
+      case UserInformationField.discoverLocations:
+        return UserDatabaseContract.discoverLocations;
     }
   }
 }
