@@ -5,12 +5,21 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:provider/provider.dart';
 
 class CustomFromToAgePicker extends StatefulWidget {
-  CustomFromToAgePicker({Key? key, required this.fromMin, required this.fromMax, required this.toMin, required this.toMax, required this.fromController, required this.toController}) : super(key: key) {
+  CustomFromToAgePicker(
+      {Key? key,
+      required this.fromMin,
+      required this.fromMax,
+      required this.toMin,
+      required this.toMax,
+      required this.fromController,
+      required this.toController})
+      : super(key: key) {
     fromItems = [for (var i = fromMin; i <= fromMax; i++) i];
     toItems = [for (var i = toMin; i <= toMax; i++) i];
   }
-  final  fromController;
-  final  toController;
+
+  final fromController;
+  final toController;
   final int fromMin;
   final int fromMax;
   final int toMin;
@@ -18,14 +27,11 @@ class CustomFromToAgePicker extends StatefulWidget {
   List<int>? fromItems;
   List<int>? toItems;
 
-
   @override
   State<CustomFromToAgePicker> createState() => _CustomFromToAgePickerState();
 }
 
 class _CustomFromToAgePickerState extends State<CustomFromToAgePicker> {
-
-  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,8 +53,9 @@ class _CustomFromToAgePickerState extends State<CustomFromToAgePicker> {
                   backgroundColor: Colors.transparent,
                   scrollController: widget.fromController,
                   onSelectedItemChanged: (int index) {
-                    context.read<DiscoverAgeCubit>().ageChanged(widget.fromController.selectedItem, widget.toController.selectedItem);
-
+                    context.read<DiscoverAgeCubit>().ageChanged(
+                        widget.fromController.selectedItem,
+                        widget.toController.selectedItem);
                   },
                   children: <Widget>[
                     for (var i = widget.fromMin; i <= widget.fromMax; i++)
@@ -68,7 +75,9 @@ class _CustomFromToAgePickerState extends State<CustomFromToAgePicker> {
                   itemExtent: 30,
                   backgroundColor: Colors.transparent,
                   onSelectedItemChanged: (int index) {
-                    context.read<DiscoverAgeCubit>().ageChanged(widget.fromController.selectedItem, widget.toController.selectedItem);
+                    context.read<DiscoverAgeCubit>().ageChanged(
+                        widget.fromController.selectedItem,
+                        widget.toController.selectedItem);
                   },
                   children: <Widget>[
                     for (var i = widget.toMin; i <= widget.toMax; i++)
