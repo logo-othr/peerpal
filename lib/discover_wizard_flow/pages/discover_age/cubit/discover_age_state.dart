@@ -6,6 +6,10 @@ abstract class DiscoverAgeState extends Equatable {
 
   final int selctedFromAge;
   final int selectedToAge;
+  final int fromMinAge = 0;
+  final int fromMaxAge = 120;
+  final int toMinAge = 0;
+  final int toMaxAge = 120;
 
   DiscoverAgeState(this.selctedFromAge, this.selectedToAge);
 }
