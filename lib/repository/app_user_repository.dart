@@ -42,8 +42,6 @@ class AppUserRepository {
     });
   }
 
-
-
   // ToDo: Remove if not used in the future
   Stream<UserInformation> get userInformation {
     return _firestore
@@ -150,7 +148,15 @@ class AppUserRepository {
       UserInformationField.age.fieldName: userInformation.age,
       UserInformationField.name.fieldName: userInformation.name,
       UserInformationField.phone.fieldName: userInformation.phoneNumber,
-      UserInformationField.pictureUrl.fieldName: userInformation.imagePath
+      UserInformationField.pictureUrl.fieldName: userInformation.imagePath,
+      UserInformationField.discoverFromAge.fieldName:
+          userInformation.discoverFromAge,
+      UserInformationField.discoverToAge.fieldName:
+          userInformation.discoverToAge,
+      UserInformationField.discoverCommunicationPreferences.fieldName:
+          userInformation.discoverCommunicationPreferences,
+      UserInformationField.discoverActivities.fieldName:
+          userInformation.discoverActivities,
     }, SetOptions(merge: true));
   }
 
@@ -195,11 +201,10 @@ class AppUserRepository {
                     .get(UserDatabaseContract.userProfilePicturePath)
                 : null;
 
-
-        if(age == null
-            && name == null
-            && phoneNumber == null
-            && imageURL == null) return UserInformation.empty;
+        if (age == null &&
+            name == null &&
+            phoneNumber == null &&
+            imageURL == null) return UserInformation.empty;
 
         userInformation = UserInformation(
             age: age,
