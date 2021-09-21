@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
+import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/app_user.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
@@ -201,16 +202,57 @@ class AppUserRepository {
                     .get(UserDatabaseContract.userProfilePicturePath)
                 : null;
 
-        if (age == null &&
+
+        var discoverFromAge =
+        data.containsKey(UserDatabaseContract.discoverFromAge)
+            ? userDocumentSnapshot
+            .get(UserDatabaseContract.discoverFromAge)
+            : null;
+
+        var discoverToAge =
+        data.containsKey(UserDatabaseContract.discoverToAge)
+            ? userDocumentSnapshot
+            .get(UserDatabaseContract.discoverToAge)
+            : null;
+
+        var discoverActivities =  data.containsKey(UserDatabaseContract.discoverActivities)
+            ? userDocumentSnapshot
+            .get(UserDatabaseContract.discoverActivities)
+            : null;
+
+
+        var discoverCommunicationPreferences =  data.containsKey(UserDatabaseContract.discoverCommunicationPreferences)
+            ? userDocumentSnapshot
+            .get(UserDatabaseContract.discoverCommunicationPreferences)
+            : null;
+
+        var discoverLocations =  data.containsKey(UserDatabaseContract.discoverLocations)
+            ? userDocumentSnapshot
+            .get(UserDatabaseContract.discoverLocations)
+            : null;
+
+
+        data.containsKey(UserDatabaseContract.userProfilePicturePath)
+            ? userDocumentSnapshot
+            .get(UserDatabaseContract.userProfilePicturePath)
+            : null;
+
+       /* if (age == null &&
             name == null &&
             phoneNumber == null &&
-            imageURL == null) return UserInformation.empty;
+            imageURL == null) return UserInformation.empty;*/
 
         userInformation = UserInformation(
             age: age,
             name: name,
             phoneNumber: phoneNumber,
-            imagePath: imageURL);
+            imagePath: imageURL,
+            discoverFromAge: discoverFromAge,
+            discoverToAge: discoverToAge,
+            discoverCommunicationPreferences: discoverCommunicationPreferences,
+            discoverActivities: discoverActivities,
+            discoverLocations: discoverLocations
+        );
       }
     }
     return userInformation;
@@ -236,5 +278,19 @@ class AppUserRepository {
     return (firebaseUser == null
         ? AppUser.empty
         : AppUser(id: firebaseUser.uid, email: firebaseUser.email));
+  }
+
+  Future<List<Activity>> loadActivityList() async {
+    // ToDo: Get list from firebase
+    final List<String> activities = [
+      "Radfahren",
+      "Wandern",
+      "Fußball",
+      "Tennis",
+      "Gartenarbeit",
+      "Hilfe gesucht",
+
+    ];
+    return activities.map((e) => Activity(name: e)).toList();
   }
 }
