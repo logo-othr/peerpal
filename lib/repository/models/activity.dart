@@ -1,30 +1,30 @@
 import 'package:peerpal/repository/models/location.dart';
 
 class Activity {
-final String id;
-final String name;
-final String description;
-final String creatorId;
-final String creatorName;
-final DateTime date;
-final Location location;
-final List<int> attendeeIds;
-final List<int> invitationIds;
-final bool public;
+  final String? id;
+  final String? name;
+  final String? description;
+  final String? creatorId;
+  final String? creatorName;
+  final DateTime? date;
+  final Location? location;
+  final List<int>? attendeeIds;
+  final List<int>? invitationIds;
+  final bool? public;
 
-//<editor-fold desc="Data Methods">upda
+//<editor-fold desc="Data Methods">
 
   const Activity({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.creatorId,
-    required this.creatorName,
-    required this.date,
-    required this.location,
-    required this.attendeeIds,
-    required this.invitationIds,
-    required this.public,
+    this.id,
+    this.name,
+    this.description,
+    this.creatorId,
+    this.creatorName,
+    this.date,
+    this.location,
+    this.attendeeIds,
+    this.invitationIds,
+    this.public,
   });
 
   @override
@@ -130,3 +130,5 @@ final bool public;
 
 //</editor-fold>
 }
+
+
