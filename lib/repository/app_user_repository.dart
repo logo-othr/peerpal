@@ -104,7 +104,7 @@ class AppUserRepository {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      // https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
+      // error-codes: https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
       switch (e.code) {
         case 'wrong-password':
         case 'user-not-found':
@@ -157,20 +157,9 @@ class AppUserRepository {
       UserInformationField.discoverCommunicationPreferences.fieldName:
           userInformation.discoverCommunicationPreferences,
       UserInformationField.discoverActivities.fieldName:
-          userInformation.discoverActivities,
+          userInformation.discoverActivities?.map((e) => e.code).toList(),
     }, SetOptions(merge: true));
   }
-
-  /* Future<void> updateAllUserInformation(
-      UserInformation updatedUserInformation) async {
-    var userDocument =
-    _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
-
-    await userDocument.set({
-      UserInformationField.userName.fieldName: updatedUserInformation.age,
-      UserInformationField.userAge.fieldName: updatedUserInformation.name
-    }, SetOptions(merge: true));
-  }*/
 
   Future<UserInformation> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
@@ -202,45 +191,35 @@ class AppUserRepository {
                     .get(UserDatabaseContract.userProfilePicturePath)
                 : null;
 
-
         var discoverFromAge =
-        data.containsKey(UserDatabaseContract.discoverFromAge)
-            ? userDocumentSnapshot
-            .get(UserDatabaseContract.discoverFromAge)
+            data.containsKey(UserDatabaseContract.discoverFromAge)
+                ? userDocumentSnapshot.get(UserDatabaseContract.discoverFromAge)
+                : null;
+
+        var discoverToAge = data.containsKey(UserDatabaseContract.discoverToAge)
+            ? userDocumentSnapshot.get(UserDatabaseContract.discoverToAge)
             : null;
 
-        var discoverToAge =
-        data.containsKey(UserDatabaseContract.discoverToAge)
-            ? userDocumentSnapshot
-            .get(UserDatabaseContract.discoverToAge)
+        var discoverActivities = data
+                .containsKey(UserDatabaseContract.discoverActivities)
+            ? List.from(userDocumentSnapshot.get(UserDatabaseContract.discoverActivities))
             : null;
 
-        var discoverActivities =  data.containsKey(UserDatabaseContract.discoverActivities)
+        var discoverCommunicationPreferences = data.containsKey(
+                UserDatabaseContract.discoverCommunicationPreferences)
             ? userDocumentSnapshot
-            .get(UserDatabaseContract.discoverActivities)
+                .get(UserDatabaseContract.discoverCommunicationPreferences)
             : null;
 
-
-        var discoverCommunicationPreferences =  data.containsKey(UserDatabaseContract.discoverCommunicationPreferences)
-            ? userDocumentSnapshot
-            .get(UserDatabaseContract.discoverCommunicationPreferences)
+        var discoverLocations = data
+                .containsKey(UserDatabaseContract.discoverLocations)
+            ? userDocumentSnapshot.get(UserDatabaseContract.discoverLocations)
             : null;
-
-        var discoverLocations =  data.containsKey(UserDatabaseContract.discoverLocations)
-            ? userDocumentSnapshot
-            .get(UserDatabaseContract.discoverLocations)
-            : null;
-
 
         data.containsKey(UserDatabaseContract.userProfilePicturePath)
             ? userDocumentSnapshot
-            .get(UserDatabaseContract.userProfilePicturePath)
+                .get(UserDatabaseContract.userProfilePicturePath)
             : null;
-
-       /* if (age == null &&
-            name == null &&
-            phoneNumber == null &&
-            imageURL == null) return UserInformation.empty;*/
 
         userInformation = UserInformation(
             age: age,
@@ -250,9 +229,8 @@ class AppUserRepository {
             discoverFromAge: discoverFromAge,
             discoverToAge: discoverToAge,
             discoverCommunicationPreferences: discoverCommunicationPreferences,
-            discoverActivities: discoverActivities,
-            discoverLocations: discoverLocations
-        );
+            discoverActivities: discoverActivities?.map((e) => Activity(code: e)).toList(),
+            discoverLocations: discoverLocations);
       }
     }
     return userInformation;
@@ -281,16 +259,13 @@ class AppUserRepository {
   }
 
   Future<List<Activity>> loadActivityList() async {
-    // ToDo: Get list from firebase
-    final List<String> activities = [
-      "Radfahren",
-      "Wandern",
-      "Fußball",
-      "Tennis",
-      "Gartenarbeit",
-      "Hilfe gesucht",
-
-    ];
-    return activities.map((e) => Activity(name: e)).toList();
+    final List<Activity> activities = [];
+    activities.add(Activity(code: 'biking', name: "Radfahren"));
+    activities.add(Activity(code: 'hiking', name: "Wandern"));
+    activities.add(Activity(code: 'soccer', name: "Fußball"));
+    activities.add(Activity(code: 'tennis', name: "Tennis"));
+    activities.add(Activity(code: 'gardening', name: "Gartenarbeit"));
+    activities.add(Activity(code: 'help', name: "Hilfe gesucht"));
+    return activities;
   }
 }

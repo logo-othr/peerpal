@@ -3,6 +3,7 @@ import 'package:peerpal/repository/models/location.dart';
 class Activity {
   final String? id;
   final String? name;
+  final String? code;
   final String? description;
   final String? creatorId;
   final String? creatorName;
@@ -17,6 +18,7 @@ class Activity {
   const Activity({
     this.id,
     this.name,
+    this.code,
     this.description,
     this.creatorId,
     this.creatorName,
@@ -34,6 +36,7 @@ class Activity {
           runtimeType == other.runtimeType &&
           id == other.id &&
           name == other.name &&
+          code == other.code &&
           description == other.description &&
           creatorId == other.creatorId &&
           creatorName == other.creatorName &&
@@ -47,6 +50,7 @@ class Activity {
   int get hashCode =>
       id.hashCode ^
       name.hashCode ^
+      code.hashCode ^
       description.hashCode ^
       creatorId.hashCode ^
       creatorName.hashCode ^
@@ -61,6 +65,7 @@ class Activity {
     return 'Activity{' +
         ' id: $id,' +
         ' name: $name,' +
+        ' code: $code,' +
         ' description: $description,' +
         ' creatorId: $creatorId,' +
         ' creatorName: $creatorName,' +
@@ -75,6 +80,7 @@ class Activity {
   Activity copyWith({
     String? id,
     String? name,
+    String? code,
     String? description,
     String? creatorId,
     String? creatorName,
@@ -87,6 +93,7 @@ class Activity {
     return Activity(
       id: id ?? this.id,
       name: name ?? this.name,
+      code: code ?? this.code,
       description: description ?? this.description,
       creatorId: creatorId ?? this.creatorId,
       creatorName: creatorName ?? this.creatorName,
@@ -102,6 +109,7 @@ class Activity {
     return {
       'id': this.id,
       'name': this.name,
+      'code': this.code,
       'description': this.description,
       'creatorId': this.creatorId,
       'creatorName': this.creatorName,
@@ -117,6 +125,7 @@ class Activity {
     return Activity(
       id: map['id'] as String,
       name: map['name'] as String,
+      code: map['code'] as String,
       description: map['description'] as String,
       creatorId: map['creatorId'] as String,
       creatorName: map['creatorName'] as String,
@@ -130,5 +139,3 @@ class Activity {
 
 //</editor-fold>
 }
-
-

@@ -45,14 +45,16 @@ class DiscoverActivitiesCubit extends Cubit<DiscoverActivitiesState> {
   }
 
   Future<void> postActivities(
-      List<Activity> activities, List<Activity> selectedActivities) async {
-    emit(DiscoverActivitiesPosting(activities, selectedActivities));
+    ) async {
+if(state is DiscoverActivitiesSelected) {
+  emit(DiscoverActivitiesPosting(state.activities, state.selectedActivities));
 
-    var userInformation = await _appUserRepository.getCurrentUserInformation();
-    var updatedUserInformation =
-        userInformation.copyWith(discoverActivities: selectedActivities);
-    await _appUserRepository.updateUserInformation(updatedUserInformation);
+  var userInformation = await _appUserRepository.getCurrentUserInformation();
+  var updatedUserInformation =
+  userInformation.copyWith(discoverActivities: state.selectedActivities);
+  await _appUserRepository.updateUserInformation(updatedUserInformation);
 
-    emit(DiscoverActivitiesPosted(activities, selectedActivities));
+  emit(DiscoverActivitiesPosted(state.activities, state.selectedActivities));
+}
   }
 }
