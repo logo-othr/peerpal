@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peerpal/repository/cache.dart';
@@ -155,7 +156,7 @@ class AppUserRepository {
       UserInformationField.discoverToAge.fieldName:
           userInformation.discoverToAge,
       UserInformationField.discoverCommunicationPreferences.fieldName:
-          userInformation.discoverCommunicationPreferences?.map((e) => e.fieldName).toList(),
+          userInformation.discoverCommunicationPreferences?.map((e) => EnumToString.convertToString(e)).toList(),
       UserInformationField.discoverActivities.fieldName:
           userInformation.discoverActivities?.map((e) => e.code).toList(),
     }, SetOptions(merge: true));
@@ -228,7 +229,7 @@ class AppUserRepository {
             imagePath: imageURL,
             discoverFromAge: discoverFromAge,
             discoverToAge: discoverToAge,
-            discoverCommunicationPreferences: discoverCommunicationPreferences?.map((e) => CommunicationType.f).toList(),
+            discoverCommunicationPreferences: discoverCommunicationPreferences?.map((e) => EnumToString.fromString(CommunicationType.values, e)).toList(),
             discoverActivities: discoverActivities?.map((e) => Activity(code: e)).toList(),
             discoverLocations: discoverLocations);
       }

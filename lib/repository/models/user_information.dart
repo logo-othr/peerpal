@@ -6,12 +6,21 @@ import 'package:peerpal/repository/models/location.dart';
 enum CommunicationType { phone, chat }
 
 extension CommunicationTypeExtension on CommunicationType {
-  String get fieldName {
+  String get toUIString {
     switch (this) {
       case CommunicationType.phone:
-        return 'phone';
+        return 'Telefon';
       case CommunicationType.chat:
-        return 'chat';
+        return 'Chat';
+    }
+  }
+
+  CommunicationType? fromFieldName(String fieldName) {
+    switch (fieldName) {
+      case 'Telefon':
+        return CommunicationType.phone;
+      case 'Chat':
+        return CommunicationType.chat;
     }
   }
 }
@@ -72,7 +81,7 @@ class UserInformation extends Equatable {
   final String? imagePath;
   final int? discoverFromAge;
   final int? discoverToAge;
-  final Map<CommunicationType, bool>? discoverCommunicationPreferences;
+  final List<CommunicationType>? discoverCommunicationPreferences;
   final List<Activity>? discoverActivities;
   final List<Location>? discoverLocations;
 
@@ -115,7 +124,7 @@ class UserInformation extends Equatable {
     String? imagePath,
     int? discoverFromAge,
     int? discoverToAge,
-    Map<CommunicationType, bool>? discoverCommunicationPreferences,
+    List<CommunicationType>? discoverCommunicationPreferences,
     List<Activity>? discoverActivities,
     List<Location>? discoverLocations,
   }) {

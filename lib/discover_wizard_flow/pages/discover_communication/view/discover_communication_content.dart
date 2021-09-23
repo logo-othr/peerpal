@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,7 +47,7 @@ class DiscoverCommunicationContent extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                               child: CustomToggleButton(
-                                text: communicationType.fieldName,
+                                text: communicationType.toUIString,
                                 textColor: Colors.white,
                                 height: 45,
                                 width: 200,

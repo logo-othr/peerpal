@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
@@ -16,6 +17,7 @@ class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
     var activities = await _appUserRepository.loadCommunicationList();
     emit(DiscoverCommunicationSelected(activities, [].cast<CommunicationType>()));
   }
+
 
 
   void addCommunication(CommunicationType communication) {
