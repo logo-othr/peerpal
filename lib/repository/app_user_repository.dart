@@ -156,7 +156,9 @@ class AppUserRepository {
       UserInformationField.discoverToAge.fieldName:
           userInformation.discoverToAge,
       UserInformationField.discoverCommunicationPreferences.fieldName:
-          userInformation.discoverCommunicationPreferences?.map((e) => EnumToString.convertToString(e)).toList(),
+          userInformation.discoverCommunicationPreferences
+              ?.map((e) => EnumToString.convertToString(e))
+              .toList(),
       UserInformationField.discoverActivities.fieldName:
           userInformation.discoverActivities?.map((e) => e.code).toList(),
     }, SetOptions(merge: true));
@@ -201,16 +203,31 @@ class AppUserRepository {
             ? userDocumentSnapshot.get(UserDatabaseContract.discoverToAge)
             : null;
 
-        var discoverActivities = data
-                .containsKey(UserDatabaseContract.discoverActivities)
-            ? List.from(userDocumentSnapshot.get(UserDatabaseContract.discoverActivities))
+        var discoverActivities =
+            data.containsKey(UserDatabaseContract.discoverActivities)
+                ? List.from(userDocumentSnapshot
+                    .get(UserDatabaseContract.discoverActivities))
+                : null;
+
+       List<String>?  discoverCommunicationPreferences = data.containsKey(
+                UserDatabaseContract.discoverCommunicationPreferences)
+            ? List.from(userDocumentSnapshot
+           .get(UserDatabaseContract.discoverCommunicationPreferences)as Iterable<dynamic>)
             : null;
 
-        var discoverCommunicationPreferences = data.containsKey(
-                UserDatabaseContract.discoverCommunicationPreferences)
-            ? userDocumentSnapshot
-                .get(UserDatabaseContract.discoverCommunicationPreferences)
-            : null;
+       List<CommunicationType>? prefs;
+       if(discoverCommunicationPreferences != null) {
+         prefs = [];
+         for(String s in discoverCommunicationPreferences) {
+           var pref = EnumToString.fromString(CommunicationType.values, s);
+           if(pref !=  null) {
+             prefs.add(pref);
+           }
+         }
+       }
+
+
+
 
         var discoverLocations = data
                 .containsKey(UserDatabaseContract.discoverLocations)
@@ -229,9 +246,11 @@ class AppUserRepository {
             imagePath: imageURL,
             discoverFromAge: discoverFromAge,
             discoverToAge: discoverToAge,
-            discoverCommunicationPreferences: discoverCommunicationPreferences?.map((e) => EnumToString.fromString(CommunicationType.values, e)).toList(),
-            discoverActivities: discoverActivities?.map((e) => Activity(code: e)).toList(),
+            discoverCommunicationPreferences: prefs,
+            discoverActivities:
+                discoverActivities?.map((e) => Activity(code: e)).toList(),
             discoverLocations: discoverLocations);
+        print("dummy");
       }
     }
     return userInformation;
@@ -244,7 +263,7 @@ class AppUserRepository {
     if (cachedUserInformation != null) {
       userInformation = cachedUserInformation;
     } else {
-      userInformation = await _downloadCurrentUserInformation();
+      userInformation =  await _downloadCurrentUserInformation();
       cache.set<UserInformation>(
           key: '{$currentUser.uid}-userinformation', value: userInformation);
     }
