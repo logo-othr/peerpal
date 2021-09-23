@@ -155,7 +155,7 @@ class AppUserRepository {
       UserInformationField.discoverToAge.fieldName:
           userInformation.discoverToAge,
       UserInformationField.discoverCommunicationPreferences.fieldName:
-          userInformation.discoverCommunicationPreferences,
+          userInformation.discoverCommunicationPreferences?.map((e) => e.fieldName).toList(),
       UserInformationField.discoverActivities.fieldName:
           userInformation.discoverActivities?.map((e) => e.code).toList(),
     }, SetOptions(merge: true));
@@ -228,7 +228,7 @@ class AppUserRepository {
             imagePath: imageURL,
             discoverFromAge: discoverFromAge,
             discoverToAge: discoverToAge,
-            discoverCommunicationPreferences: discoverCommunicationPreferences,
+            discoverCommunicationPreferences: discoverCommunicationPreferences?.map((e) => CommunicationType.f).toList(),
             discoverActivities: discoverActivities?.map((e) => Activity(code: e)).toList(),
             discoverLocations: discoverLocations);
       }
@@ -267,5 +267,12 @@ class AppUserRepository {
     activities.add(Activity(code: 'gardening', name: "Gartenarbeit"));
     activities.add(Activity(code: 'help', name: "Hilfe gesucht"));
     return activities;
+  }
+
+  loadCommunicationList() {
+    final List<CommunicationType> communicationTypes = [];
+    communicationTypes.add(CommunicationType.phone);
+    communicationTypes.add(CommunicationType.chat);
+    return communicationTypes;
   }
 }
