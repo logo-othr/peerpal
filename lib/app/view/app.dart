@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/app.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/login_flow/routes.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 
 class App extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/login_flow/sign_up/sign_up.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/sign_up/sign_up.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class SignUpPage extends StatelessWidget {

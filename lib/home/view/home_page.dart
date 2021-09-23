@@ -64,7 +64,7 @@ class MyTabView extends StatelessWidget {
 
   final tabs = [
     Center(
-      child: Container(child: FirstTabPage()),
+      child: Container(child: DiscoverTabPage()),
     ),
   ];
 
@@ -87,8 +87,8 @@ class MyTabView extends StatelessWidget {
   }
 }
 
-class FirstTabPage extends StatelessWidget {
-  const FirstTabPage({Key? key}) : super(key: key);
+class DiscoverTabPage extends StatelessWidget {
+  const DiscoverTabPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
