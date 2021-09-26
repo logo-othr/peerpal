@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/app_user.dart';
+import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
 class SignUpFailure implements Exception {
@@ -250,7 +253,6 @@ class AppUserRepository {
             discoverActivities:
                 discoverActivities?.map((e) => Activity(code: e)).toList(),
             discoverLocations: discoverLocations);
-        print("dummy");
       }
     }
     return userInformation;
@@ -294,5 +296,12 @@ class AppUserRepository {
     communicationTypes.add(CommunicationType.phone);
     communicationTypes.add(CommunicationType.chat);
     return communicationTypes;
+  }
+
+
+  Future<List<Location>> loadLocations() async {
+    final jsonData = await rootBundle.loadString('assets/location.json');
+    final list = json.decode(jsonData) as List<dynamic>;
+    return list.map((e) => Location.fromJson(e)).toList();
   }
 }
