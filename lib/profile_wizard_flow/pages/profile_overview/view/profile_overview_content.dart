@@ -65,7 +65,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                               backgroundColor: Colors.transparent,
                               padding: const EdgeInsets.all(2),
                             ),
-                            child: CustomPeerPALHeading3('Profilbild ändern',
+                            child: CustomPeerPALHeading3(text: 'Profilbild ändern',
                                 color: secondaryColor)),
                       )
                     ],

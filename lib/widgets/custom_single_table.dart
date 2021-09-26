@@ -30,7 +30,7 @@ class CustomSingleTable extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-                child: CustomPeerPALHeading3(heading, color: secondaryColor),
+                child: CustomPeerPALHeading3(text: heading, color: secondaryColor),
               ),
               Container(
                 height: 40,
@@ -52,7 +52,7 @@ class CustomSingleTable extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: CustomPeerPALHeading3(
-                            text,
+                            text: text,
                             color: Colors.black,
                           ),
                         ),

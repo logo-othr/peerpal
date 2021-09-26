@@ -84,7 +84,7 @@ class DiscoverCommunicationContent extends StatelessWidget {
                                       .postCommunications();
                                   context
                                       .flow<UserInformation>()
-                                      .update((s) => s.copyWith(discoverCommunicationPreferences: state.selectedCommunicationTypes));
+                                      .complete((s) => s.copyWith(discoverCommunicationPreferences: state.selectedCommunicationTypes));
                                 },
                               );
                             } else {
