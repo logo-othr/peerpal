@@ -206,31 +206,39 @@ class AppUserRepository {
             ? userDocumentSnapshot.get(UserDatabaseContract.discoverToAge)
             : null;
 
-        var discoverActivities =
-            data.containsKey(UserDatabaseContract.discoverActivities)
-                ? List.from(userDocumentSnapshot
-                    .get(UserDatabaseContract.discoverActivities))
-                : null;
 
-       List<String>?  discoverCommunicationPreferences = data.containsKey(
-                UserDatabaseContract.discoverCommunicationPreferences)
-            ? List.from(userDocumentSnapshot
-           .get(UserDatabaseContract.discoverCommunicationPreferences)as Iterable<dynamic>)
-            : null;
+        List<String>? discoverActivities;
+        if (data.containsKey(
+            UserDatabaseContract.discoverActivities)) {
+          var snapshot = userDocumentSnapshot
+              .get(UserDatabaseContract.discoverActivities);
 
-       List<CommunicationType>? prefs;
-       if(discoverCommunicationPreferences != null) {
-         prefs = [];
-         for(String s in discoverCommunicationPreferences) {
-           var pref = EnumToString.fromString(CommunicationType.values, s);
-           if(pref !=  null) {
-             prefs.add(pref);
-           }
-         }
-       }
+          if (snapshot != null)
+            discoverActivities =
+                List.from(snapshot as Iterable<dynamic>);
+        }
 
+        List<String>? discoverCommunicationPreferences;
+        if (data.containsKey(
+            UserDatabaseContract.discoverCommunicationPreferences)) {
+          var snapshot = userDocumentSnapshot
+              .get(UserDatabaseContract.discoverCommunicationPreferences);
 
+          if (snapshot != null)
+            discoverCommunicationPreferences =
+                List.from(snapshot as Iterable<dynamic>);
+        }
 
+        List<CommunicationType>? prefs;
+        if (discoverCommunicationPreferences != null) {
+          prefs = [];
+          for (String s in discoverCommunicationPreferences) {
+            var pref = EnumToString.fromString(CommunicationType.values, s);
+            if (pref != null) {
+              prefs.add(pref);
+            }
+          }
+        }
 
         var discoverLocations = data
                 .containsKey(UserDatabaseContract.discoverLocations)
@@ -265,7 +273,7 @@ class AppUserRepository {
     if (cachedUserInformation != null) {
       userInformation = cachedUserInformation;
     } else {
-      userInformation =  await _downloadCurrentUserInformation();
+      userInformation = await _downloadCurrentUserInformation();
       cache.set<UserInformation>(
           key: '{$currentUser.uid}-userinformation', value: userInformation);
     }
@@ -297,7 +305,6 @@ class AppUserRepository {
     communicationTypes.add(CommunicationType.chat);
     return communicationTypes;
   }
-
 
   Future<List<Location>> loadLocations() async {
     final jsonData = await rootBundle.loadString('assets/location.json');
