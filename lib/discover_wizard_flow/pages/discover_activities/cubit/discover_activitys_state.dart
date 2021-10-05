@@ -5,19 +5,19 @@ abstract class DiscoverActivitiesState extends Equatable {
   List<Activity> selectedActivities;
   String searchQuery;
 
-  DiscoverActivitiesState(this.activities, this.selectedActivities, this.searchQuery);
+  DiscoverActivitiesState(
+      this.activities, this.selectedActivities, this.searchQuery);
 }
 
 class DiscoverActivitiesInitial extends DiscoverActivitiesState {
-  DiscoverActivitiesInitial()
-      : super([], [], '');
+  DiscoverActivitiesInitial() : super([], [], '');
 
   @override
   List<Object?> get props => [activities, selectedActivities];
 }
 
 class DiscoverActivitiesLoaded extends DiscoverActivitiesState {
-  DiscoverActivitiesLoaded(activities)
+  DiscoverActivitiesLoaded(List<Activity> activities)
       : super(activities, [], '');
 
   @override
@@ -25,15 +25,16 @@ class DiscoverActivitiesLoaded extends DiscoverActivitiesState {
 }
 
 class DiscoverActivitiesSelected extends DiscoverActivitiesState {
-  DiscoverActivitiesSelected(activities, selectedActivities, searchQuery)
-      : super(activities, selectedActivities,searchQuery);
+  DiscoverActivitiesSelected(List<Activity> activities,
+      List<Activity> selectedActivities, String searchQuery)
+      : super(activities, selectedActivities, searchQuery);
 
   @override
   List<Object?> get props => [activities, selectedActivities, searchQuery];
 }
 
 class DiscoverActivitiesPosting extends DiscoverActivitiesState {
-  DiscoverActivitiesPosting(activities, selectedActivities)
+  DiscoverActivitiesPosting(List<Activity> activities, List<Activity> selectedActivities)
       : super(activities, selectedActivities, '');
 
   @override
@@ -41,19 +42,17 @@ class DiscoverActivitiesPosting extends DiscoverActivitiesState {
 }
 
 class DiscoverActivitiesPosted extends DiscoverActivitiesState {
-  DiscoverActivitiesPosted(activities, selectedActivities)
+  DiscoverActivitiesPosted(List<Activity> activities, List<Activity> selectedActivities)
       : super(activities, selectedActivities, '');
 
   @override
   List<Object?> get props => [activities, selectedActivities, searchQuery];
 }
 
-
 class DiscoverActivitiesError extends DiscoverActivitiesState {
   final String message;
 
-  DiscoverActivitiesError(this.message)
-      : super([], [], '');
+  DiscoverActivitiesError(this.message) : super([], [], '');
 
   @override
   List<Object?> get props => [message];

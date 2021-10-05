@@ -78,7 +78,7 @@ class _UsernameInputField extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
-  final isInFlowContext;
+  final bool isInFlowContext;
 
   _NextButton(this.isInFlowContext);
 

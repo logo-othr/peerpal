@@ -14,7 +14,7 @@ class DiscoverActivitiesCubit extends Cubit<DiscoverActivitiesState> {
 
   Future<void> loadActivities() async {
     var activities = await _appUserRepository.loadActivityList();
-    emit(DiscoverActivitiesSelected(activities, [].cast<Activity>(), ''));
+    emit(DiscoverActivitiesSelected(activities, <Activity>[].cast<Activity>(), ''));
   }
 
   void searchQueryChanged(String searchQuery) {
