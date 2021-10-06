@@ -14,14 +14,17 @@ class DiscoverLocationsCubit extends Cubit<DiscoverLocationState> {
 
   Future<void> loadLocations() async {
     var locations = await _appUserRepository.loadLocations();
-    emit(DiscoverLocationSelected(locations, [].cast<Location>(), [].cast<Location>()));
+    emit(DiscoverLocationLoaded(locations, [].cast<Location>(), [].cast<Location>()));
   }
 
   void searchQueryChanged(String searchQuery) {
-    if (state is DiscoverLocationSelected) {
+    if (state is DiscoverLocationLoaded) {
       var filteredLocations =
           _searchForLocationsStartingWith(searchQuery, state.locations);
-      emit(DiscoverLocationSelected(
+for(var location in state.selectedLocations) {
+  filteredLocations.remove(location);
+}
+      emit(DiscoverLocationLoaded(
           state.locations, state.selectedLocations, filteredLocations));
     }
   }
@@ -51,23 +54,23 @@ class DiscoverLocationsCubit extends Cubit<DiscoverLocationState> {
   }
 
   void addLocation(Location location) {
-    /*if (state is DiscoverLocationSelected) {
+    if (state is DiscoverLocationLoaded) {
       var updatedLocations = List<Location>.from(state.selectedLocations);
       updatedLocations.add(location);
 
-      emit(DiscoverLocationSelected(state.locations,
-          updatedLocations, state.searchQuery));
-    }*/
+      state.filteredLocations.remove(location);
+      emit(DiscoverLocationLoaded(state.locations,
+          updatedLocations, state.filteredLocations));
+    }
   }
 
   void removeLocation(Location location) {
-    /* if (state is DiscoverLocationSelected) {
+     if (state is DiscoverLocationLoaded) {
       var updatedLocations = List<Location>.from(state.selectedLocations);
       updatedLocations.remove(location);
-
-      emit(DiscoverLocationSelected(state.locations,
-          updatedLocations, state.searchQuery));
-    }*/
+      emit(DiscoverLocationLoaded(state.locations,
+          updatedLocations, state.filteredLocations));
+    }
   }
 
   Future<void> postLocations() async {

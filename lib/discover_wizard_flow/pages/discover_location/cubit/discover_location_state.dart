@@ -17,15 +17,7 @@ class DiscoverLocationInitial extends DiscoverLocationState {
 }
 
 class DiscoverLocationLoaded extends DiscoverLocationState {
-  DiscoverLocationLoaded(locations)
-      : super(locations, [], []);
-
-  @override
-  List<Object?> get props => [locations, selectedLocations, filteredLocations];
-}
-
-class DiscoverLocationSelected extends DiscoverLocationState {
-  DiscoverLocationSelected(locations, selectedLocations, filteredLocations)
+  DiscoverLocationLoaded(locations, selectedLocations, filteredLocations)
       : super(locations, selectedLocations,filteredLocations);
 
   @override
