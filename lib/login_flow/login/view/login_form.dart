@@ -159,7 +159,6 @@ class _LoginButton extends StatelessWidget {
         return state.formValidationStatus.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : CustomPeerPALButton(
-                key: const Key('login_login_button'),
                 onPressed: state.formValidationStatus.isValidated
                     ? () => context.read<LoginCubit>().login()
                     : null,
@@ -173,7 +172,6 @@ class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPeerPALButton(
-        key: const Key('login_signup_button'),
         onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
         text: 'Registrieren');
   }

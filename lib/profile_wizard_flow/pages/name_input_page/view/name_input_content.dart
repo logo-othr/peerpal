@@ -91,7 +91,6 @@ class _NextButton extends StatelessWidget {
         return state.formValidationStatus.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : CustomPeerPALButton(
-                key: const Key('name_selection_next_button'),
                 onPressed: () async {
                   if (state.formValidationStatus.isValidated) {
                     await context.read<NameInputCubit>().postName();
