@@ -29,22 +29,26 @@ class HomeView extends StatelessWidget {
     print("Build method called");
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) async {
-        if (state is HomeLoaded) {
-          if (state.userInformation.isNotComplete) {
-            await Navigator.of(context).push(
-              ProfileWizardFlow.route(state.userInformation),
-            );
-          }
-          BlocProvider.of<HomeCubit>(context).completeProfileWizard();
+        if(state is HomeProfileFlow) {
+          await Navigator.of(context).push(
+            ProfileWizardFlow.route(state.userInformation),
+          );
+          BlocProvider.of<HomeCubit>(context).loadFlowState();
+        }
+        if(state is HomeDiscoverFlow) {
           await Navigator.of(context).push(
             DiscoverWizardFlow.route(state.userInformation),
           );
+          BlocProvider.of<HomeCubit>(context).loadFlowState();
         }
+        /*if (state is! HomeInitial) {
+          BlocProvider.of<HomeCubit>(context).loadFlowState();
+        }*/
       },
       child: BlocBuilder<HomeCubit, HomeState>(
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
-            if (state is HomeProfileFlowCompleted) {
+            if (state is HomeUserInformationFlowCompleted) {
               return MyTabView();
             }
             return Container(
