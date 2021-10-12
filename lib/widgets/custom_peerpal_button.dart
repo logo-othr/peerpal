@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_text.dart';
 
-// ignore: must_be_immutable
 class CustomPeerPALButton extends StatelessWidget {
-  String? text;
-  VoidCallback? onPressed;
-  Key? key;
+  final String? text;
+  final VoidCallback? onPressed;
 
-  CustomPeerPALButton({this.key, required this.text, this.onPressed});
+  CustomPeerPALButton({ required this.text, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
