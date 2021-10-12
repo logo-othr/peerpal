@@ -102,7 +102,21 @@ class UserInformation extends Equatable {
     }
   }
 
-  bool get isNotComplete => isProfileComplete != true;
+  bool get isProfileNotComplete => isProfileComplete != true;
+
+  bool get isDiscoverComplete {
+    if (discoverFromAge != null &&
+        discoverToAge != null &&
+        discoverCommunicationPreferences != null &&
+        discoverActivities != null &&
+        discoverLocations != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool get isDiscoverNotComplete => isDiscoverComplete != true;
 
   @override
   List<Object?> get props => [
