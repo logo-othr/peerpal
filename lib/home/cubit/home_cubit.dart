@@ -15,9 +15,19 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeLoading());
     final home = await _appuserRepository.getCurrentUserInformation();
     emit(HomeLoaded(home));
+    loadFlowState();
   }
 
-  void completeProfileWizard() {
-    emit(const HomeProfileFlowCompleted());
+
+
+  loadFlowState() {
+    if (state.userInformation.isProfileNotComplete) {
+      emit(HomeProfileFlow(state.userInformation));
+    }
+    else if (state.userInformation.isDiscoverNotComplete) {
+      emit(HomeDiscoverFlow(state.userInformation));
+    } else {
+      emit(HomeUserInformationFlowCompleted());
+    }
   }
 }
