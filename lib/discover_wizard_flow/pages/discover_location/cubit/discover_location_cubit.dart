@@ -74,15 +74,15 @@ for(var location in state.selectedLocations) {
   }
 
   Future<void> postLocations() async {
-    /*  if(state is DiscoverLocationsSelected) {
-      emit(DiscoverLocationsPosting(state.locations, state.selectedLocations));
+      if(state is DiscoverLocationLoaded) {
+      emit(DiscoverLocationPosting(state.locations, state.selectedLocations));
 
       var userInformation = await _appUserRepository.getCurrentUserInformation();
       var updatedUserInformation =
       userInformation.copyWith(discoverLocations: state.selectedLocations);
       await _appUserRepository.updateUserInformation(updatedUserInformation);
 
-      emit(DiscoverLocationsPosted(state.locations, state.selectedLocations));
-    }*/
+      emit(DiscoverLocationPosted(state.locations, state.selectedLocations));
+    }
   }
 }
