@@ -1,12 +1,13 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/discover_wizard_flow/base_wizard_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
-import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
 class DiscoverAgeContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -25,7 +26,7 @@ class DiscoverAgeContent extends StatelessWidget {
           'Alter',
           hasBackButton: hasBackButton,
         ),
-        body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
+        body: BlocBuilder<BaseWizardCubit<DiscoverAgeState>, DiscoverAgeState>(
             builder: (context, state) {
           return Center(
             child: Padding(
@@ -49,42 +50,29 @@ class DiscoverAgeContent extends StatelessWidget {
                     fromController: fromController,
                   ),
                   const Spacer(),
-                  BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
-                    builder: (context, state) {
-                      if (state is DiscoverAgePosting) {
-                        return const CircularProgressIndicator();
-                      } else {
-                        if(isInFlowContext) {
-                          return CustomPeerPALButton(
-                            text: 'Weiter',
-                            onPressed: () async {
-                              await context
-                                  .read<DiscoverAgeCubit>()
-                                  .postAge(state.selctedFromAge, state.selectedToAge);
-
-                              context
-                                  .flow<UserInformation>()
-                                  .update((s) => s.copyWith(discoverFromAge: state.selctedFromAge, discoverToAge: state.selectedToAge));
-                            },
-                          );
-                        } else {
-                          return CustomPeerPALButton(
-                            text: 'Speichern',
-                            onPressed: () async {
-                              await context
-                                  .read<DiscoverAgeCubit>()
-                                  .postAge(state.selctedFromAge, state.selectedToAge);
-                              Navigator.pop(context);
-                            },
-                          );
-                        }
-                      }
-                    },
-                  ),
+                  (state is DiscoverAgePosting)
+                      ? const CircularProgressIndicator()
+                      : CompletePageButton(
+                      isSaveButton: isInFlowContext,
+                      onPressed: () async {
+                        _update(state, context);
+                      }),
                 ],
               ),
             ),
           );
         }));
+  }
+
+  Future<void> _update(
+      DiscoverAgeState state, BuildContext context) async {
+    if (isInFlowContext) {
+      await context.read<BaseWizardCubit<DiscoverAgeState>>().postData();
+      context.flow<UserInformation>().complete((s) => s.copyWith(
+          discoverFromAge: state.selctedFromAge, discoverToAge:  state.selectedToAge));
+    } else {
+      await context.read<BaseWizardCubit<DiscoverAgeState>>().postData();
+      Navigator.pop(context);
+    }
   }
 }
