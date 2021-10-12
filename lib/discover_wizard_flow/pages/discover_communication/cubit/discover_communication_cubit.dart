@@ -15,7 +15,7 @@ class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
 
   Future<void> loadCommunications() async {
     var activities = await _appUserRepository.loadCommunicationList();
-    emit(DiscoverCommunicationSelected(activities, [].cast<CommunicationType>()));
+    emit(DiscoverCommunicationSelected(activities, <CommunicationType>[].cast<CommunicationType>()));
   }
 
 

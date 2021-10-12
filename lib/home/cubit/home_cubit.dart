@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
 
 
 
-  loadFlowState() {
+  void loadFlowState() {
     if (state.userInformation.isProfileNotComplete) {
       emit(HomeProfileFlow(state.userInformation));
     }

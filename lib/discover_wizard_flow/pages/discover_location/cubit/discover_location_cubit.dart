@@ -14,7 +14,7 @@ class DiscoverLocationsCubit extends Cubit<DiscoverLocationState> {
 
   Future<void> loadLocations() async {
     var locations = await _appUserRepository.loadLocations();
-    emit(DiscoverLocationLoaded(locations, [].cast<Location>(), [].cast<Location>()));
+    emit(DiscoverLocationLoaded(locations, <Location>[].cast<Location>(), <Location>[].cast<Location>()));
   }
 
   void searchQueryChanged(String searchQuery) {
@@ -42,7 +42,7 @@ for(var location in state.selectedLocations) {
     return locations;
   }
 
-  List<Location> _filterSearchResults(searchQuery, locations) {
+  List<Location> _filterSearchResults(String searchQuery, List<Location> locations) {
     List<Location> locationData = [];
     locations.forEach((location) {
       if (location.place.toString().toLowerCase().startsWith(searchQuery) ||

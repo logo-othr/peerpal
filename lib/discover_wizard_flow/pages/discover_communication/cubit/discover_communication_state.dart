@@ -16,7 +16,7 @@ class DiscoverCommunicationInitial extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationLoaded extends DiscoverCommunicationState {
-  DiscoverCommunicationLoaded(communicationTypes)
+  DiscoverCommunicationLoaded(List<CommunicationType> communicationTypes)
       : super(communicationTypes, []);
 
   @override
@@ -24,7 +24,7 @@ class DiscoverCommunicationLoaded extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationSelected extends DiscoverCommunicationState {
-  DiscoverCommunicationSelected(communications, selectedCommunicationTypes)
+  DiscoverCommunicationSelected(List<CommunicationType> communications, List<CommunicationType> selectedCommunicationTypes)
       : super(communications, selectedCommunicationTypes);
 
   @override
@@ -32,7 +32,7 @@ class DiscoverCommunicationSelected extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationPosting extends DiscoverCommunicationState {
-  DiscoverCommunicationPosting(communications, selectedCommunicationTypes)
+  DiscoverCommunicationPosting(List<CommunicationType>  communications, List<CommunicationType>  selectedCommunicationTypes)
       : super(communications, selectedCommunicationTypes);
 
   @override
@@ -40,7 +40,7 @@ class DiscoverCommunicationPosting extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationPosted extends DiscoverCommunicationState {
-  DiscoverCommunicationPosted(communications, selectedCommunicationTypes)
+  DiscoverCommunicationPosted(List<CommunicationType> communications, List<CommunicationType> selectedCommunicationTypes)
       : super(communications, selectedCommunicationTypes);
 
   @override

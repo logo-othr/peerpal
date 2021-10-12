@@ -17,7 +17,7 @@ class DiscoverLocationInitial extends DiscoverLocationState {
 }
 
 class DiscoverLocationLoaded extends DiscoverLocationState {
-  DiscoverLocationLoaded(locations, selectedLocations, filteredLocations)
+  DiscoverLocationLoaded(List<Location> locations, List<Location>  selectedLocations, List<Location>  filteredLocations)
       : super(locations, selectedLocations,filteredLocations);
 
   @override
@@ -25,7 +25,7 @@ class DiscoverLocationLoaded extends DiscoverLocationState {
 }
 
 class DiscoverLocationPosting extends DiscoverLocationState {
-  DiscoverLocationPosting(locations, selectedLocations)
+  DiscoverLocationPosting(List<Location>  locations, List<Location>  selectedLocations)
       : super(locations, selectedLocations, []);
 
   @override
@@ -33,7 +33,7 @@ class DiscoverLocationPosting extends DiscoverLocationState {
 }
 
 class DiscoverLocationPosted extends DiscoverLocationState {
-  DiscoverLocationPosted(locations, selectedLocations)
+  DiscoverLocationPosted(List<Location>  locations, List<Location> selectedLocations)
       : super(locations, selectedLocations, []);
 
   @override
