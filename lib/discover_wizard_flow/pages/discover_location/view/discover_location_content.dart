@@ -9,6 +9,7 @@ import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
 class DiscoverLocationContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -25,7 +26,7 @@ class DiscoverLocationContent extends StatelessWidget {
           'Standorte',
           hasBackButton: isInFlowContext,
         ),
-        body: BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+        body: BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
             builder: (context, state) {
               return Center(
                 child: Padding(
@@ -42,61 +43,52 @@ class DiscoverLocationContent extends StatelessWidget {
                       ),
                       const Spacer(),
                       context
-                          .read<DiscoverLocationsCubit>()
+                          .read<DiscoverLocationCubit>()
                           .state
                           .filteredLocations
                           .isEmpty
                           ? _LocationResultBox()
                           : const _LocationSearchBox(),
                       const Spacer(),
-                      BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
-                        builder: (context, state) {
-                          if (state is DiscoverLocationPosting) {
-                            return const CircularProgressIndicator();
-                          } else {
-                            if(isInFlowContext) {
-                              return CustomPeerPALButton(
-                                text: 'Weiter',
-                                onPressed: () async {
-                                  await context
-                                      .read<DiscoverLocationsCubit>()
-                                      .postLocations();
-                                  context
-                                      .flow<UserInformation>()
-                                      .update((s) => s.copyWith(discoverLocations: state.selectedLocations));
-                                },
-                              );
-                            } else {
-                              return CustomPeerPALButton(
-                                text: 'Speichern',
-                                onPressed: () async {
-                                  await context
-                                      .read<DiscoverLocationsCubit>()
-                                      .postLocations();
-                                  Navigator.pop(context);
-                                },
-                              );
-                            }
-                          }
-                        },
-                      ),
+                      (state is DiscoverLocationPosting)
+                          ? const CircularProgressIndicator()
+                          : CompletePageButton(
+                          isSaveButton: isInFlowContext,
+                          onPressed: () async {
+                            _update(state, context);
+                          }),
                     ],
                   ),
                 ),
               );
             }));
   }
+
+  Future<void> _update(DiscoverLocationState state,
+      BuildContext context) async {
+    if (isInFlowContext) {
+      await context.read<DiscoverLocationCubit>().loadLocations();
+      context.flow<UserInformation>().complete((s) =>
+          s.copyWith(
+              discoverLocations: state
+                  .selectedLocations));
+    } else {
+      await context.read<DiscoverLocationCubit>().postLocations();
+      Navigator.pop(context);
+    }
+  }
 }
+
 
 class _LocationResultBox extends StatelessWidget {
   const _LocationResultBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+    return BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
       builder: (context, state) {
         if (context
-            .read<DiscoverLocationsCubit>()
+            .read<DiscoverLocationCubit>()
             .state
             .selectedLocations
             .isEmpty) {
@@ -119,7 +111,7 @@ class _LocationResultBox extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: context
-                    .read<DiscoverLocationsCubit>()
+                    .read<DiscoverLocationCubit>()
                     .state
                     .selectedLocations
                     .length,
@@ -128,7 +120,7 @@ class _LocationResultBox extends StatelessWidget {
                       onTap: () {},
                       child: _LocationListItem(
                         location: context
-                            .read<DiscoverLocationsCubit>()
+                            .read<DiscoverLocationCubit>()
                             .state
                             .selectedLocations[index],
                       ));
@@ -147,7 +139,7 @@ class _LocationSearchBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+    return BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -156,7 +148,7 @@ class _LocationSearchBox extends StatelessWidget {
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: context
-                  .read<DiscoverLocationsCubit>()
+                  .read<DiscoverLocationCubit>()
                   .state
                   .filteredLocations
                   .length,
@@ -165,7 +157,7 @@ class _LocationSearchBox extends StatelessWidget {
                     onTap: () {},
                     child: _LocationSearchListItem(
                       location: context
-                          .read<DiscoverLocationsCubit>()
+                          .read<DiscoverLocationCubit>()
                           .state
                           .filteredLocations[index],
                     ));
@@ -185,11 +177,11 @@ class _LocationListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+    return BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            context.read<DiscoverLocationsCubit>().removeLocation(location);
+            context.read<DiscoverLocationCubit>().removeLocation(location);
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -248,11 +240,11 @@ class _LocationSearchListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+    return BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            context.read<DiscoverLocationsCubit>().addLocation(location);
+            context.read<DiscoverLocationCubit>().addLocation(location);
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -310,7 +302,7 @@ class _LocationSearchBar extends StatefulWidget {
 class _LocationSearchBarState extends State<_LocationSearchBar> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+    return BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
@@ -318,7 +310,7 @@ class _LocationSearchBarState extends State<_LocationSearchBar> {
             controller: widget.searchBarController,
             placeholder: "PLZ oder Ort eingeben",
             onChanged: (text) {
-              context.read<DiscoverLocationsCubit>().searchQueryChanged(text);
+              context.read<DiscoverLocationCubit>().searchQueryChanged(text);
             },
           ),
         );

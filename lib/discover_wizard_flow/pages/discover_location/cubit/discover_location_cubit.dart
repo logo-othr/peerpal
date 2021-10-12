@@ -6,8 +6,8 @@ import 'package:peerpal/repository/models/location.dart';
 
 part 'discover_location_state.dart';
 
-class DiscoverLocationsCubit extends Cubit<DiscoverLocationState> {
-  DiscoverLocationsCubit(this._appUserRepository)
+class DiscoverLocationCubit extends Cubit<DiscoverLocationState> {
+  DiscoverLocationCubit(this._appUserRepository)
       : super(DiscoverLocationInitial());
 
   final AppUserRepository _appUserRepository;
