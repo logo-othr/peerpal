@@ -55,7 +55,7 @@ class AppUserRepository {
         .snapshots()
         .map((DocumentSnapshot snapshot) {
       if (snapshot.exists) {
-        var age = snapshot['age'];
+        int age = snapshot['age'];
         var name = snapshot['name'];
         return UserInformation(age: age, name: name);
       } else {
@@ -158,6 +158,7 @@ class AppUserRepository {
           userInformation.discoverFromAge,
       UserInformationField.discoverToAge.fieldName:
           userInformation.discoverToAge,
+      UserInformationField.discoverLocations.fieldName:  userInformation.discoverLocations?.map((e) => e.place).toList(),
       UserInformationField.discoverCommunicationPreferences.fieldName:
           userInformation.discoverCommunicationPreferences
               ?.map((e) => EnumToString.convertToString(e))
@@ -240,10 +241,18 @@ class AppUserRepository {
           }
         }
 
-        var discoverLocations = data
-                .containsKey(UserDatabaseContract.discoverLocations)
-            ? userDocumentSnapshot.get(UserDatabaseContract.discoverLocations)
-            : null;
+        List<String>? discoverLocations;
+        if (data.containsKey(
+            UserDatabaseContract.discoverLocations)) {
+          var snapshot = userDocumentSnapshot
+              .get(UserDatabaseContract.discoverLocations);
+
+          if (snapshot != null)
+            discoverLocations =
+                List.from(snapshot as Iterable<dynamic>);
+        }
+
+
 
         data.containsKey(UserDatabaseContract.userProfilePicturePath)
             ? userDocumentSnapshot
@@ -260,7 +269,7 @@ class AppUserRepository {
             discoverCommunicationPreferences: prefs,
             discoverActivities:
                 discoverActivities?.map((e) => Activity(code: e)).toList(),
-            discoverLocations: discoverLocations);
+            discoverLocations: discoverLocations?.map((e) => Location(place: e)).toList());
       }
     }
     return userInformation;
@@ -299,8 +308,8 @@ class AppUserRepository {
     return activities;
   }
 
-  loadCommunicationList() {
-    final List<CommunicationType> communicationTypes = [];
+  List<CommunicationType> loadCommunicationList() {
+    final communicationTypes = <CommunicationType>[];
     communicationTypes.add(CommunicationType.phone);
     communicationTypes.add(CommunicationType.chat);
     return communicationTypes;
