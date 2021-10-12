@@ -1,9 +1,11 @@
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_location/cubit/discover_location_cubit.dart';
 import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -17,7 +19,6 @@ class DiscoverLocationContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var locationBox =
 
     return Scaffold(
         appBar: CustomAppBar(
@@ -48,16 +49,37 @@ class DiscoverLocationContent extends StatelessWidget {
                           ? _LocationResultBox()
                           : const _LocationSearchBox(),
                       const Spacer(),
-                      Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              CustomPeerPALButton(
-                                text: "Weiter",
-                              ),
-                            ],
-                          ))
+                      BlocBuilder<DiscoverLocationsCubit, DiscoverLocationState>(
+                        builder: (context, state) {
+                          if (state is DiscoverLocationPosting) {
+                            return const CircularProgressIndicator();
+                          } else {
+                            if(isInFlowContext) {
+                              return CustomPeerPALButton(
+                                text: 'Weiter',
+                                onPressed: () async {
+                                  await context
+                                      .read<DiscoverLocationsCubit>()
+                                      .postLocations();
+                                  context
+                                      .flow<UserInformation>()
+                                      .update((s) => s.copyWith(discoverLocations: state.selectedLocations));
+                                },
+                              );
+                            } else {
+                              return CustomPeerPALButton(
+                                text: 'Speichern',
+                                onPressed: () async {
+                                  await context
+                                      .read<DiscoverLocationsCubit>()
+                                      .postLocations();
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
