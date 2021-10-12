@@ -3,13 +3,13 @@ import 'package:equatable/equatable.dart';
 class Location extends Equatable {
   const Location( {
     required this.place,
-    required this.zipcode,
+    this.zipcode,
     this.street,
     this.streetNumber,
   });
 
   final String place;
-  final String zipcode;
+  final String? zipcode;
   final String? street;
   final String? streetNumber;
 
