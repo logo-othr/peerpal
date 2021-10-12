@@ -1,5 +1,6 @@
 part of 'discover_communication_cubit.dart';
 
+
 abstract class DiscoverCommunicationState extends Equatable {
   List<CommunicationType> communicationTypes;
   List<CommunicationType> selectedCommunicationTypes;
