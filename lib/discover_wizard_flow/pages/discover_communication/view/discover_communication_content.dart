@@ -1,18 +1,13 @@
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
+import 'package:peerpal/discover_wizard_flow/base_wizard_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_communication/cubit/discover_communication_cubit.dart';
-import 'package:peerpal/discover_wizard_flow/pages/discover_location/cubit/discover_location_cubit.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
-import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_toggle_button.dart';
-import 'package:peerpal/widgets/peerpal_next_button.dart';
-import 'package:peerpal/widgets/peerpal_save_button.dart';
+import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
 class DiscoverCommunicationContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -29,7 +24,7 @@ class DiscoverCommunicationContent extends StatelessWidget {
           hasBackButton: hasBackButton,
         ),
         body:
-            BlocBuilder<DiscoverCommunicationCubit, DiscoverCommunicationState>(
+            BlocBuilder<BaseWizardCubit<DiscoverCommunicationState>, DiscoverCommunicationState>(
                 builder: (context, state) {
           return Center(
             child: Padding(
@@ -49,48 +44,24 @@ class DiscoverCommunicationContent extends StatelessWidget {
                       ),
                       for (CommunicationType communicationType
                           in state.communicationTypes)
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: CustomToggleButton(
-                            text: communicationType.toUIString,
-                            textColor: Colors.white,
-                            height: 45,
-                            width: 200,
-                            onPressed: () {
-                              if (state.selectedCommunicationTypes
-                                  .contains(communicationType)) {
-                                context
-                                    .read<DiscoverCommunicationCubit>()
-                                    .removeCommunication(communicationType);
-                              } else {
-                                context
-                                    .read<DiscoverCommunicationCubit>()
-                                    .addCommunication(communicationType);
-                              }
-                            },
-                            active: state.selectedCommunicationTypes
-                                .contains(communicationType),
-                          ),
+                        _CommunicationTypeButton(
+                          communicationType: communicationType,
+                          onPressed: () => context
+                              .read<DiscoverCommunicationCubit>()
+                              .toggleCommunicationType(communicationType),
+                          isActive: state.selectedCommunicationTypes
+                              .contains(communicationType),
                         ),
                     ],
                   ),
                   Spacer(),
-                  BlocBuilder<DiscoverCommunicationCubit,
-                      DiscoverCommunicationState>(builder: (context, state) {
-                    if (state is DiscoverCommunicationPosting) {
-                      return const CircularProgressIndicator();
-                    } else if (isInFlowContext) {
-                      return PeerPALSaveButton(
-                        onPressed: () async =>
-                            updateCommunication(state, context),
-                      );
-                    } else {
-                      return PeerPALNextButton(
-                        onPressed: () async =>
-                            updateCommunication(state, context),
-                      );
-                    }
-                  }),
+                  (state is DiscoverCommunicationPosting)
+                      ? const CircularProgressIndicator()
+                      : CompletePageButton(
+                          isSaveButton: isInFlowContext,
+                          onPressed: () async {
+                            _update(state, context);
+                          }),
                 ],
               ),
             ),
@@ -98,15 +69,42 @@ class DiscoverCommunicationContent extends StatelessWidget {
         }));
   }
 
-  Future<void> updateCommunication(
+  Future<void> _update(
       DiscoverCommunicationState state, BuildContext context) async {
     if (isInFlowContext) {
-      await context.read<DiscoverCommunicationCubit>().postCommunications();
+      await context.read<DiscoverCommunicationCubit>().postData();
       context.flow<UserInformation>().complete((s) => s.copyWith(
           discoverCommunicationPreferences: state.selectedCommunicationTypes));
     } else {
-      await context.read<DiscoverCommunicationCubit>().postCommunications();
+      await context.read<DiscoverCommunicationCubit>().postData();
       Navigator.pop(context);
     }
+  }
+}
+
+class _CommunicationTypeButton extends StatelessWidget {
+  final CommunicationType communicationType;
+  final VoidCallback onPressed;
+  final bool isActive;
+
+  const _CommunicationTypeButton(
+      {Key? key,
+      required this.communicationType,
+      required this.onPressed,
+      required this.isActive})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: CustomToggleButton(
+          text: communicationType.toUIString,
+          textColor: Colors.white,
+          height: 45,
+          width: 200,
+          onPressed: onPressed,
+          active: isActive),
+    );
   }
 }
