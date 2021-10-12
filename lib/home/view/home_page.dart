@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeCubit(context.read<AppUserRepository>())..getCurrentUserInformation(),
+      create: (_) => HomeCubit(context.read<AppUserRepository>())..loadFlowState(),
       child: const HomeView(),
     );
   }
@@ -33,7 +33,7 @@ class HomeView extends StatelessWidget {
           await Navigator.of(context).push(
             ProfileWizardFlow.route(state.userInformation),
           );
-          BlocProvider.of<HomeCubit>(context).loadFlowState();
+          await BlocProvider.of<HomeCubit>(context).loadFlowState();
         }
         if(state is HomeDiscoverFlow) {
           await Navigator.of(context).push(

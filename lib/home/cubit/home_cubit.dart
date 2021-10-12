@@ -20,12 +20,13 @@ class HomeCubit extends Cubit<HomeState> {
 
 
 
-  void loadFlowState() {
-    if (state.userInformation.isProfileNotComplete) {
-      emit(HomeProfileFlow(state.userInformation));
+  Future<void> loadFlowState() async  {
+    UserInformation userInformation = await _appuserRepository.getCurrentUserInformation();
+    if (userInformation.isProfileNotComplete) {
+      emit(HomeProfileFlow(userInformation));
     }
-    else if (state.userInformation.isDiscoverNotComplete) {
-      emit(HomeDiscoverFlow(state.userInformation));
+    else if (userInformation.isDiscoverNotComplete) {
+      emit(HomeDiscoverFlow(userInformation));
     } else {
       emit(HomeUserInformationFlowCompleted());
     }
