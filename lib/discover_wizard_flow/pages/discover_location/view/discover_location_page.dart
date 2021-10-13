@@ -19,7 +19,7 @@ class DiscoverLocationPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocProvider.value(
-        value: DiscoverLocationCubit(context.read<AppUserRepository>())..loadLocations(),
+        value: DiscoverLocationCubit(context.read<AppUserRepository>())..loadData(),
         child: DiscoverLocationContent(isInFlowContext: isInFlowContext),
       ),
     );

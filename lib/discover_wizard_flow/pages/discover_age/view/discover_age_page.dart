@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_wizard_flow/base_wizard_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_age/view/discover_age_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
@@ -19,7 +18,7 @@ class DiscoverAgePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: BlocProvider<BaseWizardCubit<DiscoverAgeState>>(
+      child: BlocProvider(
         create: (_) {
           return DiscoverAgeCubit(context.read<AppUserRepository>());
         },

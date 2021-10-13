@@ -1,7 +1,6 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_wizard_flow/base_wizard_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -26,8 +25,9 @@ class DiscoverAgeContent extends StatelessWidget {
           'Alter',
           hasBackButton: hasBackButton,
         ),
-        body: BlocBuilder<BaseWizardCubit<DiscoverAgeState>, DiscoverAgeState>(
+        body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
             builder: (context, state) {
+              context.read<DiscoverAgeCubit>();
           return Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
@@ -67,11 +67,11 @@ class DiscoverAgeContent extends StatelessWidget {
   Future<void> _update(
       DiscoverAgeState state, BuildContext context) async {
     if (isInFlowContext) {
-      await context.read<BaseWizardCubit<DiscoverAgeState>>().postData();
+      await context.read<DiscoverAgeCubit>().postData();
       context.flow<UserInformation>().complete((s) => s.copyWith(
           discoverFromAge: state.selctedFromAge, discoverToAge:  state.selectedToAge));
     } else {
-      await context.read<BaseWizardCubit<DiscoverAgeState>>().postData();
+      await context.read<DiscoverAgeCubit>().postData();
       Navigator.pop(context);
     }
   }

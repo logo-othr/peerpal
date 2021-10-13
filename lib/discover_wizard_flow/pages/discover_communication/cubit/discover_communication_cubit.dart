@@ -1,20 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-import 'package:peerpal/discover_wizard_flow/base_wizard_cubit.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
 part 'discover_communication_state.dart';
 
-class DiscoverCommunicationCubit extends BaseWizardCubit<DiscoverCommunicationState> {
-  DiscoverCommunicationCubit(appUserRepository)
-      : super(DiscoverCommunicationInitial(), appUserRepository);
+class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
+  DiscoverCommunicationCubit(this._appUserRepository)
+      : super(DiscoverCommunicationInitial());
+  final AppUserRepository _appUserRepository;
 
 
   Future<void> loadData() async {
-    var activities = await appUserRepository.loadCommunicationList();
+    var activities = await _appUserRepository.loadCommunicationList();
     emit(DiscoverCommunicationSelected(
         activities, <CommunicationType>[].cast<CommunicationType>()));
   }
@@ -47,10 +45,10 @@ class DiscoverCommunicationCubit extends BaseWizardCubit<DiscoverCommunicationSt
           state.communicationTypes, state.selectedCommunicationTypes));
 
       var userInformation =
-          await appUserRepository.getCurrentUserInformation();
+          await _appUserRepository.getCurrentUserInformation();
       var updatedUserInformation = userInformation.copyWith(
           discoverCommunicationPreferences: state.selectedCommunicationTypes);
-      await appUserRepository.updateUserInformation(updatedUserInformation);
+      await _appUserRepository.updateUserInformation(updatedUserInformation);
 
       emit(DiscoverCommunicationPosted(
           state.communicationTypes, state.selectedCommunicationTypes));

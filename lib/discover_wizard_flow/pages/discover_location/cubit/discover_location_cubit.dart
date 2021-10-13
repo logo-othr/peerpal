@@ -12,7 +12,7 @@ class DiscoverLocationCubit extends Cubit<DiscoverLocationState> {
 
   final AppUserRepository _appUserRepository;
 
-  Future<void> loadLocations() async {
+  Future<void> loadData() async {
     var locations = await _appUserRepository.loadLocations();
     emit(DiscoverLocationLoaded(locations, <Location>[].cast<Location>(), <Location>[].cast<Location>()));
   }

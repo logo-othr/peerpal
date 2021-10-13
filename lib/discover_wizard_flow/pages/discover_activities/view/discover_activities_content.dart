@@ -3,13 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_activities/cubit/discover_activities_cubit.dart';
-import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
-import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
-import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
 class DiscoverActivitiesContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -22,13 +20,12 @@ class DiscoverActivitiesContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var hasBackButton = (isInFlowContext) ? false : true;
-    return BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
+    return BlocBuilder<DiscoverActivitiesCubit,
+        DiscoverActivitiesState>(
       builder: (context, state) {
-        // ignore: always_declare_return_types
         searchQueryChangedListener() => context
             .read<DiscoverActivitiesCubit>()
             .searchQueryChanged(searchBarController.value.text);
-
         if (state is DiscoverActivitiesLoaded ||
             state is DiscoverActivitiesSelected) {
           searchBarController.addListener(searchQueryChangedListener);
@@ -40,8 +37,8 @@ class DiscoverActivitiesContent extends StatelessWidget {
               'Alter',
               hasBackButton: hasBackButton,
             ),
-            body: BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
-                builder: (context, state) {
+            body: BlocBuilder<DiscoverActivitiesCubit,
+                DiscoverActivitiesState>(builder: (context, state) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Column(
@@ -78,18 +75,10 @@ class DiscoverActivitiesContent extends StatelessWidget {
                                               0, 0, 20, 0),
                                           child: GestureDetector(
                                               onTap: () {
-                                                if (state.selectedActivities
-                                                    .contains(activity)) {
-                                                  context
-                                                      .read<
-                                                          DiscoverActivitiesCubit>()
-                                                      .removeActivity(activity);
-                                                } else {
-                                                  context
-                                                      .read<
-                                                          DiscoverActivitiesCubit>()
-                                                      .addActivity(activity);
-                                                }
+                                                context
+                                                    .read<
+                                                    DiscoverActivitiesCubit>()
+                                                    .toggleData(activity);
                                               },
                                               child: CustomCircleListItem(
                                                   label:
@@ -103,42 +92,30 @@ class DiscoverActivitiesContent extends StatelessWidget {
                                 )
                                 .toList())),
                     const Spacer(),
-                    BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
-                      builder: (context, state) {
-                        if (state is DiscoverAgePosting) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          if(isInFlowContext) {
-                            return CustomPeerPALButton(
-                              text: 'Weiter',
-                              onPressed: () async {
-                                await context
-                                    .read<DiscoverActivitiesCubit>()
-                                    .postActivities();
-                                context
-                                    .flow<UserInformation>()
-                                    .update((s) => s.copyWith(discoverActivities: state.selectedActivities));
-                              },
-                            );
-                          } else {
-                            return CustomPeerPALButton(
-                              text: 'Speichern',
-                              onPressed: () async {
-                                await context
-                                    .read<DiscoverActivitiesCubit>()
-                                    .postActivities();
-                                Navigator.pop(context);
-                              },
-                            );
-                          }
-                        }
-                      },
-                    ),
+                    (state is DiscoverActivitiesPosting)
+                        ? const CircularProgressIndicator()
+                        : CompletePageButton(
+                            isSaveButton: isInFlowContext,
+                            onPressed: () async {
+                              _update(state, context);
+                            }),
                   ],
                 ),
               );
             }));
       },
     );
+  }
+
+  Future<void> _update(
+      DiscoverActivitiesState state, BuildContext context) async {
+    if (isInFlowContext) {
+      await context.read<DiscoverActivitiesCubit>().postData();
+      context.flow<UserInformation>().complete(
+          (s) => s.copyWith(discoverActivities: state.selectedActivities));
+    } else {
+      await context.read<DiscoverActivitiesCubit>().postData();
+      Navigator.pop(context);
+    }
   }
 }

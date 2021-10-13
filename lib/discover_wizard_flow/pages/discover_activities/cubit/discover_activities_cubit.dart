@@ -1,22 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 
 part 'discover_activitys_state.dart';
 
-class DiscoverActivitiesCubit extends Cubit<DiscoverActivitiesState> {
+class DiscoverActivitiesCubit
+    extends Cubit<DiscoverActivitiesState> {
   DiscoverActivitiesCubit(this._appUserRepository)
       : super(DiscoverActivitiesInitial());
-
   final AppUserRepository _appUserRepository;
 
-  Future<void> loadActivities() async {
+  @override
+  Future<void> loadData() async {
     var activities = await _appUserRepository.loadActivityList();
-    emit(DiscoverActivitiesSelected(activities, <Activity>[].cast<Activity>(), ''));
+    emit(DiscoverActivitiesSelected(
+        activities, <Activity>[].cast<Activity>(), ''));
   }
 
+  @override
   void searchQueryChanged(String searchQuery) {
     if (state is DiscoverActivitiesSelected) {
       emit(DiscoverActivitiesSelected(
@@ -24,37 +26,49 @@ class DiscoverActivitiesCubit extends Cubit<DiscoverActivitiesState> {
     }
   }
 
-  void addActivity(Activity activity) {
+  @override
+  void addData(Activity activity) {
     if (state is DiscoverActivitiesSelected) {
       var updatedActivities = List<Activity>.from(state.selectedActivities);
       updatedActivities.add(activity);
 
-      emit(DiscoverActivitiesSelected(state.activities,
-          updatedActivities, state.searchQuery));
+      emit(DiscoverActivitiesSelected(
+          state.activities, updatedActivities, state.searchQuery));
     }
   }
 
-  void removeActivity(Activity activity) {
+  @override
+  void removeData(Activity activity) {
     if (state is DiscoverActivitiesSelected) {
       var updatedActivities = List<Activity>.from(state.selectedActivities);
       updatedActivities.remove(activity);
 
-      emit(DiscoverActivitiesSelected(state.activities,
-          updatedActivities, state.searchQuery));
+      emit(DiscoverActivitiesSelected(
+          state.activities, updatedActivities, state.searchQuery));
     }
   }
 
-  Future<void> postActivities(
-    ) async {
-if(state is DiscoverActivitiesSelected) {
-  emit(DiscoverActivitiesPosting(state.activities, state.selectedActivities));
+  @override
+  Future<void> postData() async {
+    if (state is DiscoverActivitiesSelected) {
+      emit(DiscoverActivitiesPosting(
+          state.activities, state.selectedActivities));
 
-  var userInformation = await _appUserRepository.getCurrentUserInformation();
-  var updatedUserInformation =
-  userInformation.copyWith(discoverActivities: state.selectedActivities);
-  await _appUserRepository.updateUserInformation(updatedUserInformation);
+      var userInformation = await _appUserRepository.getCurrentUserInformation();
+      var updatedUserInformation = userInformation.copyWith(
+          discoverActivities: state.selectedActivities);
+      await _appUserRepository.updateUserInformation(updatedUserInformation);
 
-  emit(DiscoverActivitiesPosted(state.activities, state.selectedActivities));
-}
+      emit(
+          DiscoverActivitiesPosted(state.activities, state.selectedActivities));
+    }
+  }
+
+  void toggleData(Activity activity) {
+    if (state.selectedActivities.contains(activity)) {
+      removeData(activity);
+    } else {
+      addData(activity);
+    }
   }
 }
