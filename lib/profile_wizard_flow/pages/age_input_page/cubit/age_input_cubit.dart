@@ -10,17 +10,18 @@ class AgeInputCubit extends Cubit<AgeInputState> {
 
   final AppUserRepository _appUserRepository;
 
-  void ageChanged(int selectedAge) {
+  void dataChanged(int selectedAge) {
     emit(AgeInputInitial(selectedAge));
   }
 
-  Future<void> postAge(int selectedAge) async {
-    emit(AgeInputPosting(selectedAge));
+  Future<void> postData() async {
+    emit(AgeInputPosting(state.selectedAge));
 
     var userInformation = await _appUserRepository.getCurrentUserInformation();
-    var updatedUserInformation = userInformation.copyWith(age: selectedAge);
+    var updatedUserInformation =
+        userInformation.copyWith(age: state.selectedAge);
     await _appUserRepository.updateUserInformation(updatedUserInformation);
 
-    emit(AgeInputPosted(selectedAge));
+    emit(AgeInputPosted(state.selectedAge));
   }
 }
