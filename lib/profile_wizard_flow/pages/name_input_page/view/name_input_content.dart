@@ -98,7 +98,7 @@ class _NextButton extends StatelessWidget {
                     var selectedName = state.username;
                     if (isInFlowContext) {
                       context
-                          .flow<UserInformation>()
+                          .flow<AppUserInformation>()
                           .update((s) => s.copyWith(name: selectedName.value));
                     } else {
                       Navigator.pop(context);

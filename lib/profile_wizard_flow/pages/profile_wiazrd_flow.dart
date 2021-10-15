@@ -4,11 +4,11 @@ import 'package:peerpal/home/routes/routes.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
 class ProfileWizardFlow extends StatelessWidget {
-  final UserInformation flowState;
+  final AppUserInformation flowState;
 
   const ProfileWizardFlow(this.flowState);
 
-  static Route<UserInformation> route(UserInformation flowSate) {
+  static Route<AppUserInformation> route(AppUserInformation flowSate) {
     return MaterialPageRoute(builder: (_) => ProfileWizardFlow(flowSate));
   }
 
@@ -16,7 +16,7 @@ class ProfileWizardFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: FlowBuilder<UserInformation>(
+      child: FlowBuilder<AppUserInformation>(
         state: flowState,
         onGeneratePages: onGenerateProfileWizardPages,
       ),

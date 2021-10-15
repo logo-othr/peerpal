@@ -48,7 +48,7 @@ class AppUserRepository {
   }
 
   // ToDo: Remove if not used in the future
-  Stream<UserInformation> get userInformation {
+  Stream<AppUserInformation> get userInformation {
     return _firestore
         .collection(UserDatabaseContract.users)
         .doc(currentUser.id)
@@ -57,9 +57,9 @@ class AppUserRepository {
       if (snapshot.exists) {
         int age = snapshot['age'];
         var name = snapshot['name'];
-        return UserInformation(age: age, name: name);
+        return AppUserInformation(age: age, name: name);
       } else {
-        return UserInformation.empty;
+        return AppUserInformation.empty;
       }
     });
   }
@@ -142,11 +142,11 @@ class AppUserRepository {
     }
   }
 
-  Future<void> updateUserInformation(UserInformation userInformation) async {
+  Future<void> updateUserInformation(AppUserInformation userInformation) async {
     var userDocument =
         _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
 
-    cache.set<UserInformation>(
+    cache.set<AppUserInformation>(
         key: '{$currentUser.uid}-userinformation', value: userInformation);
 
     await userDocument.set({
@@ -168,10 +168,10 @@ class AppUserRepository {
     }, SetOptions(merge: true));
   }
 
-  Future<UserInformation> _downloadCurrentUserInformation() async {
+  Future<AppUserInformation> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    var userInformation = UserInformation.empty;
+    var userInformation = AppUserInformation.empty;
     if (currentUser != null) {
       var userDocumentSnapshot = await _firestore
           .collection(UserDatabaseContract.users)
@@ -259,7 +259,7 @@ class AppUserRepository {
                 .get(UserDatabaseContract.userProfilePicturePath)
             : null;
 
-        userInformation = UserInformation(
+        userInformation = AppUserInformation(
             age: age,
             name: name,
             phoneNumber: phoneNumber,
@@ -275,15 +275,15 @@ class AppUserRepository {
     return userInformation;
   }
 
-  Future<UserInformation> getCurrentUserInformation() async {
-    var userInformation = UserInformation.empty;
+  Future<AppUserInformation> getCurrentUserInformation() async {
+    var userInformation = AppUserInformation.empty;
     var cachedUserInformation =
-        cache.get<UserInformation>(key: '{$currentUser.uid}-userinformation');
+        cache.get<AppUserInformation>(key: '{$currentUser.uid}-userinformation');
     if (cachedUserInformation != null) {
       userInformation = cachedUserInformation;
     } else {
       userInformation = await _downloadCurrentUserInformation();
-      cache.set<UserInformation>(
+      cache.set<AppUserInformation>(
           key: '{$currentUser.uid}-userinformation', value: userInformation);
     }
     return userInformation;

@@ -6,7 +6,7 @@ import 'package:peerpal/discover_wizard_flow/pages/discover_location/view/discov
 import 'package:peerpal/repository/models/user_information.dart';
 
 List<Page> onGenerateDiscoverWizardPages(
-    UserInformation userInformation, List<Page<dynamic>> pages) {
+    AppUserInformation userInformation, List<Page<dynamic>> pages) {
   return [
     DiscoverAgePage.page(isInFlowContext: true),
     if (userInformation.discoverToAge != null &&

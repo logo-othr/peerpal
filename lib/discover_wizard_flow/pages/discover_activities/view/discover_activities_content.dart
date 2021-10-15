@@ -111,7 +111,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
       DiscoverActivitiesState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverActivitiesCubit>().postData();
-      context.flow<UserInformation>().complete(
+      context.flow<AppUserInformation>().complete(
           (s) => s.copyWith(discoverActivities: state.selectedActivities));
     } else {
       await context.read<DiscoverActivitiesCubit>().postData();

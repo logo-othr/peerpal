@@ -79,7 +79,7 @@ class AgeInputContent extends StatelessWidget {
     if (isInFlowContext) {
       await context.read<AgeInputCubit>().postData();
       context
-          .flow<UserInformation>()
+          .flow<AppUserInformation>()
           .complete((s) => s.copyWith(age: state.selectedAge));
     } else {
       await context.read<AgeInputCubit>().postData();

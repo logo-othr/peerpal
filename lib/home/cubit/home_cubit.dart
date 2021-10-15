@@ -21,7 +21,7 @@ class HomeCubit extends Cubit<HomeState> {
 
 
   Future<void> loadFlowState() async  {
-    UserInformation userInformation = await _appuserRepository.getCurrentUserInformation();
+    AppUserInformation userInformation = await _appuserRepository.getCurrentUserInformation();
     if (userInformation.isProfileNotComplete) {
       emit(HomeProfileFlow(userInformation));
     }

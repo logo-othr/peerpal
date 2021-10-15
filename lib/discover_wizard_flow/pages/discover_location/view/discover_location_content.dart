@@ -68,7 +68,7 @@ class DiscoverLocationContent extends StatelessWidget {
       BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverLocationCubit>().postLocations();
-      context.flow<UserInformation>().complete((s) =>
+      context.flow<AppUserInformation>().complete((s) =>
           s.copyWith(
               discoverLocations: state
                   .selectedLocations));

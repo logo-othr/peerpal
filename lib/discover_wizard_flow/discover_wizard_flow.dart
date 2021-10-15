@@ -4,11 +4,11 @@ import 'package:peerpal/discover_wizard_flow/discover_wizard_routes.dart';
 import 'package:peerpal/repository/models/user_information.dart';
 
 class DiscoverWizardFlow extends StatelessWidget {
-  final UserInformation flowState;
+  final AppUserInformation flowState;
 
   const DiscoverWizardFlow(this.flowState);
 
-  static Route<UserInformation> route(UserInformation flowSate) {
+  static Route<AppUserInformation> route(AppUserInformation flowSate) {
     return MaterialPageRoute(builder: (_) => DiscoverWizardFlow(flowSate));
   }
 
@@ -16,7 +16,7 @@ class DiscoverWizardFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: FlowBuilder<UserInformation>(
+      child: FlowBuilder<AppUserInformation>(
         state: flowState,
         onGeneratePages: onGenerateDiscoverWizardPages,
       ),

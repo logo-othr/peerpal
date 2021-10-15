@@ -120,7 +120,7 @@ class _NextButton extends StatelessWidget {
 
               var phoneNumber = state.phoneNumber;
               context
-                  .flow<UserInformation>()
+                  .flow<AppUserInformation>()
                   .update((s) => s.copyWith(phoneNumber: phoneNumber));
             },
           );

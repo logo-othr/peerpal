@@ -63,8 +63,8 @@ extension UserInformationFieldExtension on UserInformationField {
   }
 }
 
-class UserInformation extends Equatable {
-  const UserInformation(
+class AppUserInformation extends Equatable {
+  const AppUserInformation(
       {this.name,
       this.age,
       this.phoneNumber,
@@ -85,11 +85,11 @@ class UserInformation extends Equatable {
   final List<Activity>? discoverActivities;
   final List<Location>? discoverLocations;
 
-  static const empty = UserInformation();
+  static const empty = AppUserInformation();
 
-  bool get isEmpty => this == UserInformation.empty;
+  bool get isEmpty => this == AppUserInformation.empty;
 
-  bool get isNotEmpty => this != UserInformation.empty;
+  bool get isNotEmpty => this != AppUserInformation.empty;
 
   bool get isProfileComplete {
     if (age != null &&
@@ -131,7 +131,7 @@ class UserInformation extends Equatable {
         discoverLocations
       ];
 
-  UserInformation copyWith({
+  AppUserInformation copyWith({
     String? name,
     int? age,
     String? phoneNumber,
@@ -142,7 +142,7 @@ class UserInformation extends Equatable {
     List<Activity>? discoverActivities,
     List<Location>? discoverLocations,
   }) {
-    return UserInformation(
+    return AppUserInformation(
       age: age ?? this.age,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,

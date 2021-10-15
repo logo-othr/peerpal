@@ -72,7 +72,7 @@ class DiscoverCommunicationContent extends StatelessWidget {
       DiscoverCommunicationState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverCommunicationCubit>().postData();
-      context.flow<UserInformation>().complete((s) => s.copyWith(
+      context.flow<AppUserInformation>().complete((s) => s.copyWith(
           discoverCommunicationPreferences: state.selectedCommunicationTypes));
     } else {
       await context.read<DiscoverCommunicationCubit>().postData();

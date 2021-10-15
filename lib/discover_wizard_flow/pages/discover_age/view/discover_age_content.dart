@@ -68,7 +68,7 @@ class DiscoverAgeContent extends StatelessWidget {
       DiscoverAgeState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverAgeCubit>().postData();
-      context.flow<UserInformation>().complete((s) => s.copyWith(
+      context.flow<AppUserInformation>().complete((s) => s.copyWith(
           discoverFromAge: state.selctedFromAge, discoverToAge:  state.selectedToAge));
     } else {
       await context.read<DiscoverAgeCubit>().postData();

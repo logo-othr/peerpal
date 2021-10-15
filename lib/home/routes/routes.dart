@@ -6,7 +6,7 @@ import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/vie
 import 'package:peerpal/repository/models/user_information.dart';
 
 List<Page> onGenerateProfileWizardPages(
-    UserInformation userInformation, List<Page<dynamic>> pages) {
+    AppUserInformation userInformation, List<Page<dynamic>> pages) {
   return [
     if(userInformation.age == null )AgeInputPage.page(isInFlowContext: true),
     if (userInformation.age != null) NameInputPage.page(isInFlowContext: true),

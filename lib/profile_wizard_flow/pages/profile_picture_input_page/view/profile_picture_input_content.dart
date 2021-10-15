@@ -66,7 +66,7 @@ class ProfilePictureInputContent extends StatelessWidget {
           MaterialPageRoute(builder: (context) => ProfileOverviewPage()),
         );
         context
-            .flow<UserInformation>()
+            .flow<AppUserInformation>()
             .complete((s) => s.copyWith(imagePath: profilePictureURL));
 
       } else {
