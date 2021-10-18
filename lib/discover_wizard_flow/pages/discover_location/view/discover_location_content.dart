@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_location/cubit/discover_location_cubit.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
 import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
@@ -67,10 +67,8 @@ class DiscoverLocationContent extends StatelessWidget {
       BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverLocationCubit>().postLocations();
-      context.flow<AppUserInformation>().complete((s) =>
-          s.copyWith(
-              discoverLocations: state
-                  .selectedLocations));
+      context.flow<PeerPALUser>().complete(
+          (s) => s.copyWith(discoverLocations: state.selectedLocations));
 
     } else {
       await context.read<DiscoverLocationCubit>().postLocations();

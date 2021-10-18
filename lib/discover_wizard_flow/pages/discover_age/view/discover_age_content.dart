@@ -2,7 +2,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -68,8 +68,9 @@ class DiscoverAgeContent extends StatelessWidget {
       DiscoverAgeState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverAgeCubit>().postData();
-      context.flow<AppUserInformation>().complete((s) => s.copyWith(
-          discoverFromAge: state.selctedFromAge, discoverToAge:  state.selectedToAge));
+      context.flow<PeerPALUser>().complete((s) => s.copyWith(
+          discoverFromAge: state.selctedFromAge,
+          discoverToAge: state.selectedToAge));
     } else {
       await context.read<DiscoverAgeCubit>().postData();
       Navigator.pop(context);

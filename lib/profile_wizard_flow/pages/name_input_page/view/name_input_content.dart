@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/profile_wizard_flow/pages/name_input_page/cubit/name_input_cubit.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -98,7 +98,7 @@ class _NextButton extends StatelessWidget {
                     var selectedName = state.username;
                     if (isInFlowContext) {
                       context
-                          .flow<AppUserInformation>()
+                          .flow<PeerPALUser>()
                           .update((s) => s.copyWith(name: selectedName.value));
                     } else {
                       Navigator.pop(context);

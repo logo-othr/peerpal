@@ -2,13 +2,13 @@ part of 'home_cubit.dart';
 
 @immutable
 abstract class HomeState implements Equatable {
-  final AppUserInformation userInformation;
+  final PeerPALUser userInformation;
 
   const HomeState(this.userInformation);
 }
 
 class HomeInitial extends HomeState {
-  const HomeInitial() : super(const AppUserInformation());
+  const HomeInitial() : super(const PeerPALUser());
 
   @override
   List<Object?> get props => [userInformation];
@@ -19,7 +19,7 @@ class HomeInitial extends HomeState {
 }
 
 class HomeLoading extends HomeState {
-  const HomeLoading() : super(const AppUserInformation());
+  const HomeLoading() : super(const PeerPALUser());
 
   @override
   List<Object?> get props => [userInformation];
@@ -30,7 +30,7 @@ class HomeLoading extends HomeState {
 }
 
 class HomeLoaded extends HomeState {
-  final AppUserInformation userInformation;
+  final PeerPALUser userInformation;
 
   const HomeLoaded(this.userInformation) : super(userInformation);
 
@@ -65,7 +65,7 @@ class HomeDiscoverFlow extends HomeState {
 }
 
 class HomeUserInformationFlowCompleted extends HomeState {
-  const HomeUserInformationFlowCompleted() : super(const AppUserInformation());
+  const HomeUserInformationFlowCompleted() : super(const PeerPALUser());
 
   @override
   List<Object?> get props => [];
