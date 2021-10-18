@@ -3,10 +3,10 @@ import 'package:peerpal/discover_wizard_flow/pages/discover_activities/view/disc
 import 'package:peerpal/discover_wizard_flow/pages/discover_age/view/discover_age_page.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_communication/view/discover_communication_page.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_location/view/discover_location_page.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 
 List<Page> onGenerateDiscoverWizardPages(
-    AppUserInformation userInformation, List<Page<dynamic>> pages) {
+    PeerPALUser userInformation, List<Page<dynamic>> pages) {
   return [
     DiscoverAgePage.page(isInFlowContext: true),
     if (userInformation.discoverToAge != null &&

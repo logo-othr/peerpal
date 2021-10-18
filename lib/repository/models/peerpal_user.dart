@@ -28,7 +28,7 @@ extension CommunicationTypeExtension on CommunicationType {
   }
 }
 
-enum UserInformationField {
+enum PeerPALUserField {
   age,
   name,
   phone,
@@ -41,34 +41,34 @@ enum UserInformationField {
 }
 
 // ToDo: Move field names from UserDatabaseContract to this extension
-extension UserInformationFieldExtension on UserInformationField {
+extension UserInformationFieldExtension on PeerPALUserField {
   String get fieldName {
     switch (this) {
-      case UserInformationField.age:
+      case PeerPALUserField.age:
         return UserDatabaseContract.userAge;
-      case UserInformationField.name:
+      case PeerPALUserField.name:
         return UserDatabaseContract.userName;
-      case UserInformationField.phone:
+      case PeerPALUserField.phone:
         return UserDatabaseContract.userPhoneNumber;
-      case UserInformationField.pictureUrl:
+      case PeerPALUserField.pictureUrl:
         return UserDatabaseContract.userProfilePicturePath;
-      case UserInformationField.discoverFromAge:
+      case PeerPALUserField.discoverFromAge:
         return UserDatabaseContract.discoverFromAge;
-      case UserInformationField.discoverToAge:
+      case PeerPALUserField.discoverToAge:
         return UserDatabaseContract.discoverToAge;
-      case UserInformationField.discoverCommunicationPreferences:
+      case PeerPALUserField.discoverCommunicationPreferences:
         return UserDatabaseContract.discoverCommunicationPreferences;
-      case UserInformationField.discoverActivities:
+      case PeerPALUserField.discoverActivities:
         return UserDatabaseContract.discoverActivities;
-      case UserInformationField.discoverLocations:
+      case PeerPALUserField.discoverLocations:
         return UserDatabaseContract.discoverLocations;
     }
   }
 }
 
 @JsonSerializable(explicitToJson: true)
-class AppUserInformation extends Equatable {
-  const AppUserInformation(
+class PeerPALUser extends Equatable {
+  const PeerPALUser(
       {this.name,
       this.age,
       this.phoneNumber,
@@ -89,11 +89,11 @@ class AppUserInformation extends Equatable {
   final List<Activity>? discoverActivities;
   final List<Location>? discoverLocations;
 
-  static const empty = AppUserInformation();
+  static const empty = PeerPALUser();
 
-  bool get isEmpty => this == AppUserInformation.empty;
+  bool get isEmpty => this == PeerPALUser.empty;
 
-  bool get isNotEmpty => this != AppUserInformation.empty;
+  bool get isNotEmpty => this != PeerPALUser.empty;
 
   bool get isProfileComplete {
     if (age != null &&
@@ -135,7 +135,7 @@ class AppUserInformation extends Equatable {
     discoverLocations
   ];
 
-  AppUserInformation copyWith({
+  PeerPALUser copyWith({
     String? name,
     int? age,
     String? phoneNumber,
@@ -146,7 +146,7 @@ class AppUserInformation extends Equatable {
     List<Activity>? discoverActivities,
     List<Location>? discoverLocations,
   }) {
-    return AppUserInformation(
+    return PeerPALUser(
       age: age ?? this.age,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -160,8 +160,8 @@ class AppUserInformation extends Equatable {
     );
   }
 
-  factory AppUserInformation.fromJson(Map<String, dynamic> json) =>
-      _$AppUserInformationFromJson(json);
+  factory PeerPALUser.fromJson(Map<String, dynamic> json) =>
+      _$PeerPALUserFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AppUserInformationToJson(this);
+  Map<String, dynamic> toJson() => _$PeerPALUserToJson(this);
 }

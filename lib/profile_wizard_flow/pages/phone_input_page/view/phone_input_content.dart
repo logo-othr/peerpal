@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/profile_wizard_flow/pages/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/cubit/phone_input_cubit.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -120,7 +120,7 @@ class _NextButton extends StatelessWidget {
 
               var phoneNumber = state.phoneNumber;
               context
-                  .flow<AppUserInformation>()
+                  .flow<PeerPALUser>()
                   .update((s) => s.copyWith(phoneNumber: phoneNumber));
             },
           );

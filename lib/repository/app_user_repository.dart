@@ -8,9 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
 import 'package:peerpal/repository/models/auth_user.dart';
 import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -47,7 +47,7 @@ class AppUserRepository {
   }
 
   // ToDo: Remove if not used in the future
-  Stream<AppUserInformation> get userInformation {
+  Stream<PeerPALUser> get userInformation {
     return _firestore
         .collection(UserDatabaseContract.users)
         .doc(currentUser.id)
@@ -56,9 +56,9 @@ class AppUserRepository {
       if (snapshot.exists) {
         int age = snapshot['age'];
         var name = snapshot['name'];
-        return AppUserInformation(age: age, name: name);
+        return PeerPALUser(age: age, name: name);
       } else {
-        return AppUserInformation.empty;
+        return PeerPALUser.empty;
       }
     });
   }
@@ -141,11 +141,11 @@ class AppUserRepository {
     }
   }
 
-  Future<void> updateUserInformation(AppUserInformation userInformation) async {
+  Future<void> updateUserInformation(PeerPALUser userInformation) async {
     var userDocument =
         _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
 
-    cache.set<AppUserInformation>(
+    cache.set<PeerPALUser>(
         key: '{$currentUser.uid}-userinformation', value: userInformation);
 
     var json = userInformation.toJson();
@@ -153,30 +153,30 @@ class AppUserRepository {
     await userDocument.set(json, SetOptions(merge: true));
   }
 
-  Future<AppUserInformation> _downloadCurrentUserInformation() async {
+  Future<PeerPALUser> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    var userInformation = AppUserInformation.empty;
+    var userInformation = PeerPALUser.empty;
     var userDocumentSnapshot = await _firestore
         .collection(UserDatabaseContract.users)
         .doc(firebaseUser!.uid)
         .get();
     if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
       var data = userDocumentSnapshot.data();
-      userInformation = AppUserInformation.fromJson(data!);
+      userInformation = PeerPALUser.fromJson(data!);
     }
     return userInformation;
   }
 
-  Future<AppUserInformation> getCurrentUserInformation() async {
-    var userInformation = AppUserInformation.empty;
+  Future<PeerPALUser> getCurrentUserInformation() async {
+    var userInformation = PeerPALUser.empty;
     var cachedUserInformation =
-        cache.get<AppUserInformation>(key: '{$currentUser.uid}-userinformation');
+        cache.get<PeerPALUser>(key: '{$currentUser.uid}-userinformation');
     if (cachedUserInformation != null) {
       userInformation = cachedUserInformation;
     } else {
       userInformation = await _downloadCurrentUserInformation();
-      cache.set<AppUserInformation>(
+      cache.set<PeerPALUser>(
           key: '{$currentUser.uid}-userinformation', value: userInformation);
     }
     return userInformation;
