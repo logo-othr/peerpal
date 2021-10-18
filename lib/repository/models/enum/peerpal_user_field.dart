@@ -1,6 +1,6 @@
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 
-extension UserInformationFieldExtension on PeerPALUserField {
+extension PeerPALUserFieldExtension on PeerPALUserField {
   String get fieldName {
     switch (this) {
       case PeerPALUserField.age:
