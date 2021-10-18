@@ -8,8 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
-import 'package:peerpal/repository/models/app_user.dart';
 import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/auth_user.dart';
 import 'package:peerpal/repository/models/location.dart';
 
 class SignUpFailure implements Exception {
@@ -40,9 +40,9 @@ class AppUserRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<AppUser> get user {
+  Stream<AuthUser> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      return firebaseUser == null ? AppUser.empty : _getUserFromFirebaseUser();
+      return firebaseUser == null ? AuthUser.empty : _getUserFromFirebaseUser();
     });
   }
 
@@ -63,7 +63,7 @@ class AppUserRepository {
     });
   }
 
-  AppUser get currentUser {
+  AuthUser get currentUser {
     return _getUserFromFirebaseUser();
   }
 
@@ -182,12 +182,12 @@ class AppUserRepository {
     return userInformation;
   }
 
-  AppUser _getUserFromFirebaseUser() {
+  AuthUser _getUserFromFirebaseUser() {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
     return (firebaseUser == null
-        ? AppUser.empty
-        : AppUser(id: firebaseUser.uid, email: firebaseUser.email));
+        ? AuthUser.empty
+        : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
   Future<List<Activity>> loadActivityList() async {

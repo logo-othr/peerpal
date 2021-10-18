@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class AppUser extends Equatable {
-  const AppUser({
+class AuthUser extends Equatable {
+  const AuthUser({
     required this.id,
     this.email,
   });
@@ -9,20 +9,20 @@ class AppUser extends Equatable {
   final String id;
   final String? email;
 
-  static const empty = AppUser(id: '');
+  static const empty = AuthUser(id: '');
 
-  bool get isEmpty => this == AppUser.empty;
+  bool get isEmpty => this == AuthUser.empty;
 
-  bool get isNotEmpty => this != AppUser.empty;
+  bool get isNotEmpty => this != AuthUser.empty;
 
   @override
   List<Object?> get props => [email, id];
 
-  AppUser copyWith({
+  AuthUser copyWith({
     String? email,
     String? id,
   }) {
-    return AppUser(
+    return AuthUser(
       email: email ?? this.email,
       id: id ?? this.id,
     );
