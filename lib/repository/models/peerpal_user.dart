@@ -1,30 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 
 part 'peerpal_user.g.dart';
-
-enum CommunicationType { phone, chat }
-extension CommunicationTypeExtension on CommunicationType {
-  String get toUIString {
-    switch (this) {
-      case CommunicationType.phone:
-        return 'Telefon';
-      case CommunicationType.chat:
-        return 'Chat';
-    }
-  }
-
-  CommunicationType? fromFieldName(String fieldName) {
-    switch (fieldName) {
-      case 'Telefon':
-        return CommunicationType.phone;
-      case 'Chat':
-        return CommunicationType.chat;
-    }
-  }
-}
 
 @JsonSerializable(explicitToJson: true)
 class PeerPALUser extends Equatable {

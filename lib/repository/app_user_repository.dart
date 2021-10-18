@@ -9,6 +9,7 @@ import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/auth_user.dart';
+import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
