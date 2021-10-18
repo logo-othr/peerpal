@@ -1,13 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/location.dart';
 
 part 'peerpal_user.g.dart';
 
 enum CommunicationType { phone, chat }
-
 extension CommunicationTypeExtension on CommunicationType {
   String get toUIString {
     switch (this) {
@@ -24,44 +22,6 @@ extension CommunicationTypeExtension on CommunicationType {
         return CommunicationType.phone;
       case 'Chat':
         return CommunicationType.chat;
-    }
-  }
-}
-
-enum PeerPALUserField {
-  age,
-  name,
-  phone,
-  pictureUrl,
-  discoverFromAge,
-  discoverToAge,
-  discoverCommunicationPreferences,
-  discoverActivities,
-  discoverLocations
-}
-
-// ToDo: Move field names from UserDatabaseContract to this extension
-extension UserInformationFieldExtension on PeerPALUserField {
-  String get fieldName {
-    switch (this) {
-      case PeerPALUserField.age:
-        return UserDatabaseContract.userAge;
-      case PeerPALUserField.name:
-        return UserDatabaseContract.userName;
-      case PeerPALUserField.phone:
-        return UserDatabaseContract.userPhoneNumber;
-      case PeerPALUserField.pictureUrl:
-        return UserDatabaseContract.userProfilePicturePath;
-      case PeerPALUserField.discoverFromAge:
-        return UserDatabaseContract.discoverFromAge;
-      case PeerPALUserField.discoverToAge:
-        return UserDatabaseContract.discoverToAge;
-      case PeerPALUserField.discoverCommunicationPreferences:
-        return UserDatabaseContract.discoverCommunicationPreferences;
-      case PeerPALUserField.discoverActivities:
-        return UserDatabaseContract.discoverActivities;
-      case PeerPALUserField.discoverLocations:
-        return UserDatabaseContract.discoverLocations;
     }
   }
 }
