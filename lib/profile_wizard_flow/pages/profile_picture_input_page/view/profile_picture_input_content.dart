@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/cubit/profile_picture_cubit.dart';
-import 'package:peerpal/repository/models/user_information.dart';
+import 'package:peerpal/repository/models/app_user_information.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 

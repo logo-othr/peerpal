@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/location.dart';
+
+part 'app_user_information.g.dart';
 
 enum CommunicationType { phone, chat }
 
@@ -63,6 +66,7 @@ extension UserInformationFieldExtension on UserInformationField {
   }
 }
 
+@JsonSerializable(explicitToJson: true)
 class AppUserInformation extends Equatable {
   const AppUserInformation(
       {this.name,
@@ -120,16 +124,16 @@ class AppUserInformation extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        age,
-        phoneNumber,
-        imagePath,
-        discoverFromAge,
-        discoverToAge,
-        discoverCommunicationPreferences,
-        discoverActivities,
-        discoverLocations
-      ];
+    name,
+    age,
+    phoneNumber,
+    imagePath,
+    discoverFromAge,
+    discoverToAge,
+    discoverCommunicationPreferences,
+    discoverActivities,
+    discoverLocations
+  ];
 
   AppUserInformation copyWith({
     String? name,
@@ -155,4 +159,9 @@ class AppUserInformation extends Equatable {
       discoverLocations: discoverLocations ?? this.discoverLocations,
     );
   }
+
+  factory AppUserInformation.fromJson(Map<String, dynamic> json) =>
+      _$AppUserInformationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AppUserInformationToJson(this);
 }

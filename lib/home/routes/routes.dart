@@ -3,7 +3,7 @@ import 'package:peerpal/profile_wizard_flow/pages/age_input_page/view/age_input_
 import 'package:peerpal/profile_wizard_flow/pages/name_input_page/view/name_input_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/view/phone_input_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_picture_input_page/view/profile_picture_input_page.dart';
-import 'package:peerpal/repository/models/user_information.dart';
+import 'package:peerpal/repository/models/app_user_information.dart';
 
 List<Page> onGenerateProfileWizardPages(
     AppUserInformation userInformation, List<Page<dynamic>> pages) {

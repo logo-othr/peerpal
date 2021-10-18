@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,8 @@ import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/app_user.dart';
+import 'package:peerpal/repository/models/app_user_information.dart';
 import 'package:peerpal/repository/models/location.dart';
-import 'package:peerpal/repository/models/user_information.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -149,128 +148,22 @@ class AppUserRepository {
     cache.set<AppUserInformation>(
         key: '{$currentUser.uid}-userinformation', value: userInformation);
 
-    await userDocument.set({
-      UserInformationField.age.fieldName: userInformation.age,
-      UserInformationField.name.fieldName: userInformation.name,
-      UserInformationField.phone.fieldName: userInformation.phoneNumber,
-      UserInformationField.pictureUrl.fieldName: userInformation.imagePath,
-      UserInformationField.discoverFromAge.fieldName:
-          userInformation.discoverFromAge,
-      UserInformationField.discoverToAge.fieldName:
-          userInformation.discoverToAge,
-      UserInformationField.discoverLocations.fieldName:  userInformation.discoverLocations?.map((e) => e.place).toList(),
-      UserInformationField.discoverCommunicationPreferences.fieldName:
-          userInformation.discoverCommunicationPreferences
-              ?.map((e) => EnumToString.convertToString(e))
-              .toList(),
-      UserInformationField.discoverActivities.fieldName:
-          userInformation.discoverActivities?.map((e) => e.code).toList(),
-    }, SetOptions(merge: true));
+    var json = userInformation.toJson();
+
+    await userDocument.set(json, SetOptions(merge: true));
   }
 
   Future<AppUserInformation> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
     var userInformation = AppUserInformation.empty;
-    if (currentUser != null) {
-      var userDocumentSnapshot = await _firestore
-          .collection(UserDatabaseContract.users)
-          .doc(firebaseUser!.uid)
-          .get();
-      if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
-        var data = userDocumentSnapshot.data();
-
-        var age = data!.containsKey(UserDatabaseContract.userAge)
-            ? userDocumentSnapshot.get(UserDatabaseContract.userAge)
-            : null;
-
-        var name = data.containsKey(UserDatabaseContract.userName)
-            ? userDocumentSnapshot.get(UserDatabaseContract.userName)
-            : null;
-
-        var phoneNumber = data.containsKey(UserDatabaseContract.userPhoneNumber)
-            ? userDocumentSnapshot.get(UserDatabaseContract.userPhoneNumber)
-            : null;
-
-        var imageURL =
-            data.containsKey(UserDatabaseContract.userProfilePicturePath)
-                ? userDocumentSnapshot
-                    .get(UserDatabaseContract.userProfilePicturePath)
-                : null;
-
-        var discoverFromAge =
-            data.containsKey(UserDatabaseContract.discoverFromAge)
-                ? userDocumentSnapshot.get(UserDatabaseContract.discoverFromAge)
-                : null;
-
-        var discoverToAge = data.containsKey(UserDatabaseContract.discoverToAge)
-            ? userDocumentSnapshot.get(UserDatabaseContract.discoverToAge)
-            : null;
-
-
-        List<String>? discoverActivities;
-        if (data.containsKey(
-            UserDatabaseContract.discoverActivities)) {
-          var snapshot = userDocumentSnapshot
-              .get(UserDatabaseContract.discoverActivities);
-
-          if (snapshot != null)
-            discoverActivities =
-                List.from(snapshot as Iterable<dynamic>);
-        }
-
-        List<String>? discoverCommunicationPreferences;
-        if (data.containsKey(
-            UserDatabaseContract.discoverCommunicationPreferences)) {
-          var snapshot = userDocumentSnapshot
-              .get(UserDatabaseContract.discoverCommunicationPreferences);
-
-          if (snapshot != null)
-            discoverCommunicationPreferences =
-                List.from(snapshot as Iterable<dynamic>);
-        }
-
-        List<CommunicationType>? prefs;
-        if (discoverCommunicationPreferences != null) {
-          prefs = [];
-          for (String s in discoverCommunicationPreferences) {
-            var pref = EnumToString.fromString(CommunicationType.values, s);
-            if (pref != null) {
-              prefs.add(pref);
-            }
-          }
-        }
-
-        List<String>? discoverLocations;
-        if (data.containsKey(
-            UserDatabaseContract.discoverLocations)) {
-          var snapshot = userDocumentSnapshot
-              .get(UserDatabaseContract.discoverLocations);
-
-          if (snapshot != null)
-            discoverLocations =
-                List.from(snapshot as Iterable<dynamic>);
-        }
-
-
-
-        data.containsKey(UserDatabaseContract.userProfilePicturePath)
-            ? userDocumentSnapshot
-                .get(UserDatabaseContract.userProfilePicturePath)
-            : null;
-
-        userInformation = AppUserInformation(
-            age: age,
-            name: name,
-            phoneNumber: phoneNumber,
-            imagePath: imageURL,
-            discoverFromAge: discoverFromAge,
-            discoverToAge: discoverToAge,
-            discoverCommunicationPreferences: prefs,
-            discoverActivities:
-                discoverActivities?.map((e) => Activity(code: e)).toList(),
-            discoverLocations: discoverLocations?.map((e) => Location(place: e)).toList());
-      }
+    var userDocumentSnapshot = await _firestore
+        .collection(UserDatabaseContract.users)
+        .doc(firebaseUser!.uid)
+        .get();
+    if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
+      var data = userDocumentSnapshot.data();
+      userInformation = AppUserInformation.fromJson(data!);
     }
     return userInformation;
   }

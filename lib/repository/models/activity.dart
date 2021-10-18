@@ -1,6 +1,11 @@
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:peerpal/repository/models/location.dart';
 
-class Activity {
+part 'activity.g.dart';
+
+@JsonSerializable()
+class Activity extends Equatable {
   final String? id;
   final String? name;
   final String? code;
@@ -13,7 +18,6 @@ class Activity {
   final List<int>? invitationIds;
   final bool? public;
 
-//<editor-fold desc="Data Methods">
 
   const Activity({
     this.id,
@@ -28,37 +32,6 @@ class Activity {
     this.invitationIds,
     this.public,
   });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Activity &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          code == other.code &&
-          description == other.description &&
-          creatorId == other.creatorId &&
-          creatorName == other.creatorName &&
-          date == other.date &&
-          location == other.location &&
-          attendeeIds == other.attendeeIds &&
-          invitationIds == other.invitationIds &&
-          public == other.public);
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      code.hashCode ^
-      description.hashCode ^
-      creatorId.hashCode ^
-      creatorName.hashCode ^
-      date.hashCode ^
-      location.hashCode ^
-      attendeeIds.hashCode ^
-      invitationIds.hashCode ^
-      public.hashCode;
 
   @override
   String toString() {
@@ -121,21 +94,23 @@ class Activity {
     };
   }
 
-  factory Activity.fromMap(Map<String, dynamic> map) {
-    return Activity(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      code: map['code'] as String,
-      description: map['description'] as String,
-      creatorId: map['creatorId'] as String,
-      creatorName: map['creatorName'] as String,
-      date: map['date'] as DateTime,
-      location: map['location'] as Location,
-      attendeeIds: map['attendeeIds'] as List<int>,
-      invitationIds: map['invitationIds'] as List<int>,
-      public: map['public'] as bool,
-    );
-  }
+  factory Activity.fromJson(Map<String, dynamic> json) =>
+      _$ActivityFromJson(json);
 
-//</editor-fold>
+  Map<String, dynamic> toJson() => _$ActivityToJson(this);
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        code,
+        description,
+        creatorId,
+        creatorName,
+        date,
+        location,
+        attendeeIds,
+        invitationIds,
+        public
+      ];
 }

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/user_information.dart';
+import 'package:peerpal/repository/models/app_user_information.dart';
 
 part 'home_state.dart';
 

@@ -32,10 +32,13 @@ dependencies:
   uuid: ^3.0.4
   cached_network_image: ^3.1.0
   enum_to_string: ^2.0.1
+  json_annotation: ^4.3.0
 
 dev_dependencies:
+  build_runner: ^2.1.4
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.0.0
 
 
 flutter:

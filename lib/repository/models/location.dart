@@ -1,7 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'location.g.dart';
+
+@JsonSerializable()
 class Location extends Equatable {
-  const Location( {
+  const Location({
     required this.place,
     this.zipcode,
     this.street,
@@ -13,14 +17,11 @@ class Location extends Equatable {
   final String? street;
   final String? streetNumber;
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      place: json['place'] as String,
-      zipcode: json['zipcode'] as String,
-    );
-  }
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LocationToJson(this);
 
   @override
   List<Object?> get props => [place];
-
 }

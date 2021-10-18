@@ -41,9 +41,6 @@ class HomeView extends StatelessWidget {
           );
           BlocProvider.of<HomeCubit>(context).loadFlowState();
         }
-        /*if (state is! HomeInitial) {
-          BlocProvider.of<HomeCubit>(context).loadFlowState();
-        }*/
       },
       child: BlocBuilder<HomeCubit, HomeState>(
           bloc: BlocProvider.of<HomeCubit>(context),
