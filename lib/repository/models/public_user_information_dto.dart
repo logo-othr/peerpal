@@ -3,12 +3,13 @@ import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 
-part 'public_user_information.g.dart';
+part 'public_user_information_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class PublicUserInformation {
-  const PublicUserInformation(
-      {this.name,
+class PublicUserInformationDTO {
+  const PublicUserInformationDTO(
+      {this.id,
+      this.name,
       this.age,
       this.discoverFromAge,
       this.discoverToAge,
@@ -16,6 +17,7 @@ class PublicUserInformation {
       this.discoverActivities,
       this.discoverLocations});
 
+  final String? id;
   final String? name;
   final int? age;
   final int? discoverFromAge;
@@ -24,7 +26,8 @@ class PublicUserInformation {
   final List<Activity>? discoverActivities;
   final List<Location>? discoverLocations;
 
-  PublicUserInformation copyWith({
+  PublicUserInformationDTO copyWith({
+    String? id,
     String? name,
     int? age,
     int? discoverFromAge,
@@ -33,7 +36,8 @@ class PublicUserInformation {
     List<Activity>? discoverActivities,
     List<Location>? discoverLocations,
   }) {
-    return PublicUserInformation(
+    return PublicUserInformationDTO(
+      id: id ?? this.id,
       age: age ?? this.age,
       name: name ?? this.name,
       discoverFromAge: discoverFromAge ?? this.discoverFromAge,
@@ -45,8 +49,8 @@ class PublicUserInformation {
     );
   }
 
-  factory PublicUserInformation.fromJson(Map<String, dynamic> json) =>
-      _$PublicUserInformationFromJson(json);
+  factory PublicUserInformationDTO.fromJson(Map<String, dynamic> json) =>
+      _$PublicUserInformationDTOFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PublicUserInformationToJson(this);
+  Map<String, dynamic> toJson() => _$PublicUserInformationDTOToJson(this);
 }

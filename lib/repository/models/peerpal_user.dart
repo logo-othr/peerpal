@@ -5,7 +5,8 @@ import 'package:peerpal/repository/models/location.dart';
 
 class PeerPALUser extends Equatable {
   const PeerPALUser(
-      {this.name,
+      {this.id,
+      this.name,
       this.age,
       this.phoneNumber,
       this.imagePath,
@@ -15,6 +16,7 @@ class PeerPALUser extends Equatable {
       this.discoverActivities,
       this.discoverLocations});
 
+  final String? id;
   final String? name;
   final int? age;
   final String? phoneNumber;
@@ -60,18 +62,19 @@ class PeerPALUser extends Equatable {
 
   @override
   List<Object?> get props => [
-    name,
-    age,
-    phoneNumber,
-    imagePath,
-    discoverFromAge,
-    discoverToAge,
-    discoverCommunicationPreferences,
-    discoverActivities,
-    discoverLocations
-  ];
+        name,
+        age,
+        phoneNumber,
+        imagePath,
+        discoverFromAge,
+        discoverToAge,
+        discoverCommunicationPreferences,
+        discoverActivities,
+        discoverLocations
+      ];
 
   PeerPALUser copyWith({
+    String? id,
     String? name,
     int? age,
     String? phoneNumber,
@@ -83,6 +86,7 @@ class PeerPALUser extends Equatable {
     List<Location>? discoverLocations,
   }) {
     return PeerPALUser(
+      id: id ?? this.id,
       age: age ?? this.age,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
