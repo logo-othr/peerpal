@@ -13,6 +13,8 @@ import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/repository/models/peerpal_user_dto.dart';
+import 'package:peerpal/repository/models/private_user_information_dto.dart';
+import 'package:peerpal/repository/models/public_user_information_dto.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -144,6 +146,7 @@ class AppUserRepository {
   }
 
   Future<void> updateUserInformation(PeerPALUser userInformation) async {
+    userInformation = userInformation.copyWith(id: currentUser.id);
     var publicUserCollection = _firestore
         .collection(UserDatabaseContract.publicUsers)
         .doc(currentUser.id);
@@ -170,16 +173,54 @@ class AppUserRepository {
   Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    var dto = PeerPALUserDTO.empty;
-    var userDocumentSnapshot = await _firestore
+    var peerPALUserDTO = PeerPALUserDTO.empty;
+    var publicUserDataDTO;
+    var privateUserDataDTO;
+
+    var publicUserDocument = await _firestore
         .collection(UserDatabaseContract.publicUsers)
         .doc(firebaseUser!.uid)
         .get();
-    if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
-      var data = userDocumentSnapshot.data();
-      dto = PeerPALUserDTO.fromJson(data!);
+    var privateUserDocument = await _firestore
+        .collection(UserDatabaseContract.privateUsers)
+        .doc(firebaseUser!.uid)
+        .get();
+    if (publicUserDocument.exists && publicUserDocument.data() != null) {
+      var publicUserData = publicUserDocument.data();
+      publicUserDataDTO = PublicUserInformationDTO.fromJson(publicUserData!);
     }
-    return dto;
+    if (privateUserDocument.exists && privateUserDocument.data() != null) {
+      var privateUserData = privateUserDocument.data();
+      privateUserDataDTO = PrivateUserInformationDTO.fromJson(privateUserData!);
+    }
+    peerPALUserDTO = PeerPALUserDTO(
+        privateUserInformation: privateUserDataDTO,
+        publicUserInformation: publicUserDataDTO);
+    return peerPALUserDTO;
+  }
+
+  Future<List<PeerPALUserDTO>> getMatchingUsers() async {
+    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+    var publicUserCollection =
+        await _firestore.collection(UserDatabaseContract.publicUsers);
+    var currentPeerPALUser = await getCurrentUserInformation();
+
+    var snapshots = await publicUserCollection
+        .limit(10)
+        .where('age',
+            isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
+        .where('age', isLessThanOrEqualTo: currentPeerPALUser.discoverToAge)
+        .get();
+
+    final matchedUserDocuments =
+        snapshots.docs.map((doc) => doc.data()).toList();
+    var publicUsers = matchedUserDocuments
+        .map((e) => PublicUserInformationDTO.fromJson(e))
+        .toList();
+    var peerPALUsers = publicUsers
+        .map((e) => PeerPALUserDTO(publicUserInformation: e))
+        .toList();
+    return peerPALUsers;
   }
 
   Future<PeerPALUser> getCurrentUserInformation() async {
