@@ -1,12 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 
-part 'peerpal_user.g.dart';
-
-@JsonSerializable(explicitToJson: true)
 class PeerPALUser extends Equatable {
   const PeerPALUser(
       {this.name,
@@ -99,9 +95,4 @@ class PeerPALUser extends Equatable {
       discoverLocations: discoverLocations ?? this.discoverLocations,
     );
   }
-
-  factory PeerPALUser.fromJson(Map<String, dynamic> json) =>
-      _$PeerPALUserFromJson(json);
-
-  Map<String, dynamic> toJson() => _$PeerPALUserToJson(this);
 }

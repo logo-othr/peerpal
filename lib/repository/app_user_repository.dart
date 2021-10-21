@@ -12,6 +12,7 @@ import 'package:peerpal/repository/models/auth_user.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/repository/models/peerpal_user_dto.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -50,7 +51,7 @@ class AppUserRepository {
   // ToDo: Remove if not used in the future
   Stream<PeerPALUser> get userInformation {
     return _firestore
-        .collection(UserDatabaseContract.users)
+        .collection(UserDatabaseContract.publicUsers)
         .doc(currentUser.id)
         .snapshots()
         .map((DocumentSnapshot snapshot) {
@@ -143,42 +144,55 @@ class AppUserRepository {
   }
 
   Future<void> updateUserInformation(PeerPALUser userInformation) async {
-    var userDocument =
-        _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
+    var publicUserCollection = _firestore
+        .collection(UserDatabaseContract.publicUsers)
+        .doc(currentUser.id);
+    var privateUserCollection = _firestore
+        .collection(UserDatabaseContract.privateUsers)
+        .doc(currentUser.id);
 
-    cache.set<PeerPALUser>(
-        key: '{$currentUser.uid}-userinformation', value: userInformation);
+    var userDTO = PeerPALUserDTO.fromDomainObject(userInformation);
 
-    var json = userInformation.toJson();
+    cache.set<PeerPALUserDTO>(
+        key: '{$currentUser.uid}-userinformation', value: userDTO);
 
-    await userDocument.set(json, SetOptions(merge: true));
+    var publicUserInformationJson = userDTO.publicUserInformation?.toJson();
+    var privateUserInformation = userDTO.privateUserInformation?.toJson();
+
+    if (publicUserInformationJson != null)
+      await publicUserCollection.set(
+          publicUserInformationJson, SetOptions(merge: true));
+    if (privateUserInformation != null)
+      await privateUserCollection.set(
+          privateUserInformation, SetOptions(merge: true));
   }
 
-  Future<PeerPALUser> _downloadCurrentUserInformation() async {
+  Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    var userInformation = PeerPALUser.empty;
+    var dto = PeerPALUserDTO.empty;
     var userDocumentSnapshot = await _firestore
-        .collection(UserDatabaseContract.users)
+        .collection(UserDatabaseContract.publicUsers)
         .doc(firebaseUser!.uid)
         .get();
     if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
       var data = userDocumentSnapshot.data();
-      userInformation = PeerPALUser.fromJson(data!);
+      dto = PeerPALUserDTO.fromJson(data!);
     }
-    return userInformation;
+    return dto;
   }
 
   Future<PeerPALUser> getCurrentUserInformation() async {
     var userInformation = PeerPALUser.empty;
-    var cachedUserInformation =
-        cache.get<PeerPALUser>(key: '{$currentUser.uid}-userinformation');
-    if (cachedUserInformation != null) {
-      userInformation = cachedUserInformation;
+    var cachedUserDTO =
+        cache.get<PeerPALUserDTO>(key: '{$currentUser.uid}-userinformation');
+    if (cachedUserDTO != null) {
+      userInformation = cachedUserDTO.toDomainObject();
     } else {
-      userInformation = await _downloadCurrentUserInformation();
-      cache.set<PeerPALUser>(
-          key: '{$currentUser.uid}-userinformation', value: userInformation);
+      var downloadedUserDTO = await _downloadCurrentUserInformation();
+      cache.set<PeerPALUserDTO>(
+          key: '{$currentUser.uid}-userinformation', value: downloadedUserDTO);
+      userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
   }
