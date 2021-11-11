@@ -12,11 +12,10 @@ class PeerPALUserDTO {
 
   factory PeerPALUserDTO.fromDomainObject(PeerPALUser peerPALUser) {
     var privateUserInformation = PrivateUserInformationDTO(
-        id: peerPALUser.id,
-        imagePath: peerPALUser.imagePath,
-        phoneNumber: peerPALUser.phoneNumber);
+        id: peerPALUser.id, phoneNumber: peerPALUser.phoneNumber);
 
     var publicUserInformation = PublicUserInformationDTO(
+        imagePath: peerPALUser.imagePath,
         id: peerPALUser.id,
         name: peerPALUser.name,
         age: peerPALUser.age,
@@ -33,8 +32,10 @@ class PeerPALUserDTO {
   }
 
   PeerPALUser toDomainObject() {
+    var uid = privateUserInformation?.id ?? publicUserInformation?.id;
+
     return PeerPALUser(
-        id: privateUserInformation?.id,
+        id: uid,
         name: publicUserInformation?.name,
         age: publicUserInformation?.age,
         discoverFromAge: publicUserInformation?.discoverFromAge,
@@ -43,7 +44,7 @@ class PeerPALUserDTO {
             publicUserInformation?.discoverCommunicationPreferences,
         discoverActivities: publicUserInformation?.discoverActivities,
         discoverLocations: publicUserInformation?.discoverLocations,
-        imagePath: privateUserInformation?.imagePath,
+        imagePath: publicUserInformation?.imagePath,
         phoneNumber: privateUserInformation?.phoneNumber);
   }
 

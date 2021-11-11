@@ -15,7 +15,8 @@ class PublicUserInformationDTO {
       this.discoverToAge,
       this.discoverCommunicationPreferences,
       this.discoverActivities,
-      this.discoverLocations});
+      this.discoverLocations,
+      this.imagePath});
 
   final String? id;
   final String? name;
@@ -25,17 +26,18 @@ class PublicUserInformationDTO {
   final List<CommunicationType>? discoverCommunicationPreferences;
   final List<Activity>? discoverActivities;
   final List<Location>? discoverLocations;
+  final String? imagePath;
 
-  PublicUserInformationDTO copyWith({
-    String? id,
-    String? name,
-    int? age,
-    int? discoverFromAge,
-    int? discoverToAge,
-    List<CommunicationType>? discoverCommunicationPreferences,
-    List<Activity>? discoverActivities,
-    List<Location>? discoverLocations,
-  }) {
+  PublicUserInformationDTO copyWith(
+      {String? id,
+      String? name,
+      int? age,
+      int? discoverFromAge,
+      int? discoverToAge,
+      List<CommunicationType>? discoverCommunicationPreferences,
+      List<Activity>? discoverActivities,
+      List<Location>? discoverLocations,
+      String? imagePath}) {
     return PublicUserInformationDTO(
       id: id ?? this.id,
       age: age ?? this.age,
@@ -46,7 +48,7 @@ class PublicUserInformationDTO {
           this.discoverCommunicationPreferences,
       discoverActivities: discoverActivities ?? this.discoverActivities,
       discoverLocations: discoverLocations ?? this.discoverLocations,
-    );
+        imagePath: imagePath ?? this.imagePath);
   }
 
   factory PublicUserInformationDTO.fromJson(Map<String, dynamic> json) =>

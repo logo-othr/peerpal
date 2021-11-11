@@ -7,12 +7,10 @@ class PrivateUserInformationDTO {
   PrivateUserInformationDTO({
     this.id,
     this.phoneNumber,
-    this.imagePath,
   });
 
   final String? id;
   final String? phoneNumber;
-  final String? imagePath;
 
   PrivateUserInformationDTO copyWith({
     String? id,
@@ -22,7 +20,6 @@ class PrivateUserInformationDTO {
     return PrivateUserInformationDTO(
       id: id ?? this.id,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      imagePath: imagePath ?? this.imagePath,
     );
   }
 
