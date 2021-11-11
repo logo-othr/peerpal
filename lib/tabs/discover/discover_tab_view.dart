@@ -58,18 +58,22 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         builder: (context, state) {
           switch (state.status) {
             case DiscoverTabStatus.error:
-              return const Center(child: Text('failed to fetch posts'));
+              return const Center(
+                  child: Text('Die Nutzer konnten nicht geladen werden.'));
             case DiscoverTabStatus.success:
               if (state.users.isEmpty) {
-                return const Center(child: Text('no users'));
+                return const Center(
+                    child: Text('Es konnten keine Nutzer gefunden werden'));
               }
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
                   return index >= state.users.length
-                      ? SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(strokeWidth: 1.5),
+                      ? Center(
+                          child: SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(strokeWidth: 1.5),
+                          ),
                         )
                       : DiscoverUserListItem(
                           imageLink: state.users[index].imagePath,
@@ -87,7 +91,12 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                 controller: _scrollController,
               );
             default:
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(strokeWidth: 1.5),
+              ));
           }
         },
       ),
