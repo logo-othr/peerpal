@@ -4,6 +4,7 @@ import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/tabs/discover/discover_tab_view.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
@@ -73,8 +74,16 @@ class MyTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CustomTabBar(),
-      body: tabs[0],
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<DiscoverTabBloc>(
+            create: (context) =>
+                DiscoverTabBloc(context.read<AppUserRepository>())
+                  ..add(UsersLoaded()),
+          ),
+        ],
+        child: tabs[0],
+      ),
     );
   }
 }
-
