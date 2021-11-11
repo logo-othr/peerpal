@@ -57,7 +57,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
       body: BlocBuilder<DiscoverTabBloc, DiscoverTabState>(
         builder: (context, state) {
           switch (state.status) {
-            case DiscoverTabStatus.failure:
+            case DiscoverTabStatus.error:
               return const Center(child: Text('failed to fetch posts'));
             case DiscoverTabStatus.success:
               if (state.users.isEmpty) {
