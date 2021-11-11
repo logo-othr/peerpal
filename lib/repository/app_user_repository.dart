@@ -125,7 +125,7 @@ class AppUserRepository {
         case 'too-many-requests':
           throw LoginException(
               message:
-                  'Der Server ist ausgelastet. Bitte versuche es später oder '
+              'Der Server ist ausgelastet. Bitte versuche es später oder '
                   "morgen noch einmal.");
         default:
           throw LoginException();
@@ -145,16 +145,16 @@ class AppUserRepository {
     }
   }
 
-  Future<void> updateUserInformation(PeerPALUser userInformation) async {
-    userInformation = userInformation.copyWith(id: currentUser.id);
-    var publicUserCollection = _firestore
-        .collection(UserDatabaseContract.publicUsers)
-        .doc(currentUser.id);
-    var privateUserCollection = _firestore
-        .collection(UserDatabaseContract.privateUsers)
-        .doc(currentUser.id);
+  Future<void> updateUserInformation(PeerPALUser peerPALUser,
+      {String? id}) async {
+    var uid = id == null ? currentUser.id : id;
+    peerPALUser = peerPALUser.copyWith(id: uid);
+    var publicUserCollection =
+        _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
+    var privateUserCollection =
+        _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
 
-    var userDTO = PeerPALUserDTO.fromDomainObject(userInformation);
+    var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
     cache.set<PeerPALUserDTO>(
         key: '{$currentUser.uid}-userinformation', value: userDTO);
@@ -199,27 +199,34 @@ class AppUserRepository {
     return peerPALUserDTO;
   }
 
-  Future<List<PeerPALUserDTO>> getMatchingUsers() async {
-    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+  Future<List<PeerPALUser>> getMatchingUsers(
+      {PeerPALUser? lastUser = null, required int limit}) async {
     var publicUserCollection =
         await _firestore.collection(UserDatabaseContract.publicUsers);
     var currentPeerPALUser = await getCurrentUserInformation();
 
-    var snapshots = await publicUserCollection
-        .limit(10)
-        .where('age',
-            isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
-        .where('age', isLessThanOrEqualTo: currentPeerPALUser.discoverToAge)
-        .get();
+    var query = await publicUserCollection
+        .where('age', isGreaterThanOrEqualTo: 0)
+        .where('age', isLessThanOrEqualTo: 1000)
+        .orderBy('age')
+        .orderBy("name")
+        .orderBy("id");
+
+    if (lastUser != null)
+      query = query.startAfter([lastUser.age, lastUser.name, lastUser.id]);
+
+    var snapshots = await query.limit(limit).get();
 
     final matchedUserDocuments =
         snapshots.docs.map((doc) => doc.data()).toList();
     var publicUsers = matchedUserDocuments
         .map((e) => PublicUserInformationDTO.fromJson(e))
         .toList();
-    var peerPALUsers = publicUsers
+    var peerPALUserDTOs = publicUsers
         .map((e) => PeerPALUserDTO(publicUserInformation: e))
         .toList();
+
+    var peerPALUsers = peerPALUserDTOs.map((e) => e.toDomainObject()).toList();
     return peerPALUsers;
   }
 
