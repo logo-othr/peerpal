@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
+import 'package:peerpal/widgets/custom_bottom_indicator.dart';
 import 'package:peerpal/widgets/discover_user_list_item.dart';
 import 'package:provider/src/provider.dart';
 
@@ -67,23 +68,20 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
               }
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return index >= state.users.length
-                      ? Center(
-                          child: SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(strokeWidth: 1.5),
-                          ),
-                        )
-                      : DiscoverUserListItem(
-                          imageLink: state.users[index].imagePath,
-                          header: state.users[index].name,
-                          locations: state.users[index].discoverLocations
-                              ?.map((e) => e.place)
-                              .toList(),
-                          activities: state.users[index].discoverActivities
-                              ?.map((e) => e.name!)
-                              .toList());
+                  if (index >= state.users.length) {
+                    return BottomIndicator();
+                  } else {
+                    var user = state.users[index];
+                    return DiscoverUserListItem(
+                        imageLink: user.imagePath,
+                        header: user.name,
+                        locations: user.discoverLocations
+                            ?.map((e) => e.place)
+                            .toList(),
+                        activities: state.users[index].discoverActivities
+                            ?.map((e) => e.name!)
+                            .toList());
+                  }
                 },
                 itemCount: state.hasNoMoreUsers
                     ? state.users.length
@@ -91,12 +89,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                 controller: _scrollController,
               );
             default:
-              return const Center(
-                  child: SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(strokeWidth: 1.5),
-              ));
+              return const Center(child: CircularProgressIndicator());
           }
         },
       ),
