@@ -4,11 +4,15 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class DiscoverUserListItem extends StatelessWidget {
   String? header;
-  String? description;
-  IconData? icon;
+  String? imageLink;
+  List<String>? locations;
+  List<String>? activities;
 
   DiscoverUserListItem(
-      {required this.header, required this.description, required this.icon});
+      {required this.header,
+      this.imageLink,
+      required this.locations,
+      required this.activities});
 
   @override
   Widget build(BuildContext context) {
@@ -24,41 +28,110 @@ class DiscoverUserListItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: Container(
-                      child: CircleAvatar(
-                        radius: 30,
-                        child: Icon(
-                          icon,
-                          size: 60,
-                          color: primaryColor,
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: Container(
+                        child: CircleAvatar(
+                          radius: 30,
+                          child: Image.network(imageLink!),
+                          backgroundColor: Colors.white,
                         ),
-                        backgroundColor: Colors.white,
-                      ),
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: new Border.all(
-                          color: primaryColor,
-                          width: 4.0,
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: new Border.all(
+                            color: primaryColor,
+                            width: 4,
+                          ),
+                        )),
+                  ),
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 200,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: CustomPeerPALHeading2(header!,
+                                    color: primaryColor)),
+                          ),
                         ),
-                      )),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomPeerPALHeading2(header!, color: primaryColor),
-                    CustomPeerPALHeading3(
-                      color: Colors.black,
-                      text: description!,
-                    )
-                  ],
-                ),
-              ],
+                        SizedBox(height: 3),
+                        Flexible(
+                          child: Row(
+                            children: [
+                              CustomPeerPALHeading3(
+                                text: "Ort: ",
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              Container(
+                                width: 150,
+                                child: RichText(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      for (var location in locations!)
+                                        TextSpan(
+                                          text: "${location}, ",
+                                          style: new TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Roboto',
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Flexible(
+                          child: Row(
+                            children: [
+                              CustomPeerPALHeading3(
+                                text: "Aktivitäten: ",
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              Container(
+                                width: 150,
+                                child: RichText(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      for (var activity in activities!)
+                                        TextSpan(
+                                          text: "${activity}, ",
+                                          style: new TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Roboto',
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
