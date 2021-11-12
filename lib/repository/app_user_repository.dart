@@ -50,22 +50,6 @@ class AppUserRepository {
     });
   }
 
-  // ToDo: Remove if not used in the future
-  Stream<PeerPALUser> get userInformation {
-    return _firestore
-        .collection(UserDatabaseContract.publicUsers)
-        .doc(currentUser.id)
-        .snapshots()
-        .map((DocumentSnapshot snapshot) {
-      if (snapshot.exists) {
-        int age = snapshot['age'];
-        var name = snapshot['name'];
-        return PeerPALUser(age: age, name: name);
-      } else {
-        return PeerPALUser.empty;
-      }
-    });
-  }
 
   AuthUser get currentUser {
     return _getUserFromFirebaseUser();
