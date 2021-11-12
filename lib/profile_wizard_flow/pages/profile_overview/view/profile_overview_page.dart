@@ -17,11 +17,13 @@ class ProfileOverviewPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar("Username", hasBackButton: false),
-        body: BlocProvider(
-          create: (_) {
-            return ProfileOverviewCubit(context.read<AppUserRepository>());
-          },
+        appBar: CustomAppBar(
+          "Überblick",
+          hasBackButton: true,
+        ),
+        body: BlocProvider.value(
+          value: ProfileOverviewCubit(context.read<AppUserRepository>())
+            ..loadData(),
           child: ProfileOverviewContent(),
         ),
       ),
