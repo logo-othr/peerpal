@@ -1,20 +1,20 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 
 class PeerPALUser extends Equatable {
-  const PeerPALUser(
-      {this.id,
-      this.name,
-      this.age,
-      this.phoneNumber,
-      this.imagePath,
-      this.discoverFromAge,
-      this.discoverToAge,
-      this.discoverCommunicationPreferences,
-      this.discoverActivities,
-      this.discoverLocations});
+  const PeerPALUser({this.id,
+    this.name,
+    this.age,
+    this.phoneNumber,
+    this.imagePath,
+    this.discoverFromAge,
+    this.discoverToAge,
+    this.discoverCommunicationPreferences,
+    this.discoverActivities,
+    this.discoverLocations});
 
   final String? id;
   final String? name;
@@ -62,16 +62,16 @@ class PeerPALUser extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        age,
-        phoneNumber,
-        imagePath,
-        discoverFromAge,
-        discoverToAge,
-        discoverCommunicationPreferences,
-        discoverActivities,
-        discoverLocations
-      ];
+    name,
+    age,
+    phoneNumber,
+    imagePath,
+    discoverFromAge,
+    discoverToAge,
+    discoverCommunicationPreferences,
+    discoverActivities,
+    discoverLocations
+  ];
 
   PeerPALUser copyWith({
     String? id,
@@ -98,5 +98,20 @@ class PeerPALUser extends Equatable {
       discoverActivities: discoverActivities ?? this.discoverActivities,
       discoverLocations: discoverLocations ?? this.discoverLocations,
     );
+  }
+
+  @override
+  String toString() {
+    return "\n ----- User ----- \n"
+        "id: ${this.id} \n"
+        "age: ${this.age} \n"
+        "name: ${this.name} \n"
+        "phoneNumber: ${this.phoneNumber} \n"
+        "discoverFromAge: ${this.discoverFromAge} \n"
+        "discoverToAge: ${this.discoverToAge} \n"
+        "discoverCommunicationPreferences: ${this.discoverCommunicationPreferences!.map((e) => EnumToString.convertToString(e)).toList()} \n"
+        "discoverActivities: ${this.discoverActivities!.map((e) => e.name).toList()} \n"
+        "discoverLocations: ${this.discoverLocations!.map((e) => e.place).toList()} \n"
+        "------- \n";
   }
 }
