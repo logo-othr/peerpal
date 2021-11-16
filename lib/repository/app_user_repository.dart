@@ -50,7 +50,6 @@ class AppUserRepository {
     });
   }
 
-
   AuthUser get currentUser {
     return _getUserFromFirebaseUser();
   }
@@ -109,7 +108,7 @@ class AppUserRepository {
         case 'too-many-requests':
           throw LoginException(
               message:
-              'Der Server ist ausgelastet. Bitte versuche es später oder '
+                  'Der Server ist ausgelastet. Bitte versuche es später oder '
                   "morgen noch einmal.");
         default:
           throw LoginException();
@@ -188,13 +187,46 @@ class AppUserRepository {
     var publicUserCollection =
         await _firestore.collection(UserDatabaseContract.publicUsers);
     var currentPeerPALUser = await getCurrentUserInformation();
-
-    var query = await publicUserCollection
-        .where('age', isGreaterThanOrEqualTo: 0)
-        .where('age', isLessThanOrEqualTo: 1000)
-        .orderBy('age')
+    /*var query = await publicUserCollection
+        .where(UserDatabaseContract.userAge,
+            isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
+        .where(UserDatabaseContract.userAge,
+            isLessThanOrEqualTo: currentPeerPALUser.discoverToAge)
+        .where(UserDatabaseContract.discoverActivities,
+            arrayContainsAny: currentPeerPALUser.discoverActivities!
+                .map((e) => e.name)
+                .toList())
+        .where(UserDatabaseContract.discoverLocations,
+            arrayContainsAny: currentPeerPALUser.discoverLocations!
+                .map((e) => e.place)
+                .toList())
+        .where(UserDatabaseContract.discoverCommunicationPreferences,
+            arrayContainsAny: currentPeerPALUser
+                .discoverCommunicationPreferences!
+                .map((e) => EnumToString.convertToString(e))
+                .toList())
+        .orderBy(UserDatabaseContract.userAge)
+        .orderBy(UserDatabaseContract.discoverActivities)
         .orderBy("name")
-        .orderBy("id");
+        .orderBy("id");*/
+    var query = await publicUserCollection
+            .where(UserDatabaseContract.userAge,
+                isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
+            .where(UserDatabaseContract.userAge,
+                isLessThanOrEqualTo: currentPeerPALUser
+                    .discoverToAge) /* .
+   where('phone', isEqualTo: true).
+    where('chat', isEqualTo: true)*/
+        /* .where(UserDatabaseContract.discoverLocations,
+        arrayContainsAny: currentPeerPALUser.discoverLocations!
+            .map((e) => e.place)
+            .toList())*/
+        ;
+
+    query = query
+        .orderBy(UserDatabaseContract.userAge)
+        .orderBy(UserDatabaseContract.userName)
+        .orderBy('id');
 
     if (lastUser != null)
       query = query.startAfter([lastUser.age, lastUser.name, lastUser.id]);
