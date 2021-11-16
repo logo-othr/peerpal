@@ -13,7 +13,7 @@ class ProfileOverviewInitial extends ProfileOverviewState {
 }
 
 class ProfileOverviewLoaded extends ProfileOverviewState {
-  final AppUserInformation appUserInformation;
+  final PeerPALUser appUserInformation;
 
   ProfileOverviewLoaded(this.appUserInformation);
 
