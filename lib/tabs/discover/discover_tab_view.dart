@@ -73,6 +73,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                   } else {
                     var user = state.users[index];
                     return DiscoverUserListItem(
+                        onPressed: () => print(user),
                         imageLink: user.imagePath,
                         header: user.name,
                         locations: user.discoverLocations
