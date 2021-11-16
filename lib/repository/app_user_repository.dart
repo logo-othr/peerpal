@@ -8,9 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/activity.dart';
-import 'package:peerpal/repository/models/app_user.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/auth_user.dart';
+import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/repository/models/peerpal_user_dto.dart';
+import 'package:peerpal/repository/models/private_user_information_dto.dart';
+import 'package:peerpal/repository/models/public_user_information_dto.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -40,30 +44,13 @@ class AppUserRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<AppUser> get user {
+  Stream<AuthUser> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      return firebaseUser == null ? AppUser.empty : _getUserFromFirebaseUser();
+      return firebaseUser == null ? AuthUser.empty : _getUserFromFirebaseUser();
     });
   }
 
-  // ToDo: Remove if not used in the future
-  Stream<AppUserInformation> get userInformation {
-    return _firestore
-        .collection(UserDatabaseContract.users)
-        .doc(currentUser.id)
-        .snapshots()
-        .map((DocumentSnapshot snapshot) {
-      if (snapshot.exists) {
-        int age = snapshot['age'];
-        var name = snapshot['name'];
-        return AppUserInformation(age: age, name: name);
-      } else {
-        return AppUserInformation.empty;
-      }
-    });
-  }
-
-  AppUser get currentUser {
+  AuthUser get currentUser {
     return _getUserFromFirebaseUser();
   }
 
@@ -141,53 +128,145 @@ class AppUserRepository {
     }
   }
 
-  Future<void> updateUserInformation(AppUserInformation userInformation) async {
-    var userDocument =
-        _firestore.collection(UserDatabaseContract.users).doc(currentUser.id);
+  Future<void> updateUserInformation(PeerPALUser peerPALUser,
+      {String? id}) async {
+    var uid = id == null ? currentUser.id : id;
+    peerPALUser = peerPALUser.copyWith(id: uid);
+    var publicUserCollection =
+        _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
+    var privateUserCollection =
+        _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
 
-    cache.set<AppUserInformation>(
-        key: '{$currentUser.uid}-userinformation', value: userInformation);
+    var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
-    var json = userInformation.toJson();
+    cache.set<PeerPALUserDTO>(
+        key: '{$currentUser.uid}-userinformation', value: userDTO);
 
-    await userDocument.set(json, SetOptions(merge: true));
+    var publicUserInformationJson = userDTO.publicUserInformation?.toJson();
+    var privateUserInformation = userDTO.privateUserInformation?.toJson();
+
+    if (publicUserInformationJson != null)
+      await publicUserCollection.set(
+          publicUserInformationJson, SetOptions(merge: true));
+    if (privateUserInformation != null)
+      await privateUserCollection.set(
+          privateUserInformation, SetOptions(merge: true));
   }
 
-  Future<AppUserInformation> _downloadCurrentUserInformation() async {
+  Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-    var userInformation = AppUserInformation.empty;
-    var userDocumentSnapshot = await _firestore
-        .collection(UserDatabaseContract.users)
+    var peerPALUserDTO = PeerPALUserDTO.empty;
+    var publicUserDataDTO;
+    var privateUserDataDTO;
+
+    var publicUserDocument = await _firestore
+        .collection(UserDatabaseContract.publicUsers)
         .doc(firebaseUser!.uid)
         .get();
-    if (userDocumentSnapshot.exists && userDocumentSnapshot.data() != null) {
-      var data = userDocumentSnapshot.data();
-      userInformation = AppUserInformation.fromJson(data!);
+    var privateUserDocument = await _firestore
+        .collection(UserDatabaseContract.privateUsers)
+        .doc(firebaseUser!.uid)
+        .get();
+    if (publicUserDocument.exists && publicUserDocument.data() != null) {
+      var publicUserData = publicUserDocument.data();
+      publicUserDataDTO = PublicUserInformationDTO.fromJson(publicUserData!);
     }
-    return userInformation;
+    if (privateUserDocument.exists && privateUserDocument.data() != null) {
+      var privateUserData = privateUserDocument.data();
+      privateUserDataDTO = PrivateUserInformationDTO.fromJson(privateUserData!);
+    }
+    peerPALUserDTO = PeerPALUserDTO(
+        privateUserInformation: privateUserDataDTO,
+        publicUserInformation: publicUserDataDTO);
+    return peerPALUserDTO;
   }
 
-  Future<AppUserInformation> getCurrentUserInformation() async {
-    var userInformation = AppUserInformation.empty;
-    var cachedUserInformation =
-        cache.get<AppUserInformation>(key: '{$currentUser.uid}-userinformation');
-    if (cachedUserInformation != null) {
-      userInformation = cachedUserInformation;
+  Future<List<PeerPALUser>> getMatchingUsers(
+      {PeerPALUser? lastUser = null, required int limit}) async {
+    var publicUserCollection =
+        await _firestore.collection(UserDatabaseContract.publicUsers);
+    var currentPeerPALUser = await getCurrentUserInformation();
+    /*var query = await publicUserCollection
+        .where(UserDatabaseContract.userAge,
+            isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
+        .where(UserDatabaseContract.userAge,
+            isLessThanOrEqualTo: currentPeerPALUser.discoverToAge)
+        .where(UserDatabaseContract.discoverActivities,
+            arrayContainsAny: currentPeerPALUser.discoverActivities!
+                .map((e) => e.name)
+                .toList())
+        .where(UserDatabaseContract.discoverLocations,
+            arrayContainsAny: currentPeerPALUser.discoverLocations!
+                .map((e) => e.place)
+                .toList())
+        .where(UserDatabaseContract.discoverCommunicationPreferences,
+            arrayContainsAny: currentPeerPALUser
+                .discoverCommunicationPreferences!
+                .map((e) => EnumToString.convertToString(e))
+                .toList())
+        .orderBy(UserDatabaseContract.userAge)
+        .orderBy(UserDatabaseContract.discoverActivities)
+        .orderBy("name")
+        .orderBy("id");*/
+    var query = await publicUserCollection
+            .where(UserDatabaseContract.userAge,
+                isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
+            .where(UserDatabaseContract.userAge,
+                isLessThanOrEqualTo: currentPeerPALUser
+                    .discoverToAge) /* .
+   where('phone', isEqualTo: true).
+    where('chat', isEqualTo: true)*/
+        /* .where(UserDatabaseContract.discoverLocations,
+        arrayContainsAny: currentPeerPALUser.discoverLocations!
+            .map((e) => e.place)
+            .toList())*/
+        ;
+
+    query = query
+        .orderBy(UserDatabaseContract.userAge)
+        .orderBy(UserDatabaseContract.userName)
+        .orderBy('id');
+
+    if (lastUser != null)
+      query = query.startAfter([lastUser.age, lastUser.name, lastUser.id]);
+
+    var snapshots = await query.limit(limit).get();
+
+    final matchedUserDocuments =
+        snapshots.docs.map((doc) => doc.data()).toList();
+    var publicUsers = matchedUserDocuments
+        .map((e) => PublicUserInformationDTO.fromJson(e))
+        .toList();
+    var peerPALUserDTOs = publicUsers
+        .map((e) => PeerPALUserDTO(publicUserInformation: e))
+        .toList();
+
+    var peerPALUsers = peerPALUserDTOs.map((e) => e.toDomainObject()).toList();
+    return peerPALUsers;
+  }
+
+  Future<PeerPALUser> getCurrentUserInformation() async {
+    var userInformation = PeerPALUser.empty;
+    var cachedUserDTO =
+        cache.get<PeerPALUserDTO>(key: '{$currentUser.uid}-userinformation');
+    if (cachedUserDTO != null) {
+      userInformation = cachedUserDTO.toDomainObject();
     } else {
-      userInformation = await _downloadCurrentUserInformation();
-      cache.set<AppUserInformation>(
-          key: '{$currentUser.uid}-userinformation', value: userInformation);
+      var downloadedUserDTO = await _downloadCurrentUserInformation();
+      cache.set<PeerPALUserDTO>(
+          key: '{$currentUser.uid}-userinformation', value: downloadedUserDTO);
+      userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
   }
 
-  AppUser _getUserFromFirebaseUser() {
+  AuthUser _getUserFromFirebaseUser() {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
     return (firebaseUser == null
-        ? AppUser.empty
-        : AppUser(id: firebaseUser.uid, email: firebaseUser.email));
+        ? AuthUser.empty
+        : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
   Future<List<Activity>> loadActivityList() async {

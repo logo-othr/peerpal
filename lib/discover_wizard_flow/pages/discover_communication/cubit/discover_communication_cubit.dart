@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/enum/communication_type.dart';
 
 part 'discover_communication_state.dart';
 

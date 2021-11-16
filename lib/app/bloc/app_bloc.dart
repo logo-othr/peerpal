@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/app_user.dart';
+import 'package:peerpal/repository/models/auth_user.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
@@ -21,9 +21,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   final AppUserRepository _appUserRepository;
-  late final StreamSubscription<AppUser> _userSubscription;
+  late final StreamSubscription<AuthUser> _userSubscription;
 
-  void _onUserChanged(AppUser user) => add(AppUserChanged(user));
+  void _onUserChanged(AuthUser user) => add(AppUserChanged(user));
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {

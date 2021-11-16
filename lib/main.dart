@@ -13,6 +13,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   final authenticationRepository = AppUserRepository(cache: MemoryCache());
   await authenticationRepository.user.first;
+  //await DebugHelper.createExampleUsers(appUserRepository: authenticationRepository, emailBase:  'pptestmailbase', password: 'Abc12345678*');
   runApp(App(authenticationRepository: authenticationRepository));
 }
 

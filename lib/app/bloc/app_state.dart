@@ -8,16 +8,16 @@ enum AppStatus {
 class AppState extends Equatable {
   const AppState._({
     required this.status,
-    this.user = AppUser.empty,
+    this.user = AuthUser.empty,
   });
 
-  const AppState.authenticated(AppUser user)
+  const AppState.authenticated(AuthUser user)
       : this._(status: AppStatus.authenticated, user: user);
 
   const AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
 
   final AppStatus status;
-  final AppUser user;
+  final AuthUser user;
 
   @override
   List<Object> get props => [status, user];

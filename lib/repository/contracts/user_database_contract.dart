@@ -1,5 +1,6 @@
 class UserDatabaseContract {
-  static const users = 'users';
+  static const publicUsers = 'publicUserData';
+  static const privateUsers = 'privateUserData';
   static const userAge = 'age';
   static const userName = 'name';
   static const userPhoneNumber = 'phone_number';

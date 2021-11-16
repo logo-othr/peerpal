@@ -2,7 +2,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/profile_wizard_flow/pages/age_input_page/cubit/age_input_cubit.dart';
-import 'package:peerpal/repository/models/app_user_information.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/age_picker.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -79,7 +79,7 @@ class AgeInputContent extends StatelessWidget {
     if (isInFlowContext) {
       await context.read<AgeInputCubit>().postData();
       context
-          .flow<AppUserInformation>()
+          .flow<PeerPALUser>()
           .complete((s) => s.copyWith(age: state.selectedAge));
     } else {
       await context.read<AgeInputCubit>().postData();
