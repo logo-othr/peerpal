@@ -109,7 +109,7 @@ class PeerPALUser extends Equatable {
         "phoneNumber: ${this.phoneNumber} \n"
         "discoverFromAge: ${this.discoverFromAge} \n"
         "discoverToAge: ${this.discoverToAge} \n"
-        "discoverCommunicationPreferences: ${this.discoverCommunicationPreferences!.map((e) => EnumToString.convertToString(e)).toList()} \n"
+        "discoverCommunicationPreferences: ${this.discoverCommunicationPreferences?.map((e) => EnumToString.convertToString(e)).toList()} \n"
         "discoverActivities: ${this.discoverActivities!.map((e) => e.name).toList()} \n"
         "discoverLocations: ${this.discoverLocations!.map((e) => e.place).toList()} \n"
         "------- \n";

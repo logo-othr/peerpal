@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:peerpal/repository/models/enum/communication_type.dart';
+import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/repository/models/private_user_information_dto.dart';
 import 'package:peerpal/repository/models/public_user_information_dto.dart';
@@ -21,10 +23,17 @@ class PeerPALUserDTO {
         age: peerPALUser.age,
         discoverFromAge: peerPALUser.discoverFromAge,
         discoverToAge: peerPALUser.discoverToAge,
-        discoverCommunicationPreferences:
-            peerPALUser.discoverCommunicationPreferences,
+        hasPhoneCommunicationPreference: peerPALUser
+                .discoverCommunicationPreferences
+                ?.contains(CommunicationType.phone) ??
+            false,
+        hasChatCommunicationPreference: peerPALUser
+                .discoverCommunicationPreferences
+                ?.contains(CommunicationType.chat) ??
+            false,
         discoverActivities: peerPALUser.discoverActivities,
-        discoverLocations: peerPALUser.discoverLocations);
+        discoverLocations:
+            peerPALUser.discoverLocations?.map((e) => e.place).toList());
 
     return PeerPALUserDTO(
         privateUserInformation: privateUserInformation,
@@ -33,6 +42,14 @@ class PeerPALUserDTO {
 
   PeerPALUser toDomainObject() {
     var uid = privateUserInformation?.id ?? publicUserInformation?.id;
+    List<CommunicationType>? discoverCommunicationPreferences;
+    if (publicUserInformation != null) {
+      discoverCommunicationPreferences = [];
+      if (publicUserInformation!.hasPhoneCommunicationPreference)
+        discoverCommunicationPreferences.add(CommunicationType.phone);
+      if (publicUserInformation!.hasChatCommunicationPreference)
+        discoverCommunicationPreferences.add(CommunicationType.chat);
+    }
 
     return PeerPALUser(
         id: uid,
@@ -40,10 +57,11 @@ class PeerPALUserDTO {
         age: publicUserInformation?.age,
         discoverFromAge: publicUserInformation?.discoverFromAge,
         discoverToAge: publicUserInformation?.discoverToAge,
-        discoverCommunicationPreferences:
-            publicUserInformation?.discoverCommunicationPreferences,
+        discoverCommunicationPreferences: discoverCommunicationPreferences,
         discoverActivities: publicUserInformation?.discoverActivities,
-        discoverLocations: publicUserInformation?.discoverLocations,
+        discoverLocations: publicUserInformation?.discoverLocations
+            ?.map((e) => Location(place: e))
+            .toList(),
         imagePath: publicUserInformation?.imagePath,
         phoneNumber: privateUserInformation?.phoneNumber);
   }
