@@ -210,18 +210,24 @@ class AppUserRepository {
         .orderBy("name")
         .orderBy("id");*/
     var query = await publicUserCollection
-            .where(UserDatabaseContract.userAge,
-                isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
-            .where(UserDatabaseContract.userAge,
-                isLessThanOrEqualTo: currentPeerPALUser
-                    .discoverToAge) /* .
-   where('phone', isEqualTo: true).
-    where('chat', isEqualTo: true)*/
-        /* .where(UserDatabaseContract.discoverLocations,
-        arrayContainsAny: currentPeerPALUser.discoverLocations!
-            .map((e) => e.place)
-            .toList())*/
-        ;
+        .where(UserDatabaseContract.userAge,
+            isGreaterThanOrEqualTo: 1 /*currentPeerPALUser.discoverFromAge*/)
+        .where(UserDatabaseContract.userAge,
+            isLessThanOrEqualTo:
+                100 /*currentPeerPALUser
+                    .discoverToAge*/
+            )
+        .where(UserDatabaseContract.discoverLocations, arrayContainsAny: [
+          'Köln'
+        ] /*currentPeerPALUser.discoverLocations!
+                .map((e) => e.place)
+                .toList()*/
+            )
+        .where('hasPhoneCommunicationPreference', isEqualTo: true)
+        .where('hasChatCommunicationPreference', isEqualTo: false);
+
+    /* .
+   */
 
     query = query
         .orderBy(UserDatabaseContract.userAge)
