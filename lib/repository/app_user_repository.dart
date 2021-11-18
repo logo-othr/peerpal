@@ -182,68 +182,63 @@ class AppUserRepository {
     return peerPALUserDTO;
   }
 
-  Future<List<PeerPALUser>> getMatchingUsers(
-      {PeerPALUser? lastUser = null, required int limit}) async {
-    var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
-    var currentPeerPALUser = await getCurrentUserInformation();
-    /*var query = await publicUserCollection
+  _buildGetMatchingUsersQuery(
+      {required PeerPALUser? lastUser,
+      required int limit,
+      required CollectionReference<Map<String, dynamic>> collection,
+      required PeerPALUser currentUser}) {
+    var query = collection
         .where(UserDatabaseContract.userAge,
-            isGreaterThanOrEqualTo: currentPeerPALUser.discoverFromAge)
+            isGreaterThanOrEqualTo: currentUser.discoverFromAge)
         .where(UserDatabaseContract.userAge,
-            isLessThanOrEqualTo: currentPeerPALUser.discoverToAge)
-        .where(UserDatabaseContract.discoverActivities,
-            arrayContainsAny: currentPeerPALUser.discoverActivities!
-                .map((e) => e.name)
-                .toList())
-        .where(UserDatabaseContract.discoverLocations,
-            arrayContainsAny: currentPeerPALUser.discoverLocations!
-                .map((e) => e.place)
-                .toList())
-        .where(UserDatabaseContract.discoverCommunicationPreferences,
-            arrayContainsAny: currentPeerPALUser
-                .discoverCommunicationPreferences!
-                .map((e) => EnumToString.convertToString(e))
-                .toList())
-        .orderBy(UserDatabaseContract.userAge)
-        .orderBy(UserDatabaseContract.discoverActivities)
-        .orderBy("name")
-        .orderBy("id");*/
-    var query = await publicUserCollection
-        .where(UserDatabaseContract.userAge,
-            isGreaterThanOrEqualTo: 1 /*currentPeerPALUser.discoverFromAge*/)
-        .where(UserDatabaseContract.userAge,
-            isLessThanOrEqualTo:
-                100 /*currentPeerPALUser
-                    .discoverToAge*/
-            )
-        .where(UserDatabaseContract.discoverLocations, arrayContainsAny: [
-          'Köln'
-        ] /*currentPeerPALUser.discoverLocations!
-                .map((e) => e.place)
-                .toList()*/
-            )
-        .where('hasPhoneCommunicationPreference', isEqualTo: true)
-        .where('hasChatCommunicationPreference', isEqualTo: false);
+            isLessThanOrEqualTo: currentUser.discoverToAge);
 
-    /* .
-   */
+    query = query.where(UserDatabaseContract.discoverLocations,
+        arrayContainsAny: currentUser.discoverLocations!
+            .map((e) => e.place)
+            .toList()); // ['Köln']
+
+    query = query.where(UserDatabaseContract.phonePreference,
+        isEqualTo: currentUser.discoverCommunicationPreferences!
+            .contains(CommunicationType.phone));
+
+    query = query.where(UserDatabaseContract.chatPreference,
+        isEqualTo: currentUser.discoverCommunicationPreferences!
+            .contains(CommunicationType.phone));
 
     query = query
         .orderBy(UserDatabaseContract.userAge)
         .orderBy(UserDatabaseContract.userName)
-        .orderBy('id');
+        .orderBy(UserDatabaseContract.uid);
 
     if (lastUser != null)
       query = query.startAfter([lastUser.age, lastUser.name, lastUser.id]);
 
-    var snapshots = await query.limit(limit).get();
+    query = query.limit(limit);
+  }
+
+  Future<List<PeerPALUser>> getMatchingUsers(
+      {PeerPALUser? lastUser = null, required int limit}) async {
+    var currentPeerPALUser = await getCurrentUserInformation();
+
+    var publicUserCollection =
+        await _firestore.collection(UserDatabaseContract.publicUsers);
+
+    var query = _buildGetMatchingUsersQuery(
+        lastUser: lastUser,
+        limit: limit,
+        collection: publicUserCollection,
+        currentUser: currentPeerPALUser);
+
+    var snapshots = await query.get();
 
     final matchedUserDocuments =
         snapshots.docs.map((doc) => doc.data()).toList();
+
     var publicUsers = matchedUserDocuments
         .map((e) => PublicUserInformationDTO.fromJson(e))
         .toList();
+
     var peerPALUserDTOs = publicUsers
         .map((e) => PeerPALUserDTO(publicUserInformation: e))
         .toList();
