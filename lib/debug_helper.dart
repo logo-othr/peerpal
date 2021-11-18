@@ -83,7 +83,8 @@ class DebugHelper {
       name: 'Emilia',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 20,
       discoverToAge: 40,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -106,7 +107,8 @@ class DebugHelper {
       name: 'Hanna',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 18,
       discoverToAge: 35,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -132,7 +134,8 @@ class DebugHelper {
       name: 'Emma',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 12,
       discoverToAge: 50,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -160,7 +163,7 @@ class DebugHelper {
       age: randomAge,
       phoneNumber: '0123456789',
       imagePath:
-          'https://cdn-icons.flaticon.com/png/512/2202/premium/2202112.png?token=exp=1636566272~hmac=433bcb6c8c75cb2d761d3c1098e66b21',
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 16,
       discoverToAge: 25,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -183,7 +186,7 @@ class DebugHelper {
       age: randomAge,
       phoneNumber: '0123456789',
       imagePath:
-          'https://cdn-icons.flaticon.com/png/512/1785/premium/1785896.png?token=exp=1636566272~hmac=c8690172cf07774d84fc60f6918425b6',
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 25,
       discoverToAge: 60,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -205,7 +208,8 @@ class DebugHelper {
       name: 'Lina',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 30,
       discoverToAge: 70,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -231,7 +235,8 @@ class DebugHelper {
       name: 'Mila',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 50,
       discoverToAge: 90,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -254,7 +259,8 @@ class DebugHelper {
       name: 'Ella',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 45,
       discoverToAge: 98,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -282,7 +288,8 @@ class DebugHelper {
       name: 'Lea',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 27,
       discoverToAge: 36,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -309,7 +316,8 @@ class DebugHelper {
       name: 'Klara',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 22,
       discoverToAge: 52,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -335,7 +343,8 @@ class DebugHelper {
       name: 'Noa',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 15,
       discoverToAge: 27,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -358,7 +367,8 @@ class DebugHelper {
       name: 'Leon',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 20,
       discoverToAge: 35,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -381,7 +391,8 @@ class DebugHelper {
       name: 'Paul',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 10,
       discoverToAge: 57,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -403,7 +414,8 @@ class DebugHelper {
       name: 'Matteo',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 12,
       discoverToAge: 62,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -430,7 +442,8 @@ class DebugHelper {
       name: 'Ben',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 12,
       discoverToAge: 62,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -457,7 +470,8 @@ class DebugHelper {
       name: 'Elias',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 33,
       discoverToAge: 75,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -483,7 +497,8 @@ class DebugHelper {
       name: 'Finn',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 50,
       discoverToAge: 80,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -509,7 +524,8 @@ class DebugHelper {
       name: 'Felix',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 50,
       discoverToAge: 80,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -535,7 +551,8 @@ class DebugHelper {
       name: 'Henri',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 54,
       discoverToAge: 93,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
@@ -562,7 +579,8 @@ class DebugHelper {
       name: 'Luis',
       age: randomAge,
       phoneNumber: '0123456789',
-      imagePath: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png',
+      imagePath:
+          'https://www.peerpal.de/wp-content/uploads/2021/06/cropped-PeerPAL-Logo-32x32.png',
       discoverFromAge: 12,
       discoverToAge: 25,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
