@@ -182,7 +182,7 @@ class AppUserRepository {
     return peerPALUserDTO;
   }
 
-  _buildGetMatchingUsersQuery(
+  Query<Map<String, dynamic>> _buildGetMatchingUsersQuery(
       {required PeerPALUser? lastUser,
       required int limit,
       required CollectionReference<Map<String, dynamic>> collection,
@@ -215,6 +215,7 @@ class AppUserRepository {
       query = query.startAfter([lastUser.age, lastUser.name, lastUser.id]);
 
     query = query.limit(limit);
+    return query;
   }
 
   Future<List<PeerPALUser>> getMatchingUsers(
