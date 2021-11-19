@@ -9,7 +9,7 @@ class UserDatabaseContract {
   static const discoverFromAge = 'discoverFromAge';
   static const discoverToAge = 'discoverToAge';
   static const chatPreference = 'hasChatCommunicationPreference';
-  static const phonePreference = 'hasChatCommunicationPreference';
+  static const phonePreference = 'hasPhoneCommunicationPreference';
   static const discoverActivities = 'discoverActivities';
   static const discoverLocations = 'discoverLocations';
 }
