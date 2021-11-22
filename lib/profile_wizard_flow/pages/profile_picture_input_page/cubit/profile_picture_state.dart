@@ -30,7 +30,7 @@ class ProfilePicturePicking extends ProfilePictureState {
 }
 
 class ProfilePicturePicked extends ProfilePictureState {
-  final XFile profilePicture;
+  final File? profilePicture;
 
   const ProfilePicturePicked(this.profilePicture);
 
@@ -39,7 +39,7 @@ class ProfilePicturePicked extends ProfilePictureState {
 }
 
 class ProfilePicturePosting extends ProfilePictureState {
-  final XFile profilePicture;
+  final File? profilePicture;
 
   ProfilePicturePosting(this.profilePicture);
 

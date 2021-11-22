@@ -29,6 +29,7 @@ dependencies:
   zxcvbn: ^1.0.0
   logger: ^1.0.0
   image_picker: ^0.8.4
+  image_cropper: ^1.4.1
   uuid: ^3.0.4
   cached_network_image: ^3.1.0
   enum_to_string: ^2.0.1

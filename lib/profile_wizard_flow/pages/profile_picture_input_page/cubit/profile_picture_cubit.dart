@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:uuid/uuid.dart';
@@ -17,20 +18,36 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   Future<void> pickProfilePictureFromGallery() async {
     var profilePicture =
         (await ImagePicker().pickImage(source: ImageSource.gallery))!;
-    profilePictureChanged(profilePicture);
+    File? croppedImage = await ImageCropper.cropImage(
+      sourcePath: profilePicture.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [CropAspectRatioPreset.original],
+      cropStyle: CropStyle.circle,
+      compressQuality: 100,
+      compressFormat: ImageCompressFormat.jpg,
+    );
+    profilePictureChanged(croppedImage);
   }
 
   Future<void> pickProfilePictureFromCamera() async {
     var profilePicture =
-        (await ImagePicker().pickImage(source: ImageSource.camera))!;
-    profilePictureChanged(profilePicture);
+        ((await ImagePicker().pickImage(source: ImageSource.camera)))!;
+    File? croppedImage =  = await ImageCropper.cropImage(
+      sourcePath: profilePicture.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [CropAspectRatioPreset.ratio5x3],
+      cropStyle: CropStyle.circle,
+      compressQuality: 100,
+      compressFormat: ImageCompressFormat.jpg,
+    );
+    profilePictureChanged(croppedImage);
   }
 
-  void profilePictureChanged(XFile profilePicture) {
+  void profilePictureChanged(File? profilePicture) {
     emit(ProfilePicturePicked(profilePicture));
   }
 
-  Future<String> updateProfilePicture(XFile profilePicture) async {
+  Future<String> updateProfilePicture(File? profilePicture) async {
     emit(ProfilePicturePosting(profilePicture));
     var profilePictureURL = await _uploadProfilePicture(profilePicture);
     await _updateProfilePicturePath(profilePictureURL);
@@ -38,7 +55,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     return profilePictureURL;
   }
 
-  Future<String> _uploadProfilePicture(XFile profilePicture) async {
+  Future<String> _uploadProfilePicture(File? profilePicture) async {
     var uid = Uuid();
 
     firebase_storage.UploadTask uploadTask;
@@ -50,7 +67,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
 
     final metadata = firebase_storage.SettableMetadata(
         contentType: 'image/jpeg',
-        customMetadata: {'file-path': profilePicture.path});
+        customMetadata: {'file-path': profilePicture!.path});
 
     uploadTask = ref.putFile(File(profilePicture.path), metadata);
 
@@ -75,3 +92,4 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     await _authRepository.updateUserInformation(updatedUserInformation);
   }
 }
+

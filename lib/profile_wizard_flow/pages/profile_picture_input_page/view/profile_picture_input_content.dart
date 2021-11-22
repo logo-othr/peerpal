@@ -110,7 +110,7 @@ class _Avatar extends StatelessWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: FileImage(File(state.profilePicture.path)),
+              image: FileImage(File(state.profilePicture!.path)),
             ),
             shape: BoxShape.circle,
             border: Border.all(
