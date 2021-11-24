@@ -14,7 +14,9 @@ class PeerPALUserDTO {
 
   factory PeerPALUserDTO.fromDomainObject(PeerPALUser peerPALUser) {
     var privateUserInformation = PrivateUserInformationDTO(
-        id: peerPALUser.id, phoneNumber: peerPALUser.phoneNumber);
+        id: peerPALUser.id,
+        phoneNumber: peerPALUser.phoneNumber,
+        pushToken: peerPALUser.pushToken);
 
     var publicUserInformation = PublicUserInformationDTO(
         imagePath: peerPALUser.imagePath,
@@ -42,6 +44,7 @@ class PeerPALUserDTO {
 
   PeerPALUser toDomainObject() {
     var uid = privateUserInformation?.id ?? publicUserInformation?.id;
+    var pushToken = privateUserInformation?.pushToken;
     List<CommunicationType>? discoverCommunicationPreferences;
     if (publicUserInformation != null) {
       discoverCommunicationPreferences = [];
@@ -52,18 +55,20 @@ class PeerPALUserDTO {
     }
 
     return PeerPALUser(
-        id: uid,
-        name: publicUserInformation?.name,
-        age: publicUserInformation?.age,
-        discoverFromAge: publicUserInformation?.discoverFromAge,
-        discoverToAge: publicUserInformation?.discoverToAge,
-        discoverCommunicationPreferences: discoverCommunicationPreferences,
-        discoverActivities: publicUserInformation?.discoverActivities,
-        discoverLocations: publicUserInformation?.discoverLocations
-            ?.map((e) => Location(place: e))
-            .toList(),
-        imagePath: publicUserInformation?.imagePath,
-        phoneNumber: privateUserInformation?.phoneNumber);
+      id: uid,
+      name: publicUserInformation?.name,
+      age: publicUserInformation?.age,
+      discoverFromAge: publicUserInformation?.discoverFromAge,
+      discoverToAge: publicUserInformation?.discoverToAge,
+      discoverCommunicationPreferences: discoverCommunicationPreferences,
+      discoverActivities: publicUserInformation?.discoverActivities,
+      discoverLocations: publicUserInformation?.discoverLocations
+          ?.map((e) => Location(place: e))
+          .toList(),
+      imagePath: publicUserInformation?.imagePath,
+      phoneNumber: privateUserInformation?.phoneNumber,
+      pushToken: pushToken,
+    );
   }
 
   static const empty = PeerPALUserDTO();

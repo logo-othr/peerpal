@@ -5,16 +5,18 @@ import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 
 class PeerPALUser extends Equatable {
-  const PeerPALUser({this.id,
-    this.name,
-    this.age,
-    this.phoneNumber,
-    this.imagePath,
-    this.discoverFromAge,
-    this.discoverToAge,
-    this.discoverCommunicationPreferences,
-    this.discoverActivities,
-    this.discoverLocations});
+  const PeerPALUser(
+      {this.id,
+      this.name,
+      this.age,
+      this.phoneNumber,
+      this.imagePath,
+      this.discoverFromAge,
+      this.discoverToAge,
+      this.discoverCommunicationPreferences,
+      this.discoverActivities,
+      this.discoverLocations,
+      this.pushToken});
 
   final String? id;
   final String? name;
@@ -26,6 +28,7 @@ class PeerPALUser extends Equatable {
   final List<CommunicationType>? discoverCommunicationPreferences;
   final List<Activity>? discoverActivities;
   final List<Location>? discoverLocations;
+  final String? pushToken;
 
   static const empty = PeerPALUser();
 
@@ -61,17 +64,19 @@ class PeerPALUser extends Equatable {
   bool get isDiscoverNotComplete => isDiscoverComplete != true;
 
   @override
-  List<Object?> get props => [
-    name,
-    age,
-    phoneNumber,
-    imagePath,
-    discoverFromAge,
-    discoverToAge,
-    discoverCommunicationPreferences,
-    discoverActivities,
-    discoverLocations
-  ];
+  List<Object?> get props =>
+      [
+        name,
+        age,
+        phoneNumber,
+        imagePath,
+        discoverFromAge,
+        discoverToAge,
+        discoverCommunicationPreferences,
+        discoverActivities,
+        discoverLocations,
+        pushToken
+      ];
 
   PeerPALUser copyWith({
     String? id,
@@ -84,6 +89,7 @@ class PeerPALUser extends Equatable {
     List<CommunicationType>? discoverCommunicationPreferences,
     List<Activity>? discoverActivities,
     List<Location>? discoverLocations,
+    String? pushToken,
   }) {
     return PeerPALUser(
       id: id ?? this.id,
@@ -97,6 +103,7 @@ class PeerPALUser extends Equatable {
           this.discoverCommunicationPreferences,
       discoverActivities: discoverActivities ?? this.discoverActivities,
       discoverLocations: discoverLocations ?? this.discoverLocations,
+      pushToken: pushToken ?? this.pushToken,
     );
   }
 
