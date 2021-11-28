@@ -17,6 +17,8 @@ Map<int, Color> primaryColorMap = {
 
 MaterialColor secondaryColor = MaterialColor(0xFFaeaeb2, secondaryColorMap);
 
+final darkGreyColor = Color(0xff505050);
+
 Map<int, Color> secondaryColorMap = {
   50:  const Color.fromRGBO(174,174,178, .1),
   100: const Color.fromRGBO(174,174,178, .2),
