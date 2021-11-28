@@ -75,13 +75,16 @@ class MyTabView extends StatelessWidget {
       child: Container(child: DiscoverTabView()),
     ),
     Center(
+      child: Container(),
+    ),
+    Center(
       child: Container(child: FriendsOverviewPage()),
     ),
     Center(
       child: Container(child: ChatOverviewPage()),
     ),
     Center(
-      child: Container(child: DiscoverTabPage()),
+      child: Container(),
     ),
   ];
 
