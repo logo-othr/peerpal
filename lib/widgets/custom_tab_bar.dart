@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
-
-class CustomTabBar extends StatefulWidget {
-  @override
-  _CustomTabBarState createState() => _CustomTabBarState();
-}
-
-class _CustomTabBarState extends State<CustomTabBar> {
+class CustomTabBar extends StatelessWidget {
+  const CustomTabBar({Key? key, required this.index, required this.onTap}) : super(key: key);
+final int index;
+  final void Function(int index) onTap;
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: 0,
+      currentIndex: index,
       // ToDo: dynamic index
       type: BottomNavigationBarType.fixed,
       iconSize: 25,
@@ -41,9 +38,8 @@ class _CustomTabBarState extends State<CustomTabBar> {
             label: 'Einstellungen',
             backgroundColor: secondaryColor),
       ],
-      onTap: (index) {
-        // ToDo: dynamic index
-      },
+      onTap:(index)  => onTap(index),
     );
   }
 }
+
