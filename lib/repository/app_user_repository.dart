@@ -204,7 +204,7 @@ class AppUserRepository {
 
     query = query.where(UserDatabaseContract.chatPreference,
         isEqualTo: currentUser.discoverCommunicationPreferences!
-            .contains(CommunicationType.phone));
+            .contains(CommunicationType.chat));
 
     query = query
         .orderBy(UserDatabaseContract.userAge)
@@ -294,4 +294,5 @@ class AppUserRepository {
     final list = json.decode(jsonData) as List<dynamic>;
     return list.map((e) => Location.fromJson(e)).toList();
   }
+
 }
