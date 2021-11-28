@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app/bloc/app_bloc.dart';
+import 'package:peerpal/chat/chat_overview_page/view/chat_overview_page.dart';
+import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
+import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
@@ -16,7 +20,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeCubit(context.read<AppUserRepository>())..loadFlowState(),
+      create: (_) =>
+      HomeCubit(context.read<AppUserRepository>())
+        ..loadFlowState(),
       child: const HomeView(),
     );
   }
@@ -30,13 +36,13 @@ class HomeView extends StatelessWidget {
     print("Build method called");
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) async {
-        if(state is HomeProfileFlow) {
+        if (state is HomeProfileFlow) {
           await Navigator.of(context).push(
             ProfileWizardFlow.route(state.userInformation),
           );
           await BlocProvider.of<HomeCubit>(context).loadFlowState();
         }
-        if(state is HomeDiscoverFlow) {
+        if (state is HomeDiscoverFlow) {
           await Navigator.of(context).push(
             DiscoverWizardFlow.route(state.userInformation),
           );
@@ -68,22 +74,59 @@ class MyTabView extends StatelessWidget {
     Center(
       child: Container(child: DiscoverTabView()),
     ),
+    Center(
+      child: Container(child: FriendsOverviewPage()),
+    ),
+    Center(
+      child: Container(child: ChatOverviewPage()),
+    ),
+    Center(
+      child: Container(child: DiscoverTabPage()),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: CustomTabBar(),
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider<DiscoverTabBloc>(
-            create: (context) =>
-                DiscoverTabBloc(context.read<AppUserRepository>())
-                  ..add(UsersLoaded()),
-          ),
-        ],
-        child: tabs[0],
-      ),
+    return BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          if (state is HomeUserInformationFlowCompleted) {
+            return
+              Scaffold(
+                bottomNavigationBar: CustomTabBar(index: state.index,
+
+                  onTap: (index) {
+                    context.read<HomeCubit>().indexChanged(index);
+                  }
+
+
+
+                  ),
+                body: MultiBlocProvider(
+                  providers: [
+                    BlocProvider<DiscoverTabBloc>(
+                      create: (context) =>
+                      DiscoverTabBloc(context.read<AppUserRepository>())
+                        ..add(UsersLoaded()),
+                    ),
+                  ],
+                  child: tabs[
+                  state.index
+                  ],
+                ),
+              );
+          } else {
+            return Text('TabBar Error');
+          }
+        }
     );
+  }
+}
+
+class DiscoverTabPage extends StatelessWidget {
+  const DiscoverTabPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
