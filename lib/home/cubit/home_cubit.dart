@@ -28,7 +28,11 @@ class HomeCubit extends Cubit<HomeState> {
     } else if (userInformation.isDiscoverNotComplete) {
       emit(HomeDiscoverFlow(userInformation));
     } else {
-      emit(HomeUserInformationFlowCompleted());
+      emit(HomeUserInformationFlowCompleted(0));
     }
+  }
+
+  void indexChanged(int index){
+    emit(HomeUserInformationFlowCompleted(index));
   }
 }
