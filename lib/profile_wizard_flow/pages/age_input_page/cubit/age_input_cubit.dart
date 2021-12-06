@@ -8,7 +8,7 @@ part 'age_input_state.dart';
 class AgeInputCubit extends Cubit<AgeInputState> {
   AgeInputCubit(this._appUserRepository) : super(AgeInputInitial(10));
 
-  final AppUserRepository _appUserRepository;
+  late final AppUserRepository _appUserRepository;
 
   void dataChanged(int selectedAge) {
     emit(AgeInputInitial(selectedAge));
@@ -21,7 +21,12 @@ class AgeInputCubit extends Cubit<AgeInputState> {
     var updatedUserInformation =
         userInformation.copyWith(age: state.selectedAge);
     await _appUserRepository.updateUserInformation(updatedUserInformation);
-
     emit(AgeInputPosted(state.selectedAge));
+  }
+
+  Future<int?>currentAge() async{
+    var userInformation =
+    await _appUserRepository.getCurrentUserInformation();
+    return userInformation.age;
   }
 }
