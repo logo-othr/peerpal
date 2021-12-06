@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/app/bloc/app_bloc.dart';
-import 'package:peerpal/chat/chat_overview_page/view/chat_overview_page.dart';
-import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
-import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
@@ -78,10 +74,10 @@ class MyTabView extends StatelessWidget {
       child: Container(),
     ),
     Center(
-      child: Container(child: FriendsOverviewPage()),
+      child: Container(child: Container()),
     ),
     Center(
-      child: Container(child: ChatOverviewPage()),
+      child: Container(child: Container()),
     ),
     Center(
       child: Container(),
@@ -97,13 +93,10 @@ class MyTabView extends StatelessWidget {
               Scaffold(
                 bottomNavigationBar: CustomTabBar(index: state.index,
 
-                  onTap: (index) {
-                    context.read<HomeCubit>().indexChanged(index);
-                  }
-
-
-
-                  ),
+                    onTap: (index) {
+                      context.read<HomeCubit>().indexChanged(index);
+                    }
+                ),
                 body: MultiBlocProvider(
                   providers: [
                     BlocProvider<DiscoverTabBloc>(

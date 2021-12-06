@@ -65,10 +65,13 @@ class HomeDiscoverFlow extends HomeState {
 }
 
 class HomeUserInformationFlowCompleted extends HomeState {
-  const HomeUserInformationFlowCompleted() : super(const PeerPALUser());
+
+  final int index;
+
+  const HomeUserInformationFlowCompleted(this.index) : super(const PeerPALUser());
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [index];
 
   @override
   // TODO: implement stringify

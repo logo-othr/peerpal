@@ -22,7 +22,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> loadFlowState() async  {
     PeerPALUser userInformation =
-        await _appuserRepository.getCurrentUserInformation();
+    await _appuserRepository.getCurrentUserInformation();
     if (userInformation.isProfileNotComplete) {
       emit(HomeProfileFlow(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
