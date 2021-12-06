@@ -41,7 +41,7 @@ class NameInputContent extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 CustomPeerPALHeading1('Name Input'),
                 const SizedBox(height: 30.0),
-                _UsernameInputField(),
+                _UsernameInputField(isInFlowContext),
                 const SizedBox(height: 8.0),
                 _NextButton(isInFlowContext),
                 const SizedBox(height: 15.0),
@@ -55,24 +55,35 @@ class NameInputContent extends StatelessWidget {
 }
 
 class _UsernameInputField extends StatelessWidget {
+
+  final bool isInFlowContext;
+
+  _UsernameInputField(this.isInFlowContext);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NameInputCubit, NameInputState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
-        return TextField(
+        return new FutureBuilder(
+          future: context.read<NameInputCubit>().currentName(),
+          initialData: "Name",
+          builder:(BuildContext context, AsyncSnapshot<String?>text){
+
+          return TextField(
             style: const TextStyle(fontSize: 22),
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.mail),
-              labelText: 'Name',
+              labelText: text.data,
               helperText: '',
               errorText: state.username.invalid ? 'invalid email' : null,
             ),
             key: const Key('name_selection_username_field'),
-            onChanged: (username) =>
-                context.read<NameInputCubit>().nameChanged(username),
+            onChanged: (username) {
+                context.read<NameInputCubit>().nameChanged(username);
+                },
             keyboardType: TextInputType.name);
-      },
+      },);},
     );
   }
 }

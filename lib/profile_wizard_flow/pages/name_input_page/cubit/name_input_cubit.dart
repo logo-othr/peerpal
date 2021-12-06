@@ -36,4 +36,10 @@ class NameInputCubit extends Cubit<NameInputState> {
           errorMessage: "Fehler beim aktualisieren."));
     }
   }
+
+  Future<String?>currentName() async{
+    var userInformation =
+    await _appUserRepository.getCurrentUserInformation();
+    return userInformation.name;
+  }
 }
