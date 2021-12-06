@@ -43,7 +43,7 @@ class ProfilePictureInputContent extends StatelessWidget {
                     text: isInFlowContext ? 'Weiter' : 'Speichern',
 
                     onPressed: (state is ProfilePicturePicked)
-                        ? () async => updatePicture(state, context)
+                        ? () async => updatePicture(state, context,)
                         : null,
                   );
                 },
@@ -83,84 +83,91 @@ class _Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
-      if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
-        //   var imageURL = context.flow<UserInformation>().state.imagePath;
-        var imageURL = null; // ToDo: Stop using flow state as a source
-        if (imageURL != null && imageURL.isNotEmpty) {
-          return Container(
-            width: 150.0,
-            height: 150.0,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(imageURL),
-              ),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: primaryColor,
-                width: 4.0,
-              ),
-            ),
+          return new FutureBuilder(
+              future: context.read<ProfilePictureCubit>().getProfilePicturePath(),
+              initialData: null,
+              builder:(BuildContext context, AsyncSnapshot<String?>text) {
+                if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
+                  var imageURL = text.data;
+                  //var imageURL = null; // ToDo: Stop using flow state as a source
+                  if (imageURL != null && imageURL.isNotEmpty) {
+                    return Container(
+                      width: 150.0,
+                      height: 150.0,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: CachedNetworkImageProvider(imageURL),
+                        ),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: primaryColor,
+                          width: 4.0,
+                        ),
+                      ),
+                    );
+                  }
+                } else if (state is ProfilePicturePicked) {
+                  return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: FileImage(File(state.profilePicture!.path)),
+                      ),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                  );
+                } else if (state is ProfilePicturePosting) {
+                  return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: const CircularProgressIndicator(),
+                  );
+                } else if (state is ProfilePicturePosting) {
+                  return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: const CircularProgressIndicator(),
+                  );
+                }
+                return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 110,
+                      color: primaryColor,
+                    ));
+              }
           );
         }
-      } else if (state is ProfilePicturePicked) {
-        return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: FileImage(File(state.profilePicture!.path)),
-            ),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-        );
-      } else if (state is ProfilePicturePosting) {
-        return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-          child: const CircularProgressIndicator(),
-        );
-      } else if (state is ProfilePicturePosting) {
-        return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-          child: const CircularProgressIndicator(),
-        );
-      }
-      return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-          child: Icon(
-            Icons.camera_alt_outlined,
-            size: 110,
-            color: primaryColor,
-          ));
-    });
+    );
   }
 }
