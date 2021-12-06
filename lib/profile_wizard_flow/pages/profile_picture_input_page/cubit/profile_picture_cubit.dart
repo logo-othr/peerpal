@@ -6,10 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../colors.dart';
 
 part 'profile_picture_state.dart';
 
@@ -23,21 +23,21 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     var profilePicture =
     (await ImagePicker().pickImage(source: ImageSource.gallery))!;
     File? croppedImage = await ImageCropper.cropImage(
-        sourcePath: profilePicture.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        aspectRatioPresets: [CropAspectRatioPreset.original],
-        cropStyle: CropStyle.circle,
-        compressQuality: 100,
-        compressFormat: ImageCompressFormat.jpg,
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Passe dein Foto zurecht',
-            toolbarColor: primaryColor,
-            toolbarWidgetColor: Colors.white,
-            activeControlsWidgetColor: primaryColor,
-            initAspectRatio: CropAspectRatioPreset.original,
-            hideBottomControls: true,
-            showCropGrid: false,
-            lockAspectRatio: false),
+      sourcePath: profilePicture.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [CropAspectRatioPreset.original],
+      cropStyle: CropStyle.circle,
+      compressQuality: 100,
+      compressFormat: ImageCompressFormat.jpg,
+      androidUiSettings: AndroidUiSettings(
+          toolbarTitle: 'Passe dein Foto zurecht',
+          toolbarColor: primaryColor,
+          toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor: primaryColor,
+          initAspectRatio: CropAspectRatioPreset.original,
+          hideBottomControls: true,
+          showCropGrid: false,
+          lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           title: 'Passe dein Foto zurecht',
         )
@@ -48,30 +48,30 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
 
   Future<void> pickProfilePictureFromCamera() async {
     var profilePicture =
-    ((await ImagePicker().pickImage(source: ImageSource.camera)))!;
+        ((await ImagePicker().pickImage(source: ImageSource.camera)))!;
     File? croppedImage = = await ImageCropper.cropImage(
-    sourcePath: profilePicture.path,
-    aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-    aspectRatioPresets: [CropAspectRatioPreset.ratio5x3],
-    cropStyle: CropStyle.circle,
-    compressQuality: 100,
-    compressFormat: ImageCompressFormat.jpg,
-    androidUiSettings: AndroidUiSettings(
-    toolbarTitle: 'Passe dein Foto zurecht',
-    toolbarColor: primaryColor,
-    toolbarWidgetColor: Colors.white,
-    activeControlsWidgetColor: primaryColor,
-    initAspectRatio: CropAspectRatioPreset.original,
-    hideBottomControls: true,
-    showCropGrid: false,
-    lockAspectRatio: false
+      sourcePath: profilePicture.path,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [CropAspectRatioPreset.ratio5x3],
+      cropStyle: CropStyle.circle,
+      compressQuality: 100,
+      compressFormat: ImageCompressFormat.jpg,
+      androidUiSettings: AndroidUiSettings(
+        toolbarTitle: 'Passe dein Foto zurecht',
+        toolbarColor: primaryColor,
+        toolbarWidgetColor: Colors.white,
+        activeControlsWidgetColor: primaryColor,
+        initAspectRatio: CropAspectRatioPreset.original,
+        hideBottomControls: true,
+        showCropGrid: false,
+        lockAspectRatio: false
     ),
-    iosUiSettings: IOSUiSettings(
-    title: 'Passe dein Foto zurecht',
-    )
+      iosUiSettings: IOSUiSettings(
+        title: 'Passe dein Foto zurecht',
+      )
     );
     profilePictureChanged(croppedImage);
-    }
+  }
 
   void profilePictureChanged(File? profilePicture) {
     emit(ProfilePicturePicked(profilePicture));
@@ -118,7 +118,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   Future<void> _updateProfilePicturePath(String profilePicturePath) async {
     var userInformation = await _authRepository.getCurrentUserInformation();
     var updatedUserInformation =
-    userInformation.copyWith(imagePath: profilePicturePath);
+        userInformation.copyWith(imagePath: profilePicturePath);
     await _authRepository.updateUserInformation(updatedUserInformation);
   }
 }
