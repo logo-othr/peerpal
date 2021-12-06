@@ -71,4 +71,24 @@ class SignupCubit extends Cubit<SignupState> {
       emit(state.copyWith(formValidationStatus: FormzStatus.submissionFailure));
     }
   }
+
+  void changeVisibility(int version){
+    if(version==0){
+      emit(state.copyWith(visible: !state.visible));
+    }
+    if(version==1){
+      emit(state.copyWith(confirmVisible: !state.confirmVisible));
+    }
+  }
+
+  bool isVisible(int version){
+    if(version==0){
+      return state.visible;
+    }
+    else{
+      return state.confirmVisible;
+    }
+  }
+
+
 }

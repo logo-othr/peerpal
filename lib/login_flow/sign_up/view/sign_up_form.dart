@@ -38,7 +38,7 @@ class SignUpForm extends StatelessWidget {
                 const SizedBox(height: 30.0),
                 _EmailInputField(),
                 const SizedBox(height: 8.0),
-                _PasswordInputField(),
+                new _PasswordInputField(),
                 const SizedBox(height: 8.0),
                 _ConfirmPasswordInputField(),
                 const SizedBox(height: 20.0),
@@ -78,7 +78,7 @@ class _PasswordInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      buildWhen: (previous, current) => previous.password != current.password || previous.visible != current.visible,
       builder: (context, state) {
         String? errorText = "";
         var errorState = state.password.error;
@@ -102,13 +102,21 @@ class _PasswordInputField extends StatelessWidget {
             errorText = null;
             break;
         }
-        return TextField(
+        return new TextField(
           style: TextStyle(fontSize: 22),
           onChanged: (password) =>
               context.read<SignupCubit>().changePassword(password),
-          obscureText: true,
+          obscureText: context.read<SignupCubit>().isVisible(0),
           decoration: InputDecoration(
               prefixIcon: Icon(Icons.lock),
+              suffixIcon: IconButton(
+                icon: Icon(
+                    context.read<SignupCubit>().isVisible(0)? Icons.visibility_off : Icons.visibility),
+                onPressed: (){
+                  context.read<SignupCubit>().changeVisibility(0);
+                },
+
+              ),
               labelText: 'Passwort',
               helperText: '',
               errorText: errorText),
@@ -123,17 +131,25 @@ class _ConfirmPasswordInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) =>
-          previous.password != current.password ||
-          previous.confirmedPassword != current.confirmedPassword,
+      previous.password != current.password ||
+          previous.confirmedPassword != current.confirmedPassword || previous.confirmVisible != current.confirmVisible,
       builder: (context, state) {
         return TextField(
           style: TextStyle(fontSize: 22),
           onChanged: (confirmPassword) => context
               .read<SignupCubit>()
               .changeConfirmedPassword(confirmPassword),
-          obscureText: true,
+          obscureText: context.read<SignupCubit>().isVisible(1),
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.lock),
+            suffixIcon: IconButton(
+              icon: Icon(
+                  context.read<SignupCubit>().isVisible(1)? Icons.visibility_off : Icons.visibility),
+              onPressed: (){
+                context.read<SignupCubit>().changeVisibility(1);
+              },
+
+            ),
             labelText: 'Passwort bestätigen',
             helperText: '',
             errorText: state.confirmedPassword.invalid
@@ -155,10 +171,10 @@ class _SignUpButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : CustomPeerPALButton(
-                onPressed: state.status.isValidated
-                    ? () => context.read<SignupCubit>().submitSignupForm()
-                    : null,
-                text: "Registrieren");
+            onPressed: state.status.isValidated
+                ? () => context.read<SignupCubit>().submitSignupForm()
+                : null,
+            text: "Registrieren");
       },
     );
   }
