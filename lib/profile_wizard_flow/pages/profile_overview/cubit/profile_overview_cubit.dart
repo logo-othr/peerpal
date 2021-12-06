@@ -14,4 +14,25 @@ class ProfileOverviewCubit extends Cubit<ProfileOverviewState> {
     var appUserInformation = await repository.getCurrentUserInformation();
     emit(ProfileOverviewLoaded(appUserInformation));
   }
+
+  Future <String?> name() async{
+    var appUserInformation = await repository.getCurrentUserInformation();
+    return appUserInformation.name;
+  }
+
+  Future <String?> age() async{
+    var appUserInformation = await repository.getCurrentUserInformation();
+    return appUserInformation.age.toString();
+  }
+
+  Future <String?> phoneNumber() async{
+    var appUserInformation = await repository.getCurrentUserInformation();
+    return appUserInformation.phoneNumber;
+  }
+
+  Future <String?> profilePicture() async{
+    var appUserInformation = await repository.getCurrentUserInformation();
+    return appUserInformation.imagePath;
+  }
+
 }
