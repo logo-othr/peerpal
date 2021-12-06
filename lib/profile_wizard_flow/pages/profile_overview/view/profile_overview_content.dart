@@ -36,74 +36,91 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                     const SizedBox(
                       height: 40,
                     ),
-                    new FutureBuilder(
-                      future: context.read<ProfileOverviewCubit>().profilePicture(),
-                      initialData: state.appUserInformation.imagePath!,
-                      builder:(BuildContext context, AsyncSnapshot<String?>text)=>
-                          Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border(
-                                      top: BorderSide(width: 1, color: secondaryColor),
-                                      bottom: BorderSide(width: 1, color: secondaryColor))),
-                              child: Center(
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: primaryColor,
-                                              width: 4.0,
-                                            ),
+                new FutureBuilder(
+                  future: context.read<ProfileOverviewCubit>().profilePicture(),
+                  initialData: state.appUserInformation.imagePath!,
+                  builder:(BuildContext context, AsyncSnapshot<String?>text)=>
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                  top: BorderSide(width: 1, color: secondaryColor),
+                                  bottom: BorderSide(width: 1, color: secondaryColor))),
+                          child: Center(
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: primaryColor,
+                                          width: 4.0,
+                                        ),
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 70,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 70,
+                                          child:  ClipOval(
+                                            child: Image.network(text.data!),
                                           ),
-                                          child: CircleAvatar(
-                                            radius: 70,
-                                            backgroundColor: Colors.white,
-                                            child: CircleAvatar(
-                                              radius: 70,
-                                              child:  ClipOval(
-                                                child: Image.network(text.data!),
-                                              ),
-                                              backgroundColor: Colors.white,
-                                            ),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                      child: TextButton(
-                                          onPressed: () async => {
-                                            await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProfilePictureInputPage(isInFlowContext: false)),
-                                            ),
-                                            setState((){
-                                              context.read<ProfileOverviewCubit>().loadData();},)
-                                          },
-                                          style: TextButton.styleFrom(
-                                            minimumSize: const Size(50, 15),
-                                            backgroundColor: Colors.transparent,
-                                            padding: const EdgeInsets.all(2),
-                                          ),
-                                          child: CustomPeerPALHeading3(
-                                              text: 'Profilbild ändern',
-                                              color: secondaryColor)),
-                                    )
-                                  ],
+                                          backgroundColor: Colors.white,
+                                        ),
+                                      )),
                                 ),
-                              )
-                          ),
-                    ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                  child: TextButton(
+                                      onPressed: () async => {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProfilePictureInputPage(isInFlowContext: false)),
+                                        ),
+                                        setState((){
+                                          context.read<ProfileOverviewCubit>().loadData();},)
+                                      },
+                                      style: TextButton.styleFrom(
+                                        minimumSize: const Size(50, 15),
+                                        backgroundColor: Colors.transparent,
+                                        padding: const EdgeInsets.all(2),
+                                      ),
+                                      child: CustomPeerPALHeading3(
+                                          text: 'Profilbild ändern',
+                                          color: secondaryColor)),
+                                )
+                              ],
+                            ),
+                          )
+                      ),
+                ),
 
-                    new FutureBuilder(
-                      future: context.read<ProfileOverviewCubit>().name(),
-                      initialData: state.appUserInformation.name!,
-                      builder:(BuildContext context, AsyncSnapshot<String?>text)=> CustomSingleTable(
-                          heading: "Name",
+                  new FutureBuilder(
+                future: context.read<ProfileOverviewCubit>().name(),
+                initialData: state.appUserInformation.name!,
+                builder:(BuildContext context, AsyncSnapshot<String?>text)=> CustomSingleTable(
+                        heading: "Name",
+                        text: text.data!,
+                        isArrowIconVisible: true,
+                        onPressed: () async => {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NameInputPage(isInFlowContext: false)),
+                          ),
+                          setState((){
+                            context.read<ProfileOverviewCubit>().loadData();},)
+                        }),),
+                new FutureBuilder(
+                  future: context.read<ProfileOverviewCubit>().age(),
+                  initialData: "12",
+                  builder:(BuildContext context, AsyncSnapshot<String?>text)=> CustomSingleTable(
+                          heading: 'ALTER',
                           text: text.data!,
                           isArrowIconVisible: true,
                           onPressed: () async => {
@@ -111,54 +128,37 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      NameInputPage(isInFlowContext: false)),
+                                      AgeInputPage(isInFlowContext: false)),
                             ),
                             setState((){
-                              context.read<ProfileOverviewCubit>().loadData();},)
-                          }),),
-                    new FutureBuilder(
-                        future: context.read<ProfileOverviewCubit>().age(),
-                        initialData: "12",
-                        builder:(BuildContext context, AsyncSnapshot<String?>text)=> CustomSingleTable(
-                            heading: 'ALTER',
-                            text: text.data!,
-                            isArrowIconVisible: true,
-                            onPressed: () async => {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        AgeInputPage(isInFlowContext: false)),
-                              ),
-                              setState((){
-                                context.read<ProfileOverviewCubit>().loadData();
-                              },
-                              )
-                            }
-                        )
-                    ),
-                    new FutureBuilder(
-                      future: context.read<ProfileOverviewCubit>().phoneNumber(),
-                      initialData: state.appUserInformation.phoneNumber!,
-                      builder:(BuildContext context, AsyncSnapshot<String?>text)=>
-                          CustomSingleTable(
-                              heading: 'TELEFONNUMMER',
-                              text: text.data!,
-                              isArrowIconVisible: true,
-                              onPressed: () async => {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PhoneInputPage(isInFlowContext: false)),
-                                ),
-                                setState((){
-                                  context.read<ProfileOverviewCubit>().loadData();
-                                },
-                                )
-                              }
+                              context.read<ProfileOverviewCubit>().loadData();
+                            },
+                            )
+                          }
+                          )
+                ),
+                new FutureBuilder(
+                  future: context.read<ProfileOverviewCubit>().phoneNumber(),
+                  initialData: state.appUserInformation.phoneNumber!,
+                  builder:(BuildContext context, AsyncSnapshot<String?>text)=>
+                      CustomSingleTable(
+                          heading: 'TELEFONNUMMER',
+                          text: text.data!,
+                          isArrowIconVisible: true,
+                          onPressed: () async => {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      PhoneInputPage(isInFlowContext: false)),
+                            ),
+                            setState((){
+                              context.read<ProfileOverviewCubit>().loadData();
+                            },
+                            )
+                          }
                           ),
-                    ),
+                ),
                     const Spacer(),
                     Container(
                         color: Colors.transparent,
@@ -179,6 +179,6 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
             return CircularProgressIndicator();
           }
 
-        });
+    });
   }
 }
