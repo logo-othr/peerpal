@@ -5,6 +5,7 @@ class AgePicker extends StatelessWidget {
   final Widget? hint;
   final List<String> items;
   final int? value;
+  final int? start;
   final ValueSetter<int?> onChanged;
 
   const AgePicker({
@@ -12,6 +13,7 @@ class AgePicker extends StatelessWidget {
     required this.items,
     required this.onChanged,
     this.value,
+    this.start,
     this.hint,
   }) : super(key: key);
 
@@ -26,6 +28,7 @@ class AgePicker extends StatelessWidget {
           itemExtent: 30,
           backgroundColor: Colors.transparent,
           onSelectedItemChanged: onChanged,
+          scrollController: FixedExtentScrollController(initialItem: items.indexOf(start.toString())),
           children: <Widget>[for (var i in items) Text(i.toString())],
         ),
       ),
