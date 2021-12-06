@@ -44,7 +44,7 @@ class PhoneInputContent extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 CustomPeerPALHeading1("Wie lautet deine Telefonnummer?"),
                 const SizedBox(height: 30.0),
-                _PhonenumberInputField(),
+                _PhonenumberInputField(isInFlowContext),
                 const SizedBox(height: 8.0),
                 _NextButton(),
                 const SizedBox(height: 15.0),
@@ -58,17 +58,24 @@ class PhoneInputContent extends StatelessWidget {
 }
 
 class _PhonenumberInputField extends StatelessWidget {
+  _PhonenumberInputField(bool isInFlowContext);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
       buildWhen: (previous, current) =>
           previous.phoneNumber != current.phoneNumber,
       builder: (context, state) {
+        return new FutureBuilder(future: context.read<PhoneInputCubit>().currentPhoneNumber(),
+        initialData: state.phoneNumber,
+        builder:(BuildContext context, AsyncSnapshot<String?>text){
         return Container(
           child: Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
               child: TextFormField(
+                //discuss
+                initialValue: text.data,
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -80,7 +87,7 @@ class _PhonenumberInputField extends StatelessWidget {
                 maxLines: 1,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
-                  labelText: 'Telefonnummer',
+                  labelText: text.data,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                     borderSide: BorderSide(
@@ -98,8 +105,9 @@ class _PhonenumberInputField extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
+            }
+        );}
+      );
   }
 }
 
