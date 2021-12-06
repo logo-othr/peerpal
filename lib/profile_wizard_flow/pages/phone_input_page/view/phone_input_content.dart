@@ -46,7 +46,7 @@ class PhoneInputContent extends StatelessWidget {
                 const SizedBox(height: 30.0),
                 _PhonenumberInputField(isInFlowContext),
                 const SizedBox(height: 8.0),
-                _NextButton(),
+                _NextButton(isInFlowContext),
                 const SizedBox(height: 15.0),
               ],
             ),
@@ -112,6 +112,12 @@ class _PhonenumberInputField extends StatelessWidget {
 }
 
 class _NextButton extends StatelessWidget {
+
+  final bool isInFlowContext;
+
+  _NextButton(this.isInFlowContext);
+
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
@@ -127,9 +133,14 @@ class _NextButton extends StatelessWidget {
                   .updatePhoneNumber(state.phoneNumber);
 
               var phoneNumber = state.phoneNumber;
-              context
-                  .flow<PeerPALUser>()
-                  .update((s) => s.copyWith(phoneNumber: phoneNumber));
+              if (isInFlowContext) {
+                context
+                    .flow<PeerPALUser>()
+                    .update((s) => s.copyWith(phoneNumber: phoneNumber));
+              } else {
+                Navigator.pop(context);
+              }
+
             },
           );
         }
