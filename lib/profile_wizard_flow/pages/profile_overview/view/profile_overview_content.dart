@@ -98,13 +98,9 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                           )
                       ),
                 ),
-
-                  new FutureBuilder(
-                future: context.read<ProfileOverviewCubit>().name(),
-                initialData: state.appUserInformation.name!,
-                builder:(BuildContext context, AsyncSnapshot<String?>text)=> CustomSingleTable(
+                  CustomSingleTable(
                         heading: "Name",
-                        text: text.data!,
+                        text: state.appUserInformation.name!,
                         isArrowIconVisible: true,
                         onPressed: () async => {
                           await Navigator.push(
@@ -112,16 +108,13 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                             MaterialPageRoute(
                                 builder: (context) =>
                                     NameInputPage(isInFlowContext: false)),
-                          ),
-                          setState((){
-                            context.read<ProfileOverviewCubit>().loadData();},)
-                        }),),
-                new FutureBuilder(
-                  future: context.read<ProfileOverviewCubit>().age(),
-                  initialData: "12",
-                  builder:(BuildContext context, AsyncSnapshot<String?>text)=> CustomSingleTable(
+                          ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
+                        }),
+           
+
+                 CustomSingleTable(
                           heading: 'ALTER',
-                          text: text.data!,
+                          text: state.appUserInformation.age.toString(),
                           isArrowIconVisible: true,
                           onPressed: () async => {
                             await Navigator.push(
@@ -129,21 +122,16 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       AgeInputPage(isInFlowContext: false)),
-                            ),
-                            setState((){
-                              context.read<ProfileOverviewCubit>().loadData();
-                            },
-                            )
+                            ).then((value) => context.read<ProfileOverviewCubit>().loadData())
+                 
+                            
                           }
-                          )
+                          
                 ),
-                new FutureBuilder(
-                  future: context.read<ProfileOverviewCubit>().phoneNumber(),
-                  initialData: state.appUserInformation.phoneNumber!,
-                  builder:(BuildContext context, AsyncSnapshot<String?>text)=>
+ 
                       CustomSingleTable(
                           heading: 'TELEFONNUMMER',
-                          text: text.data!,
+                          text: state.appUserInformation.phoneNumber.toString(),
                           isArrowIconVisible: true,
                           onPressed: () async => {
                             await Navigator.push(
@@ -151,14 +139,10 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       PhoneInputPage(isInFlowContext: false)),
-                            ),
-                            setState((){
-                              context.read<ProfileOverviewCubit>().loadData();
-                            },
-                            )
+                            ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
                           }
                           ),
-                ),
+                
                     const Spacer(),
                     Container(
                         color: Colors.transparent,
