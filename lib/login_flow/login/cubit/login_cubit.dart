@@ -35,7 +35,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
           status: FormzStatus.submissionFailure,
           errorMessage:
-              'Zu viele Fehlversuche. Bitte versuchen Sie es später erneut.'));
+          'Zu viele Fehlversuche. Bitte versuchen Sie es später erneut.'));
       return;
     }
     emit(state.copyWith(
@@ -82,4 +82,13 @@ class LoginCubit extends Cubit<LoginState> {
       return false;
     }
   }
+
+  void changeVisibility(){
+    emit(state.copyWith(visible: !state.visible));
+  }
+
+  bool isVisible(){
+    return state.visible;
+  }
+
 }
