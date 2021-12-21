@@ -27,3 +27,28 @@ class CustomPeerPALButton extends StatelessWidget {
         ));
   }
 }
+
+class CustomPeerPALButton2 extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onPressed;
+
+  CustomPeerPALButton2({ required this.text, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        key: key,
+        onPressed: onPressed,
+        child: CustomPeerPALText(
+          text: text,
+          fontSize: 14,
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+        ),
+        style: TextButton.styleFrom(
+          minimumSize: Size(170, 45),
+          backgroundColor: Color.fromRGBO(0, 0, 0, 1.0),
+          padding: EdgeInsets.all(10),
+        ));
+  }
+}
