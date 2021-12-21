@@ -30,7 +30,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
       compressQuality: 100,
       compressFormat: ImageCompressFormat.jpg,
       androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Passe dein Foto zurecht',
+          toolbarTitle: 'Passe dein Foto an',
           toolbarColor: primaryColor,
           toolbarWidgetColor: Colors.white,
           activeControlsWidgetColor: primaryColor,
@@ -39,7 +39,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
           showCropGrid: false,
           lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
-          title: 'Passe dein Foto zurecht',
+          title: 'Passe dein Foto an',
         )
     );
     profilePictureChanged(croppedImage);

@@ -21,7 +21,7 @@ class ProfilePictureInputPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar("Profilbild auswählen", hasBackButton: true,),
+        appBar: CustomAppBar("PeerPAL", hasBackButton: true,),
         body: BlocProvider(
           create: (_) {
             return ProfilePictureCubit(context.read<AppUserRepository>());
