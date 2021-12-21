@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/profile_wizard_flow/pages/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/cubit/phone_input_cubit.dart';
+import 'package:peerpal/profile_wizard_flow/pages/phone_input_page/models/phonenum_model.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -40,6 +41,7 @@ class PhoneInputContent extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 16.0),
                 CustomPeerPALHeading1("Wie lautet deine Telefonnummer?"),
@@ -48,6 +50,7 @@ class PhoneInputContent extends StatelessWidget {
                 const SizedBox(height: 8.0),
                 _NextButton(isInFlowContext),
                 const SizedBox(height: 15.0),
+                _Checkbox(isInFlowContext),
               ],
             ),
           ),
@@ -66,8 +69,22 @@ class _PhonenumberInputField extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.phoneNumber != current.phoneNumber,
       builder: (context, state) {
+
+        String? errorText = "";
+        var errorState = state.phoneNumber.error;
+        switch (errorState) {
+          case PhoneError.toLong:
+            errorText = "länge einer gültigen Telefonnummer überschritten";
+            break;
+          case PhoneError.toShort:
+            errorText = "Länge einer gültigen Telefennummer unterschritten";
+            break;
+          default:
+            errorText = null;
+            break;
+        }
         return new FutureBuilder(future: context.read<PhoneInputCubit>().currentPhoneNumber(),
-        initialData: state.phoneNumber,
+        initialData: state.phoneNumber.value,
         builder:(BuildContext context, AsyncSnapshot<String?>text){
         return Container(
           child: Center(
@@ -88,6 +105,7 @@ class _PhonenumberInputField extends StatelessWidget {
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
                   labelText: text.data,
+                  errorText: state.phoneNumber.invalid ? errorText : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                     borderSide: BorderSide(
@@ -127,23 +145,52 @@ class _NextButton extends StatelessWidget {
         } else {
           return CustomPeerPALButton(
             text: 'Weiter',
-            onPressed: () async {
-              await context
-                  .read<PhoneInputCubit>()
-                  .updatePhoneNumber(state.phoneNumber);
+            onPressed: !state.phoneNumber.invalid ? () async {
+                await context
+                    .read<PhoneInputCubit>()
+                    .updatePhoneNumber(state.phoneNumber.value);
 
               var phoneNumber = state.phoneNumber;
+              print(state.phoneNumber.invalid);
               if (isInFlowContext) {
                 context
                     .flow<PeerPALUser>()
-                    .update((s) => s.copyWith(phoneNumber: phoneNumber));
+                    .update((s) => s.copyWith(phoneNumber: phoneNumber.value));
+              } else {
+                Navigator.pop(context);
+              }
+
+            } : null,
+          );
+        }
+      },
+    );
+  }
+}
+
+class _Checkbox extends StatelessWidget {
+
+  final bool isInFlowContext;
+
+  _Checkbox(this.isInFlowContext);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PhoneInputCubit, PhoneInputState>(
+      builder: (context, state) {
+          return  CustomPeerPALButton2(
+            text: 'Ich möchte keine Telefonnummer angeben',
+            onPressed: () async {
+
+              if (isInFlowContext) {
+                context.flow<PeerPALUser>().update((s) => s.copyWith(phoneNumber: 'Keine Angabe'));;
               } else {
                 Navigator.pop(context);
               }
 
             },
           );
-        }
+
       },
     );
   }

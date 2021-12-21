@@ -23,7 +23,7 @@ class PhoneInputPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar("Telefonnummer", hasBackButton: true,),
+        appBar: CustomAppBar("PeerPAL", hasBackButton: true,),
         body: BlocProvider(
           create: (_) {
             return PhoneInputCubit(context.read<AppUserRepository>());
