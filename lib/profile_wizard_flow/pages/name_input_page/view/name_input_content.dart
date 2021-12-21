@@ -39,7 +39,7 @@ class NameInputContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 16.0),
-                CustomPeerPALHeading1('Name Input'),
+                CustomPeerPALHeading1('Wie ist dein Name?'),
                 const SizedBox(height: 30.0),
                 _UsernameInputField(isInFlowContext),
                 const SizedBox(height: 8.0),
@@ -73,10 +73,10 @@ class _UsernameInputField extends StatelessWidget {
           return TextField(
             style: const TextStyle(fontSize: 22),
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.mail),
+              prefixIcon: const Icon(Icons.person),
               labelText: text.data,
               helperText: '',
-              errorText: state.username.invalid ? 'invalid email' : null,
+              errorText: state.username.invalid ? 'Bitte geben sie Ihren Namen ein' : null,
             ),
             key: const Key('name_selection_username_field'),
             onChanged: (username) {
