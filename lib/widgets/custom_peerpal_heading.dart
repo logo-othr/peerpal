@@ -13,6 +13,7 @@ class CustomPeerPALHeading1 extends StatelessWidget {
       fontSize: 25,
       color: Colors.black,
       fontWeight: FontWeight.bold,
+      textAlign: TextAlign.center
     );
   }
 }
@@ -68,3 +69,4 @@ class CustomPeerPALHeading4 extends StatelessWidget {
         text: text, fontSize: 14, color: color, fontWeight: FontWeight.normal);
   }
 }
+
