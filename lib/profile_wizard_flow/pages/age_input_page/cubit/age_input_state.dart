@@ -2,7 +2,7 @@ part of 'age_input_cubit.dart';
 
 @immutable
 abstract class AgeInputState extends Equatable {
-  final List<int> ages = (List<int>.generate(10, (i) => i + 10));
+  final List<int> ages = (List<int>.generate(107, (i) => i + 14));
 
   final int selectedAge;
 
