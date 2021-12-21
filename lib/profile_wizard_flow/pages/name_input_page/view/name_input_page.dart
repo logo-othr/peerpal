@@ -21,7 +21,7 @@ class NameInputPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar('Username', hasBackButton: true,),
+        appBar: CustomAppBar('PeerPAL', hasBackButton: true,),
         body: BlocProvider(
           create: (_) {
             return NameInputCubit(context.read<AppUserRepository>());
