@@ -27,6 +27,7 @@ class ProfilePictureInputContent extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+            const SizedBox(height: 20),
               CustomPeerPALHeading1('Nimm ein Foto von dir auf'),
               const Spacer(),
               InkWell(
