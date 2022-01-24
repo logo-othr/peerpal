@@ -10,12 +10,12 @@ import 'package:peerpal/widgets/custom_app_bar.dart';
 class PhoneInputPage extends StatelessWidget {
 
   final bool isInFlowContext;
+  final String pastPhone;
+  PhoneInputPage({required this.isInFlowContext,required this.pastPhone});
 
-  PhoneInputPage({required this.isInFlowContext});
-
-  static MaterialPage<void> page({required bool isInFlowContext}) {
+  static MaterialPage<void> page({required bool isInFlowContext,required String pastPhone}) {
     return MaterialPage<void>(
-        child: PhoneInputPage(isInFlowContext: isInFlowContext));
+        child: PhoneInputPage(isInFlowContext: isInFlowContext,pastPhone: pastPhone,));
   }
 
   @override
@@ -28,7 +28,7 @@ class PhoneInputPage extends StatelessWidget {
           create: (_) {
             return PhoneInputCubit(context.read<AppUserRepository>());
           },
-          child: PhoneInputContent(isInFlowContext: isInFlowContext),
+          child: PhoneInputContent(isInFlowContext: isInFlowContext,pastPhone:pastPhone,),
         ),
       ),
     );

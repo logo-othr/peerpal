@@ -107,7 +107,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NameInputPage(isInFlowContext: false)),
+                                    NameInputPage(isInFlowContext: false,pastName: state.appUserInformation.name!)),
                           ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
                         }),
            
@@ -138,7 +138,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      PhoneInputPage(isInFlowContext: false)),
+                                      PhoneInputPage(isInFlowContext: false,pastPhone: state.appUserInformation.phoneNumber.toString())),
                             ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
                           }
                           ),

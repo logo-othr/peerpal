@@ -13,8 +13,8 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 class PhoneInputContent extends StatelessWidget {
 
   final bool isInFlowContext;
-
-  PhoneInputContent({Key? key, required this.isInFlowContext})
+  final String pastPhone;
+  PhoneInputContent({Key? key, required this.isInFlowContext,this.pastPhone=""})
       : super(key: key);
 
   TextEditingController nameController = TextEditingController();
@@ -43,13 +43,15 @@ class PhoneInputContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 16.0),
-                CustomPeerPALHeading1("Wie lautet deine Telefonnummer?"),
-                const SizedBox(height: 30.0),
-                _PhonenumberInputField(isInFlowContext),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 1.0),
+                FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: CustomPeerPALHeading1("Wie lautet deine Telefonnummer?"),),
+                const SizedBox(height: 150.0),
+                _PhonenumberInputField(isInFlowContext,pastPhone),
+                const SizedBox(height: 190),
                 _NextButton(isInFlowContext),
-                const SizedBox(height: 15.0),
+                const SizedBox(height: 20),
                 _Checkbox(isInFlowContext),
               ],
             ),
@@ -61,8 +63,8 @@ class PhoneInputContent extends StatelessWidget {
 }
 
 class _PhonenumberInputField extends StatelessWidget {
-  _PhonenumberInputField(bool isInFlowContext);
-
+  _PhonenumberInputField(bool isInFlowContext, this.pastPhone);
+  String pastPhone;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
@@ -92,7 +94,7 @@ class _PhonenumberInputField extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
               child: TextFormField(
                 //discuss
-                initialValue: text.data,
+                initialValue:pastPhone,
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -104,7 +106,6 @@ class _PhonenumberInputField extends StatelessWidget {
                 maxLines: 1,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
-                  labelText: text.data,
                   errorText: state.phoneNumber.invalid ? errorText : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
@@ -151,7 +152,6 @@ class _NextButton extends StatelessWidget {
                     .updatePhoneNumber(state.phoneNumber.value);
 
               var phoneNumber = state.phoneNumber;
-              print(state.phoneNumber.invalid);
               if (isInFlowContext) {
                 context
                     .flow<PeerPALUser>()
@@ -182,9 +182,11 @@ class _Checkbox extends StatelessWidget {
             text: 'Ich möchte keine Telefonnummer angeben',
             onPressed: () async {
 
-              if (isInFlowContext) {
-                context.flow<PeerPALUser>().update((s) => s.copyWith(phoneNumber: 'Keine Angabe'));;
-              } else {
+              context
+                  .read<PhoneInputCubit>()
+                  .updatePhoneNumber("0");
+              context.flow<PeerPALUser>().update((s) => s.copyWith(phoneNumber: '0'));;
+              if (!isInFlowContext){
                 Navigator.pop(context);
               }
 

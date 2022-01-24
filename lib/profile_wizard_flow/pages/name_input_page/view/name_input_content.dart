@@ -10,10 +10,9 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class NameInputContent extends StatelessWidget {
   final bool isInFlowContext;
+  final String pastName;
 
-  NameInputContent({Key? key, required this.isInFlowContext}) : super(key: key);
-
-  TextEditingController nameController = TextEditingController();
+  NameInputContent({Key? key, required this.isInFlowContext, required this.pastName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +35,14 @@ class NameInputContent extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 const SizedBox(height: 16.0),
                 CustomPeerPALHeading1('Wie ist dein Name?'),
-                const SizedBox(height: 30.0),
-                _UsernameInputField(isInFlowContext),
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 120),
+                _UsernameInputField(isInFlowContext,pastName),
+                const SizedBox(height: 190),
                 _NextButton(isInFlowContext),
-                const SizedBox(height: 15.0),
               ],
             ),
           ),
@@ -57,8 +55,8 @@ class NameInputContent extends StatelessWidget {
 class _UsernameInputField extends StatelessWidget {
 
   final bool isInFlowContext;
-
-  _UsernameInputField(this.isInFlowContext);
+  final String pastName;
+  _UsernameInputField(this.isInFlowContext,this.pastName);
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +65,14 @@ class _UsernameInputField extends StatelessWidget {
       builder: (context, state) {
         return new FutureBuilder(
           future: context.read<NameInputCubit>().currentName(),
-          initialData: "Name",
+          initialData: pastName,
           builder:(BuildContext context, AsyncSnapshot<String?>text){
 
-          return TextField(
+          return new TextFormField(
+              initialValue:pastName,
             style: const TextStyle(fontSize: 22),
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.person),
-              labelText: text.data,
               helperText: '',
               errorText: state.username.invalid ? 'Bitte geben sie Ihren Namen ein' : null,
             ),
