@@ -11,7 +11,7 @@ List<Page> onGenerateProfileWizardPages(
     if (userInformation.age == null) AgeInputPage.page(isInFlowContext: true),
     if (userInformation.age != null) NameInputPage.page(isInFlowContext: true),
     if (userInformation.name != null)
-      PhoneInputPage.page(isInFlowContext: true),
+      PhoneInputPage.page(isInFlowContext: true,pastPhone: ""),
     if (userInformation.phoneNumber != null)
       ProfilePictureInputPage.page(isInFlowContext: true),
   ];
