@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
+import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_bottom_indicator.dart';
 import 'package:peerpal/widgets/discover_user_list_item.dart';
@@ -73,7 +74,13 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                   } else {
                     var user = state.users[index];
                     return DiscoverUserListItem(
-                        onPressed: () => print(user),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserDetailPage(user.id!)));
+                        },
                         imageLink: user.imagePath,
                         header: user.name,
                         locations: user.discoverLocations

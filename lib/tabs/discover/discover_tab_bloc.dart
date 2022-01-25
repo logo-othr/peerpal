@@ -37,15 +37,15 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
       }
       final lastUser = state.users.last;
       final users = await _appUsersRepository.getMatchingUsers(
-          lastUser: lastUser, limit: limit);
+          last: lastUser, limit: limit);
       final updatedUserList = List.of(state.users)..addAll(users);
       return users.isEmpty
           ? state.copyWith(hasNoMoreUsers: true)
           : state.copyWith(
-              status: DiscoverTabStatus.success,
-              users: updatedUserList,
-              hasNoMoreUsers: false,
-            );
+        status: DiscoverTabStatus.success,
+        users: updatedUserList,
+        hasNoMoreUsers: false,
+      );
     } on Exception {
       return state.copyWith(status: DiscoverTabStatus.error);
     }
