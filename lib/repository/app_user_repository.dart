@@ -100,7 +100,7 @@ class AppUserRepository {
         case 'user-not-found':
           throw LoginException(
               message:
-                  'Falsches Passwort oder die der Nutzer existiert nicht.');
+              'Falsches Passwort oder die der Nutzer existiert nicht.');
         case 'user-disabled':
           throw LoginException(message: 'Der Account wurde deaktiviert.');
         case 'invalid-email':
@@ -108,7 +108,7 @@ class AppUserRepository {
         case 'too-many-requests':
           throw LoginException(
               message:
-                  'Der Server ist ausgelastet. Bitte versuche es später oder '
+              'Der Server ist ausgelastet. Bitte versuche es später oder '
                   "morgen noch einmal.");
         default:
           throw LoginException();
@@ -133,9 +133,9 @@ class AppUserRepository {
     var uid = id == null ? currentUser.id : id;
     peerPALUser = peerPALUser.copyWith(id: uid);
     var publicUserCollection =
-        _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
+    _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
     var privateUserCollection =
-        _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
+    _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
 
     var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
@@ -155,18 +155,26 @@ class AppUserRepository {
 
   Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+    var uid = firebaseUser!.uid;
+    return await _downloadUserInformation(uid);
+  }
 
+  Future<PeerPALUser> getUserInformation(String uid) async {
+    return (await _downloadUserInformation(uid)).toDomainObject();
+  }
+
+  Future<PeerPALUserDTO> _downloadUserInformation(String uid) async {
     var peerPALUserDTO = PeerPALUserDTO.empty;
     var publicUserDataDTO;
     var privateUserDataDTO;
 
     var publicUserDocument = await _firestore
         .collection(UserDatabaseContract.publicUsers)
-        .doc(firebaseUser!.uid)
+        .doc(uid)
         .get();
     var privateUserDocument = await _firestore
         .collection(UserDatabaseContract.privateUsers)
-        .doc(firebaseUser!.uid)
+        .doc(uid)
         .get();
     if (publicUserDocument.exists && publicUserDocument.data() != null) {
       var publicUserData = publicUserDocument.data();
@@ -184,27 +192,30 @@ class AppUserRepository {
 
   Query<Map<String, dynamic>> _buildGetMatchingUsersQuery(
       {required PeerPALUser? lastUser,
-      required int limit,
-      required CollectionReference<Map<String, dynamic>> collection,
-      required PeerPALUser currentUser}) {
+        required int limit,
+        required CollectionReference<Map<String, dynamic>> collection,
+        required PeerPALUser currentUser}) {
     var query = collection
         .where(UserDatabaseContract.userAge,
-            isGreaterThanOrEqualTo: currentUser.discoverFromAge)
+        isGreaterThanOrEqualTo: /*currentUser.discoverFromAge*/ 1)
         .where(UserDatabaseContract.userAge,
-            isLessThanOrEqualTo: currentUser.discoverToAge);
+        isLessThanOrEqualTo: /*currentUser.discoverToAge*/ 120);
 
     query = query.where(UserDatabaseContract.discoverLocations,
-        arrayContainsAny: currentUser.discoverLocations!
+        arrayContainsAny: /*currentUser.discoverLocations!
             .map((e) => e.place)
-            .toList()); // ['Köln']
+            .toList())*/
+        ['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
 
     query = query.where(UserDatabaseContract.phonePreference,
-        isEqualTo: currentUser.discoverCommunicationPreferences!
-            .contains(CommunicationType.phone));
+        isEqualTo: /*currentUser.discoverCommunicationPreferences!
+            .contains(CommunicationType.phone)*/
+        true);
 
     query = query.where(UserDatabaseContract.chatPreference,
-        isEqualTo: currentUser.discoverCommunicationPreferences!
-            .contains(CommunicationType.chat));
+        isEqualTo: /*currentUser.discoverCommunicationPreferences!
+            .contains(CommunicationType.chat)*/
+        true);
 
     query = query
         .orderBy(UserDatabaseContract.userAge)
@@ -219,14 +230,14 @@ class AppUserRepository {
   }
 
   Future<List<PeerPALUser>> getMatchingUsers(
-      {PeerPALUser? lastUser = null, required int limit}) async {
+      {PeerPALUser? last = null, required int limit}) async {
     var currentPeerPALUser = await getCurrentUserInformation();
 
     var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
+    await _firestore.collection(UserDatabaseContract.publicUsers);
 
     var query = _buildGetMatchingUsersQuery(
-        lastUser: lastUser,
+        lastUser: last,
         limit: limit,
         collection: publicUserCollection,
         currentUser: currentPeerPALUser);
@@ -234,7 +245,7 @@ class AppUserRepository {
     var snapshots = await query.get();
 
     final matchedUserDocuments =
-        snapshots.docs.map((doc) => doc.data()).toList();
+    snapshots.docs.map((doc) => doc.data()).toList();
 
     var publicUsers = matchedUserDocuments
         .map((e) => PublicUserInformationDTO.fromJson(e))
@@ -251,7 +262,7 @@ class AppUserRepository {
   Future<PeerPALUser> getCurrentUserInformation() async {
     var userInformation = PeerPALUser.empty;
     var cachedUserDTO =
-        cache.get<PeerPALUserDTO>(key: '{$currentUser.uid}-userinformation');
+    cache.get<PeerPALUserDTO>(key: '{$currentUser.uid}-userinformation');
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
@@ -294,5 +305,11 @@ class AppUserRepository {
     final list = json.decode(jsonData) as List<dynamic>;
     return list.map((e) => Location.fromJson(e)).toList();
   }
+
+
+
+
+
+
 
 }
