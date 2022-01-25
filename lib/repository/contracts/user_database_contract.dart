@@ -12,6 +12,9 @@ class UserDatabaseContract {
   static const phonePreference = 'hasPhoneCommunicationPreference';
   static const discoverActivities = 'discoverActivities';
   static const discoverLocations = 'discoverLocations';
-  static const chat = 'chat';
+  static const chat = 'chats';
   static const chatUids = 'uids';
+  static const friendsCollection = 'friends';
+  static const chatMessages = 'messages';
+  static const chatTimestamp = 'lastUpdated';
 }
