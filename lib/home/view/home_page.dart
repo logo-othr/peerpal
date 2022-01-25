@@ -31,7 +31,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Build method called");
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) async {
         if (state is HomeProfileFlow) {
