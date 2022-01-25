@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
+import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
 import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
+import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/tabs/discover/discover_tab_view.dart';
-import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,8 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-      HomeCubit(context.read<AppUserRepository>())
-        ..loadFlowState(),
+      HomeCubit(context.read<AppUserRepository>())..loadFlowState(),
       child: const HomeView(),
     );
   }
@@ -31,6 +31,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Build method called");
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) async {
         if (state is HomeProfileFlow) {
@@ -53,25 +54,7 @@ class HomeView extends StatelessWidget {
               return MyTabView();
             }
             return Container(
-              child: Container(
-                child: Scaffold(
-                    appBar: CustomAppBar("PeerPAL", hasBackButton: false,),
-                    body:  Center(
-                        child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                            child: Container(
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(height: 300),
-                                      CustomPeerPALHeading1("Laden..."),
-                                      CircularProgressIndicator(),]
-                                )
-                            )
-                        )
-                    )
-                ),
-              ),
+              child: Text("Nicht geladen"),
             );
           }),
     );
@@ -96,7 +79,7 @@ class MyTabView extends StatelessWidget {
       child: Container(child: Container()),
     ),
     Center(
-      child: Container(child: Container()),
+      child: Container(child: ChatListPage()),
     ),
     Center(
       child: Container(),
@@ -105,35 +88,32 @@ class MyTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
-        builder: (context, state) {
-          if (state is HomeUserInformationFlowCompleted) {
-            return
-              Scaffold(
-                bottomNavigationBar: CustomTabBar(index: state.index,
-
-                    onTap: (index) {
-                      context.read<HomeCubit>().indexChanged(index);
-                    }
-                ),
-                body: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<DiscoverTabBloc>(
-                      create: (context) =>
-                      DiscoverTabBloc(context.read<AppUserRepository>())
-                        ..add(UsersLoaded()),
-                    ),
-                  ],
-                  child: tabs[
-                  state.index
-                  ],
-                ),
-              );
-          } else {
-            return Text('TabBar Error');
-          }
-        }
-    );
+    return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+      if (state is HomeUserInformationFlowCompleted) {
+        return Scaffold(
+          bottomNavigationBar: CustomTabBar(
+              index: state.index,
+              onTap: (index) {
+                context.read<HomeCubit>().indexChanged(index);
+              }),
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider<DiscoverTabBloc>(
+                create: (context) =>
+                DiscoverTabBloc(context.read<AppUserRepository>())
+                  ..add(UsersLoaded()),
+              ),
+              BlocProvider<ChatListBloc>(
+                create: (context) => sl<ChatListBloc>()..add(ChatListLoaded()),
+              ),
+            ],
+            child: tabs[state.index],
+          ),
+        );
+      } else {
+        return Text('TabBar Error');
+      }
+    });
   }
 }
 
