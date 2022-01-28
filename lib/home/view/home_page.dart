@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/activities/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
 import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
@@ -73,7 +74,7 @@ class MyTabView extends StatelessWidget {
       child: Container(child: DiscoverTabView()),
     ),
     Center(
-      child: Container(),
+      child: ActivityFeedPage(),
     ),
     Center(
       child: Container(child: Container()),
