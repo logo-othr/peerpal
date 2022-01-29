@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_selection/cubit/activity_selection_cubit.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
+import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
+import 'package:flow_builder/flow_builder.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
 class ActivitySelectionContent extends StatelessWidget {
@@ -54,7 +56,16 @@ class ActivitySelectionContent extends StatelessWidget {
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 0, 20, 0),
                                       child: GestureDetector(
-                                          onTap: () {
+                                          onTap: () async {
+                                            if (isInFlowContext) {
+                                              await context.read<ActivitySelectionCubit>().postData();
+                                              context.flow<Activity>().update(
+                                                      (s) => s.copyWith(code: activity.code, name: activity.name));
+                                            } else {
+                                              // ToDo: Implement outside flow context
+                                              //await context.read<DiscoverActivitiesCubit>().postData();
+                                              // Navigator.pop(context);
+                                            }
                                           },
                                           child: CustomCircleListItem(
                                               label:
