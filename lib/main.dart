@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 
 import 'app/app.dart';
@@ -33,6 +34,9 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider.value(
           value: sl<ChatRepository>(),
+        ),
+        RepositoryProvider.value(
+          value: ActivityRepository(),
         )
       ],
       child: BlocProvider(
