@@ -29,7 +29,7 @@ class ActivitySelectionContent extends StatelessWidget {
           "Aktivität planen",
           hasBackButton: true,
           onBackButtonPressed: () {
-            if(isInFlowContext) {
+            if (isInFlowContext) {
               context.flow<Activity>().complete();
             } else {
               Navigator.pop(context);
@@ -48,7 +48,7 @@ class ActivitySelectionContent extends StatelessWidget {
                           top: BorderSide(width: 1, color: secondaryColor),
                           bottom: BorderSide(width: 1, color: secondaryColor))),
                   child: CustomCupertinoSearchBar(
-searchBarController: searchFieldController,
+                    searchBarController: searchFieldController,
                     enabled: false,
                   )),
               Expanded(
@@ -69,25 +69,31 @@ searchBarController: searchFieldController,
                                           state.activities.map((activity) {
                                         return GestureDetector(
                                             onTap: () async {
-                                              var cubit =  context
-                                                  .read<
+                                              var cubit = context.read<
                                                   ActivitySelectionCubit>();
                                               if (isInFlowContext) {
-                                                var currentActivity = await cubit.getCurrentActivity();
-                                                var updatedActivity = currentActivity.copyWith(code: activity.code,
-                                                    name: activity.name);
-                                                await cubit
-                                                    .postData(updatedActivity); // ToDo: Update data in shared prefs
+                                                var updatedActivity = (await cubit
+                                                        .getCurrentActivity())
+                                                    .copyWith(
+                                                        code: activity.code,
+                                                        name: activity.name);
+                                                await cubit.postData(
+                                                    updatedActivity); // ToDo: Update data in shared prefs
                                                 context.flow<Activity>().update(
                                                     (s) => s.copyWith(
                                                         code: activity.code,
                                                         name: activity.name));
                                               } else {
-                                                var currentActivity = await cubit.getCurrentActivity();
-                                                var updatedActivity = currentActivity.copyWith(code: activity.code,
-                                                    name: activity.name);
-                                                await cubit.postData(updatedActivity);
-                                                 Navigator.pop(context);
+                                                var currentActivity =
+                                                    await cubit
+                                                        .getCurrentActivity();
+                                                var updatedActivity =
+                                                    currentActivity.copyWith(
+                                                        code: activity.code,
+                                                        name: activity.name);
+                                                await cubit
+                                                    .postData(updatedActivity);
+                                                Navigator.pop(context);
                                               }
                                             },
                                             child: CustomCircleListItem(
