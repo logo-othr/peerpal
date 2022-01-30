@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {
+
+  SharedPreferences prefs;
+
+  ActivityRepository(this.prefs);
+
   Future<List<Activity>> loadActivityList() async {
     final List<Activity> activities = [];
     activities.add(Activity(code: 'shopping', name: "Einkaufen"));
@@ -24,9 +32,20 @@ class ActivityRepository {
     return activities;
   }
 
-  updateActivity(updatedActivityInformation) {}
+  updateActivity(Activity activity) {
+    prefs.setString("activity_creation", jsonEncode(activity.toJson()));
+  }
 
-  getActivityInformation() {}
+  Activity getCurrentActivity() {
+    var activity = Activity();
+    try {
+      var activityMap = jsonDecode(prefs.getString('activity_creation')!);
+      activity = Activity.fromJson(activityMap);
+    } catch(e) {
+      // ToDo: Implement.
+    }
+    return activity;
+  }
 
   loadLocations() {}
 }
