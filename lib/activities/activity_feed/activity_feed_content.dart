@@ -15,6 +15,9 @@ class ActivityFeedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var searchFieldController = TextEditingController();
+    searchFieldController.text = "Derzeit noch deaktiviert";
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
@@ -27,7 +30,7 @@ class ActivityFeedContent extends StatelessWidget {
                     border: Border(
                         top: BorderSide(width: 1, color: secondaryColor),
                         bottom: BorderSide(width: 1, color: secondaryColor))),
-                child: CustomCupertinoSearchBar()),
+                child: CustomCupertinoSearchBar(searchBarController: searchFieldController, enabled: false,)),
             Spacer(),
             CustomEmptyListHint(
                 icon: Icons.nature_people,
