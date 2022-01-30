@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/repository/models/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {
@@ -47,5 +49,9 @@ class ActivityRepository {
     return activity;
   }
 
-  loadLocations() {}
+  Future<List<Location>> loadLocations() async {
+    final jsonData = await rootBundle.loadString('assets/location.json');
+    final list = json.decode(jsonData) as List<dynamic>;
+    return list.map((e) => Location.fromJson(e)).toList();
+  }
 }
