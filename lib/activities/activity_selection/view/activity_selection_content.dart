@@ -20,68 +20,89 @@ class ActivitySelectionContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ActivitySelectionCubit,
-        ActivitySelectionState>(
-        builder: (context, state)
-    {
+    var searchFieldController = TextEditingController();
+    searchFieldController.text = "Derzeit noch deaktiviert";
+    return BlocBuilder<ActivitySelectionCubit, ActivitySelectionState>(
+        builder: (context, state) {
       return Scaffold(
-        appBar: CustomAppBar("Aktivität planen", hasBackButton: true,),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                            top: BorderSide(width: 1, color: secondaryColor),
-                            bottom: BorderSide(width: 1, color: secondaryColor))),
-                    child: CustomCupertinoSearchBar()),
-                Expanded(
-                  child: (state is ActivitiesLoaded) ? Container(
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  children: state.activities
-                                      .map((activity) {
-                                    return Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 0, 20, 0),
-                                      child: GestureDetector(
-                                          onTap: () async {
-                                            if (isInFlowContext) {
-                                              await context.read<ActivitySelectionCubit>().postData();
-                                              context.flow<Activity>().update(
-                                                      (s) => s.copyWith(code: activity.code, name: activity.name));
-                                            } else {
-                                              // ToDo: Implement outside flow context
-                                              //await context.read<DiscoverActivitiesCubit>().postData();
-                                              // Navigator.pop(context);
-                                            }
-                                          },
-                                          child: CustomCircleListItem(
-                                              label:
-                                              activity.name.toString(),
-                                              icon: ActivityIconData.icons[activity.code],
-                                              active: false)),
-                                    );
-                                  })
-                                      .toList())),
-                        ],
-                      ),
-                    ),
-                  ) : CircularProgressIndicator(),
-                ),
-              ],
-            ),
+        appBar: CustomAppBar(
+          "Aktivität planen",
+          hasBackButton: true,
+          onBackButtonPressed: () {
+            if(isInFlowContext) {
+              context.flow<Activity>().complete();
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+        body: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                          top: BorderSide(width: 1, color: secondaryColor),
+                          bottom: BorderSide(width: 1, color: secondaryColor))),
+                  child: CustomCupertinoSearchBar(
+searchBarController: searchFieldController,
+                    enabled: false,
+                  )),
+              Expanded(
+                child: (state is ActivitiesLoaded)
+                    ? SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Wrap(
+                                      runSpacing: 8,
+                                      spacing: 10,
+                                      alignment: WrapAlignment.start,
+                                      children:
+                                          state.activities.map((activity) {
+                                        return GestureDetector(
+                                            onTap: () async {
+                                              var cubit =  context
+                                                  .read<
+                                                  ActivitySelectionCubit>();
+                                              if (isInFlowContext) {
+                                                var currentActivity = await cubit.getCurrentActivity();
+                                                var updatedActivity = currentActivity.copyWith(code: activity.code,
+                                                    name: activity.name);
+                                                await cubit
+                                                    .postData(updatedActivity); // ToDo: Update data in shared prefs
+                                                context.flow<Activity>().update(
+                                                    (s) => s.copyWith(
+                                                        code: activity.code,
+                                                        name: activity.name));
+                                              } else {
+                                                var currentActivity = await cubit.getCurrentActivity();
+                                                var updatedActivity = currentActivity.copyWith(code: activity.code,
+                                                    name: activity.name);
+                                                await cubit.postData(updatedActivity);
+                                                 Navigator.pop(context);
+                                              }
+                                            },
+                                            child: CustomCircleListItem(
+                                                label: activity.name.toString(),
+                                                icon: ActivityIconData
+                                                    .icons[activity.code],
+                                                active: false));
+                                      }).toList()),
+                                )),
+                          ],
+                        ),
+                      )
+                    : CircularProgressIndicator(),
+              ),
+            ],
           ),
         ),
       );
