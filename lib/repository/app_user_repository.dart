@@ -308,7 +308,135 @@ class AppUserRepository {
 
 
 
+  //----------------------------------------------------
+  //Friends Start
+  //----------------------------------------------------
 
+
+  Stream<List<dynamic>> getFriendRequestsFromUser() {
+    return getList('friendRequests', true);
+  }
+
+  Stream<int> getFriendRequestsSize() async* {
+    await for (var friendRequestList in getFriendRequestsFromUser()) {
+      yield friendRequestList.length;
+    }
+  }
+
+
+  Future<void> sendFriendRequestToUser(PeerPALUser userInformation) async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection('friendRequestNotifications')
+        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .set({
+      'fromId': currentUserId,
+      'toId': userInformation.id,
+    });
+  }
+
+  Future<void> canceledFriendRequest(PeerPALUser userInformation) async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection('canceledFriendRequests')
+        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .set({
+      'fromId': currentUserId,
+      'toId': userInformation.id,
+    });
+  }
+
+  Future<void> friendRequestResponse(
+      PeerPALUser userInformation, bool response) async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection('friendRequestResponse')
+        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .set({
+      'fromId': currentUserId,
+      'toId': userInformation.id,
+      'response': response,
+    });
+  }
+
+
+
+  Stream<List<PeerPALUser>> getFriendList() async* {
+    var currentList = <PeerPALUser>[];
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    Stream<QuerySnapshot> stream = FirebaseFirestore.instance
+        .collection('privateUserData')
+        .doc(currentUserId)
+        .collection('friends')
+        .snapshots();
+
+    await for (QuerySnapshot querySnapshot in stream) {
+      currentList.clear();
+      for (var doc in querySnapshot.docs) {
+        DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance
+            .collection('publicUserData')
+            .doc(doc.id)
+            .get();
+
+        var userDTO = PeerPALUserDTO(publicUserInformation: PublicUserInformationDTO.fromJson(userDoc.data()!));
+
+        PeerPALUser friend = userDTO.toDomainObject();
+
+        if (!currentList.contains(friend)) {
+          currentList.add(friend);
+        }
+      }
+      yield currentList;
+    }
+  }
+
+
+  Stream<List<dynamic>> getSentFriendRequestsFromUser() {
+    return getList('sentFriendRequests', false);
+  }
+
+  Stream<List<dynamic>> getList(
+      String listName, bool isListOfCustomObjects) async* {
+    var currentList = <dynamic>[];
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    Stream<QuerySnapshot> stream = FirebaseFirestore.instance
+        .collection('privateUserData')
+        .doc(currentUserId)
+        .collection(listName)
+        .snapshots();
+
+    await for (QuerySnapshot querySnapshot in stream) {
+      currentList.clear();
+      for (var doc in querySnapshot.docs) {
+        if (isListOfCustomObjects) {
+          DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance
+              .collection('publicUserData')
+              .doc(doc.id)
+              .get();
+
+
+          var userDTO = PeerPALUserDTO(publicUserInformation: PublicUserInformationDTO.fromJson(userDoc.data()!));
+
+          PeerPALUser friend = userDTO.toDomainObject();
+
+          if (!currentList.contains(friend)) {
+            currentList.add(friend);
+          }
+        } else {
+          if (!currentList.contains(doc.id)) {
+            currentList.add(doc.id);
+          }
+        }
+      }
+      yield currentList;
+    }
+  }
+
+//----------------------------------------------------
+//Friends End
+//----------------------------------------------------
 
 
 
