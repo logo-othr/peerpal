@@ -60,13 +60,14 @@ class CustomPeerPALHeading3 extends StatelessWidget {
 class CustomPeerPALHeading4 extends StatelessWidget {
   String text;
   Color? color;
+  TextAlign? alignment;
 
-  CustomPeerPALHeading4(this.text, {this.color});
+  CustomPeerPALHeading4(this.text, {this.color, this.alignment});
 
   @override
   Widget build(BuildContext context) {
     return CustomPeerPALText(
-        text: text, fontSize: 14, color: color, fontWeight: FontWeight.normal);
+      text: text, fontSize: 14, color: color, fontWeight: FontWeight.normal, textAlign: alignment,);
   }
 }
 
