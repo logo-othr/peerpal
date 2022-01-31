@@ -4,8 +4,11 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class CustomCupertinoSearchBar extends StatelessWidget {
   String? heading = "";
+  bool enabled;
+  TextEditingController searchBarController;
 
-  CustomCupertinoSearchBar({this.heading});
+  CustomCupertinoSearchBar(
+      {this.heading, required this.searchBarController, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +21,14 @@ class CustomCupertinoSearchBar extends StatelessWidget {
           heading == null
               ? Container()
               : Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-            child: CustomPeerPALHeading1(heading!),
-          ),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  child: CustomPeerPALHeading1(heading!),
+                ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: CupertinoSearchTextField(
+              enabled: enabled,
+              controller: searchBarController,
               placeholder: "Suchen",
             ),
           )
