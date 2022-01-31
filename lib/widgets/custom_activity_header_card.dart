@@ -5,7 +5,10 @@ import 'custom_peerpal_heading.dart';
 
 // ignore: must_be_immutable
 class CustomActivityHeaderCard extends StatelessWidget {
-  CustomActivityHeaderCard();
+  final IconData icon;
+  final String activity;
+
+  CustomActivityHeaderCard({required this.icon, required this.activity});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class CustomActivityHeaderCard extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 35,
                       child: Icon(
-                        Icons.directions_bike,
+                        icon,
                         size: 50,
                         color: Colors.black,
                       ),
@@ -40,7 +43,7 @@ class CustomActivityHeaderCard extends StatelessWidget {
                 SizedBox(
                   width: 20,
                 ),
-                CustomPeerPALHeading2("Radfahren"),
+                CustomPeerPALHeading2(activity),
               ],
             ),
           ),
