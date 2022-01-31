@@ -6,6 +6,7 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 
@@ -16,6 +17,7 @@ Future<void> main() async {
   await init();
   final authenticationRepository = sl<AppUserRepository>();
   await authenticationRepository.user.first;
+
   //await DebugHelper.createExampleUsers(appUserRepository: authenticationRepository, emailBase:  'pptestmailbase234', password: 'Abc12345678*');
   runApp(App());
 }
@@ -36,7 +38,7 @@ class App extends StatelessWidget {
           value: sl<ChatRepository>(),
         ),
         RepositoryProvider.value(
-          value: ActivityRepository(),
+          value: ActivityRepository(sl<SharedPreferences>()),
         )
       ],
       child: BlocProvider(
