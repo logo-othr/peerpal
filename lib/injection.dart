@@ -9,10 +9,18 @@ import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_li
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/memory_cache.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
+
+  // =============== DataSource ===============
+  // SharedPreferences
+  var sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(
+        () => sharedPreferences,
+  );
   // =============== Chat ===============
   // Bloc
   sl.registerFactory(
@@ -34,4 +42,6 @@ Future<void> init() async {
 
   // Source/Service/Cache
   sl.registerLazySingleton<Cache>(() => MemoryCache());
+
+
 }
