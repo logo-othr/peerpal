@@ -32,9 +32,9 @@ class CustomCircleListItem extends StatelessWidget {
               ),
             )),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
           child:
-          CustomPeerPALHeading4(label, color: active ? Colors.green: primaryColor),
+          Container(width: 100,child: Center(child: CustomPeerPALHeading4(label, color: active ? Colors.green: primaryColor, alignment: TextAlign.center))),
         )
       ],
     );
