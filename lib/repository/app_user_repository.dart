@@ -313,8 +313,8 @@ class AppUserRepository {
   //----------------------------------------------------
 
 
-  Stream<List<dynamic>> getFriendRequestsFromUser() {
-    return getList('friendRequests', true);
+  Stream<List<PeerPALUser>> getFriendRequestsFromUser() {
+    return getList('friendRequests');
   }
 
   Stream<int> getFriendRequestsSize() async* {
@@ -392,13 +392,13 @@ class AppUserRepository {
   }
 
 
-  Stream<List<dynamic>> getSentFriendRequestsFromUser() {
-    return getList('sentFriendRequests', false);
+  Stream<List<PeerPALUser>> getSentFriendRequestsFromUser() {
+    return getList('sentFriendRequests');
   }
 
-  Stream<List<dynamic>> getList(
-      String listName, bool isListOfCustomObjects) async* {
-    var currentList = <dynamic>[];
+  Stream<List<PeerPALUser>> getList(
+      String listName) async* {
+    var currentList = <PeerPALUser>[];
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     Stream<QuerySnapshot> stream = FirebaseFirestore.instance
@@ -410,12 +410,10 @@ class AppUserRepository {
     await for (QuerySnapshot querySnapshot in stream) {
       currentList.clear();
       for (var doc in querySnapshot.docs) {
-        if (isListOfCustomObjects) {
           DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance
               .collection('publicUserData')
               .doc(doc.id)
               .get();
-
 
           var userDTO = PeerPALUserDTO(publicUserInformation: PublicUserInformationDTO.fromJson(userDoc.data()!));
 
@@ -424,11 +422,6 @@ class AppUserRepository {
           if (!currentList.contains(friend)) {
             currentList.add(friend);
           }
-        } else {
-          if (!currentList.contains(doc.id)) {
-            currentList.add(doc.id);
-          }
-        }
       }
       yield currentList;
     }
