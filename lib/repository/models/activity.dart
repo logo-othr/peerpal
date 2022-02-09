@@ -7,7 +7,11 @@ part 'activity.g.dart';
 @JsonSerializable()
 class Activity extends Equatable {
 
+  static const empty = Activity();
 
+  bool get isEmpty => this == Activity.empty;
+
+  bool get isNotEmpty => this != Activity.empty;
 
   final String? id;
   final String? name;
