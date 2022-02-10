@@ -15,11 +15,14 @@ class SignUpForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           Navigator.of(context).pop();
-        } else if (state.status.isSubmissionFailure) {
+        } else         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Registrierungs Fehler')),
+              SnackBar(
+                  content: Text((state.errorMessage.isEmpty
+                      ? 'Fehler bei der Registierung.'
+                      : state.errorMessage))),
             );
         }
       },
