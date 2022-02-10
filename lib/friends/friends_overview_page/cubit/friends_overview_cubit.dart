@@ -12,12 +12,10 @@ class FriendsOverviewCubit extends Cubit<FriendsOverviewState> {
 
   final AppUserRepository _appUserRepository;
 
-
   Future<void> getFriendsFromUser() async {
     var friends = _appUserRepository.getFriendList();
     var friendRequestsSize = _appUserRepository.getFriendRequestsSize();
     emit(FriendsOverviewLoaded(friends, friendRequestsSize));
   }
-
 
 }
