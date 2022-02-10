@@ -1,24 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 
 import '../colors.dart';
 import 'custom_peerpal_heading.dart';
 
-// ignore: must_be_immutable
-class CustomActivityInviteFriendsListItem extends StatefulWidget {
-  IconData? icon;
-  String? name;
 
-  CustomActivityInviteFriendsListItem({this.name, this.icon});
+class CustomActivityInviteFriendsListItem extends StatelessWidget {
 
-  @override
-  _CustomActivityInviteFriendsListItemState createState() =>
-      _CustomActivityInviteFriendsListItemState();
-}
+  PeerPALUser peerPALUser;
+  VoidCallback onActive;
+  VoidCallback onInactive;
+  bool isActive;
 
-class _CustomActivityInviteFriendsListItemState
-    extends State<CustomActivityInviteFriendsListItem> {
-  bool? isChecked = false;
+  CustomActivityInviteFriendsListItem(
+      {required this.peerPALUser,
+        required this.isActive,
+        required this.onActive,
+        required this.onInactive});
 
   // https://api.flutter.dev/flutter/material/MaterialStateProperty-class.html
   Color getColor(Set<MaterialState> states) {
@@ -46,11 +45,14 @@ class _CustomActivityInviteFriendsListItemState
             child: Checkbox(
               checkColor: Colors.white,
               fillColor: MaterialStateProperty.resolveWith(getColor),
-              value: isChecked,
+              value: isActive,
               onChanged: (bool? value) {
-                setState(() {
-                  isChecked = value;
-                });
+                if (value != null) {
+                  if (value)
+                    onActive();
+                  else
+                    onInactive();
+                }
               },
             ),
           ),
@@ -58,7 +60,8 @@ class _CustomActivityInviteFriendsListItemState
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+                  border: Border(
+                      bottom: BorderSide(width: 1, color: secondaryColor))),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                 child: Row(
@@ -66,11 +69,7 @@ class _CustomActivityInviteFriendsListItemState
                     Container(
                         child: CircleAvatar(
                           radius: 30,
-                          child: Icon(
-                            widget.icon,
-                            size: 60,
-                            color: primaryColor,
-                          ),
+                          backgroundImage:  NetworkImage(peerPALUser.imagePath!),
                           backgroundColor: Colors.white,
                         ),
                         decoration: new BoxDecoration(
@@ -81,13 +80,12 @@ class _CustomActivityInviteFriendsListItemState
                           ),
                         )),
                     SizedBox(width: 15),
-                    CustomPeerPALHeading2("tim",color: primaryColor),
+                    CustomPeerPALHeading2(peerPALUser.name!, color: primaryColor),
                   ],
                 ),
               ),
             ),
           ),
-
         ],
       ),
     );
