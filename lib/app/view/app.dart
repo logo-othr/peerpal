@@ -36,6 +36,7 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
           primarySwatch: primaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           inputDecorationTheme: InputDecorationTheme(
