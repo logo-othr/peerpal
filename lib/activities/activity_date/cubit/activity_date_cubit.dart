@@ -37,7 +37,9 @@ class DateInputCubit extends Cubit<DateInputState> {
     DateTime dt = inputFormat.parse('${state.date} ${state.time}');
     // Timestamp ts = Timestamp.fromDate(dt);
     var activity = await _activityRepository.getCurrentActivity();
+
     activity = activity.copyWith(date: dt);
+    _activityRepository.updateActivity(activity);
     return activity;
   }
 }
