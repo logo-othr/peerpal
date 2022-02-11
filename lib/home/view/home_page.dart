@@ -9,6 +9,7 @@ import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/tabs/discover/discover_tab_view.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
@@ -84,7 +85,7 @@ class MyTabView extends StatelessWidget {
       child: Container(child: ChatListPage()),
     ),
     Center(
-      child: Container(),
+      child: Container(child: SettingsPage(),),
     ),
   ];
 
