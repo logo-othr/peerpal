@@ -24,4 +24,20 @@ class Location extends Equatable {
 
   @override
   List<Object?> get props => [place];
+
+
+  Location copyWith({
+    final String? place,
+    final String? zipcode,
+    final String? street,
+    final String? streetNumber,
+
+  }) {
+    return Location(
+      place: place ?? this.place,
+      zipcode: zipcode ?? this.zipcode,
+      street: street ?? this.street,
+      streetNumber: streetNumber ?? this.streetNumber,
+    );
+  }
 }
