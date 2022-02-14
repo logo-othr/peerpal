@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_overview/cubit/profile_overview_cubit.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_overview_page.dart';
@@ -81,6 +82,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 MaterialPageRoute(
                     builder: (context) => LicensesPage()),
               ),
+            },
+          ),
+          CustomTableRow(text: "Logout",
+            onPressed: () async => {
+              context.read<AppBloc>().add(AppLogoutRequested())
             },
           )
         ],
