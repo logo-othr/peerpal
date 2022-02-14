@@ -22,8 +22,8 @@ class PublicUserInformationDTO {
   final int? age;
   final int? discoverFromAge;
   final int? discoverToAge;
-  final bool hasPhoneCommunicationPreference;
-  final bool hasChatCommunicationPreference;
+  final bool? hasPhoneCommunicationPreference;
+  final bool? hasChatCommunicationPreference;
   final List<Activity>? discoverActivities;
   final List<String>? discoverLocations;
   final String? imagePath;

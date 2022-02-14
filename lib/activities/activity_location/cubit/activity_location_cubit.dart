@@ -74,6 +74,18 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
     }
   }
 
+  void updateSelectedLocation(Location location) {
+    if (state is ActivityLocationLoaded) {
+      state.selectedLocations.clear();
+      var updatedActivityLocations = List<Location>.from(state.selectedLocations);
+      updatedActivityLocations.add(location);
+
+      state.filteredLocations.remove(location); // ToDo: Test!
+      emit(ActivityLocationLoaded(state.locations,
+          updatedActivityLocations, state.filteredLocations));
+    }
+  }
+
   Future<Activity> postActivityLocations() async {
       emit(ActivityLocationPosting(state.locations, state.selectedLocations));
 
