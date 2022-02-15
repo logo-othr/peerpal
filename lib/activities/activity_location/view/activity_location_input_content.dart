@@ -9,6 +9,7 @@ import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+import 'package:peerpal/widgets/custom_peerpal_text.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
 class LocationInputContent extends StatelessWidget {
@@ -28,39 +29,43 @@ class LocationInputContent extends StatelessWidget {
         ),
         body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
             builder: (context, state) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      CustomPeerPALHeading1("Treffpunkt"),
-                      _LocationSearchBar(
-                        searchBarController: searchBarController,
-                      ),
-                      const Spacer(),
-                      context
-                          .read<ActivityLocationCubit>()
-                          .state
-                          .filteredLocations
-                          .isEmpty || context
-                          .read<ActivityLocationCubit>()
-                          .state
-                          .selectedLocations.length > 0
-                          ? _LocationResultBox()
-                          : const _LocationSearchBox(),
-                      const Spacer(),
-                      (state is ActivityLocationPosting)
-                          ? const CircularProgressIndicator()
-                          : CompletePageButton(
-                          isSaveButton: isInFlowContext,
-                          onPressed: () async {
-                            _update(state, context);
-                          }),
-                    ],
+              return Container(
+                color: Colors.white,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        CustomPeerPALHeading1("Treffpunkt"),
+                        _LocationSearchBar(
+                          searchBarController: searchBarController,
+                        ),
+                        const Spacer(),
+                        context
+                            .read<ActivityLocationCubit>()
+                            .state
+                            .filteredLocations
+                            .isEmpty || context
+                            .read<ActivityLocationCubit>()
+                            .state
+                            .selectedLocations.length > 0
+                            ? _LocationResultBox()
+                            : const _LocationSearchBox(),
+                        const Spacer(),
+                        (state is ActivityLocationPosting)
+                            ? const CircularProgressIndicator()
+                            : CompletePageButton(
+                          disabled: state.selectedLocations.isEmpty,
+                            isSaveButton: isInFlowContext,
+                            onPressed: () async {
+                              _update(state, context);
+                            }),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -175,12 +180,15 @@ class _LocationSearchBox extends StatelessWidget {
 class _LocationListItem extends StatelessWidget {
   final Location location;
 
+
   _LocationListItem({required this.location});
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
       builder: (context, state) {
+        var cubit = context.read<ActivityLocationCubit>();
         return GestureDetector(
           onTap: () {
             context.read<ActivityLocationCubit>().removeLocation(location);
@@ -191,7 +199,8 @@ class _LocationListItem extends StatelessWidget {
                     content: Text(("${location.place} entfernt."))),
               );
           },
-          child: Row(
+          child:  Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -202,28 +211,67 @@ class _LocationListItem extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: secondaryColor))),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomPeerPALHeading3(
-                          text: location.place,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 5, 20, 8),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                                bottom: BorderSide(width: 1, color: secondaryColor))),
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomPeerPALText(
+                              text: location.place,
+                              fontSize: 20,
+                            ),
+                            Icon(
+                              Icons.cancel_outlined,
+                              color: Colors.black,
+                              size: 20,
+                            )
+                          ],
                         ),
-                        Icon(
-                          Icons.cancel_outlined,
-                          color: Colors.black,
-                          size: 20,
-                        )
-                      ],
-                    ),
+                      ),
+                      TextField(
+                          onChanged: (text) {
+                            cubit.updateSelectedLocation(state.selectedLocations[0].copyWith(street: text));
+                          },
+                          style: const TextStyle(fontSize: 18),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            labelText: 'Straße',
+                            border: InputBorder.none,
+
+                          ),
+                          keyboardType: TextInputType.name),
+                      TextField(
+                          onChanged: (text) {
+                            cubit.updateSelectedLocation(state.selectedLocations[0].copyWith(streetNumber: text));
+                          },
+                          style: const TextStyle(fontSize: 18),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            labelText: 'Hausnummer',
+                            border: InputBorder.none,
+                          ),
+                          keyboardType: TextInputType.number),
+                    ],
                   ),
                 ),
               ),
