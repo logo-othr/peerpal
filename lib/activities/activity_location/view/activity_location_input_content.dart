@@ -1,4 +1,3 @@
-
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ class LocationInputContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: CustomAppBar(
           'Standorte',
@@ -29,63 +27,69 @@ class LocationInputContent extends StatelessWidget {
         ),
         body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
             builder: (context, state) {
-              return Container(
-                color: Colors.white,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        CustomPeerPALHeading1("Treffpunkt"),
-                        _LocationSearchBar(
-                          searchBarController: searchBarController,
-                        ),
-                        const Spacer(),
-                        context
-                            .read<ActivityLocationCubit>()
-                            .state
-                            .filteredLocations
-                            .isEmpty || context
-                            .read<ActivityLocationCubit>()
-                            .state
-                            .selectedLocations.length > 0
-                            ? _LocationResultBox()
-                            : const _LocationSearchBox(),
-                        const Spacer(),
-                        (state is ActivityLocationPosting)
-                            ? const CircularProgressIndicator()
-                            : CompletePageButton(
-                          disabled: (state.selectedLocations.isEmpty || (state.selectedLocations[0].streetNumber?.isEmpty ?? true) || ( state.selectedLocations[0].street?.isEmpty ?? true)),
+          return Container(
+            color: Colors.white,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    CustomPeerPALHeading1("Treffpunkt"),
+                    _LocationSearchBar(
+                      searchBarController: searchBarController,
+                    ),
+                    const Spacer(),
+                    context
+                                .read<ActivityLocationCubit>()
+                                .state
+                                .filteredLocations
+                                .isEmpty ||
+                            context
+                                    .read<ActivityLocationCubit>()
+                                    .state
+                                    .selectedLocations
+                                    .length >
+                                0
+                        ? _LocationResultBox()
+                        : const _LocationSearchBox(),
+                    const Spacer(),
+                    (state is ActivityLocationPosting)
+                        ? const CircularProgressIndicator()
+                        : CompletePageButton(
+                            disabled: (state.selectedLocations.isEmpty ||
+                                (state.selectedLocations[0].streetNumber
+                                        ?.isEmpty ??
+                                    true) ||
+                                (state.selectedLocations[0].street?.isEmpty ??
+                                    true)),
                             isSaveButton: isInFlowContext,
                             onPressed: () async {
                               _update(state, context);
                             }),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
-              );
-            }));
+              ),
+            ),
+          );
+        }));
   }
 
-  Future<void> _update(ActivityLocationInputState state,
-      BuildContext context) async {
+  Future<void> _update(
+      ActivityLocationInputState state, BuildContext context) async {
     var cubit = context.read<ActivityLocationCubit>();
     if (isInFlowContext) {
       var activity = await cubit.postActivityLocations();
-      context.flow<Activity>().update(
-              (s) => activity);
+      context.flow<Activity>().update((s) => activity);
     } else {
       await cubit.postActivityLocations();
       Navigator.pop(context);
     }
   }
 }
-
 
 class _LocationResultBox extends StatelessWidget {
   const _LocationResultBox({Key? key}) : super(key: key);
@@ -180,12 +184,10 @@ class _LocationSearchBox extends StatelessWidget {
 class _LocationListItem extends StatelessWidget {
   final Location location;
 
-
   _LocationListItem({required this.location});
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
       builder: (context, state) {
         var cubit = context.read<ActivityLocationCubit>();
@@ -195,11 +197,10 @@ class _LocationListItem extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(
-                    content: Text(("${location.place} entfernt."))),
+                SnackBar(content: Text(("${location.place} entfernt."))),
               );
           },
-          child:  Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -219,7 +220,8 @@ class _LocationListItem extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border(
-                                bottom: BorderSide(width: 1, color: secondaryColor))),
+                                bottom: BorderSide(
+                                    width: 1, color: secondaryColor))),
                         height: 50,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,11 +240,14 @@ class _LocationListItem extends StatelessWidget {
                       ),
                       TextField(
                           onChanged: (text) {
-                            cubit.updateSelectedLocation(state.selectedLocations[0].copyWith(street: text));
+                            cubit.updateSelectedLocation(state
+                                .selectedLocations[0]
+                                .copyWith(street: text));
                           },
                           style: const TextStyle(fontSize: 18),
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 15),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                             ),
@@ -251,16 +256,18 @@ class _LocationListItem extends StatelessWidget {
                             ),
                             labelText: 'Straße',
                             border: InputBorder.none,
-
                           ),
                           keyboardType: TextInputType.name),
                       TextField(
                           onChanged: (text) {
-                            cubit.updateSelectedLocation(state.selectedLocations[0].copyWith(streetNumber: text));
+                            cubit.updateSelectedLocation(state
+                                .selectedLocations[0]
+                                .copyWith(streetNumber: text));
                           },
                           style: const TextStyle(fontSize: 18),
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 15),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                             ),
@@ -299,8 +306,7 @@ class _LocationSearchListItem extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(
-                    content: Text(("${location.place} hinzugefügt."))),
+                SnackBar(content: Text(("${location.place} hinzugefügt."))),
               );
           },
           child: Row(
