@@ -59,7 +59,7 @@ class LocationInputContent extends StatelessWidget {
                         (state is ActivityLocationPosting)
                             ? const CircularProgressIndicator()
                             : CompletePageButton(
-                          disabled: state.selectedLocations.isEmpty,
+                          disabled: (state.selectedLocations.isEmpty || (state.selectedLocations[0].streetNumber?.isEmpty ?? true) || ( state.selectedLocations[0].street?.isEmpty ?? true)),
                             isSaveButton: isInFlowContext,
                             onPressed: () async {
                               _update(state, context);
