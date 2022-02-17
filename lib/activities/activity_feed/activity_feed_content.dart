@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activities/activity_wizard_flow.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/injection.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -18,8 +20,7 @@ class ActivityFeedContent extends StatelessWidget {
     var searchFieldController = TextEditingController();
     searchFieldController.text = "Derzeit noch deaktiviert";
 
-    return Scaffold(
-      body: Padding(
+    return  Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -50,15 +51,17 @@ class ActivityFeedContent extends StatelessWidget {
                                       .read<AppUserRepository>()
                                       .getCurrentUserInformation())
                                   .name;
-                              await Navigator.of(context)
-                                  .push(ActivityWizardFlow.route(Activity(
+                              Activity activity = Activity(
                                 id: (Uuid()).v4().toString(),
                                 creatorId: context
                                     .read<AppUserRepository>()
                                     .currentUser
                                     .id,
                                 creatorName: currentUserName,
-                              ))); // ToDo: Move to domain layer
+                              );
+                              context.read<ActivityRepository>().updateActivity(activity);
+                              await Navigator.of(context)
+                                  .push(ActivityWizardFlow.route(activity)); // ToDo: Move to domain layer
                             });
                       },
                     ),
@@ -66,7 +69,6 @@ class ActivityFeedContent extends StatelessWidget {
                 )),
           ],
         ),
-      ),
-    );
+      );
   }
 }
