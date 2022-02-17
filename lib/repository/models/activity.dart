@@ -4,7 +4,7 @@ import 'package:peerpal/repository/models/location.dart';
 
 part 'activity.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Activity extends Equatable {
 
   static const empty = Activity();
