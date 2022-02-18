@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
+import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_bottom_indicator.dart';
 import 'package:peerpal/widgets/discover_user_list_item.dart';
 import 'package:provider/src/provider.dart';
@@ -47,14 +48,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Entdecken'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
-        ],
+      appBar: CustomAppBar(
+        'Entdecken',
+        hasBackButton: false,
       ),
       body: BlocBuilder<DiscoverTabBloc, DiscoverTabState>(
         builder: (context, state) {
@@ -70,7 +66,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
                   if (index >= state.users.length) {
-                    return BottomIndicator();
+                    if(index >= limit) {
+                      return BottomIndicator();
+                    } else return Container();
                   } else {
                     var user = state.users[index];
                     return DiscoverUserListItem(
