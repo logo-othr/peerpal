@@ -197,15 +197,15 @@ class AppUserRepository {
         required PeerPALUser currentUser}) {
     var query = collection
         .where(UserDatabaseContract.userAge,
-        isGreaterThanOrEqualTo: /*currentUser.discoverFromAge*/ 1)
+        isGreaterThanOrEqualTo: currentUser.discoverFromAge)
         .where(UserDatabaseContract.userAge,
-        isLessThanOrEqualTo: /*currentUser.discoverToAge*/ 120);
+        isLessThanOrEqualTo: currentUser.discoverToAge);
 
     query = query.where(UserDatabaseContract.discoverLocations,
-        arrayContainsAny: /*currentUser.discoverLocations!
+        arrayContainsAny: currentUser.discoverLocations!
             .map((e) => e.place)
-            .toList())*/
-        ['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
+            .toList());
+        //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
 
     query = query.where(UserDatabaseContract.phonePreference,
         isEqualTo: /*currentUser.discoverCommunicationPreferences!
@@ -227,6 +227,35 @@ class AppUserRepository {
 
     query = query.limit(limit);
     return query;
+  }
+
+  Stream<List<PeerPALUser>> getMatchingUsersStream(
+      {int limit = 20}) async* {
+    var currentPeerPALUser = await getCurrentUserInformation();
+
+    var publicUserCollection =
+    await _firestore.collection(UserDatabaseContract.publicUsers);
+
+    var query = _buildGetMatchingUsersQuery(
+        lastUser: null,
+        limit: limit,
+        collection: publicUserCollection,
+        currentUser: currentPeerPALUser);
+
+    var snapshots = await query.snapshots();
+    List<PeerPALUser> userList = <PeerPALUser>[];
+    await for (QuerySnapshot querySnapshot in snapshots) {
+      userList.clear();
+      querySnapshot.docs.forEach((document) {
+
+        var documentData = document.data() as Map<String, dynamic>;
+        var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
+        var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
+        var publicUser = peerPALUserDTO.toDomainObject();
+        userList.add(publicUser);
+      });
+      yield userList;
+    }
   }
 
   Future<List<PeerPALUser>> getMatchingUsers(
@@ -430,7 +459,5 @@ class AppUserRepository {
 //----------------------------------------------------
 //Friends End
 //----------------------------------------------------
-
-
 
 }
