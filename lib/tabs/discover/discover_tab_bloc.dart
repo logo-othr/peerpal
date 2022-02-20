@@ -14,8 +14,8 @@ const limit = 10;
 
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
- // StreamController<List<PeerPALUser>> _userStreamController = new BehaviorSubject();
 
+  // StreamController<List<PeerPALUser>> _userStreamController = new BehaviorSubject();
 
   DiscoverTabBloc(this._appUsersRepository) : super(DiscoverTabState());
 
@@ -23,20 +23,25 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   Stream<DiscoverTabState> mapEventToState(DiscoverTabEvent event) async* {
     if (event is UsersLoaded) {
       yield await lazyLoadUserList(state);
-
       // ToDo: Implement infinite list with streams and lazy loading
-     /*   Stream<List<PeerPALUser>> userStream =  _appUsersRepository.getMatchingUsersStream(limit: limit);
-_userStreamController.addStream(userStream);
-        yield state.copyWith(
-            status: DiscoverTabStatus.success,
-            users: _userStreamController.stream,
-            chatRequests: _userFriendRequestStreamController.stream
-        );
-*/
+      //yield lazyStreamUserList();
 
+    } else if (event is ReloadUsers) {
+      yield await lazyLoadUserList(DiscoverTabState());
     }
   }
 
+  /*
+  Stream<List<PeerPALUser>> lazyStreamUserList() {
+    Stream<List<PeerPALUser>> userStream =  _appUsersRepository.getMatchingUsersStream(limit: limit);
+          _userStreamController.addStream(userStream);
+          yield state.copyWith(
+              status: DiscoverTabStatus.success,
+              users: _userStreamController.stream,
+              chatRequests: _userFriendRequestStreamController.stream
+          );
+  }
+   */
 
   Future<DiscoverTabState> lazyLoadUserList(DiscoverTabState state) async {
     if (state.hasNoMoreUsers) return state;
