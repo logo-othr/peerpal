@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
@@ -48,6 +50,17 @@ class ActivityRepository {
     }
     return activity;
   }
+
+  Future<void> postActivity(Activity activity) async {
+    //ToDo: use toJson / toMap
+    await FirebaseFirestore.instance
+        .collection('activities')
+        .doc()
+        .set(activity.toJson());
+  }
+
+
+
 
   Future<List<Location>> loadLocations() async {
     final jsonData = await rootBundle.loadString('assets/location.json');
