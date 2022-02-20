@@ -6,3 +6,4 @@ abstract class DiscoverTabEvent extends Equatable {
 }
 
 class UsersLoaded extends DiscoverTabEvent {}
+class ReloadUsers extends DiscoverTabEvent {}
