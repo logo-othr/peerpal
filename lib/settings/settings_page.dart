@@ -7,6 +7,7 @@ import 'package:peerpal/profile_wizard_flow/pages/profile_overview/view/profile_
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/licenses_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
+import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
 import 'package:peerpal/widgets/custom_table_row.dart';
@@ -51,7 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => DiscoverInterestsOverviewPage()),
-              )
+              ).then((value) => context.read<DiscoverTabBloc>().add(ReloadUsers()))
             },
           ),
 
