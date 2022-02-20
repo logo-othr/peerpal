@@ -11,7 +11,7 @@ class CompletePageButton extends StatelessWidget {
   final bool disabled;
 
   const CompletePageButton(
-      {Key? key,  this.disabled = true, required this.isSaveButton, required this.onPressed})
+      {Key? key,  this.disabled = false, required this.isSaveButton, required this.onPressed})
       : super(key: key);
 
   @override
