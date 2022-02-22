@@ -12,8 +12,10 @@ import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_pa
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/custom_centered_info_text.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
+import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +64,6 @@ class _ChatListContentState extends State<ChatListContent> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-
         StreamBuilder<List<UserChat>>(
           stream: context.read<ChatListBloc>().state.chatRequests,
           builder:
@@ -92,25 +93,39 @@ class _ChatListContentState extends State<ChatListContent> {
                 border: Border(
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
-            child: CustomCupertinoSearchBar(searchBarController: searchFieldController)),
+            child: CustomCupertinoSearchBar(
+                searchBarController: searchFieldController)),
         Expanded(
           child: StreamBuilder<List<UserChat>>(
             stream: context.read<ChatListBloc>().state.chats,
             builder:
                 (BuildContext context, AsyncSnapshot<List<UserChat>> snapshot) {
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text("Es gibt noch keine Chats.")/* CustomPeerPALButton(
-                    text: 'Chat starten',
-                  )*/,
-                );
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CustomLoadingIndicator();
+              } else if (snapshot.connectionState == ConnectionState.active ||
+                  snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return CustomCenteredInfoText(
+                      text:
+                          'Es ist ein Fehler beim laden der Daten aufgetreten.');
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return ListView.builder(
+                    itemBuilder: (context, index) =>
+                        buildChatPartner(context, snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  );
+                } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                  return CustomCenteredInfoText(
+                      text: "Sie haben noch keine Chats gestartet.");
+                } else {
+                  return CustomCenteredInfoText(
+                      text: "Sie haben noch keine Chats gestartet.");
+                }
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildChatPartner(context, snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
-                );
+                return CustomCenteredInfoText(
+                    text:
+                        'Fehler beim laden. Status: ${snapshot.connectionState}');
               }
             },
           ),

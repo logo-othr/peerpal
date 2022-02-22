@@ -8,8 +8,10 @@ import 'package:peerpal/friends/friend_request_page/view/friend_requests_page.da
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/custom_centered_info_text.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
+import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:provider/provider.dart';
 
@@ -84,26 +86,41 @@ class FriendsOverviewContent extends StatelessWidget {
                 border: Border(
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
-            child: CustomCupertinoSearchBar(heading: null, searchBarController: searchBarController,)),
+            child: CustomCupertinoSearchBar(
+              heading: null,
+              searchBarController: searchBarController,
+            )),
         Expanded(
           child: StreamBuilder<List<dynamic>>(
             stream: context.read<FriendsOverviewCubit>().state.friends,
             builder:
                 (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text("Sie haben noch keine Freunde in der App. "),
-                  /* child: CustomPeerPALButton(
-                  text: 'Freunde finden',
-                )*/
-                   );
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CustomLoadingIndicator();
+              } else if (snapshot.connectionState == ConnectionState.active ||
+                  snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return CustomCenteredInfoText(
+                      text:
+                          'Es ist ein Fehler beim laden der Daten aufgetreten.');
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return ListView.builder(
+                    itemBuilder: (context, index) =>
+                        buildFriend(context, snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  );
+                } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                  return CustomCenteredInfoText(
+                      text: "Sie haben noch keine Freunde in der App. ");
+                } else {
+                  return CustomCenteredInfoText(
+                      text: "Sie haben noch keine Freunde in der App. ");
+                }
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildFriend(context, snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
-                );
+                return CustomCenteredInfoText(
+                    text:
+                        'Fehler beim laden. Status: ${snapshot.connectionState}');
               }
             },
           ),
@@ -112,8 +129,7 @@ class FriendsOverviewContent extends StatelessWidget {
     );
   }
 
-  Widget buildFriend(
-      BuildContext context, PeerPALUser userInformation) {
+  Widget buildFriend(BuildContext context, PeerPALUser userInformation) {
     if (userInformation != null) {
       if (userInformation.id == currentUserId) {
         return const SizedBox.shrink();
@@ -133,7 +149,8 @@ class FriendsOverviewContent extends StatelessWidget {
                           builder: (context) =>
                               UserDetailPage(userInformation.id!)));
                 },
-                child: CustomFriendListItemUser(userInformation: userInformation),
+                child:
+                    CustomFriendListItemUser(userInformation: userInformation),
               );
             }));
       }
