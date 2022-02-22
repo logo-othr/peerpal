@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_activities/cubit/discover_activities_cubit.dart';
+import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
@@ -59,39 +60,45 @@ class DiscoverActivitiesContent extends StatelessWidget {
                         controller: searchBarController,
                       ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        child: Wrap(
-                            alignment: WrapAlignment.start,
-                            children: state.activities
-                                .map(
-                                  (activity) => (activity.name
-                                          .toString()
-                                          .toLowerCase()
-                                          .startsWith(
-                                              state.searchQuery.toLowerCase()))
-                                      ? Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 20, 0),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                context
-                                                    .read<
-                                                    DiscoverActivitiesCubit>()
-                                                    .toggleData(activity);
-                                              },
-                                              child: CustomCircleListItem(
-                                                  label:
-                                                      activity.name.toString(),
-                                                  icon: Icons.directions_bike,
-                                                  active: state
-                                                      .selectedActivities
-                                                      .contains(activity))),
-                                        )
-                                      : Container(),
-                                )
-                                .toList())),
-                    const Spacer(),
+                    SizedBox(height: 10,),
+                    Expanded(
+                      child: SingleChildScrollView(
+
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[ Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  children: state.activities
+                                      .map(
+                                        (activity) => (activity.name
+                                                .toString()
+                                                .toLowerCase()
+                                                .startsWith(
+                                                    state.searchQuery.toLowerCase()))
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  context
+                                                      .read<
+                                                      DiscoverActivitiesCubit>()
+                                                      .toggleData(activity);
+                                                },
+                                                child: CustomCircleListItem(
+                                                    label:
+                                                    activity.name.toString(),
+                                                    icon: ActivityIconData
+                                                        .icons[activity.code],
+                                                    active: state
+                                                        .selectedActivities
+                                                        .contains(activity)))
+                                            : Container(),
+                                      )
+                                      .toList())),
+                        ]),
+                      ),
+                    ),
+                    SizedBox(height: 50,),
                     (state is DiscoverActivitiesPosting)
                         ? const CircularProgressIndicator()
                         : CompletePageButton(

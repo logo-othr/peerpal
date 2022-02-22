@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 
@@ -7,13 +8,14 @@ part 'discover_activitys_state.dart';
 
 class DiscoverActivitiesCubit
     extends Cubit<DiscoverActivitiesState> {
-  DiscoverActivitiesCubit(this._appUserRepository)
+  DiscoverActivitiesCubit(this._appUserRepository, this._activityRepository)
       : super(DiscoverActivitiesInitial());
   final AppUserRepository _appUserRepository;
+  final ActivityRepository _activityRepository;
 
   @override
   Future<void> loadData() async {
-    var activities = await _appUserRepository.loadActivityList();
+    var activities = await _activityRepository.loadActivityList();
     emit(DiscoverActivitiesSelected(
         activities, <Activity>[].cast<Activity>(), ''));
   }
