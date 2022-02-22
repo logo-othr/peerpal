@@ -100,9 +100,9 @@ class _ChatListContentState extends State<ChatListContent> {
                 (BuildContext context, AsyncSnapshot<List<UserChat>> snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(
-                  child: CustomPeerPALButton(
+                  child: Text("Es gibt noch keine Chats.")/* CustomPeerPALButton(
                     text: 'Chat starten',
-                  ),
+                  )*/,
                 );
               } else {
                 return ListView.builder(
