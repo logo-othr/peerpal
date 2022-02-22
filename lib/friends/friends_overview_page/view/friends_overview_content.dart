@@ -92,9 +92,11 @@ class FriendsOverviewContent extends StatelessWidget {
                 (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(
-                    child: CustomPeerPALButton(
+                  child: Text("Sie haben noch keine Freunde in der App. "),
+                  /* child: CustomPeerPALButton(
                   text: 'Freunde finden',
-                ));
+                )*/
+                   );
               } else {
                 return ListView.builder(
                   itemBuilder: (context, index) =>
