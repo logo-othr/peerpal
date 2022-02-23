@@ -87,7 +87,7 @@ class AgeInputContent extends StatelessWidget {
       await context.read<AgeInputCubit>().postData();
       context
           .flow<PeerPALUser>()
-          .complete((s) => s.copyWith(age: state.selectedAge));
+          .update((s) => s.copyWith(age: state.selectedAge));
     } else {
       await context.read<AgeInputCubit>().postData();
       Navigator.pop(context);
