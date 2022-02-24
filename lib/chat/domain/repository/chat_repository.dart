@@ -10,6 +10,8 @@ abstract class ChatRepository {
   Future<void> sendChatMessage(PeerPALUser userInformation, String? chatId, String message,
       String type);
 
+  Stream<int>  messageCountForChat(String chatId);
+
   Future<void> sendChatRequestResponse(String currentUserId, String chatPartnerId, bool response);
 
 

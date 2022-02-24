@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/chat/chat_profile_overview.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
+import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
@@ -16,6 +17,7 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
+import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/single_chat_cancel_friend_request_button.dart';
 import 'package:peerpal/widgets/single_chat_send_friend_request_button.dart';
@@ -80,8 +82,39 @@ class ChatPageContent extends StatelessWidget {
               (!state.userChat.chat.chatRequestAccepted &&
                       state.userChat.chat.startedBy != state.appUser.id)
                   ? _showChatRequestButtons(context)
-                  : singleChatTextFormField(
-                      state.chatPartner, state.userChat.chat.chatId, context),
+                  : StreamBuilder<int>(
+                      stream: sl<ChatRepository>()
+                          .messageCountForChat(state.userChat.chat.chatId),
+                      builder: (context, snapshot) {
+                        if(!snapshot.hasData) {
+                          return CustomLoadingIndicator(text: "Lade Nachrichten..");
+                        } else if(snapshot.data == 0) {
+                          return Container(
+                            width: double.infinity,
+                            height: 500,
+                            alignment: Alignment.center,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Der Chat ist nicht mehr vorhanden."),
+                                SizedBox(height: 50,),
+                                CustomPeerPALButton(text: "Zurück", onPressed: () => Navigator.pop(context),)
+                              ],
+                            ),
+                          );
+                        } else {
+                          return singleChatTextFormField(state.chatPartner,
+                              state.userChat.chat.chatId, context);
+                        }
+                        return Container();
+                        /* if (!snapshot.hasData || snapshot.data == 0) {
+
+
+                        } else {
+
+                        }*/
+                      }),
             ],
           );
         } else if (state is ChatPageChatNotExists) {
@@ -95,10 +128,13 @@ class ChatPageContent extends StatelessWidget {
               singleChatTextFormField(state.chatPartner, null, context),
             ],
           );
-        } else if(state is ChatPageError) {
-          return Container(child: Center(child: Text(state.message),),);
-        }
-        else {
+        } else if (state is ChatPageError) {
+          return Container(
+            child: Center(
+              child: Text(state.message),
+            ),
+          );
+        } else {
           return CircularProgressIndicator();
         }
       }),
@@ -123,31 +159,42 @@ class ChatPageContent extends StatelessWidget {
 // ToDo: convert to widget class
   Widget friendRequestButton(BuildContext context, PeerPALUser chatPartner) {
     return StreamBuilder<List<PeerPALUser>>(
-        stream: sl.get<AppUserRepository>().getFriendList(), // ToDo: move to correct layer
+        stream: sl.get<AppUserRepository>().getFriendList(),
+        // ToDo: move to correct layer
         builder: (context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data!.map((e) => e.id).toList().contains(chatPartner.id)) {
+            if (snapshot.data!
+                .map((e) => e.id)
+                .toList()
+                .contains(chatPartner.id)) {
               return Container();
             } else {
               return StreamBuilder<List<PeerPALUser>>(
-                  stream: sl.get<AppUserRepository>().getSentFriendRequestsFromUser(),
+                  stream: sl
+                      .get<AppUserRepository>()
+                      .getSentFriendRequestsFromUser(),
                   builder:
                       (context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.map((e) => e.id).toList()
+                      if (snapshot.data!
+                          .map((e) => e.id)
+                          .toList()
                           .contains(chatPartner.id)) {
-
-                        return SingleChatCancelFriendRequestButton(buttonText: "Anfrage gesendet", onPressed: () {
-                          sl.get<AppUserRepository>()
-                              .canceledFriendRequest(
-                              chatPartner);
-                        });
+                        return SingleChatCancelFriendRequestButton(
+                            buttonText: "Anfrage gesendet",
+                            onPressed: () {
+                              sl
+                                  .get<AppUserRepository>()
+                                  .canceledFriendRequest(chatPartner);
+                            });
                       } else {
-                        return SingleChatSendFriendRequestButton(buttonText: "Anfrage senden", onPressed: () {
-                          sl.get<AppUserRepository>()
-                              .sendFriendRequestToUser(
-                              chatPartner);
-                        });
+                        return SingleChatSendFriendRequestButton(
+                            buttonText: "Anfrage senden",
+                            onPressed: () {
+                              sl
+                                  .get<AppUserRepository>()
+                                  .sendFriendRequestToUser(chatPartner);
+                            });
                       }
                     } else {
                       return Container();
@@ -159,6 +206,7 @@ class ChatPageContent extends StatelessWidget {
           }
         });
   }
+
   /*
 
               */
@@ -279,7 +327,7 @@ class ChatPageContent extends StatelessWidget {
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
             /* newGroupChatId = uuid.v4().toString();*/
-            return Container(child: Text("Daten sind leer"));
+            return Container(height: 100, alignment: Alignment.center,child: Text("Keine Nachrichten gefunden"));
           }
           return ListView.builder(
             padding: const EdgeInsets.all(10.0),
@@ -351,12 +399,16 @@ class ChatPageContent extends StatelessWidget {
         children: [
           CustomPeerPALButton(
             text: "Annehmen",
-            onPressed: () => context.read<ChatPageBloc>().add(SendChatRequestResponseButtonPressed(true)),
+            onPressed: () => context
+                .read<ChatPageBloc>()
+                .add(SendChatRequestResponseButtonPressed(true)),
           ),
           SizedBox(height: 8),
           CustomPeerPALButton(
             text: "Ablehnen",
-            onPressed: () => context.read<ChatPageBloc>().add(SendChatRequestResponseButtonPressed(false)),
+            onPressed: () => context
+                .read<ChatPageBloc>()
+                .add(SendChatRequestResponseButtonPressed(false)),
           ),
         ],
       ),

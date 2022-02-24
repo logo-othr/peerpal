@@ -83,6 +83,13 @@ print("Chat-Change");
     });
   }
 
+
+  Stream<int> messageCountForChat(chatId) async* {
+    await for (var messageList in getChatMessagesForChat(chatId)) {
+      yield messageList.length;
+    }
+  }
+
   Stream<List<ChatMessage>> getChatMessagesForChat(chatId) async* {
     Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
         .collection('chats')
