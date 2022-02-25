@@ -19,26 +19,28 @@ class GetUserChatForChat {
       userChats.clear();
       for (Chat chat in chatList) {
         if(chat.chatRequestAccepted == true) {
-          userChats = await addChats(chat, appUserId);
+          UserChat userChat = await chatToUserChat(chat, appUserId);
+          userChats.add(userChat);
         } else if(chat.chatRequestAccepted == false &&
             chat.startedBy == appUserId) {
-          userChats = await addChats(chat, appUserId);
+          UserChat userChat = await chatToUserChat(chat, appUserId);
+          userChats.add(userChat);
         } else if(filter == false) {
-          userChats = await addChats(chat, appUserId);
+          UserChat userChat = await chatToUserChat(chat, appUserId);
+          userChats.add(userChat);
         }
-        yield userChats;
+
       }
+      yield userChats;
     }
   }
 
-  Future<List<UserChat>> addChats(Chat chat, String appUserId) async {
-    List<UserChat> userChats = <UserChat>[];
+  Future<UserChat> chatToUserChat(Chat chat, String appUserId) async {
     List<String> userIds = chat.uids;
     userIds.remove(appUserId);
     PeerPALUser peerPALUser =
         await appUserRepository.getUserInformation(userIds.first);
     UserChat userChat = UserChat(chat: chat, user: peerPALUser);
-    userChats.add(userChat);
-    return userChats;
+    return userChat;
   }
 }
