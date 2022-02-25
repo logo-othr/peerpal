@@ -8,7 +8,7 @@ import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_activity_header_card.dart';
-import 'package:peerpal/widgets/custom_singel_location_table_view.dart';
+import 'package:peerpal/widgets/custom_single_location_table_view.dart';
 import 'package:peerpal/widgets/custom_single_creator_table_view.dart';
 import 'package:peerpal/widgets/custom_single_description_table_view.dart';
 import 'package:peerpal/widgets/custom_single_participants_table_view.dart';
