@@ -96,7 +96,7 @@ class FriendsOverviewContent extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CustomLoadingIndicator();
+                return CustomLoadingIndicator(text: "Daten werden geladen...");
               } else if (snapshot.connectionState == ConnectionState.active ||
                   snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
