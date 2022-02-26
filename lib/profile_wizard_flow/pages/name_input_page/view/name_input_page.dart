@@ -10,7 +10,7 @@ class NameInputPage extends StatelessWidget {
   final bool isInFlowContext;
   final String pastName;
 
-  NameInputPage({required this.isInFlowContext,this.pastName="Name"});
+  NameInputPage({required this.isInFlowContext,this.pastName=''});
 
   static MaterialPage<void> page({required bool isInFlowContext}) {
     return MaterialPage<void>(
