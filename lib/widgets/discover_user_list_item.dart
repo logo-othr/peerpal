@@ -116,12 +116,15 @@ class DiscoverUserListItem extends StatelessWidget {
   }
 
   Widget _Avatar(String imageURL) {
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Container(
           child: CircleAvatar(
             radius: 30,
-            child: Image.network(imageURL),
+            child: ClipOval(
+                child:
+                Image.network(imageLink!)),
             backgroundColor: Colors.white,
           ),
           decoration: new BoxDecoration(
@@ -130,7 +133,7 @@ class DiscoverUserListItem extends StatelessWidget {
               color: primaryColor,
               width: 4,
             ),
-          )),
+          ))
     );
   }
 }
