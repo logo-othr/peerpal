@@ -30,7 +30,7 @@ class UserDetailContent extends StatelessWidget {
             'Profil',
             hasBackButton: true,
           ),
-          body: state.status != UserDetailStatus.success ? CircularProgressIndicator() : Center(
+          body: state.status != UserDetailStatus.success ? Center(child: CircularProgressIndicator()) : Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
               child: Column(
