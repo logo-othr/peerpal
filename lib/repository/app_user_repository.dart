@@ -15,6 +15,8 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/repository/models/peerpal_user_dto.dart';
 import 'package:peerpal/repository/models/private_user_information_dto.dart';
 import 'package:peerpal/repository/models/public_user_information_dto.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});
@@ -84,6 +86,35 @@ class AppUserRepository {
     }
   }
 
+
+
+Future<void> registerFCMDeviceToken() async{
+  var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+  await FirebaseMessaging.instance.getToken().then((token) {
+    print("user-id: $currentUserId");
+    print('pushToken: $token');
+    FirebaseFirestore.instance
+        .collection('privateUserData')
+        .doc(currentUserId)
+        .update({'pushToken': token});
+  }).catchError((err) {
+    print(err.message.toString());
+    print("Error while creating push noticiation");
+  });
+
+}
+  Future<void> unregisterFCMDeviceToken() async{
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    print("delete device push token");
+    FirebaseFirestore.instance
+        .collection('privateUserData')
+        .doc(currentUserId)
+        .update({'pushToken': null});
+  }
+
+
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
@@ -116,6 +147,8 @@ class AppUserRepository {
     } on Exception {
       throw LoginException();
     }
+
+    await registerFCMDeviceToken();
   }
 
   Future<void> logout() async {
@@ -127,6 +160,7 @@ class AppUserRepository {
     } on Exception {
       throw LogoutException();
     }
+    await unregisterFCMDeviceToken();
   }
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser,
