@@ -7,87 +7,77 @@ import '../../colors.dart';
 class CustomActivityOverviewHeaderCard extends StatelessWidget {
   CustomActivityOverviewHeaderCard(
       {required this.heading,
-      required this.icon,
-      required this.isActive,
-      required this.onActive,
-      required this.onInactive});
+        required this.icon,
+        required this.isActive,
+        required this.onActive,
+        required this.onInactive});
 
   final IconData icon;
   final String heading;
   final VoidCallback onActive;
   final VoidCallback onInactive;
   final bool isActive;
-
   bool isSwitched = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: 100,
         decoration: BoxDecoration(
             color: Colors.white,
             border:
-                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                children: [
-                  Container(
-                      child: CircleAvatar(
-                        radius: 35,
-                        child: Icon(
-                          icon,
-                          size: 50,
-                          color: Colors.black,
-                        ),
-                        backgroundColor: Colors.white,
-                      ),
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: new Border.all(
-                          color: primaryColor,
-                          width: 2.0,
-                        ),
-                      )),
-                  SizedBox(
-                    width: 20,
+            Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Container(
+                  child: CircleAvatar(
+                    radius: 35,
+                    child: Icon(
+                      icon,
+                      size: 50,
+                      color: Colors.black,
+                    ),
+                    backgroundColor: Colors.white,
                   ),
-                  CustomPeerPALHeading2(heading),
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: new Border.all(
+                      color: primaryColor,
+                      width: 2.0,
+                    ),
+                  )),
+              Container(
+                width: 120,
+                child: CustomPeerPALHeading3(fontSize: 20,fontWeight: FontWeight.bold, text: heading),
+              ),
+              //CustomPeerPALHeading2(heading),
+              VerticalDivider(thickness: 1, color: secondaryColor),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
+                    child: CustomPeerPALHeading4('ÖFFENTLICH'),
+                  ),
+                  //CustomPeerPALHeading4(),
+                  Switch(
+                    value: isActive,
+                    onChanged: (value) async {
+                      if (value) {
+                        onActive();
+                      } else {
+                        onInactive();
+                      }
+                    },
+                    activeTrackColor: secondaryColor,
+                    activeColor: primaryColor,
+                  ),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                Container(
-                    height: 115,
-                    child:
-                        VerticalDivider(thickness: 1, color: secondaryColor)),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      CustomPeerPALHeading4('ÖFFENTLICH'),
-                      Switch(
-                        value: isActive,
-                        onChanged: (value) async {
-                          if (isActive) {
-                            onActive();
-                          } else {
-                            onInactive();
-                          }
-                        },
-                        activeTrackColor: secondaryColor,
-                        activeColor: primaryColor,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ));
   }
 }
