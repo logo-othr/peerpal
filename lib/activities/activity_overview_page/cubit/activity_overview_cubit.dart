@@ -30,18 +30,21 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
     emit(ActivityOverviewLoaded(activity, activityCreator, attendees));
   }
 
-  setActivityToPublic() {
-    state.activity.copyWith(public: true);
-    _activityRepository.updateActivity(state.activity);
+  setActivityToPublic() async {
+    var updatedActivity = state.activity.copyWith(public: true);
+    await _activityRepository.updateActivity(updatedActivity);
+    emit(ActivityOverviewLoaded(
+        updatedActivity, state.activityCreator, state.attendees));
   }
 
-  setActivityToPrivate() {
-    state.activity.copyWith(public: false);
-    _activityRepository.updateActivity(state.activity);
+  setActivityToPrivate() async {
+    var updatedActivity = state.activity.copyWith(public: false);
+    await _activityRepository.updateActivity(updatedActivity);
+    emit(ActivityOverviewLoaded(
+        updatedActivity, state.activityCreator, state.attendees));
   }
 
   Future<void> postData() async {
     await _activityRepository.postActivity(state.activity);
   }
-
 }
