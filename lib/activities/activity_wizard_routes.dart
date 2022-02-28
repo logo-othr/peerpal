@@ -6,7 +6,6 @@ import 'activity_date/view/activity_date_input_page.dart';
 import 'activity_invitation/view/activity_invitation_input_page.dart';
 import 'activity_location/view/activity_location_input_page.dart';
 import 'activity_overview_page/view/activity_overview_input_page.dart';
-import 'activity_pinboard/view/activity_pinboard_input_page.dart';
 
 List<Page> onGenerateActivityWizardPages(
     Activity activityFlowState, List<Page<dynamic>> pages) {
