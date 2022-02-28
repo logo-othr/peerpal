@@ -10,19 +10,21 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/models/activity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 
+final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 void configLocalNotification() {
   final AndroidInitializationSettings initializationSettingsAndroid =
-  const AndroidInitializationSettings('@mipmap/ic_launcher');
+      const AndroidInitializationSettings('@mipmap/ic_launcher');
 
   final IOSInitializationSettings initializationSettingsIOS =
-  const IOSInitializationSettings();
+      const IOSInitializationSettings();
 
   final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -30,19 +32,18 @@ void configLocalNotification() {
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-
 void showNotification(RemoteNotification remoteNotification) async {
   const NotificationDetails platformChannelSpecifics =
-  const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'app_notification',
-        'app_notification_channel',
-        'Channel for all app notifications',
-        playSound: true,
-        priority: Priority.high,
-        importance: Importance.max,
-      ),
-      iOS: IOSNotificationDetails());
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'app_notification',
+            'app_notification_channel',
+            'Channel for all app notifications',
+            playSound: true,
+            priority: Priority.high,
+            importance: Importance.max,
+          ),
+          iOS: IOSNotificationDetails());
 
   print(remoteNotification);
 
@@ -64,32 +65,53 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   return;
 }
 
+Future<void> _firebaseMessagingInAppHandler(RemoteMessage message) async {
+  print("Handling in App message ${message.data}");
+  print('onMessage: $message');
+  if (message.notification != null) {
+    showNotification(message.notification!);
+  }
+  return;
+}
+
+Future<void> _firebaseMessagingOnOpenAppHandler(RemoteMessage message) async {
+  print("Handling on open App message ${message.data}");
+  print('onLaunch: $message');
+  if (message.notification != null) {
+    showNotification(message.notification!);
+  }
+  return;
+}
+
 Future<void> main() async {
   Bloc.observer = AppBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  firebaseMessaging.requestPermission();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(_firebaseMessagingInAppHandler);
+  FirebaseMessaging.onMessageOpenedApp
+      .listen(_firebaseMessagingOnOpenAppHandler);
   configLocalNotification();
-
   await init();
-
-
 
   final authenticationRepository = sl<AppUserRepository>();
   await authenticationRepository.user.first;
+
 
   //await DebugHelper.createExampleUsers(appUserRepository: authenticationRepository, emailBase:  'pptestmailbase234', password: 'Abc12345678*');
   runApp(App());
 }
 
-
 class App extends StatelessWidget {
-  const App({
+  App({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(
