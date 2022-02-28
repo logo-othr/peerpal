@@ -55,9 +55,9 @@ async function handleChatNotification(db) {
 
               //The searchForChatIdInMap()-Method will be deleted in the future.
               //Why this method exists at the moment.
-              //UseCase:
+              //UseCase: 
               //The user sends a message before the chat is loaded.
-              //A new chat would now be created even though the chat already exists.
+              //A new chat would now be created even though the chat already exists. 
               //However, this method checks if the chat already exists.
               var chatId = searchForChatIdInMap(change);
 
@@ -92,12 +92,17 @@ async function handleChatNotification(db) {
               }
             }
             if (change.doc.data().chatId != null) {
+
               var chatId = change.doc.data().chatId;
               db.collection(`chats`).where('chatId', '==', chatId).get()
                 .then((documentQuerySnapshot) => {
                   if (documentQuerySnapshot.empty) {
                     console.log('handleChatNotification() No matching documents');
-                    db.collection(`chatNotifications`).doc(change.doc.id).delete();
+
+                    db.collection(`chatNotifications`).doc(change.doc.id).delete()
+                    .then(response => { console.log('Successfully delete chatNotification:', response) })
+                    .catch(error => { console.log('Error deleting chatNotification:', error) });
+
                     return;
                   }
                   documentQuerySnapshot.forEach(doc => {
@@ -118,11 +123,13 @@ async function handleChatNotification(db) {
                       }
                     }
                     sendPushNotification(change, db, payload);
-                    db.collection(`chatNotifications`).doc(change.doc.id).delete();
+
+                    db.collection(`chatNotifications`).doc(change.doc.id).delete()
+                    .then(response => { console.log('Successfully delete chatNotification:', response) })
+                    .catch(error => { console.log('Error deleting chatNotification:', error) });
+                    
                   });
-                }).catch(error => {
-                  console.log('handleChatNotification() error message:', error);
-                });
+                }).catch(error => {console.log('handleChatNotification() error message:', error);});
             }
           }
           else {
@@ -171,38 +178,54 @@ async function handleChatRequestResponse(db) {
           if (change.doc.data().response) {
             db.collection('chats').where('uids', 'array-contains', change.doc.data().fromId).where('startedBy', '==', change.doc.data().toId).get()
               .then((documentQuerySnapshot) => {
+
                 if (documentQuerySnapshot.empty) {
                   console.log('handleChatRequestResponse() No matching documents');
-                  db.collection(`chatRequestResponse`).doc(change.doc.id).delete();
+
+                  db.collection(`chatRequestResponse`).doc(change.doc.id).delete()
+                    .then(response => { console.log('Successfully delete chatRequestResponse:', response) })
+                    .catch(error => { console.log('Error deleting chatRequestResponse:', error) });
+
                   return;
                 }
-                db.collection(`chatRequestResponse`).doc(change.doc.id).delete();
+                db.collection(`chatRequestResponse`).doc(change.doc.id).delete()
+                  .then(response => { console.log('Successfully delete chatRequestResponse:', response) })
+                  .catch(error => { console.log('Error deleting chatRequestResponse:', error) });
+
+
                 documentQuerySnapshot.forEach(doc => {
+
                   db.collection(`chats`).doc(doc.id).update({
                     'chatRequestAccepted': true,
-                  });
+                  }).then(response => { console.log('Successfully update chatRequestAccepted:', response) })
+                    .catch(error => { console.log('Error updating chatRequestAccepted:', error) });
+
+
                   var chatId = doc.id
                   if (chatIds.has(chatId)) {
                     var chatProptertiesArray = chatIds.get(chatId)
                     const index = chatProptertiesArray.indexOf(false);
-                    //Löscht den Eintrag des chatProptertiesArray an Stelle "index" und updated das Array an "index"
+                    //Löscht den Eintrag des chatProptertiesArray an Stelle "index" und updated das Array an "index" 
                     if (index > -1) {
                       chatProptertiesArray.splice(index, 1);
                       chatProptertiesArray.push(true);
                       chatIds.set(chatId, chatProptertiesArray);
                     }
                   }
-                })
+                });
               }).catch(error => {
                 console.log('handleChatRequestResponse() error message:', error);
               });
           }
           else {
             deleteMessageRequest(change.doc.data().fromId, change.doc.data().toId);
-            db.collection(`chatRequestResponse`).doc(change.doc.id).delete();
+
+            db.collection(`chatRequestResponse`).doc(change.doc.id).delete()
+              .then(response => { console.log('Successfully delete chatRequestResponse:', response) })
+              .catch(error => { console.log('Error deleting chatRequestResponse:', error) });
           }
         }
-      })
+      });
     })
 }
 
@@ -212,12 +235,18 @@ function deleteMessageRequest(fromId, toId) {
   killrequest_query.get().then(function (querySnapshot) {
     querySnapshot.forEach(function (doc) {
       console.log("delete collection: ", db.collection('chats').doc(doc.id).collection('messages').path);
-      deleteCollection(db.collection('chats').doc(doc.id).collection('messages').path);
+
+      deleteCollection(db.collection('chats').doc(doc.id).collection('messages').path)
+
       console.log("delete document: ", doc.ref.path);
-      doc.ref.delete();
+
+      doc.ref.delete()
+        .then(response => { console.log('Successfully delete document:', response) })
+        .catch(error => { console.log('Error deleting document:', error) });
+
       deleteChatIdInLocalMap(doc.id);
     });
-  });
+  }).catch(error => { console.log('Error getting killrequest_query:', error) });
 }
 
 function deleteChatIdInLocalMap(chatId) {
@@ -230,7 +259,8 @@ function deleteCollection(path) {
     val.map((val) => {
       val.delete()
     })
-  })
+  }).then(response => { console.log('Successfully delete Collection:', response) })
+    .catch(error => { console.log('Error deleting Collection:', error) });
 }
 
 async function handleCanceledFriendRequests(db) {
@@ -247,9 +277,17 @@ async function handleCanceledFriendRequests(db) {
           console.log('|------canceledFriendRequests()------|');
           console.log(change.doc.id, '=>', change.doc.data());
 
-          db.collection(`/privateUserData/${change.doc.data().fromId}/sentFriendRequests`).doc(change.doc.data().toId).delete();
-          db.collection(`/privateUserData/${change.doc.data().toId}/friendRequests`).doc(change.doc.data().fromId).delete();
-          db.collection(`canceledFriendRequests`).doc(change.doc.id).delete();
+          db.collection(`/privateUserData/${change.doc.data().fromId}/sentFriendRequests`).doc(change.doc.data().toId).delete()
+            .then(response => { console.log('Successfully delete sentFriendRequest:', response) })
+            .catch(error => { console.log('Error deleting sentFriendRequest:', error) });
+
+          db.collection(`/privateUserData/${change.doc.data().toId}/friendRequests`).doc(change.doc.data().fromId).delete()
+            .then(response => { console.log('Successfully delete friendRequest:', response) })
+            .catch(error => { console.log('Error deleting friendRequest:', error) });
+
+          db.collection(`canceledFriendRequests`).doc(change.doc.id).delete()
+            .then(response => { console.log('Successfully delete canceledFriendRequest:', response) })
+            .catch(error => { console.log('Error deleting canceledFriendRequest:', error) });
         }
       });
     });
@@ -269,9 +307,18 @@ async function handleFriendRequestNotification(db) {
           console.log('|------handleFriendRequestNotification()------|');
           console.log(change.doc.id, '=>', change.doc.data());
 
-          db.collection(`/privateUserData/${change.doc.data().toId}/friendRequests`).doc(change.doc.data().fromId).set({});
-          db.collection(`/privateUserData/${change.doc.data().fromId}/sentFriendRequests`).doc(change.doc.data().toId).set({});
-          db.collection(`friendRequestNotifications`).doc(change.doc.id).delete();
+          db.collection(`/privateUserData/${change.doc.data().toId}/friendRequests`).doc(change.doc.data().fromId).set({})
+            .then(response => { console.log('Successfully set friendRequests:', response) })
+            .catch(error => { console.log('Error setting friendRequests:', error) });
+
+
+          db.collection(`/privateUserData/${change.doc.data().fromId}/sentFriendRequests`).doc(change.doc.data().toId).set({})
+            .then(response => { console.log('Successfully set sentFriendRequest:', response) })
+            .catch(error => { console.log('Error setting sentFriendRequest:', error) });
+
+          db.collection(`friendRequestNotifications`).doc(change.doc.id).delete()
+            .then(response => { console.log('Successfully delete friendRequestNotification:', response) })
+            .catch(error => { console.log('Error deleting friendRequestNotification:', error) });
 
           var userName = getNameFromUser(db, change);
 
@@ -334,20 +381,42 @@ async function handleFriendRequestResponse(db) {
 }
 
 function denyFriendRequest(denyFriendRequestSenderId, friendRequestSenderId, requestId) {
-  db.collection(`/${PRIVATE_USER_DATA_COLLECTION}/${denyFriendRequestSenderId}/friendRequests`).doc(friendRequestSenderId).delete();
-  db.collection(`/${PRIVATE_USER_DATA_COLLECTION}/${friendRequestSenderId}/sentFriendRequests`).doc(denyFriendRequestSenderId).delete();
-  db.collection(FRIEND_REQUEST_RESPONSE_COLLECTION).doc(requestId).delete();
+  db.collection(`/${PRIVATE_USER_DATA_COLLECTION}/${denyFriendRequestSenderId}/friendRequests`).doc(friendRequestSenderId).delete()
+    .then(response => { console.log('Successfully delete friendRequestSenderId:', response) })
+    .catch(error => { console.log('Error deleting friendRequestSenderId:', error) });
+
+  db.collection(`/${PRIVATE_USER_DATA_COLLECTION}/${friendRequestSenderId}/sentFriendRequests`).doc(denyFriendRequestSenderId).delete()
+    .then(response => { console.log('Successfully delete denyFriendRequestSenderId:', response) })
+    .catch(error => { console.log('Error deleting denyFriendRequestSenderId:', error) });
+
+  db.collection(FRIEND_REQUEST_RESPONSE_COLLECTION).doc(requestId).delete()
+    .then(response => { console.log('Successfully delete requestId:', response) })
+    .catch(error => { console.log('Error deleting requestId:', error) });
 }
 
 function acceptFriendRequest(acceptFriendRequestSenderId, friendRequestSenderId, friendRequestId, documentId) {
   console.log(documentId, '==', acceptFriendRequestSenderId);
   if (documentId == acceptFriendRequestSenderId) {
     // ToDo: use transaction?
-    db.collection(`/privateUserData/${friendRequestSenderId}/friends`).doc(acceptFriendRequestSenderId).set({'friendId': acceptFriendRequestSenderId});
-    db.collection(`/privateUserData/${acceptFriendRequestSenderId}/friends`).doc(friendRequestSenderId).set({'friendId': friendRequestSenderId});
-    db.collection(`/privateUserData/${acceptFriendRequestSenderId}/friendRequests`).doc(friendRequestSenderId).delete();
-    db.collection(`/privateUserData/${friendRequestSenderId}/${SENT_FRIEND_REQUESTS_COLLECTION}`).doc(acceptFriendRequestSenderId).delete();
-    db.collection(FRIEND_REQUEST_RESPONSE_COLLECTION).doc(friendRequestId).delete();
+    db.collection(`/privateUserData/${friendRequestSenderId}/friends`).doc(acceptFriendRequestSenderId).set({ 'friendId': acceptFriendRequestSenderId })
+      .then(response => { console.log('Successfully set friendId:', response) })
+      .catch(error => { console.log('Error setting friendId:', error) });
+
+    db.collection(`/privateUserData/${acceptFriendRequestSenderId}/friends`).doc(friendRequestSenderId).set({ 'friendId': friendRequestSenderId })
+      .then(response => { console.log('Successfully set friendId:', response) })
+      .catch(error => { console.log('Error setting friendId:', error) });
+
+    db.collection(`/privateUserData/${acceptFriendRequestSenderId}/friendRequests`).doc(friendRequestSenderId).delete()
+      .then(response => { console.log('Successfully delete friendRequestSenderId:', response) })
+      .catch(error => { console.log('Error deleting friendRequestSenderId:', error) });
+
+    db.collection(`/privateUserData/${friendRequestSenderId}/${SENT_FRIEND_REQUESTS_COLLECTION}`).doc(acceptFriendRequestSenderId).delete()
+      .then(response => { console.log('Successfully delete acceptFriendRequestSenderId:', response) })
+      .catch(error => { console.log('Error deleting acceptFriendRequestSenderId:', error) });
+
+    db.collection(FRIEND_REQUEST_RESPONSE_COLLECTION).doc(friendRequestId).delete()
+      .then(response => { console.log('Successfully delete friendRequestId:', response) })
+      .catch(error => { console.log('Error deleting friendRequestId:', error) });
   }
 
 }
@@ -370,11 +439,9 @@ function searchForChatIdInMap(change) {
       chatId = existingChatId;
       breakForEach = true;
     }
-  })
-
+  });
   return chatId;
 }
-
 
 
 function createNewChat(db, newChatId, change) {
@@ -428,15 +495,13 @@ function createNewChat(db, newChatId, change) {
 
         createChatCollectionInDatabase(db, newChatId, change, chatRequestAccepted);
 
-      })
-  }).catch(error => {
-    console.log('createNewChat() error message:', error);
-  })
+      });
+    }).catch(error => {console.log('createNewChat() error message:', error);})
 
 }
 
 
-function createChatCollectionInDatabase(db, newChatId, change, chatRequestAccepted){
+function createChatCollectionInDatabase(db, newChatId, change, chatRequestAccepted) {
 
   db.collection(`chats`).doc(newChatId).set({
     uids: [
@@ -453,7 +518,8 @@ function createChatCollectionInDatabase(db, newChatId, change, chatRequestAccept
     'startedBy': change.doc.data().fromId,
     'chatId': newChatId,
     'chatRequestAccepted': chatRequestAccepted,
-  });
+  }).then(response => {console.log('Successfully wrote new Chatdocument:', response)})
+    .catch(error => {console.log('Error writting new Chatdocument:', error)});
 
   db.collection(`/chats/${newChatId}/messages`).doc(change.doc.id).set(
     {
@@ -462,43 +528,41 @@ function createChatCollectionInDatabase(db, newChatId, change, chatRequestAccept
       'message': change.doc.data().message,
       'type': change.doc.data().type,
     }
-  );
+  ).then(response => {console.log('Successfully wrote message:', response)})
+    .catch(error => {console.log('Error writting message:', error)});
 
-  db.collection(`chatNotifications`).doc(change.doc.id).delete();
+  db.collection(`chatNotifications`).doc(change.doc.id).delete()
+    .then(response => {console.log('Successfully delete chatNotification:', response)})
+    .catch(error => {console.log('Error deleting chatNotification:', error)});
 }
 
 
 function updateChat(db, chatId, change) {
-  try {
-    db.collection(`chats`).doc(chatId).update({
-      lastMessage: {
-        'userId': change.doc.data().fromId,
-        'timestamp': change.doc.data().timestamp,
-        'message': change.doc.data().message,
-        'type': change.doc.data().type,
-      },
-      'lastUpdated': change.doc.data().timestamp,
-    });
-  } catch (error) {
-    console.log('updateChat() error message:', error);
-  }
-  try {
-    db.collection(`/chats/${chatId}/messages`).doc(change.doc.id).set(
-      {
-        'userId': change.doc.data().fromId,
-        'timestamp': change.doc.data().timestamp,
-        'message': change.doc.data().message,
-        'type': change.doc.data().type,
-      }
-    );
-  } catch (error) {
-    console.log('updateChat() error message:', error);
-  }
-  try {
-    db.collection(`chatNotifications`).doc(change.doc.id).delete();
-  } catch (error) {
-    console.log('updateChat() error message:', error);
-  }
+
+  db.collection(`chats`).doc(chatId).update({
+    lastMessage: {
+      'userId': change.doc.data().fromId,
+      'timestamp': change.doc.data().timestamp,
+      'message': change.doc.data().message,
+      'type': change.doc.data().type,
+    },
+    'lastUpdated': change.doc.data().timestamp,
+  }).then(response => {console.log('Successfully update Chat:', response)})
+  .catch(error => {console.log('Error updating Chat:', error)});
+
+  db.collection(`/chats/${chatId}/messages`).doc(change.doc.id).set(
+    {
+      'userId': change.doc.data().fromId,
+      'timestamp': change.doc.data().timestamp,
+      'message': change.doc.data().message,
+      'type': change.doc.data().type,
+    }
+  ).then(response => { console.log('Successfully wrote message:', response) })
+    .catch(error => { console.log('Error writting message:', error) });
+
+  db.collection(`chatNotifications`).doc(change.doc.id).delete()
+    .then(response => { console.log('Successfully delete chatNotification:', response) })
+    .catch(error => { console.log('Error deleting chatNotification:', error) });
 
 }
 
@@ -523,9 +587,7 @@ function getNameFromUser(db, change) {
         return userName;
 
       })
-      .catch(error => {
-        console.log('getNameFromUser() error message:', error);
-      })
+      .catch(error => { console.log('getNameFromUser() error message:', error); })
   }
 
 }
@@ -539,12 +601,8 @@ function sendPushNotification(change, db, payload) {
     var deviceToken = deviceTokens.get(change.doc.data().toId);
     console.log(`deviceToken: ${deviceToken}`);
     admin.messaging().sendToDevice(deviceToken, payload)
-      .then(response => {
-        console.log('Successfully sent message:', response)
-      })
-      .catch(error => {
-        console.log('Error sending message:', error)
-      })
+      .then(response => { console.log('Successfully sent message:', response) })
+      .catch(error => { console.log('Error sending message:', error) })
   }
   else {
     db
@@ -559,24 +617,10 @@ function sendPushNotification(change, db, payload) {
         admin.messaging().sendToDevice(deviceToken, payload)
           .then(response => {
             console.log('Successfully sent message:', response)
-          })
-          .catch(error => {
-            console.log('Error sending message:', error)
-          })
+          }).catch(error => { console.log('Error sending message:', error) })
       })
       .catch(error => {
         console.log('sendPushNotification() error message:', error);
       })
   }
 }
-
-
-
-
-
-
-
-
-
-
-
