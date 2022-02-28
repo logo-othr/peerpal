@@ -22,7 +22,8 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   Future<void> pickProfilePictureFromGallery() async {
     var profilePicture =
     (await ImagePicker().pickImage(source: ImageSource.gallery))!;
-    File? croppedImage = await ImageCropper.cropImage(
+     ImageCropper imageCropper = ImageCropper();
+    File? croppedImage = await imageCropper.cropImage(
       sourcePath: profilePicture.path,
       aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       aspectRatioPresets: [CropAspectRatioPreset.original],
@@ -52,7 +53,8 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   Future<void> pickProfilePictureFromCamera() async {
     var profilePicture =
         ((await ImagePicker().pickImage(source: ImageSource.camera)))!;
-    File? croppedImage = await ImageCropper.cropImage(
+    ImageCropper imageCropper = ImageCropper();
+    File? croppedImage = await imageCropper.cropImage(
       sourcePath: profilePicture.path,
       aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       aspectRatioPresets: [CropAspectRatioPreset.ratio5x3],
