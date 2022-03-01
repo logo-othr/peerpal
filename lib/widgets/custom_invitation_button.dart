@@ -6,22 +6,24 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 class CustomInvitationButton extends StatelessWidget {
   CustomInvitationButton(
       {Key? key,
-        required this.length,
-        required this.text,
-        required this.icon,
-        required this.header})
+      required this.length,
+      required this.text,
+      required this.icon,
+      this.header,
+      this.small = false})
       : super(key: key);
   String length;
   String text;
   IconData icon;
-  String header;
+  String? header;
+  bool small;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          height: 80,
+          height: small ? 60 : 80,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
@@ -35,10 +37,10 @@ class CustomInvitationButton extends StatelessWidget {
                 child: Icon(
                   icon,
                   color: primaryColor,
-                  size: 30,
+                  size: small? 22: 30,
                 ),
               ),
-              CustomPeerPALHeading2(text, color: primaryColor),
+              small? CustomPeerPALHeading3(text: text, fontSize: 18, fontWeight: FontWeight.bold, color: primaryColor,) : CustomPeerPALHeading2(text, color: primaryColor),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                 child: Container(
@@ -46,7 +48,7 @@ class CustomInvitationButton extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Colors.red,
                   ),
-                  child:  Padding(
+                  child: Padding(
                     padding: const EdgeInsets.all(7.0),
                     child: Text(
                       length,
@@ -57,25 +59,26 @@ class CustomInvitationButton extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ),
               )
             ],
           ),
         ),
-        SizedBox(
-          height: 40,
-          child: Center(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                child:
-                CustomPeerPALHeading3(text: header, color: secondaryColor),
-              ),
-            ),
-          ),
-        ),
+        header != null
+            ? SizedBox(
+                height: 40,
+                child: Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: CustomPeerPALHeading3(
+                          text: header!, color: secondaryColor),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }
