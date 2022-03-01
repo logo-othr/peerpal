@@ -9,6 +9,7 @@ import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
@@ -399,16 +400,22 @@ class ChatPageContent extends StatelessWidget {
         children: [
           CustomPeerPALButton(
             text: "Annehmen",
-            onPressed: () => context
+            onPressed: () {
+             context
                 .read<ChatPageBloc>()
-                .add(SendChatRequestResponseButtonPressed(true)),
+                .add(SendChatRequestResponseButtonPressed(true));
+            Navigator.pop(context);}
           ),
           SizedBox(height: 8),
           CustomPeerPALButton(
             text: "Ablehnen",
-            onPressed: () => context
-                .read<ChatPageBloc>()
-                .add(SendChatRequestResponseButtonPressed(false)),
+              onPressed: () {
+                context
+                    .read<ChatPageBloc>()
+                    .add(SendChatRequestResponseButtonPressed(false));
+               // context.read<ChatListBloc>().add(ChatListLoaded());
+              //  Navigator.pop(context);
+       }
           ),
         ],
       ),
