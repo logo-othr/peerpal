@@ -12,10 +12,10 @@ class CustomSingleDescriptionTable extends StatelessWidget {
   String? description;
   bool? isEditingModus = false;
   VoidCallback? onPressed;
+  TextEditingController? textEditingController;
 
-  CustomSingleDescriptionTable({this.heading, this.description, this.onPressed, this.isEditingModus});
+  CustomSingleDescriptionTable({this.heading, this.description, this.onPressed, this.isEditingModus, this.textEditingController});
 
-  get nameController => null;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class CustomSingleDescriptionTable extends StatelessWidget {
                 child: TextField(
                   readOnly: isEditingModus! ? false : true,
                   style: TextStyle(fontSize: 15),
-                  controller: nameController,
+                  controller: textEditingController,
                   decoration: InputDecoration(
                     hintMaxLines: 3,
                     filled: true,
