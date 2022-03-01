@@ -1,9 +1,11 @@
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:peerpal/activities/activity_overview_page/cubit/activity_overview_cubit.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
+import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -16,6 +18,7 @@ import 'package:peerpal/widgets/custom_single_table.dart';
 
 class OverviewInputContent extends StatelessWidget {
   final bool isInFlowContext;
+  final TextEditingController descriptionController = TextEditingController();
 
   OverviewInputContent({Key? key, required this.isInFlowContext})
       : super(key: key);
@@ -93,6 +96,7 @@ class OverviewInputContent extends StatelessWidget {
                               CustomSingleDescriptionTable(
                                 heading: "BESCHREIBUNG",
                                 isEditingModus: true,
+                                textEditingController: descriptionController,
                               ),
                             ],
                           ),
@@ -106,8 +110,13 @@ class OverviewInputContent extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           CustomPeerPALButton(
-                            onPressed: () async =>
-                                context.read<OverviewInputCubit>().postData(),
+                            onPressed: () async {
+                              await context
+                                  .read<OverviewInputCubit>()
+                                  .postData(descriptionController.text);
+                              context.flow<Activity>().complete();
+                             // Navigator.pop(context);
+                            },
                             text: "Aktivität erstellen",
                           ),
                         ],
