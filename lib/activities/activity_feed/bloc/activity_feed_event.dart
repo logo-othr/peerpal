@@ -6,10 +6,7 @@ abstract class ActivityFeedEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadActivityFeed extends ActivityFeedEvent {
-
-  LoadActivityFeed();
-}
+class LoadActivityFeed extends ActivityFeedEvent {}
 
 
 
