@@ -20,7 +20,7 @@ handleChatNotification(db);
 handleFriendRequestNotification(db);
 handleFriendRequestResponse(db);
 handleCanceledFriendRequests(db);
-
+handleActivityNotificaction(db);
 
 
 // DB Collections
@@ -292,6 +292,9 @@ async function handleCanceledFriendRequests(db) {
       });
     });
 }
+
+
+
 
 async function handleFriendRequestNotification(db) {
 
@@ -624,3 +627,83 @@ function sendPushNotification(change, db, payload) {
       })
   }
 }
+
+async function handleActivityNotificaction(db) {
+
+  console.log('|///////////////////////////////////////////////////////////////////|');
+  console.log('|---------------| Start handleActivityNotificaction |---------------|');
+  console.log('|///////////////////////////////////////////////////////////////////|');
+
+  db.collection(`activities`)
+    .onSnapshot(querySnapshot => {
+      querySnapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+
+          console.log('|------handleActivityNotificaction()------|');
+          console.log(change.doc.id, '=>', change.doc.data());
+
+          var creatorName = change.doc.data().creatorName;
+
+          //Notification payload
+          const payload = {
+            notification: {
+              title: 'Aktivitätenanfrage',
+              body: `Neue Aktivitätenanfrage von ${creatorName}`,
+            },
+            data: {
+              //id: change.doc.data().fromId,
+              click_action: 'FLUTTER_NOTIFICATION_CLICK'
+            }
+          }
+
+          sendPushNotificationsForActivity(change, db, payload);
+        }
+      });
+    });
+}
+
+function sendPushNotificationsForActivity(change, db, payload) {
+
+  var invitationIds = change.doc.data().invitationIds
+
+  invitationIds.forEach(id =>{
+
+    if (deviceTokens.has(id)) {
+      if (deviceTokens.get(id).empty || deviceTokens.get(id) == null) {
+        console.log('sendPushNotification() No deviceToken exist for User')
+        return;
+      }
+      var deviceToken = deviceTokens.get(id);
+      console.log(`deviceToken: ${deviceToken}`);
+      admin.messaging().sendToDevice(deviceToken, payload)
+        .then(response => { console.log('Successfully sent message:', response) })
+        .catch(error => { console.log('Error sending message:', error) })
+    }
+    else {
+      db
+        .collection('privateUserData').doc(id).get()
+        .then(documentQuerySnapshot => {
+  
+          var deviceToken = documentQuerySnapshot.data().pushToken;
+  
+          deviceTokens.set(documentQuerySnapshot.id, deviceToken);
+          console.log(`deviceToken: ${deviceToken}`);
+  
+          admin.messaging().sendToDevice(deviceToken, payload)
+            .then(response => {
+              console.log('Successfully sent message:', response)
+            }).catch(error => { console.log('Error sending message:', error) })
+        })
+        .catch(error => {
+          console.log('sendPushNotification() error message:', error);
+        })
+    }
+
+  });
+ 
+}
+
+
+
+
+
