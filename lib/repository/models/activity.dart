@@ -6,6 +6,9 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
+
+
+
   final String? id;
   final String? name;
   final String? code;
@@ -14,8 +17,8 @@ class Activity extends Equatable {
   final String? creatorName;
   final DateTime? date;
   final Location? location;
-  final List<int>? attendeeIds;
-  final List<int>? invitationIds;
+  final List<String>? attendeeIds;
+  final List<String>? invitationIds;
   final bool? public;
 
 
@@ -59,8 +62,8 @@ class Activity extends Equatable {
     String? creatorName,
     DateTime? date,
     Location? location,
-    List<int>? attendeeIds,
-    List<int>? invitationIds,
+    List<String>? attendeeIds,
+    List<String>? invitationIds,
     bool? public,
   }) {
     return Activity(

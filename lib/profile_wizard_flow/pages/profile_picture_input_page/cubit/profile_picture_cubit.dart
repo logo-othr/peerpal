@@ -30,7 +30,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
       compressQuality: 100,
       compressFormat: ImageCompressFormat.jpg,
       androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Passe dein Foto zurecht',
+          toolbarTitle: 'Passe dein Foto an',
           toolbarColor: primaryColor,
           toolbarWidgetColor: Colors.white,
           activeControlsWidgetColor: primaryColor,
@@ -39,17 +39,20 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
           showCropGrid: false,
           lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
-          title: 'Passe dein Foto zurecht',
+          title: 'Passe dein Foto an',
         )
-    );
-    profilePictureChanged(croppedImage);
+    )!;
+
+    if(croppedImage !=null){
+      profilePictureChanged(croppedImage);
+    }
   }
 
 
   Future<void> pickProfilePictureFromCamera() async {
     var profilePicture =
         ((await ImagePicker().pickImage(source: ImageSource.camera)))!;
-    File? croppedImage = = await ImageCropper.cropImage(
+    File? croppedImage = await ImageCropper.cropImage(
       sourcePath: profilePicture.path,
       aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       aspectRatioPresets: [CropAspectRatioPreset.ratio5x3],
@@ -69,8 +72,10 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
       iosUiSettings: IOSUiSettings(
         title: 'Passe dein Foto zurecht',
       )
-    );
-    profilePictureChanged(croppedImage);
+    )!;
+    if(croppedImage!=null){
+      profilePictureChanged(croppedImage);
+    }
   }
 
   void profilePictureChanged(File? profilePicture) {

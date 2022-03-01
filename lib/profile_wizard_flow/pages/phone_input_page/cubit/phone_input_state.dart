@@ -2,28 +2,28 @@ part of 'phone_input_cubit.dart';
 
 @immutable
 abstract class PhoneInputState extends Equatable {
-  final String phoneNumber;
+  final PhoneModel phoneNumber;
 
   const PhoneInputState(this.phoneNumber);
-  
+
 }
 
 class PhoneInputInitial extends PhoneInputState {
-  PhoneInputInitial(String phoneNumber) : super(phoneNumber);
+  PhoneInputInitial(PhoneModel phoneNumber) : super(phoneNumber);
 
   @override
   List<Object?> get props => [phoneNumber];
 }
 
 class PhoneInputPosting extends PhoneInputState {
-  PhoneInputPosting(String phoneNumber) : super(phoneNumber);
+  PhoneInputPosting(PhoneModel phoneNumber) : super(phoneNumber);
 
   @override
   List<Object?> get props => [phoneNumber];
 }
 
 class PhoneInputPosted extends PhoneInputState {
-  PhoneInputPosted(String phoneNumber) : super(phoneNumber);
+  PhoneInputPosted(PhoneModel phoneNumber) : super(phoneNumber);
 
   @override
   List<Object?> get props => [phoneNumber];
@@ -32,7 +32,7 @@ class PhoneInputPosted extends PhoneInputState {
 class PhoneInputError extends PhoneInputState {
   final String message;
 
-  PhoneInputError(this.message, String phone) : super(phone);
+  PhoneInputError(this.message, PhoneModel phone) : super(phone);
 
   @override
   List<Object?> get props => [phoneNumber];

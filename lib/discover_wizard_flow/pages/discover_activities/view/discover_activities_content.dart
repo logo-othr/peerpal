@@ -34,7 +34,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
         }
         return Scaffold(
             appBar: CustomAppBar(
-              'Alter',
+              'PeerPAL',
               hasBackButton: hasBackButton,
             ),
             body: BlocBuilder<DiscoverActivitiesCubit,

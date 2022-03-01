@@ -10,8 +10,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final hasBackButton;
 
+  final VoidCallback? onBackButtonPressed;
+
   CustomAppBar(
     this.title, {
+      this.onBackButtonPressed,
     Key? key,
         required this.hasBackButton,
   })  : preferredSize = Size.fromHeight(50.0),
@@ -29,13 +32,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
             width: 30,
             child: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () {
+              onPressed: onBackButtonPressed != null ? onBackButtonPressed : () {
                 Navigator.of(context).pop();
               },
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: onBackButtonPressed != null ? onBackButtonPressed : () {
               Navigator.of(context).pop();
             },
             child: CustomPeerPALText(

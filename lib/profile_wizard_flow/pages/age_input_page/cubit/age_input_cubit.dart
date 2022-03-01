@@ -8,7 +8,7 @@ part 'age_input_state.dart';
 class AgeInputCubit extends Cubit<AgeInputState> {
   AgeInputCubit(this._appUserRepository) : super(AgeInputInitial(10));
 
-  late final AppUserRepository _appUserRepository;
+  final AppUserRepository _appUserRepository;
 
   void dataChanged(int selectedAge) {
     emit(AgeInputInitial(selectedAge));

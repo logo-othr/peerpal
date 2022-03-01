@@ -8,7 +8,7 @@ class LoginState extends Equatable {
     this.errorMessage = '',
     this.loginCounter = 0,
     this.lastAttempt = 0,
-    this.visible=false,
+    this.visible=true,
   });
 
   final FormzStatus formValidationStatus;
