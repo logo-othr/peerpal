@@ -60,11 +60,73 @@ class ActivityRepository {
   }
 
 
-
-
   Future<List<Location>> loadLocations() async {
     final jsonData = await rootBundle.loadString('assets/location.json');
     final list = json.decode(jsonData) as List<dynamic>;
     return list.map((e) => Location.fromJson(e)).toList();
+  }
+
+
+  Stream<List<Activity>> getPublicActivities(String currentUserId) async* {
+    Stream<QuerySnapshot> publicActivityStream = FirebaseFirestore.instance
+        .collection('activities')
+        .where('public', isEqualTo: true)
+        .orderBy('date', descending: true)
+        .snapshots();
+
+    List<Activity> publicActivityList = <Activity>[];
+    await for (QuerySnapshot querySnapshot in publicActivityStream) {
+      publicActivityList.clear();
+      querySnapshot.docs.forEach((document) {
+        var documentData = document.data() as Map<String, dynamic>;
+        var activity = Activity.fromJson(documentData);
+        publicActivityList.add(activity);
+        print("PublicActivityStream: $activity");
+      });
+      yield publicActivityList;
+    }
+  }
+
+
+  Stream<List<Activity>> getPrivateRequestActivitiesForUser(String currentUserId) async* {
+    Stream<QuerySnapshot> privateRequestActivityStream = FirebaseFirestore.instance
+        .collection('activities')
+        .where('invitationIds', arrayContains: currentUserId)
+        .orderBy('date', descending: true)
+        .snapshots();
+
+    List<Activity> privateRequestActivitiesFromUserList = <Activity>[];
+    await for (QuerySnapshot querySnapshot in privateRequestActivityStream) {
+      privateRequestActivitiesFromUserList.clear();
+      querySnapshot.docs.forEach((document) {
+        var documentData = document.data() as Map<String, dynamic>;
+        var activity = Activity.fromJson(documentData);
+        privateRequestActivitiesFromUserList.add(activity);
+        print("PrivateRequestActivitiesFromUserStream: $activity");
+      });
+      yield privateRequestActivitiesFromUserList;
+    }
+
+  }
+
+  Stream<List<Activity>> getPrivateJoinedActivitiesForUser(String currentUserId) async* {
+    Stream<QuerySnapshot> privateJoinedActivityStream = FirebaseFirestore.instance
+        .collection('activities')
+        .where('attendeeIds', arrayContains: currentUserId)
+        .orderBy('date', descending: true)
+        .snapshots();
+
+    List<Activity> publicJoinedActivitiesFromUserList = <Activity>[];
+    await for (QuerySnapshot querySnapshot in privateJoinedActivityStream) {
+      publicJoinedActivitiesFromUserList.clear();
+      querySnapshot.docs.forEach((document) {
+        var documentData = document.data() as Map<String, dynamic>;
+        var activity = Activity.fromJson(documentData);
+        publicJoinedActivitiesFromUserList.add(activity);
+        print("PublicJoinedActivitiesFromUserStream: $activity");
+      });
+      yield publicJoinedActivitiesFromUserList;
+    }
+
   }
 }
