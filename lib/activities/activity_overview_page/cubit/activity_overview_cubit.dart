@@ -37,6 +37,8 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
         updatedActivity, state.activityCreator, state.attendees));
   }
 
+
+
   setActivityToPrivate() async {
     var updatedActivity = state.activity.copyWith(public: false);
     await _activityRepository.updateActivity(updatedActivity);
@@ -44,7 +46,9 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
         updatedActivity, state.activityCreator, state.attendees));
   }
 
-  Future<void> postData() async {
+  Future<void> postData(String description) async {
+    var updatedActivity = state.activity.copyWith(description: description);
+    await _activityRepository.updateActivity(updatedActivity);
     await _activityRepository.postActivity(state.activity);
   }
 }
