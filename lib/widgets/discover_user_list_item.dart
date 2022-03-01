@@ -11,10 +11,10 @@ class DiscoverUserListItem extends StatelessWidget {
 
   DiscoverUserListItem(
       {required this.header,
-      this.imageLink,
-      required this.locations,
-      required this.activities,
-      required this.onPressed});
+        this.imageLink,
+        required this.locations,
+        required this.activities,
+        required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class DiscoverUserListItem extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
-                  top: BorderSide(width: 1, color: secondaryColor),
+                //top: BorderSide(width: 1, color: secondaryColor),
                   bottom: BorderSide(width: 1, color: secondaryColor))),
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 13, 0, 13),
@@ -39,6 +39,7 @@ class DiscoverUserListItem extends StatelessWidget {
               children: [
                 _Avatar(imageLink!),
                 _Content(locationString, activityString),
+                Spacer(),
                 _RightArrow(),
               ],
             ),
@@ -50,6 +51,7 @@ class DiscoverUserListItem extends StatelessWidget {
 
   Widget _Content(String locationString, String activityString) {
     return Container(
+      width: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,16 +79,18 @@ class DiscoverUserListItem extends StatelessWidget {
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
-        RichText(
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          text: TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: content,
-                style: textStyle,
-              ),
-            ],
+        Flexible(
+          child: RichText(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                  text: content,
+                  style: textStyle,
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -95,12 +99,11 @@ class DiscoverUserListItem extends StatelessWidget {
 
   Widget _Heading() {
     return Container(
-      // width: 200,
       child: Align(
         alignment: Alignment.centerLeft,
         child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: CustomPeerPALHeading2(header!, color: primaryColor)),
+            child: CustomPeerPALHeading3(text: header!, color: primaryColor, fontSize: 18,fontWeight: FontWeight.bold,)),
       ),
     );
   }
@@ -111,6 +114,7 @@ class DiscoverUserListItem extends StatelessWidget {
       child: Icon(
         Icons.arrow_forward_ios,
         color: secondaryColor,
+        size: 20,
       ),
     );
   }
@@ -118,22 +122,22 @@ class DiscoverUserListItem extends StatelessWidget {
   Widget _Avatar(String imageURL) {
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Container(
-          child: CircleAvatar(
-            radius: 30,
-            child: ClipOval(
-                child:
-                Image.network(imageLink!)),
-            backgroundColor: Colors.white,
-          ),
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            border: new Border.all(
-              color: primaryColor,
-              width: 4,
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Container(
+            child: CircleAvatar(
+              radius: 30,
+              child: ClipOval(
+                  child:
+                  Image.network(imageLink!)),
+              backgroundColor: Colors.white,
             ),
-          ))
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              border: new Border.all(
+                color: primaryColor,
+                width: 4,
+              ),
+            ))
     );
   }
 }
