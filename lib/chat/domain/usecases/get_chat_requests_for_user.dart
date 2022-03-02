@@ -24,8 +24,8 @@ class GetChatRequestForUser {
           UserChat userChat = UserChat(chat: chat, user: peerPALUser);
           userChats.add(userChat);
         }
-        yield userChats;
       }
+      yield userChats;
     }
   }
 }
