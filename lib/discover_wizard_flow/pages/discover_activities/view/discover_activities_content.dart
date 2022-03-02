@@ -41,7 +41,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
             body: BlocBuilder<DiscoverActivitiesCubit,
                 DiscoverActivitiesState>(builder: (context, state) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -52,60 +52,53 @@ class DiscoverActivitiesContent extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                      child: CupertinoSearchTextField(
-                        enabled: (state is DiscoverActivitiesLoaded ||
-                            state is DiscoverActivitiesSelected),
-                        controller: searchBarController,
-                      ),
+                    CupertinoSearchTextField(
+                      enabled: (state is DiscoverActivitiesLoaded ||
+                          state is DiscoverActivitiesSelected),
+                      controller: searchBarController,
                     ),
-                    SizedBox(height: 10,),
                     Expanded(
                       child: SingleChildScrollView(
-
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[ Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  children: state.activities
-                                      .map(
-                                        (activity) => (activity.name
-                                                .toString()
-                                                .toLowerCase()
-                                                .startsWith(
-                                                    state.searchQuery.toLowerCase()))
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  context
-                                                      .read<
-                                                      DiscoverActivitiesCubit>()
-                                                      .toggleData(activity);
-                                                },
-                                                child: CustomCircleListItem(
-                                                    label:
-                                                    activity.name.toString(),
-                                                    icon: ActivityIconData
-                                                        .icons[activity.code],
-                                                    active: state
-                                                        .selectedActivities
-                                                        .contains(activity)))
-                                            : Container(),
-                                      )
-                                      .toList())),
-                        ]),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: Wrap(
+                                children: state.activities
+                                    .map(
+                                      (activity) => (activity.name
+                                      .toString()
+                                      .toLowerCase()
+                                      .startsWith(
+                                      state.searchQuery.toLowerCase()))
+                                      ? GestureDetector(
+                                      onTap: () {
+                                        context
+                                            .read<
+                                            DiscoverActivitiesCubit>()
+                                            .toggleData(activity);
+                                      },
+                                      child: CustomCircleListItem(
+                                          label:
+                                          activity.name.toString(),
+                                          icon: ActivityIconData
+                                              .icons[activity.code],
+                                          active: state
+                                              .selectedActivities
+                                              .contains(activity)))
+                                      : Container(),
+                                )
+                                    .toList())),
                       ),
                     ),
-                    SizedBox(height: 50,),
                     (state is DiscoverActivitiesPosting)
                         ? const CircularProgressIndicator()
-                        : CompletePageButton(
-                            isSaveButton: isInFlowContext,
-                            onPressed: () async {
-                              _update(state, context);
-                            }),
+                        : Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                      child: CompletePageButton(
+                          isSaveButton: isInFlowContext,
+                          onPressed: () async {
+                            _update(state, context);
+                          }),
+                    ),
                   ],
                 ),
               );
@@ -119,7 +112,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
     if (isInFlowContext) {
       await context.read<DiscoverActivitiesCubit>().postData();
       context.flow<PeerPALUser>().complete(
-          (s) => s.copyWith(discoverActivities: state.selectedActivities));
+              (s) => s.copyWith(discoverActivities: state.selectedActivities));
     } else {
       await context.read<DiscoverActivitiesCubit>().postData();
       Navigator.pop(context);
