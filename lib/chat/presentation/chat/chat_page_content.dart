@@ -15,6 +15,7 @@ import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
@@ -79,6 +80,7 @@ class ChatPageContent extends StatelessWidget {
               chatHeader(context, state.chatPartner),
               friendRequestButton(context, state.chatPartner),
               buildChatMessages(context, state),
+              ChatButtons(textEditingController: textEditingController),
               //const SingleChatAnswerButtons(),
               (!state.userChat.chat.chatRequestAccepted &&
                       state.userChat.chat.startedBy != state.appUser.id)
@@ -125,6 +127,8 @@ class ChatPageContent extends StatelessWidget {
               chatHeader(context, state.chatPartner),
               friendRequestButton(context, state.chatPartner),
               Spacer(),
+              ChatButtons(textEditingController: textEditingController),
+
               //const SingleChatAnswerButtons(),
               singleChatTextFormField(state.chatPartner, null, context),
             ],
@@ -414,7 +418,7 @@ class ChatPageContent extends StatelessWidget {
                     .read<ChatPageBloc>()
                     .add(SendChatRequestResponseButtonPressed(false));
                // context.read<ChatListBloc>().add(ChatListLoaded());
-              //  Navigator.pop(context);
+              Navigator.pop(context);
        }
           ),
         ],
