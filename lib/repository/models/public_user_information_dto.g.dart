@@ -19,7 +19,7 @@ PublicUserInformationDTO _$PublicUserInformationDTOFromJson(
       hasChatCommunicationPreference:
           json['hasChatCommunicationPreference'] as bool? ?? false,
       discoverActivities: (json['discoverActivities'] as List<dynamic>?)
-          ?.map((e) => Activity.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => e as String)
           .toList(),
       discoverLocations: (json['discoverLocations'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -38,8 +38,7 @@ Map<String, dynamic> _$PublicUserInformationDTOToJson(
       'hasPhoneCommunicationPreference':
           instance.hasPhoneCommunicationPreference,
       'hasChatCommunicationPreference': instance.hasChatCommunicationPreference,
-      'discoverActivities':
-          instance.discoverActivities?.map((e) => e.toJson()).toList(),
+      'discoverActivities': instance.discoverActivities,
       'discoverLocations': instance.discoverLocations,
       'imagePath': instance.imagePath,
     };

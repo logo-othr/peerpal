@@ -41,7 +41,7 @@ class PeerPALUserDTO {
         discoverToAge: peerPALUser.discoverToAge,
         hasPhoneCommunicationPreference: phonePreference,
         hasChatCommunicationPreference: chatPreference,
-        discoverActivities: peerPALUser.discoverActivities,
+        discoverActivities: peerPALUser.discoverActivitiesCodes,
         discoverLocations:
             peerPALUser.discoverLocations?.map((e) => e.place).toList());
 
@@ -78,7 +78,7 @@ class PeerPALUserDTO {
       discoverFromAge: publicUserInformation?.discoverFromAge,
       discoverToAge: publicUserInformation?.discoverToAge,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
-      discoverActivities: publicUserInformation?.discoverActivities,
+      discoverActivitiesCodes: publicUserInformation?.discoverActivities,
       discoverLocations: publicUserInformation?.discoverLocations
           ?.map((e) => Location(place: e))
           .toList(),

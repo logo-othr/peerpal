@@ -7,6 +7,7 @@ import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -121,8 +122,8 @@ class UserDetailContent extends StatelessWidget {
                       )),
                   CustomSingleTable(
                     heading: 'AKTIVITÄTEN',
-                    text: state.user.discoverActivities!
-                        .map((e) => e.name)
+                    text: state.user.discoverActivitiesCodes!
+                        .map((e) => ActivityRepository.getActivityNameFromCode(e))
                         .toList()
                         .join(','),
                     isArrowIconVisible: false,

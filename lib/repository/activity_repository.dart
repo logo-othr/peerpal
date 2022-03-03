@@ -1,14 +1,45 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:async/async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/location.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+
+
 class ActivityRepository {
+
+  static String getActivityNameFromCode(String code) {
+    final List<Activity> activities = [];
+    activities.add(Activity(code: 'shopping', name: "Einkaufen"));
+    activities.add(Activity(code: 'walking', name: "Spazieren"));
+    activities.add(Activity(code: 'music', name: "Musik hören"));
+    activities.add(Activity(code: 'coffee', name: "Kaffeetrinken"));
+    activities.add(Activity(code: 'phone', name: "Telefonieren"));
+    activities.add(Activity(code: 'visit', name: "Besuchen"));
+    activities.add(Activity(code: 'car', name: "Ausflug mit dem Auto"));
+    activities.add(Activity(code: 'tv', name: "Fernsehen schauen"));
+    activities.add(Activity(code: 'garden', name: "Gartenarbeit"));
+    activities.add(Activity(code: 'cooking', name: "Kochen"));
+    activities.add(Activity(code: 'eating', name: "Essen gehen"));
+    activities.add(Activity(code: 'travel', name: "Reisen"));
+    activities.add(Activity(code: 'sightseeing', name: "Sightseeing"));
+    activities.add(Activity(code: 'sport', name: "Sport"));
+    activities.add(Activity(code: 'games', name: "Gesellschaftsspiele"));
+    activities.add(Activity(code: 'culture', name: "Kultur"));
+    activities.add(Activity(code: 'diy', name: "Heimwerken"));
+    for(Activity a in activities) {
+      if(a.code == code && a.name != null) return a.name!;
+    }
+    return "<Aktivitätsname>";
+  }
+
   SharedPreferences prefs;
 
   ActivityRepository(this.prefs);
@@ -64,7 +95,6 @@ class ActivityRepository {
       'activityId': activity.id,
       'joiningId': currentUserId,
       'invitationIds': activity.invitationIds,
-
     });
   }
 
@@ -89,17 +119,78 @@ class ActivityRepository {
         .orderBy('date', descending: true)
         .snapshots();
 
-    List<Activity> publicActivityList = <Activity>[];
-    await for (QuerySnapshot querySnapshot in publicActivityStream) {
-      publicActivityList.clear();
+    Stream<QuerySnapshot> creatorStream = FirebaseFirestore.instance
+        .collection('activities')
+        .where('creatorId', isEqualTo: currentUserId)
+        .orderBy('date', descending: true)
+        .snapshots();
+
+    Stream<QuerySnapshot> mergedStream =
+        StreamGroup.merge([publicActivityStream, creatorStream]);
+
+    /*
+    Rx.combineLatest2(
+        publicActivityStream, //a snapshot from firestore
+        creatorStream, //another snapshot from firestore
+            (var stream1, var stream2) {
+
+          return [...stream1.docs, ...stream2.docs]; //Concatenated list
+        }
+    )
+  */
+
+    List<Activity> myActivityList = <Activity>[];
+    await for (QuerySnapshot querySnapshot in mergedStream) {
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
-        publicActivityList.add(activity);
+        myActivityList = _replaceOrAddActivity(myActivityList, activity);
         print("PublicActivityStream: $activity");
       });
-      yield publicActivityList;
+
+      myActivityList = sortActivityList(myActivityList, currentUserId);
+
+      yield myActivityList;
     }
+  }
+
+  // ToDo: Workaround. Refactor.
+  List<Activity> _replaceOrAddActivity(
+      List<Activity> activityList, Activity activity) {
+    Activity? activityToRemove;
+    Activity? activityToAdd;
+    bool isReplaced = false;
+    for (Activity a in activityList) {
+      if (a.id == activity.id) {
+        activityToAdd = (activity);
+        activityToRemove = a;
+        isReplaced = true;
+      }
+    }
+    if (activityToAdd != null) activityList.add(activityToAdd);
+    if (activityToRemove != null) activityList.remove(activityToRemove);
+    if (!isReplaced) activityList.add(activity);
+
+    return activityList;
+  }
+
+  List<Activity> sortActivityList(
+      List<Activity> listToSort, String currentUserId) {
+    List<Activity> creatorList = [];
+    List<Activity> publicList = [];
+    List<Activity> sortedList = [];
+    for (Activity activty in listToSort) {
+      if (activty.creatorId == currentUserId)
+        creatorList.add(activty);
+      else
+        publicList.add(activty);
+    }
+    creatorList.sort((a, b) => b.date!.compareTo(a.date!));
+    publicList.sort((a, b) => b.date!.compareTo(a.date!));
+    sortedList.addAll(creatorList);
+    sortedList.addAll(publicList);
+
+    return sortedList;
   }
 
   Stream<List<Activity>> getPrivateRequestActivitiesForUser(

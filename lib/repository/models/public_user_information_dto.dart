@@ -24,7 +24,7 @@ class PublicUserInformationDTO {
   final int? discoverToAge;
   final bool? hasPhoneCommunicationPreference;
   final bool? hasChatCommunicationPreference;
-  final List<Activity>? discoverActivities;
+  final List<String>? discoverActivities;
   final List<String>? discoverLocations;
   final String? imagePath;
 
@@ -36,7 +36,7 @@ class PublicUserInformationDTO {
       int? discoverToAge,
       bool? hasPhoneCommunicationPreference,
       bool? hasChatCommunicationPreference,
-      List<Activity>? discoverActivities,
+      List<String>? discoverActivities,
       List<String>? discoverLocations,
       String? imagePath}) {
     return PublicUserInformationDTO(

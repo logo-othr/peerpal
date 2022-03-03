@@ -58,7 +58,7 @@ class DiscoverActivitiesCubit
 
       var userInformation = await _appUserRepository.getCurrentUserInformation();
       var updatedUserInformation = userInformation.copyWith(
-          discoverActivities: state.selectedActivities);
+          discoverActivities: state.selectedActivities.map((e) => e.code!).toList());
       await _appUserRepository.updateUserInformation(updatedUserInformation);
 
       emit(

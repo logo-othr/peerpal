@@ -239,9 +239,18 @@ Future<void> registerFCMDeviceToken() async{
     query = query.where(UserDatabaseContract.discoverLocations,
         arrayContainsAny:
             currentUser.discoverLocations!.map((e) => e.place).toList());
-    //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
 
-    query = query.where(UserDatabaseContract.phonePreference,
+
+    //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
+    if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {
+      query = query.where(UserDatabaseContract.discoverActivities,
+          arrayContainsAny:
+          currentUser.discoverActivitiesCodes);
+    }
+
+
+
+  /*  query = query.where(UserDatabaseContract.phonePreference,
         isEqualTo: /*currentUser.discoverCommunicationPreferences!
             .contains(CommunicationType.phone)*/
             true);
@@ -249,7 +258,8 @@ Future<void> registerFCMDeviceToken() async{
     query = query.where(UserDatabaseContract.chatPreference,
         isEqualTo: /*currentUser.discoverCommunicationPreferences!
             .contains(CommunicationType.chat)*/
-            true);
+            true);*/
+
 
     query = query
         .orderBy(UserDatabaseContract.userAge)

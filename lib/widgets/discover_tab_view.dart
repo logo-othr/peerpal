@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_bottom_indicator.dart';
@@ -125,8 +126,8 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                               locations: user.discoverLocations
                                   ?.map((e) => e.place)
                                   .toList(),
-                              activities: state.users[index].discoverActivities
-                                  ?.map((e) => e.name!)
+                              activities: state.users[index].discoverActivitiesCodes
+                                  ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
                                   .toList());
                         }
                       },

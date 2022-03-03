@@ -6,6 +6,7 @@ import 'package:peerpal/discover_wizard_flow/pages/discover_age/view/discover_ag
 import 'package:peerpal/discover_wizard_flow/pages/discover_communication/view/discover_communication_page.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/cubit/discover_interests_overview_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_location/view/discover_location_page.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -68,8 +69,8 @@ class _DiscoverInterestsOverviewContentState extends State<DiscoverInterestsOver
                       ),
                       CustomSingleTableWithListItems(
                         heading: "INTERESSEN",
-                        list: state.appUserInformation.discoverActivities
-                            ?.map((e) => e.name!)
+                        list: state.appUserInformation.discoverActivitiesCodes
+                            ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
                             .toList(),
                         isArrowIconVisible: true,
                         onPressed: () async => {

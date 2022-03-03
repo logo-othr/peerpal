@@ -112,7 +112,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
     if (isInFlowContext) {
       await context.read<DiscoverActivitiesCubit>().postData();
       context.flow<PeerPALUser>().complete(
-          (s) => s.copyWith(discoverActivities: state.selectedActivities));
+          (s) => s.copyWith(discoverActivities: state.selectedActivities.map((e) => e.code!).toList()));
     } else {
       await context.read<DiscoverActivitiesCubit>().postData();
       Navigator.pop(context);

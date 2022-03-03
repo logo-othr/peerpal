@@ -141,7 +141,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: (DateFormat('dd.mm.yyyy').format(widget.activity.date!)), color: Colors.black)
+                                CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy hh:mm').format(widget.activity.date!)), color: Colors.black)
                               ],
                             ),
                             SizedBox(height: 5),
@@ -166,6 +166,16 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                 CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? '0', color: Colors.black,),
                               ],
                             ),
+                           /* Row(
+                              children: [
+                                CustomPeerPALHeading3(
+                                  text: "DEBUG Activity ID: ",
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                SizedBox(width: 10),
+                                Container(width: 100, child: Flexible(child: CustomPeerPALHeading3(text: widget.activity.id!, color: Colors.red,))),
+                              ],
+                            ),*/
                           ],
                         ),
                       ),

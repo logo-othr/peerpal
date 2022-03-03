@@ -12,7 +12,7 @@ List<Page> onGenerateDiscoverWizardPages(
     if (userInformation.discoverToAge != null &&
         userInformation.discoverFromAge != null)
       DiscoverActivitiesPage.page(isInFlowContext: true),
-    if (userInformation.discoverActivities != null)
+    if (userInformation.discoverActivitiesCodes != null)
       DiscoverLocationPage.page(isInFlowContext: true),
     if (userInformation.discoverLocations != null)
       DiscoverCommunicationPage.page(isInFlowContext: true),
