@@ -21,6 +21,8 @@ handleFriendRequestNotification(db);
 handleFriendRequestResponse(db);
 handleCanceledFriendRequests(db);
 handleActivityNotificaction(db);
+handlejoinActivityNotificaction(db);
+handleLeaveActivityNotificaction(db);
 
 
 // DB Collections
@@ -55,9 +57,9 @@ async function handleChatNotification(db) {
 
               //The searchForChatIdInMap()-Method will be deleted in the future.
               //Why this method exists at the moment.
-              //UseCase: 
+              //UseCase:
               //The user sends a message before the chat is loaded.
-              //A new chat would now be created even though the chat already exists. 
+              //A new chat would now be created even though the chat already exists.
               //However, this method checks if the chat already exists.
               var chatId = searchForChatIdInMap(change);
 
@@ -100,8 +102,8 @@ async function handleChatNotification(db) {
                     console.log('handleChatNotification() No matching documents');
 
                     db.collection(`chatNotifications`).doc(change.doc.id).delete()
-                    .then(response => { console.log('Successfully delete chatNotification:', response) })
-                    .catch(error => { console.log('Error deleting chatNotification:', error) });
+                      .then(response => { console.log('Successfully delete chatNotification:', response) })
+                      .catch(error => { console.log('Error deleting chatNotification:', error) });
 
                     return;
                   }
@@ -125,11 +127,11 @@ async function handleChatNotification(db) {
                     sendPushNotification(change, db, payload);
 
                     db.collection(`chatNotifications`).doc(change.doc.id).delete()
-                    .then(response => { console.log('Successfully delete chatNotification:', response) })
-                    .catch(error => { console.log('Error deleting chatNotification:', error) });
-                    
+                      .then(response => { console.log('Successfully delete chatNotification:', response) })
+                      .catch(error => { console.log('Error deleting chatNotification:', error) });
+
                   });
-                }).catch(error => {console.log('handleChatNotification() error message:', error);});
+                }).catch(error => { console.log('handleChatNotification() error message:', error); });
             }
           }
           else {
@@ -205,7 +207,7 @@ async function handleChatRequestResponse(db) {
                   if (chatIds.has(chatId)) {
                     var chatProptertiesArray = chatIds.get(chatId)
                     const index = chatProptertiesArray.indexOf(false);
-                    //Löscht den Eintrag des chatProptertiesArray an Stelle "index" und updated das Array an "index" 
+                    //Löscht den Eintrag des chatProptertiesArray an Stelle "index" und updated das Array an "index"
                     if (index > -1) {
                       chatProptertiesArray.splice(index, 1);
                       chatProptertiesArray.push(true);
@@ -499,7 +501,7 @@ function createNewChat(db, newChatId, change) {
         createChatCollectionInDatabase(db, newChatId, change, chatRequestAccepted);
 
       });
-    }).catch(error => {console.log('createNewChat() error message:', error);})
+    }).catch(error => { console.log('createNewChat() error message:', error); })
 
 }
 
@@ -521,8 +523,8 @@ function createChatCollectionInDatabase(db, newChatId, change, chatRequestAccept
     'startedBy': change.doc.data().fromId,
     'chatId': newChatId,
     'chatRequestAccepted': chatRequestAccepted,
-  }).then(response => {console.log('Successfully wrote new Chatdocument:', response)})
-    .catch(error => {console.log('Error writting new Chatdocument:', error)});
+  }).then(response => { console.log('Successfully wrote new Chatdocument:', response) })
+    .catch(error => { console.log('Error writting new Chatdocument:', error) });
 
   db.collection(`/chats/${newChatId}/messages`).doc(change.doc.id).set(
     {
@@ -531,12 +533,12 @@ function createChatCollectionInDatabase(db, newChatId, change, chatRequestAccept
       'message': change.doc.data().message,
       'type': change.doc.data().type,
     }
-  ).then(response => {console.log('Successfully wrote message:', response)})
-    .catch(error => {console.log('Error writting message:', error)});
+  ).then(response => { console.log('Successfully wrote message:', response) })
+    .catch(error => { console.log('Error writting message:', error) });
 
   db.collection(`chatNotifications`).doc(change.doc.id).delete()
-    .then(response => {console.log('Successfully delete chatNotification:', response)})
-    .catch(error => {console.log('Error deleting chatNotification:', error)});
+    .then(response => { console.log('Successfully delete chatNotification:', response) })
+    .catch(error => { console.log('Error deleting chatNotification:', error) });
 }
 
 
@@ -550,8 +552,8 @@ function updateChat(db, chatId, change) {
       'type': change.doc.data().type,
     },
     'lastUpdated': change.doc.data().timestamp,
-  }).then(response => {console.log('Successfully update Chat:', response)})
-  .catch(error => {console.log('Error updating Chat:', error)});
+  }).then(response => { console.log('Successfully update Chat:', response) })
+    .catch(error => { console.log('Error updating Chat:', error) });
 
   db.collection(`/chats/${chatId}/messages`).doc(change.doc.id).set(
     {
@@ -666,7 +668,7 @@ function sendPushNotificationsForActivity(change, db, payload) {
 
   var invitationIds = change.doc.data().invitationIds
 
-  invitationIds.forEach(id =>{
+  invitationIds.forEach(id => {
 
     if (deviceTokens.has(id)) {
       if (deviceTokens.get(id).empty || deviceTokens.get(id) == null) {
@@ -683,12 +685,12 @@ function sendPushNotificationsForActivity(change, db, payload) {
       db
         .collection('privateUserData').doc(id).get()
         .then(documentQuerySnapshot => {
-  
+
           var deviceToken = documentQuerySnapshot.data().pushToken;
-  
+
           deviceTokens.set(documentQuerySnapshot.id, deviceToken);
           console.log(`deviceToken: ${deviceToken}`);
-  
+
           admin.messaging().sendToDevice(deviceToken, payload)
             .then(response => {
               console.log('Successfully sent message:', response)
@@ -700,8 +702,85 @@ function sendPushNotificationsForActivity(change, db, payload) {
     }
 
   });
- 
+
 }
+
+async function handlejoinActivityNotificaction(db) {
+
+  console.log('|///////////////////////////////////////////////////////////////////|');
+  console.log('|------------| Start handleJoinedActivityNotificaction |------------|');
+  console.log('|///////////////////////////////////////////////////////////////////|');
+
+  db.collection(`joinActivity`)
+    .onSnapshot(querySnapshot => {
+      querySnapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+
+          const fieldValue = admin.firestore.FieldValue;
+
+          console.log('|------handleJoinedActivityNotificaction()------|');
+          console.log(change.doc.id, '=>', change.doc.data());
+
+          if (change.doc.data().invitationIds.includes(change.doc.data().joiningId)) {
+
+            var collection = db.collection(`activities`);
+            collection.doc(change.doc.data().activityId).update(
+              {
+                'invitationIds': fieldValue.arrayRemove(change.doc.data().joiningId),
+              }
+            ).then(response => { console.log('Successfully delete invitationId:', response) })
+              .catch(error => { console.log('Error deleting invitationId:', error) });
+          }
+
+          db.collection(`activities`).doc(change.doc.data().activityId).update({
+            'attendeeIds': [
+              change.doc.data().joiningId
+            ],
+          })
+            .then(response => { console.log('Successfully set attendeeIds:', response) })
+            .catch(error => { console.log('Error setting attendeeIds:', error) });
+
+          db.collection(`joinActivity`).doc(change.doc.id).delete()
+            .then(response => { console.log('Successfully delete joinActivity:', response) })
+            .catch(error => { console.log('Error deleting joinActivity:', error) });
+        }
+      });
+    });
+}
+
+async function handleLeaveActivityNotificaction(db) {
+
+  console.log('|///////////////////////////////////////////////////////////////////|');
+  console.log('|------------| Start handleLeaveActivityNotificaction |-------------|');
+  console.log('|///////////////////////////////////////////////////////////////////|');
+
+  db.collection(`leaveActivity`)
+    .onSnapshot(querySnapshot => {
+      querySnapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+
+          const fieldValue = admin.firestore.FieldValue;
+
+          console.log('|------handleLeaveActivityNotificaction()------|');
+          console.log(change.doc.id, '=>', change.doc.data());
+
+          var collection = db.collection(`activities`);
+          collection.doc(change.doc.data().activityId).update(
+            {
+              'attendeeIds': fieldValue.arrayRemove(change.doc.data().leavingId),
+            }
+          ).then(response => { console.log('Successfully delete leavingId:', response) })
+            .catch(error => { console.log('Error deleting leavingId:', error) });
+
+          db.collection(`leaveActivity`).doc(change.doc.id).delete()
+            .then(response => { console.log('Successfully delete leaveActivity:', response) })
+            .catch(error => { console.log('Error deleting leaveActivity:', error) });
+        }
+      });
+    });
+}
+
+
 
 
 
