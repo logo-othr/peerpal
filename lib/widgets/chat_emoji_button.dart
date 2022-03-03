@@ -6,10 +6,8 @@ class ChatEmojiKeyboard extends StatefulWidget {
   VoidCallback onCancel;
   final TextEditingController textEditingController;
 
-  //VoidCallback onPressedEmojiKeyboardItem;
 
   ChatEmojiKeyboard({required this.onCancel, required this.textEditingController
-      /*required this.onPressedEmojiKeyboardItem*/
       });
 
   @override
