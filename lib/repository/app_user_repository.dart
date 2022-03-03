@@ -242,11 +242,11 @@ Future<void> registerFCMDeviceToken() async{
 
 
     //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
-    if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {
+   /* if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {
       query = query.where(UserDatabaseContract.discoverActivities,
           arrayContainsAny:
           currentUser.discoverActivitiesCodes);
-    }
+    }*/
 
 
 
