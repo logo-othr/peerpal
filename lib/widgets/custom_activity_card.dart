@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peerpal/activities/activity_overview_page/view/activity_overview_input_content.dart';
+import 'package:peerpal/activities/activity_overview_page/view/activity_overview_input_page.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -14,7 +16,7 @@ class CustomActivityCard extends StatefulWidget {
   Activity activity;
   bool isOwnCreatedActivity = false;
 
-  CustomActivityCard({required this.activity});
+  CustomActivityCard({required this.activity, required this.isOwnCreatedActivity});
 
   @override
   _CustomActivityCardState createState() => _CustomActivityCardState();
@@ -22,6 +24,7 @@ class CustomActivityCard extends StatefulWidget {
 
 class _CustomActivityCardState extends State<CustomActivityCard> {
   bool _expanded = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +130,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                   text:"Ersteller: "
                                 ),
                                 SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: widget.activity.creatorName ?? ''),
+                                CustomPeerPALHeading3(text: widget.activity.creatorName ?? '', color: Colors.black,),
                               ],
                             ),
                             SizedBox(height: 5),
@@ -138,8 +141,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: (DateFormat('dd.mm.yyyy').format(widget.activity.date!))
-                                    ),
+                                CustomPeerPALHeading3(text: (DateFormat('dd.mm.yyyy').format(widget.activity.date!)), color: Colors.black)
                               ],
                             ),
                             SizedBox(height: 5),
@@ -150,7 +152,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: widget.activity.location?.place ?? ''),
+                                CustomPeerPALHeading3(text: widget.activity.location?.place ?? '', color: Colors.black,),
                               ],
                             ),
                             SizedBox(height: 5),
@@ -161,7 +163,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? ''),
+                                CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? '0', color: Colors.black,),
                               ],
                             ),
                           ],
@@ -190,7 +192,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                       title: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 20.0),
                         child: CustomPeerPALHeading3(
-                            text:widget.activity.description ?? ''),
+                            text:widget.activity.description ?? '', color: Colors.black),
                       ),
                     ),
                     isExpanded: _expanded,
