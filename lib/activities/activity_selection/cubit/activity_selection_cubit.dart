@@ -24,7 +24,7 @@ Future<Activity> getCurrentActivity() async {
   Future<void> postData(Activity activity) async {
     if (state is ActivitiesLoaded) {
       emit(ActivitiesLoaded(state.activities));
-      _activityRepository.updateActivity(activity);
+      _activityRepository.updateLocalActivity(activity);
     }
   }
 
