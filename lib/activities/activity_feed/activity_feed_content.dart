@@ -50,8 +50,9 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               id: (Uuid()).v4().toString(),
               creatorId: context.read<AppUserRepository>().currentUser.id,
               creatorName: currentUserName,
+              public: false,
             );
-            context.read<ActivityRepository>().updateActivity(activity);
+            context.read<ActivityRepository>().updateLocalActivity(activity);
             await Navigator.of(context).push(ActivityWizardFlow.route(
                 activity)); // ToDo: Move to domain layer
           },
@@ -180,6 +181,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                     MaterialPageRoute(
                         builder: (context) => OverviewInputPage(
                           isInFlowContext: false,
+                          activity: activity,
                         )));
               },
               child: CustomActivityCard(
