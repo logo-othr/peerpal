@@ -39,7 +39,7 @@ class DateInputCubit extends Cubit<DateInputState> {
     var activity = await _activityRepository.getCurrentActivity();
 
     activity = activity.copyWith(date: dt);
-    _activityRepository.updateActivity(activity);
+    _activityRepository.updateLocalActivity(activity);
     return activity;
   }
 }
