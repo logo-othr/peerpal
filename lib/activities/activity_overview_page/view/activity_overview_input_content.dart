@@ -9,7 +9,6 @@ import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
-import 'package:peerpal/widgets/custom_activity_header_card.dart';
 import 'package:peerpal/widgets/custom_single_location_table_view.dart';
 import 'package:peerpal/widgets/custom_single_creator_table_view.dart';
 import 'package:peerpal/widgets/custom_single_description_table_view.dart';
@@ -64,7 +63,7 @@ class OverviewInputContent extends StatelessWidget {
                                   heading: "ERSTELLER",
                                   text: activity.creatorName,
                                   avatar:
-                                      NetworkImage(activityCreator.imagePath!),
+                                  NetworkImage(activityCreator.imagePath!),
                                   tapIcon: Icons.email),
                               CustomSingleTable(
                                 heading: "DATUM",
@@ -76,7 +75,7 @@ class OverviewInputContent extends StatelessWidget {
                               CustomSingleTable(
                                 heading: "UHRZEIT",
                                 text:
-                                    DateFormat('kk:mm').format(activity.date!),
+                                DateFormat('kk:mm').format(activity.date!),
                                 isArrowIconVisible: true,
                                 onPressed: () {},
                               ),
@@ -84,7 +83,9 @@ class OverviewInputContent extends StatelessWidget {
                                   heading: "ORT",
                                   text: activity.location!.place,
                                   subText:
-                                      "${activity.location!.street} ${activity.location!.streetNumber}"),
+                                  "${activity.location!.street} ${activity
+                                      .location!.streetNumber}",
+                                  isArrowIconVisible: true),
                               CustomSingleParticipantsTable(
                                 heading: "TEILNEHMER",
                                 text: activityAttendees
@@ -92,6 +93,7 @@ class OverviewInputContent extends StatelessWidget {
                                     .toList()
                                     .join(", "),
                                 isOwnCreatedActivity: true,
+                                isArrowIconVisible: true,
                               ),
                               CustomSingleDescriptionTable(
                                 heading: "BESCHREIBUNG",
@@ -109,16 +111,24 @@ class OverviewInputContent extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          CustomPeerPALButton(
+                          isInFlowContext ? CustomPeerPALButton(
                             onPressed: () async {
                               await context
                                   .read<OverviewInputCubit>()
-                                  .postData(descriptionController.text);
+                                  .createActivity(descriptionController.text);
                               context.flow<Activity>().complete();
-                             // Navigator.pop(context);
+                               Navigator.pop(context);
                             },
                             text: "Aktivität erstellen",
-                          ),
+                          ) :CustomPeerPALButton(
+                            onPressed: () async {
+                              await context
+                                  .read<OverviewInputCubit>()
+                                  .updateActivity(descriptionController.text);
+                               Navigator.pop(context);
+                            },
+                            text: "Aktivität speichern",
+                          )
                         ],
                       ))
                 ],
