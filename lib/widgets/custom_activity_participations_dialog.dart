@@ -15,10 +15,10 @@ class Person {
 
 class CustomActivityParticipationsDialog extends StatefulWidget {
   final bool isOwnCreatedActivity;
-  final List<String> userNames;
+  final List<String?>? userNames;
 
   const CustomActivityParticipationsDialog(
-      {required this.isOwnCreatedActivity, required this.userNames});
+      {required this.isOwnCreatedActivity,  this.userNames});
 
   @override
   _CustomActivityParticipationsDialogState createState() =>
@@ -116,10 +116,10 @@ class _CustomActivityParticipationsDialogState
                                     padding: const EdgeInsets.fromLTRB(
                                         0, 0, 0, 10.0),
                                     child:
-                                        CustomActivityParticipationsDialogItem(
-                                            name: entry.value[i].name,
-                                            isOwnCreatedActivity:
-                                                widget.isOwnCreatedActivity),
+                                    CustomActivityParticipationsDialogItem(
+                                        name: entry.value[i].name,
+                                        isOwnCreatedActivity:
+                                        widget.isOwnCreatedActivity),
                                   ),
                               ],
                             ),
