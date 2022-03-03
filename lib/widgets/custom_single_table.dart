@@ -8,12 +8,12 @@ class CustomSingleTable extends StatelessWidget {
   const CustomSingleTable(
       {required this.heading,
       required this.text,
-      required this.onPressed,
+      this.onPressed,
       this.isArrowIconVisible = true});
 
   final String heading;
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isArrowIconVisible;
 
   @override
