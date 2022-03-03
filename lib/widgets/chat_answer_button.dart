@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 class ChatAnswerKeyboard extends StatefulWidget {
   VoidCallback onCancel;
   final TextEditingController textEditingController;
-  //VoidCallback onPressedAnswerKeyboardItem;
 
   ChatAnswerKeyboard({
     required this.onCancel, required this.textEditingController
-    /*required this.onPressedAnswerKeyboardItem*/
   });
 
   @override
   State<ChatAnswerKeyboard> createState() => _ChatAnswerKeyboardState();
+}
+
+void addStringToTextController(
+    TextEditingController controller, String string) {
+  String currentText = controller.text.toString();
+  String updatedText = "${currentText}${string}";
+  controller.text = updatedText;
+  controller.selection = TextSelection.fromPosition(
+      TextPosition(offset: controller.text.length));
 }
 
 class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
@@ -26,10 +33,14 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                customAnswerListTile('Deine Telefonnummer senden'),
-                customAnswerListTile('Ja'),
-                customAnswerListTile('Nein'),
-                customAnswerListTile('Vielleicht'),
+                customAnswerListTile(widget.textEditingController, 'Wie lautet deine Telefonnummer?'),
+                customAnswerListTile(widget.textEditingController, 'Ja'),
+                customAnswerListTile(widget.textEditingController, 'Nein'),
+                customAnswerListTile(widget.textEditingController, 'Hallo'),
+                customAnswerListTile(widget.textEditingController, 'Wie geht es dir?'),
+                customAnswerListTile(widget.textEditingController, 'Hast du lust etwas zu unternehmen?'),
+                customAnswerListTile(widget.textEditingController, 'Danke'),
+                customAnswerListTile(widget.textEditingController, 'Gern geschehen'),
               ],
             ),
           ),
@@ -65,7 +76,7 @@ Widget customAnswerHeaderBar(onCancel) {
             onTap: () {
               onCancel();
             },
-            child: const Text(
+            child: Text(
               'Abbrechen',
               style: TextStyle(
                 color: Colors.white,
@@ -76,17 +87,25 @@ Widget customAnswerHeaderBar(onCancel) {
   );
 }
 
-Widget customAnswerListTile(text) => Padding(
+Widget customAnswerListTile(textEditingController, text) => Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-            child: Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white,
+          GestureDetector(
+            onTap: () {
+              addStringToTextController(textEditingController, text);
+            },
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              width: double.infinity,
+              height: 50,
+              child: Text(
+                text,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
