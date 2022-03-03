@@ -49,4 +49,8 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
       );
     }
   }
+
+  bool isOwnCreatedActivity(Activity activity) {
+    return activity.creatorId == currentUserId;
+  }
 }
