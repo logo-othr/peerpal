@@ -14,8 +14,8 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
   final ActivityRepository _activityRepository;
   final AppUserRepository _appUserRepository;
 
-  Future<void> loadData() async {
-    Activity activity = _activityRepository.getCurrentActivity();
+  Future<void> loadData({Activity? activityToChange}) async {
+    Activity activity = activityToChange ?? _activityRepository.getCurrentActivity();
     PeerPALUser activityCreator =
         await _appUserRepository.getUserInformation(activity.creatorId!);
     List<PeerPALUser> attendees = [];
@@ -30,9 +30,11 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
     emit(ActivityOverviewLoaded(activity, activityCreator, attendees));
   }
 
+
+
   setActivityToPublic() async {
     var updatedActivity = state.activity.copyWith(public: true);
-    await _activityRepository.updateActivity(updatedActivity);
+    await _activityRepository.updateLocalActivity(updatedActivity);
     emit(ActivityOverviewLoaded(
         updatedActivity, state.activityCreator, state.attendees));
   }
@@ -41,14 +43,22 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
 
   setActivityToPrivate() async {
     var updatedActivity = state.activity.copyWith(public: false);
-    await _activityRepository.updateActivity(updatedActivity);
+    await _activityRepository.updateLocalActivity(updatedActivity);
     emit(ActivityOverviewLoaded(
         updatedActivity, state.activityCreator, state.attendees));
   }
 
-  Future<void> postData(String description) async {
+  Future<void> updateActivity(String description) async {
     var updatedActivity = state.activity.copyWith(description: description);
-    await _activityRepository.updateActivity(updatedActivity);
+    await _activityRepository.updateLocalActivity(updatedActivity);
+    await _activityRepository.postActivity(state.activity);
+  }
+
+  Future<void> createActivity(String description) async {
+    var updatedActivity = state.activity.copyWith(description: description);
+    await _activityRepository.updateLocalActivity(updatedActivity);
     await _activityRepository.postActivity(state.activity);
   }
 }
+
+
