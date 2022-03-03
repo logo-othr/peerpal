@@ -91,7 +91,7 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
 
       var currentActivity = await _activityRepository.getCurrentActivity();
       var activity = currentActivity.copyWith(location: state.selectedLocations[0]);
-      _activityRepository.updateActivity(activity);
+      _activityRepository.updateLocalActivity(activity);
 
       emit(ActivityLocationPosted(state.locations, state.selectedLocations));
       return activity;
