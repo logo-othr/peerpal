@@ -44,7 +44,7 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
   Future<Activity> postData() async {
     var activity = await _activityRepository.getCurrentActivity();
     activity = activity.copyWith(invitationIds: state.invitations.map((e) => e.id!).toList());
-    _activityRepository.updateActivity(activity);
+    _activityRepository.updateLocalActivity(activity);
     return activity;
   }
 
