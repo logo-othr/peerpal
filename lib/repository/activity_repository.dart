@@ -9,7 +9,6 @@ import 'package:peerpal/repository/models/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {
-
   SharedPreferences prefs;
 
   ActivityRepository(this.prefs);
@@ -36,7 +35,7 @@ class ActivityRepository {
     return activities;
   }
 
-  updateActivity(Activity activity) {
+  updateLocalActivity(Activity activity) {
     prefs.setString("activity_creation", jsonEncode(activity.toJson()));
   }
 
@@ -45,7 +44,7 @@ class ActivityRepository {
     try {
       var activityMap = jsonDecode(prefs.getString('activity_creation')!);
       activity = Activity.fromJson(activityMap);
-    } catch(e) {
+    } catch (e) {
       // ToDo: Implement.
     }
     return activity;
@@ -55,17 +54,33 @@ class ActivityRepository {
     //ToDo: use toJson / toMap
     await FirebaseFirestore.instance
         .collection('activities')
-        .doc()
+        .doc(activity.id)
         .set(activity.toJson());
   }
 
+  Future<void> joinActivity(Activity activity) async {
+    String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance.collection('joinActivity').doc().set({
+      'activityId': activity.id,
+      'joiningId': currentUserId,
+      'invitationIds': activity.invitationIds,
+
+    });
+  }
+
+  Future<void> leaveActivity(Activity activity) async {
+    String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance.collection('leaveActivity').doc().set({
+      'activityId': activity.id,
+      'leavingId': currentUserId,
+    });
+  }
 
   Future<List<Location>> loadLocations() async {
     final jsonData = await rootBundle.loadString('assets/location.json');
     final list = json.decode(jsonData) as List<dynamic>;
     return list.map((e) => Location.fromJson(e)).toList();
   }
-
 
   Stream<List<Activity>> getPublicActivities(String currentUserId) async* {
     Stream<QuerySnapshot> publicActivityStream = FirebaseFirestore.instance
@@ -87,9 +102,10 @@ class ActivityRepository {
     }
   }
 
-
-  Stream<List<Activity>> getPrivateRequestActivitiesForUser(String currentUserId) async* {
-    Stream<QuerySnapshot> privateRequestActivityStream = FirebaseFirestore.instance
+  Stream<List<Activity>> getPrivateRequestActivitiesForUser(
+      String currentUserId) async* {
+    Stream<QuerySnapshot> privateRequestActivityStream = FirebaseFirestore
+        .instance
         .collection('activities')
         .where('invitationIds', arrayContains: currentUserId)
         .orderBy('date', descending: true)
@@ -106,11 +122,12 @@ class ActivityRepository {
       });
       yield privateRequestActivitiesFromUserList;
     }
-
   }
 
-  Stream<List<Activity>> getPrivateJoinedActivitiesForUser(String currentUserId) async* {
-    Stream<QuerySnapshot> privateJoinedActivityStream = FirebaseFirestore.instance
+  Stream<List<Activity>> getPrivateJoinedActivitiesForUser(
+      String currentUserId) async* {
+    Stream<QuerySnapshot> privateJoinedActivityStream = FirebaseFirestore
+        .instance
         .collection('activities')
         .where('attendeeIds', arrayContains: currentUserId)
         .orderBy('date', descending: true)
@@ -127,6 +144,5 @@ class ActivityRepository {
       });
       yield publicJoinedActivitiesFromUserList;
     }
-
   }
 }
