@@ -25,7 +25,10 @@ PublicUserInformationDTO _$PublicUserInformationDTOFromJson(
           ?.map((e) => e as String)
           .toList(),
       imagePath: json['imagePath'] as String?,
-    );
+    )..combined_location_activities =
+        (json['combined_location_activities'] as List<dynamic>)
+            .map((e) => e as String)
+            .toList();
 
 Map<String, dynamic> _$PublicUserInformationDTOToJson(
         PublicUserInformationDTO instance) =>
@@ -41,4 +44,5 @@ Map<String, dynamic> _$PublicUserInformationDTOToJson(
       'discoverActivities': instance.discoverActivities,
       'discoverLocations': instance.discoverLocations,
       'imagePath': instance.imagePath,
+      'combined_location_activities': instance.combined_location_activities,
     };

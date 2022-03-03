@@ -236,10 +236,16 @@ Future<void> registerFCMDeviceToken() async{
         .where(UserDatabaseContract.userAge,
             isLessThanOrEqualTo: currentUser.discoverToAge);
 
-    query = query.where(UserDatabaseContract.discoverLocations,
+
+    PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(currentUser);
+    query = query.where('combined_location_activities',
+        arrayContainsAny:
+        userDTO.publicUserInformation?.combined_location_activities);
+
+ /*   query = query.where(UserDatabaseContract.discoverLocations,
         arrayContainsAny:
             currentUser.discoverLocations!.map((e) => e.place).toList());
-
+*/
 
     //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
    /* if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {

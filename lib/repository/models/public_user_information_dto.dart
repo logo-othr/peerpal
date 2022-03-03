@@ -5,7 +5,7 @@ part 'public_user_information_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PublicUserInformationDTO {
-  const PublicUserInformationDTO(
+  PublicUserInformationDTO(
       {this.id,
       this.name,
       this.age,
@@ -15,7 +15,11 @@ class PublicUserInformationDTO {
       this.hasChatCommunicationPreference = false,
       this.discoverActivities,
       this.discoverLocations,
-      this.imagePath});
+      this.imagePath}) {
+    combined_location_activities = [];
+    if(discoverActivities != null) combined_location_activities.addAll(discoverActivities!);
+    if(discoverLocations != null) combined_location_activities.addAll(discoverLocations!);
+  }
 
   final String? id;
   final String? name;
@@ -27,6 +31,17 @@ class PublicUserInformationDTO {
   final List<String>? discoverActivities;
   final List<String>? discoverLocations;
   final String? imagePath;
+
+  /**
+   * Private class member used for firebase query. Workaround because
+   * we can only use arrayContains once per query in firebase.
+   * Do not use this member outside of this class.
+   * Can't be private because of json generator.
+   * ToDo: Think about a better implementation
+   */
+  late List<String> combined_location_activities;
+
+
 
   PublicUserInformationDTO copyWith(
       {String? id,
