@@ -46,7 +46,7 @@ class CustomSingleDescriptionTable extends StatelessWidget {
                     fillColor: Colors.white,
                     hintText: description,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(0),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
