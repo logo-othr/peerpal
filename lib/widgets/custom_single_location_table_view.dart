@@ -12,10 +12,11 @@ class CustomSingleLocationTable extends StatelessWidget {
   String? text;
   String? subText;
   VoidCallback? onPressed;
+  final bool isArrowIconVisible;
 
 
 
-  CustomSingleLocationTable({this.heading, this.text, this.subText, this.onPressed});
+  CustomSingleLocationTable({this.heading, this.text, this.subText, this.onPressed, required this.isArrowIconVisible});
 
 
   @override
@@ -60,11 +61,11 @@ class CustomSingleLocationTable extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Icon(
+                        isArrowIconVisible? Icon(
                           Icons.arrow_forward_ios,
                           size: 15,
                           color: secondaryColor,
-                        )
+                        ) : Container(),
                       ],
                     ),
                     style: TextButton.styleFrom(
