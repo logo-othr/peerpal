@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/chat_answer_button.dart';
 import 'package:peerpal/widgets/chat_emoji_button.dart';
@@ -21,6 +22,7 @@ class _ChatButtonsState extends State<ChatButtons> {
     /*  Future.delayed(
         const Duration(milliseconds: 800),
     );*/
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     setState(() {
       toggleChatAnswerKeyboard = false;
     });
@@ -29,6 +31,7 @@ class _ChatButtonsState extends State<ChatButtons> {
   void onCancelEmojiKeyboard() {
     /*  Future.delayed(
         const Duration(milliseconds: 800));*/
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     setState(() {
       toggleChatEmojiKeyboard = false;
     });
@@ -58,6 +61,7 @@ class _ChatButtonsState extends State<ChatButtons> {
                 ),
                 child: GestureDetector(
                   onTap: () {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
                     setState(() {
                       toggleChatEmojiKeyboard = true;
                     });
@@ -88,6 +92,7 @@ class _ChatButtonsState extends State<ChatButtons> {
                 ),
                 child: GestureDetector(
                     onTap: () {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
                       setState(() {
                         toggleChatAnswerKeyboard = true;
                       });
