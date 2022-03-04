@@ -98,62 +98,64 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                           )
                       ),
                 ),
-                  CustomSingleTable(
-                        heading: "Name",
-                        text: state.appUserInformation.name!,
-                        isArrowIconVisible: true,
-                        onPressed: () async => {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    NameInputPage(isInFlowContext: false,pastName: state.appUserInformation.name!)),
-                          ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
-                        }),
-           
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          CustomSingleTable(
+                                heading: "Name",
+                                text: state.appUserInformation.name!,
+                                isArrowIconVisible: true,
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            NameInputPage(isInFlowContext: false,pastName: state.appUserInformation.name!)),
+                                  ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
+                                }),
+                          CustomSingleTable(
+                              heading: 'ALTER',
+                              text: state.appUserInformation.age.toString(),
+                              isArrowIconVisible: true,
+                              onPressed: () async => {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AgeInputPage(isInFlowContext: false)),
+                                ).then((value) => context.read<ProfileOverviewCubit>().loadData())
 
-                 CustomSingleTable(
-                          heading: 'ALTER',
-                          text: state.appUserInformation.age.toString(),
-                          isArrowIconVisible: true,
-                          onPressed: () async => {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AgeInputPage(isInFlowContext: false)),
-                            ).then((value) => context.read<ProfileOverviewCubit>().loadData())
-                 
-                            
-                          }
-                          
-                ),
- 
-                      CustomSingleTable(
-                          heading: 'TELEFONNUMMER',
-                          text: state.appUserInformation.phoneNumber.toString(),
-                          isArrowIconVisible: true,
-                          onPressed: () async => {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      PhoneInputPage(isInFlowContext: false,pastPhone: state.appUserInformation.phoneNumber.toString())),
-                            ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
-                          }
+
+                              }
+
                           ),
-                
-                    const Spacer(),
+
+                          CustomSingleTable(
+                              heading: 'TELEFONNUMMER',
+                              text: state.appUserInformation.phoneNumber.toString(),
+                              isArrowIconVisible: true,
+                              onPressed: () async => {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PhoneInputPage(isInFlowContext: false,pastPhone: state.appUserInformation.phoneNumber.toString())),
+                                ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
+                              }
+                          ),
+
+
+                        ],
+                      ),
+                    ),
+                  ),
+                    SizedBox(height: 20),
                     Container(
                         color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            CustomPeerPALButton(
-                              text: 'Fertig',
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                          ],
+                        child: CustomPeerPALButton(
+                          text: 'Fertig',
+                          onPressed: () => Navigator.pop(context),
                         ))
                   ],
                 ),
