@@ -101,4 +101,10 @@ class PeerPALUserDTO {
       _$PeerPALUserDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$PeerPALUserDTOToJson(this);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "PrivateUser: ${privateUserInformation.toString()} PublicUser: ${publicUserInformation.toString()}";
+  }
 }
