@@ -19,7 +19,7 @@ class _ImprintPageState extends State<ImprintPage> {
       ),
       body: Center(
         child: Container(
-          width: 250,
+     padding: EdgeInsets.all(20),
           child: Column(
             children: [
               SizedBox(height: 20),
