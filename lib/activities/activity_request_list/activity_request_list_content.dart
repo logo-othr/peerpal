@@ -6,6 +6,7 @@ import 'package:peerpal/activities/activity_request_list/bloc/activity_request_l
 
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -52,7 +53,7 @@ class _ActivityRequestListContentState extends State<ActivityRequestListContent>
 
   Widget ActivityRequestList(BuildContext context) {
     var searchFieldController = TextEditingController();
-    searchFieldController.text = "Derzeit noch deaktiviert";
+    searchFieldController.text = Strings.searchDisabled;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
