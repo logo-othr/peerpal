@@ -27,4 +27,9 @@ class MemoryCache implements Cache{
     if (value is T) return value;
     return null;
   }
+
+  @override
+  String toString() {
+    return _memoryCache.toString();
+  }
 }
