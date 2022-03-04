@@ -1,6 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_location/cubit/discover_location_cubit.dart';
@@ -242,13 +243,25 @@ class _LocationSearchListItem extends StatelessWidget {
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            context.read<DiscoverLocationCubit>().addLocation(location);
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Text(("${location.place} hinzugefügt."))),
+            if( context.read<DiscoverLocationCubit>().state.selectedLocations.length >= 3) {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                      content: Text(("Es können nicht mehr als 3 Orte hinzugefügt werden."))),
                 );
+            } else {
+              SystemChannels.textInput.invokeMethod('TextInput.hide');
+              context.read<DiscoverLocationCubit>().addLocation(location);
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                      content: Text(("${location.place} hinzugefügt."))),
+                );
+            }
+
             },
           child: Row(
             children: [
