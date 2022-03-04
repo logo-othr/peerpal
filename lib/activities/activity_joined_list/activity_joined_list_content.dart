@@ -6,6 +6,7 @@ import 'package:peerpal/activities/activity_public_overview_page/view/activity_p
 
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -52,7 +53,7 @@ class _ActivityJoinedListContentState extends State<ActivityJoinedListContent> {
 
   Widget ActivityJoinedList(BuildContext context) {
     var searchFieldController = TextEditingController();
-    searchFieldController.text = "Derzeit noch deaktiviert";
+    searchFieldController.text = Strings.searchDisabled;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
