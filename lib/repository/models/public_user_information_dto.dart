@@ -73,4 +73,10 @@ class PublicUserInformationDTO {
       _$PublicUserInformationDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$PublicUserInformationDTOToJson(this);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "$id, $name, $age, $discoverFromAge, $discoverToAge, $hasPhoneCommunicationPreference, $hasChatCommunicationPreference, $discoverActivities, $discoverLocations, $imagePath";
+  }
 }
