@@ -33,7 +33,7 @@ class DateInputCubit extends Cubit<DateInputState> {
   }
 
   Future<Activity> postData() async {
-    DateFormat inputFormat = DateFormat("dd.MM.yyyy kk:mm");
+    DateFormat inputFormat = DateFormat("dd.MM.yyyy hh:mm");
     DateTime dt = inputFormat.parse('${state.date} ${state.time}');
     // Timestamp ts = Timestamp.fromDate(dt);
     var activity = await _activityRepository.getCurrentActivity();
