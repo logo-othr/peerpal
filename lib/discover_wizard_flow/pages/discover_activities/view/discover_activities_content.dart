@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_activities/cubit/discover_activities_cubit.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -21,6 +22,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var hasBackButton = (isInFlowContext) ? false : true;
+    searchBarController.text = Strings.searchDisabled;
     return BlocBuilder<DiscoverActivitiesCubit,
         DiscoverActivitiesState>(
       builder: (context, state) {
@@ -53,8 +55,9 @@ class DiscoverActivitiesContent extends StatelessWidget {
                       height: 50,
                     ),
                     CupertinoSearchTextField(
-                      enabled: (state is DiscoverActivitiesLoaded ||
-                          state is DiscoverActivitiesSelected),
+                     // enabled: (state is DiscoverActivitiesLoaded ||
+                    //      state is DiscoverActivitiesSelected),
+                      enabled: false,
                       controller: searchBarController,
                     ),
                     Expanded(
