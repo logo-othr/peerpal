@@ -21,6 +21,7 @@ class DiscoverLocationContent extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           'Standorte',
           hasBackButton: isInFlowContext,
@@ -40,7 +41,6 @@ class DiscoverLocationContent extends StatelessWidget {
                       _LocationSearchBar(
                         searchBarController: searchBarController,
                       ),
-                      const Spacer(),
                       context
                           .read<DiscoverLocationCubit>()
                           .state
