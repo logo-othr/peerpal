@@ -6,4 +6,6 @@ abstract class Cache {
   T? get<T extends Object>({required String key});
 
   void clear({String? key});
+
+  String toString();
 }
