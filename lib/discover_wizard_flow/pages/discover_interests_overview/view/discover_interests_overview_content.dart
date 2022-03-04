@@ -54,63 +54,75 @@ class _DiscoverInterestsOverviewContentState extends State<DiscoverInterestsOver
                           child: CustomPeerPALHeading1("Suchkriterien"),
                         ),
                       ),
-                      CustomSingleTable(
-                        heading: "ALTER",
-                        text: '${state.appUserInformation.discoverFromAge!}-${state.appUserInformation.discoverToAge!}',
-                        isArrowIconVisible: true,
-                          onPressed: () async => {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DiscoverAgePage(isInFlowContext: false, /*pastName: state.appUserInformation.name!*/)),
-                            ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
-                          }
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              CustomSingleTable(
+                                heading: "ALTER",
+                                text: '${state.appUserInformation.discoverFromAge!}-${state.appUserInformation.discoverToAge!}',
+                                isArrowIconVisible: true,
+                                  onPressed: () async => {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DiscoverAgePage(isInFlowContext: false, /*pastName: state.appUserInformation.name!*/)),
+                                    ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
+                                  }
+                              ),
+
+                              CustomSingleTableWithListItems(
+                                heading: "INTERESSEN",
+                                list: state.appUserInformation.discoverActivitiesCodes
+                                    ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
+                                    .toList(),
+                                isArrowIconVisible: true,
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DiscoverActivitiesPage(isInFlowContext: false, /*pastName: state.appUserInformation.name!*/)),
+                                  ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
+                                },
+                              ),
+                              CustomSingleTableWithListItems(
+                                heading: "KOMMUNIKATIONSART",
+                                list: communicationTypesAsString,
+                                isArrowIconVisible: true,
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DiscoverCommunicationPage(isInFlowContext: false,/*pastName: state.appUserInformation.name!*/)),
+                                  ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
+                                },
+                              ),
+                              CustomSingleTableWithListItems(
+                                heading: "ORT",
+                                list: state.appUserInformation.discoverLocations
+                                    ?.map((e) => e.place)
+                                    .toList(),
+                                isArrowIconVisible: true,
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DiscoverLocationPage(isInFlowContext: false, /*pastName: state.appUserInformation.name!*/)),
+                                  ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
+                                },
+                              ),
+
+                            ],
+                          ),
+                        ),
                       ),
-                      CustomSingleTableWithListItems(
-                        heading: "INTERESSEN",
-                        list: state.appUserInformation.discoverActivitiesCodes
-                            ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
-                            .toList(),
-                        isArrowIconVisible: true,
-                        onPressed: () async => {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    DiscoverActivitiesPage(isInFlowContext: false, /*pastName: state.appUserInformation.name!*/)),
-                          ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
-                        },
-                      ),
-                      CustomSingleTableWithListItems(
-                        heading: "KOMMUNIKATIONSART",
-                        list: communicationTypesAsString,
-                        isArrowIconVisible: true,
-                        onPressed: () async => {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    DiscoverCommunicationPage(isInFlowContext: false,/*pastName: state.appUserInformation.name!*/)),
-                          ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
-                        },
-                      ),
-                      CustomSingleTableWithListItems(
-                        heading: "ORT",
-                        list: state.appUserInformation.discoverLocations
-                            ?.map((e) => e.place)
-                            .toList(),
-                        isArrowIconVisible: true,
-                        onPressed: () async => {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    DiscoverLocationPage(isInFlowContext: false, /*pastName: state.appUserInformation.name!*/)),
-                          ).then((value) => context.read<DiscoverInterestsOverviewCubit>().loadData()),
-                        },
-                      ),
-                      Spacer(),
+
+
+                      SizedBox(height: 20),
                       Container(
                           color: Colors.transparent,
                           child: Column(
