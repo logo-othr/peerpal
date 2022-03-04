@@ -152,7 +152,9 @@ Future<void> registerFCMDeviceToken() async{
   }
 
   Future<void> logout() async {
+
     try {
+      await unregisterFCMDeviceToken();
       await Future.wait([
         _firebaseAuth.signOut(),
       ]);
@@ -160,7 +162,7 @@ Future<void> registerFCMDeviceToken() async{
     } on Exception {
       throw LogoutException();
     }
-    await unregisterFCMDeviceToken();
+
   }
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser,
@@ -238,8 +240,7 @@ Future<void> registerFCMDeviceToken() async{
 
 
 
-
-    query = query.where(UserDatabaseContract.discoverLocations,
+    if(currentUser.discoverLocations != null && currentUser.discoverLocations!.isNotEmpty) query = query.where(UserDatabaseContract.discoverLocations,
         arrayContainsAny:
             currentUser.discoverLocations!.map((e) => e.place).toList());
 
@@ -313,6 +314,7 @@ Future<void> registerFCMDeviceToken() async{
   Future<List<PeerPALUser>> getMatchingUsers(
       {PeerPALUser? last = null, required int limit}) async {
     var currentPeerPALUser = await getCurrentUserInformation();
+    if(currentPeerPALUser.discoverLocations != null && currentPeerPALUser.discoverLocations!.isEmpty) return [];
 
     var publicUserCollection =
         await _firestore.collection(UserDatabaseContract.publicUsers);
@@ -335,6 +337,8 @@ Future<void> registerFCMDeviceToken() async{
     var peerPALUserDTOs = publicUsers
         .map((e) => PeerPALUserDTO(publicUserInformation: e))
         .toList();
+
+    // ToDo: filter for activities
 
     var peerPALUsers = peerPALUserDTOs.map((e) => e.toDomainObject()).toList();
     return peerPALUsers;
