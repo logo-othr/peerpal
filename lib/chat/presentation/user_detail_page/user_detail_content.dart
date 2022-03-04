@@ -120,28 +120,37 @@ class UserDetailContent extends StatelessWidget {
                           ],
                         ),
                       )),
-                  CustomSingleTable(
-                    heading: 'AKTIVITÄTEN',
-                    text: state.user.discoverActivitiesCodes!
-                        .map((e) => ActivityRepository.getActivityNameFromCode(e))
-                        .toList()
-                        .join(','),
-                    isArrowIconVisible: false,
-                    onPressed: () {},
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          CustomSingleTable(
+                            heading: 'AKTIVITÄTEN',
+                            text: state.user.discoverActivitiesCodes!
+                                .map((e) => ActivityRepository.getActivityNameFromCode(e))
+                                .toList()
+                                .join(', '),
+                            isArrowIconVisible: false,
+                            onPressed: () {},
+                          ),
+                          CustomSingleTable(
+                            heading: 'KOMMUNIKATIONSART',
+                            text: 'Chat',
+                            isArrowIconVisible: false,
+                            onPressed: () {},
+                          ),
+                          CustomSingleTable(
+                            heading: 'ORT',
+                            text: 'Mainz',
+                            isArrowIconVisible: false,
+                            onPressed: () {},
+                          ),
+
+                        ],
+                      ),
+                    ),
                   ),
-                  CustomSingleTable(
-                    heading: 'KOMMUNIKATIONSART',
-                    text: 'Chat',
-                    isArrowIconVisible: false,
-                    onPressed: () {},
-                  ),
-                  CustomSingleTable(
-                    heading: 'ORT',
-                    text: 'Mainz',
-                    isArrowIconVisible: false,
-                    onPressed: () {},
-                  ),
-                  Spacer(),
+                  SizedBox(height: 20),
                   Container(
                       color: Colors.transparent,
                       child: Column(
@@ -208,7 +217,7 @@ class UserDetailContent extends StatelessWidget {
                         }, color: Colors.red);
 
                       } else {
-                        return FriendRequestPeerPALButton(buttonText: "Anfrage senden", onPressed: () {
+                        return FriendRequestPeerPALButton(buttonText: "Freundschaftsanfrage senden", onPressed: () {
                           sl.get<AppUserRepository>()
                               .sendFriendRequestToUser(
                               chatPartner);
