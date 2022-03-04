@@ -7,6 +7,7 @@ import 'package:peerpal/friends/custom_friend_list_item_user.dart';
 import 'package:peerpal/friends/friend_request_page/view/friend_requests_page.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_centered_info_text.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -55,7 +56,7 @@ class FriendsOverviewContent extends StatelessWidget {
 
   Widget friendList(BuildContext context) {
     var searchBarController = new TextEditingController();
-    searchBarController.text = "Derzeit noch deaktiviert";
+    searchBarController.text = Strings.searchDisabled;
     return Column(
       children: <Widget>[
         GestureDetector(
@@ -87,6 +88,7 @@ class FriendsOverviewContent extends StatelessWidget {
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: CustomCupertinoSearchBar(
+              enabled: false,
               heading: null,
               searchBarController: searchBarController,
             )),
