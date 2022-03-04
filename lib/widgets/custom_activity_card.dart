@@ -64,44 +64,53 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Container(
-                              child: CircleAvatar(
-                                radius: 30,
-                                child: Icon(
-                                  ActivityIconData
-                                      .icons[widget.activity.code],
-                                  size: 40,
-                                  color: Colors.black,
+                        Flexible(
+                          flex: 33,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                            child: Container(
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  child: Icon(
+                                    ActivityIconData
+                                        .icons[widget.activity.code],
+                                    size: 40,
+                                    color: Colors.black,
+                                  ),
+                                  backgroundColor: Colors.white,
                                 ),
-                                backgroundColor: Colors.white,
-                              ),
-                              decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: new Border.all(
-                                  color: primaryColor,
-                                  width: 2.0,
-                                ),
-                              )),
-                        ),
-                        Center(
-                          child: CustomPeerPALHeading2(
-                            widget.activity.name!,
-                            color: primaryColor,
+                                decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: new Border.all(
+                                    color: primaryColor,
+                                    width: 2.0,
+                                  ),
+                                )),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                          child: widget.isOwnCreatedActivity
-                              ? Icon(
-                                  Icons.edit,
-                                  color: primaryColor,
-                                  size: 30,
-                                )
-                              : Container(
-                                  width: 30,
-                                ),
+                        Flexible(
+                          flex: 33,
+                          child: Center(
+                            child: CustomPeerPALHeading2(
+                              widget.activity.name!,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 33,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                            child: widget.isOwnCreatedActivity
+                                ? Icon(
+                                    Icons.edit,
+                                    color: primaryColor,
+                                    size: 30,
+                                  )
+                                : Container(
+                                    width: 30,
+                                  ),
+                          ),
                         )
                       ],
                     )),
