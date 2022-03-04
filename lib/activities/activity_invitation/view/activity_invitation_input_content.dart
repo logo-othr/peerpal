@@ -8,6 +8,7 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_activity_header_card.dart';
 import 'package:peerpal/widgets/custom_activity_invite_friends_list_item.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -25,6 +26,8 @@ class InviteFriendsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController searchFieldController = TextEditingController();
+    searchFieldController.text = Strings.searchDisabled;
     return BlocBuilder<InvitationInputCubit, ActivityInvitationState>(
       builder: (context, state) {
         return Scaffold(
@@ -49,7 +52,10 @@ class InviteFriendsContent extends StatelessWidget {
                           bottom: BorderSide(width: 1, color: secondaryColor))),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                    child: CupertinoSearchTextField(),
+                    child: CupertinoSearchTextField(
+                      enabled: false,
+                      controller: searchFieldController,
+                    ),
                   ),
                 ),
                 Expanded(
