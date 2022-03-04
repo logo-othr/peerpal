@@ -81,9 +81,15 @@ class DateInputContent extends StatelessWidget {
   }
 }
 
-class _DatePicker extends StatelessWidget {
+class _DatePicker extends StatefulWidget {
+  @override
+  State<_DatePicker> createState() => _DatePickerState();
+}
+
+class _DatePickerState extends State<_DatePicker> {
   var dateController = TextEditingController(
       text: DateFormat('dd.MM.yyyy').format(DateTime.now()).toString());
+
   String? datePickerText;
 
   @override
@@ -132,7 +138,12 @@ class _DatePicker extends StatelessWidget {
   }
 }
 
-class _TimePicker extends StatelessWidget {
+class _TimePicker extends StatefulWidget {
+  @override
+  State<_TimePicker> createState() => _TimePickerState();
+}
+
+class _TimePickerState extends State<_TimePicker> {
   TextEditingController timeController = TextEditingController(
       text: '${DateFormat('kk:mm').format(DateTime.now())} Uhr');
 

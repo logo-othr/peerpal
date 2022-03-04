@@ -150,7 +150,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                   fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy hh:mm').format(widget.activity.date!)), color: Colors.black)
+                                CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy kk:mm').format(widget.activity.date!)), color: Colors.black)
                               ],
                             ),
                             SizedBox(height: 5),
