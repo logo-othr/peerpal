@@ -80,11 +80,12 @@ class ChatPageContent extends StatelessWidget {
               chatHeader(context, state.chatPartner),
               friendRequestButton(context, state.chatPartner),
               buildChatMessages(context, state),
-              ChatButtons(textEditingController: textEditingController),
-              //const SingleChatAnswerButtons(),
               (!state.userChat.chat.chatRequestAccepted &&
                       state.userChat.chat.startedBy != state.appUser.id)
-                  ? _showChatRequestButtons(context)
+                  ? Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
+                    child: _showChatRequestButtons(context),
+                  )
                   : StreamBuilder<int>(
                       stream: sl<ChatRepository>()
                           .messageCountForChat(state.userChat.chat.chatId),
@@ -107,8 +108,13 @@ class ChatPageContent extends StatelessWidget {
                             ),
                           );
                         } else {
-                          return singleChatTextFormField(state.chatPartner,
-                              state.userChat.chat.chatId, context);
+                          return Column(
+                            children: [
+                              ChatButtons(textEditingController: textEditingController),
+                              singleChatTextFormField(state.chatPartner,
+                                  state.userChat.chat.chatId, context),
+                            ],
+                          );
                         }
                         return Container();
                         /* if (!snapshot.hasData || snapshot.data == 0) {
@@ -256,7 +262,7 @@ class ChatPageContent extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.grey[100],
                   hintText: 'Nachricht',
-                  suffixIcon: Padding(
+            /*      suffixIcon: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -282,7 +288,7 @@ class ChatPageContent extends StatelessWidget {
                             : Container(),
                       ],
                     ),
-                  ),
+                  ),*/
                 ),
               ),
             ),
