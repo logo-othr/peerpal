@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/repository/activity_repository.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_bottom_indicator.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
+import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/discover_user_list_item.dart';
 import 'package:provider/src/provider.dart';
@@ -52,7 +55,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   @override
   Widget build(BuildContext context) {
     var personSearchFieldController = TextEditingController();
-    personSearchFieldController.text = "Derzeit noch deaktiviert";
+    personSearchFieldController.text = Strings.searchDisabled;
     return Scaffold(
       appBar: CustomAppBar(
         'Entdecken',
@@ -66,8 +69,48 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                   child: Text('Die Nutzer konnten nicht geladen werden.'));
             case DiscoverTabStatus.success:
               if (state.users.isEmpty) {
-                return const Center(
-                    child: Text('Es konnten keine Nutzer gefunden werden'));
+                return Column(
+                  children: [
+                    Container(
+                        width: double.infinity,
+                        height: 90,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            border: Border(
+                              //top: BorderSide(width: 1, color: secondaryColor),
+                                bottom:
+                                BorderSide(width: 1, color: secondaryColor))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CustomPeerPALHeading3(
+                              text:
+                              'Personen die deinen\nSuchkriterien entsprechen',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 100),
+                    const Center(
+                        child: Text('Es konnten keine Nutzer gefunden werden')),
+                    SizedBox(height: 30),
+                    CustomPeerPALButton(
+                      text: "Suchkriterien ändern",
+                      onPressed: () async => {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DiscoverInterestsOverviewPage()),
+                        ).then((value) =>
+                            context.read<DiscoverTabBloc>().add(ReloadUsers())),
+                      },
+                    )
+                  ],
+                );
               }
               return Column(
                 children: [
@@ -77,8 +120,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                           border: Border(
                               top: BorderSide(width: 1, color: secondaryColor),
                               bottom:
-                              BorderSide(width: 1, color: secondaryColor))),
+                                  BorderSide(width: 1, color: secondaryColor))),
                       child: CustomCupertinoSearchBar(
+                        enabled: false,
                           heading: 'Personensuche',
                           searchBarController: personSearchFieldController)),
                   Container(
@@ -87,16 +131,16 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                       decoration: BoxDecoration(
                           color: Colors.grey[100],
                           border: Border(
-                            //top: BorderSide(width: 1, color: secondaryColor),
+                              //top: BorderSide(width: 1, color: secondaryColor),
                               bottom:
-                              BorderSide(width: 1, color: secondaryColor))),
+                                  BorderSide(width: 1, color: secondaryColor))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CustomPeerPALHeading3(
                             text:
-                            'Personen die deinen\nSuchkriterien entsprechen',
+                                'Personen die deinen\nSuchkriterien entsprechen',
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             textAlign: TextAlign.center,
@@ -126,8 +170,10 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                               locations: user.discoverLocations
                                   ?.map((e) => e.place)
                                   .toList(),
-                              activities: state.users[index].discoverActivitiesCodes
-                                  ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
+                              activities: state
+                                  .users[index].discoverActivitiesCodes
+                                  ?.map((e) => ActivityRepository
+                                      .getActivityNameFromCode(e))
                                   .toList());
                         }
                       },
