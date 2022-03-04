@@ -56,6 +56,7 @@ class HomeView extends StatelessWidget {
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
             if (state is HomeUserInformationFlowCompleted) {
+              context.read<AppUserRepository>().registerFCMDeviceToken();
               return MyTabView();
             }
             return Container(
