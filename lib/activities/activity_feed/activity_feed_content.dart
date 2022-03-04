@@ -11,6 +11,7 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_empty_list_hint.dart';
@@ -79,7 +80,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
 
   Widget ActivityFeedList(BuildContext context) {
     var searchFieldController = TextEditingController();
-    searchFieldController.text = "Derzeit noch deaktiviert";
+    searchFieldController.text = Strings.searchDisabled;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -138,6 +139,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: CustomCupertinoSearchBar(
+              enabled: false,
                 searchBarController: searchFieldController)),
         Expanded(
           child: StreamBuilder<List<Activity>>(
