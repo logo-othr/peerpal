@@ -4,6 +4,7 @@ import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/activity_repository.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_bottom_indicator.dart';
@@ -52,7 +53,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   @override
   Widget build(BuildContext context) {
     var personSearchFieldController = TextEditingController();
-    personSearchFieldController.text = "Derzeit noch deaktiviert";
+    personSearchFieldController.text = Strings.searchDisabled;
     return Scaffold(
       appBar: CustomAppBar(
         'Entdecken',
