@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
+import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_overview/cubit/profile_overview_cubit.dart';
@@ -31,7 +31,7 @@ class _SettingsPageState extends State<SettingsPage> {
     CustomTableRow(text: "Lizenzen")
   ];
 
-  Future<String> getPlattformData() async {
+  /*Future<String> getPlattformData() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     String appName = packageInfo.appName;
@@ -39,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
     return "[App-Name: ${appName}, Package-Name: ${packageName}, Version: ${version}, Build-Number: ${buildNumber}] ";
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,20 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: CustomAppBar("Einstellungen", hasBackButton: false),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(height: 10),
+            Align(
+                alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                    height: 120,
+                    width: 120,
+                    child:
+                        Image(image: AssetImage('assets/PeerPAL-Logo.png')))),
+            SizedBox(height: 10),
+            Divider(thickness: 1, color: primaryColor),
+            SizedBox(height: 10),
             CustomTableHeader(heading: "PERSÖNLICHE DATEN"),
             CustomTableRow(
               text: "Profil",
