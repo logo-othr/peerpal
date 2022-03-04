@@ -4,12 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:peerpal/chat/chat_profile_overview.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
+import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
@@ -158,8 +158,8 @@ class ChatPageContent extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChatProfileOverview(
-                userInformation: user,
+              builder: (context) => UserDetailPage(
+                user.id!,
               ),
             ),
           );

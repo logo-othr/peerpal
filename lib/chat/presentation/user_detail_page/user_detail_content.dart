@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
@@ -9,6 +10,7 @@ import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -135,13 +137,19 @@ class UserDetailContent extends StatelessWidget {
                           ),
                           CustomSingleTable(
                             heading: 'KOMMUNIKATIONSART',
-                            text: 'Chat',
+                            text: state.user.discoverCommunicationPreferences!
+                                .map((e) => e.toUIString)
+                                .toList()
+                                .join(', '),
                             isArrowIconVisible: false,
                             onPressed: () {},
                           ),
                           CustomSingleTable(
                             heading: 'ORT',
-                            text: 'Mainz',
+                            text: state.user.discoverLocations!
+                                .map((e) => e.place)
+                                .toList()
+                                .join(', '),
                             isArrowIconVisible: false,
                             onPressed: () {},
                           ),
