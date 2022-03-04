@@ -5,6 +5,7 @@ import 'package:peerpal/activities/activity_selection/cubit/activity_selection_c
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -21,7 +22,7 @@ class ActivitySelectionContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var searchFieldController = TextEditingController();
-    searchFieldController.text = "Derzeit noch deaktiviert";
+    searchFieldController.text = Strings.searchDisabled;
     return BlocBuilder<ActivitySelectionCubit, ActivitySelectionState>(
         builder: (context, state) {
       return Scaffold(
