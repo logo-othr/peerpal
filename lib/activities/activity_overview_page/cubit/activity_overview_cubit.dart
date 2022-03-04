@@ -16,6 +16,7 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
 
   Future<void> loadData({Activity? activityToChange}) async {
     Activity activity = activityToChange ?? _activityRepository.getCurrentActivity();
+    if(activityToChange != null) _activityRepository.updateLocalActivity(activity);
     PeerPALUser activityCreator =
         await _appUserRepository.getUserInformation(activity.creatorId!);
     List<PeerPALUser> attendees = [];

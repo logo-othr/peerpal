@@ -3,7 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:peerpal/activities/activity_date/view/activity_date_input_page.dart';
+import 'package:peerpal/activities/activity_invitation/view/activity_invitation_input_page.dart';
+import 'package:peerpal/activities/activity_location/view/activity_location_input_page.dart';
 import 'package:peerpal/activities/activity_overview_page/cubit/activity_overview_cubit.dart';
+import 'package:peerpal/activities/activity_public_overview_page/cubit/activity_public_overview_cubit.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
@@ -66,20 +70,39 @@ class OverviewInputContent extends StatelessWidget {
                                   NetworkImage(activityCreator.imagePath!),
                                   tapIcon: Icons.email),
                               CustomSingleTable(
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ActivitySelectDatePage(isInFlowContext: false,)),
+                                  ).then((value) => context.read<OverviewInputCubit>()..loadData())
+                                },
                                 heading: "DATUM",
                                 text: DateFormat('dd.MM.yyyy')
                                     .format(activity.date!),
                                 isArrowIconVisible: true,
-                                onPressed: () {},
                               ),
                               CustomSingleTable(
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ActivitySelectDatePage(isInFlowContext: false,)),
+                                  ).then((value) => context.read<OverviewInputCubit>()..loadData())
+                                },
                                 heading: "UHRZEIT",
                                 text:
                                 DateFormat('kk:mm').format(activity.date!),
                                 isArrowIconVisible: true,
-                                onPressed: () {},
                               ),
                               CustomSingleLocationTable(
+                                  onPressed: () async => {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LocationInputPage(isInFlowContext: false,)),
+                                    ).then((value) => context.read<OverviewInputCubit>()..loadData())
+                                  },
                                   heading: "ORT",
                                   text: activity.location!.place,
                                   subText:
@@ -87,7 +110,14 @@ class OverviewInputContent extends StatelessWidget {
                                       .location!.streetNumber}",
                                   isArrowIconVisible: true),
                               CustomSingleParticipantsTable(
-                                heading: "TEILNEHMER",
+                                onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => InvitationInputPage(isInFlowContext: false,)),
+                                  ).then((value) => context.read<OverviewInputCubit>()..loadData())
+                                },
+                                heading: "EINGELADEN",
                                 text: activityAttendees
                                     .map((e) => e.name)
                                     .toList()
