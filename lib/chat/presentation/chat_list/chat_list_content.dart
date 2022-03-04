@@ -11,6 +11,7 @@ import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_page.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
@@ -57,7 +58,7 @@ class _ChatListContentState extends State<ChatListContent> {
 
   Widget ChatPartnerList(BuildContext context) {
     var searchFieldController = TextEditingController();
-    searchFieldController.text = "Derzeit noch deaktiviert";
+    searchFieldController.text = Strings.searchDisabled;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -92,6 +93,7 @@ class _ChatListContentState extends State<ChatListContent> {
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: CustomCupertinoSearchBar(
+              enabled: false,
                 searchBarController: searchFieldController)),
         Expanded(
           child: StreamBuilder<List<UserChat>>(
