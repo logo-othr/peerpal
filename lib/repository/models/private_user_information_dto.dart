@@ -26,4 +26,9 @@ class PrivateUserInformationDTO {
       _$PrivateUserInformationDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$PrivateUserInformationDTOToJson(this);
+
+  @override
+  String toString() {
+    return "id: $id, phoneNumer: $phoneNumber, pushToken: $pushToken";
+  }
 }
