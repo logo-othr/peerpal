@@ -29,7 +29,7 @@ dependencies:
   zxcvbn: ^1.0.0
   logger: ^1.0.0
   image_picker: ^0.8.4
-  image_cropper: ^1.4.1
+  image_cropper: ^1.5.0
   uuid: ^3.0.4
   cached_network_image: ^3.1.0
   enum_to_string: ^2.0.1
@@ -41,13 +41,14 @@ dependencies:
   get_it: ^7.2.0
   flutter_datetime_picker: ^1.5.1
   shared_preferences: ^2.0.12
+  change_app_package_name: ^1.0.0
 
 dev_dependencies:
   build_runner: ^2.1.4
   flutter_test:
     sdk: flutter
   json_serializable: ^6.0.0
-
+  change_app_package_name: ^1.0.0
 
 flutter:
   uses-material-design: true
