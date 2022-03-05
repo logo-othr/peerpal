@@ -6,6 +6,7 @@ const {
 
 const serviceAccount = require("./firebase-admin-sdk.json"); // PP-Test-DB
 
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -599,7 +600,7 @@ function getNameFromUser(db, change) {
 
 function sendPushNotification(change, db, payload) {
   if (deviceTokens.has(change.doc.data().toId)) {
-    if (deviceTokens.get(change.doc.data().toId).empty || deviceTokens.get(change.doc.data().toId) == null) {
+    if (deviceTokens.get(change.doc.data().toId) == null) {
       console.log('sendPushNotification() No deviceToken exist for User')
       return;
     }
@@ -615,8 +616,8 @@ function sendPushNotification(change, db, payload) {
       .then(documentQuerySnapshot => {
 
         var deviceToken = documentQuerySnapshot.data().pushToken;
-
-        deviceTokens.set(documentQuerySnapshot.id, deviceToken);
+        //Aktivate for lazy caching
+        //deviceTokens.set(documentQuerySnapshot.id, deviceToken);
         console.log(`deviceToken: ${deviceToken}`);
 
         admin.messaging().sendToDevice(deviceToken, payload)
@@ -687,8 +688,8 @@ function sendPushNotificationsForActivity(change, db, payload) {
         .then(documentQuerySnapshot => {
 
           var deviceToken = documentQuerySnapshot.data().pushToken;
-
-          deviceTokens.set(documentQuerySnapshot.id, deviceToken);
+          //Aktivate for lazy caching
+          //deviceTokens.set(documentQuerySnapshot.id, deviceToken);
           console.log(`deviceToken: ${deviceToken}`);
 
           admin.messaging().sendToDevice(deviceToken, payload)
@@ -779,6 +780,10 @@ async function handleLeaveActivityNotificaction(db) {
       });
     });
 }
+
+
+
+
 
 
 
