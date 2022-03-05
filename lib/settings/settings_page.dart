@@ -14,6 +14,7 @@ import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/custom_logout_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
 import 'package:peerpal/widgets/custom_table_row.dart';
 import 'package:provider/src/provider.dart';
@@ -138,8 +139,13 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             CustomTableRow(
               text: "Logout",
-              onPressed: () async =>
-                  {context.read<AppBloc>().add(AppLogoutRequested())},
+              onPressed: () async => {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomLogoutDialog(onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()));
+                    }),
+              },
             ),
             Column(
               children: [
