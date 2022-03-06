@@ -66,6 +66,14 @@ class DiscoverLocationContent extends StatelessWidget {
 
   Future<void> _update(DiscoverLocationState state,
       BuildContext context) async {
+    if(context.read<DiscoverLocationCubit>().state.selectedLocations.length < 1) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+            SnackBar(
+                content: Text("Es muss mindestens ein Ort ausgewählt sein.")));
+            return;
+    }
     if (isInFlowContext) {
       await context.read<DiscoverLocationCubit>().postLocations();
       context.flow<PeerPALUser>().update(
@@ -251,7 +259,8 @@ class _LocationSearchListItem extends StatelessWidget {
                   SnackBar(
                       content: Text(("Es können nicht mehr als 3 Orte hinzugefügt werden."))),
                 );
-            } else {
+            }
+              else {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               context.read<DiscoverLocationCubit>().addLocation(location);
               ScaffoldMessenger.of(context)
