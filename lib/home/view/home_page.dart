@@ -94,10 +94,10 @@ class MyTabView extends StatelessWidget {
 
   final tabs = [
     Center(
-      child: Container(child: DiscoverTabView()),
+      child: ActivityFeedPage(),
     ),
     Center(
-      child: ActivityFeedPage(),
+      child: Container(child: DiscoverTabView()),
     ),
     Center(
       child: Container(child: FriendsOverviewPage()),
