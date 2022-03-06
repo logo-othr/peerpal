@@ -28,6 +28,11 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.black,
+    );
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Container(
@@ -124,75 +129,77 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                               color: widget.isOwnCreatedActivity
                                   ? primaryColor
                                   : secondaryColor))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                CustomPeerPALHeading3(
-                                  fontWeight: FontWeight.bold,
-                                  text:"Ersteller: "
-                                ),
-                                SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: widget.activity.creatorName ?? '', color: Colors.black,),
-                              ],
+                            CustomPeerPALHeading3(
+                              fontWeight: FontWeight.bold,
+                              text:"Ersteller: "
                             ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                CustomPeerPALHeading3(
-                                  text: "Datum: ",
-                                  fontWeight: FontWeight.bold,
+                            Flexible(
+                              child: RichText(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: widget.activity.creatorName ?? '',
+                                      style: textStyle,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy kk:mm').format(widget.activity.date!)), color: Colors.black)
-                              ],
+                              ),
                             ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                CustomPeerPALHeading3(
-                                 text: "Ort: ",
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: widget.activity.location?.place ?? '', color: Colors.black,),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                CustomPeerPALHeading3(
-                                  text: "Teilnehmer: ",
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(width: 5),
-                                CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? '0', color: Colors.black,),
-                              ],
-                            ),
-                           /* Row(
-                              children: [
-                                CustomPeerPALHeading3(
-                                  text: "DEBUG Activity ID: ",
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                SizedBox(width: 10),
-                                Container(width: 100, child: Flexible(child: CustomPeerPALHeading3(text: widget.activity.id!, color: Colors.red,))),
-                              ],
-                            ),*/
+                            //CustomPeerPALHeading3(text: widget.activity.creatorName ?? '', color: Colors.black,),
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
-
-                      ),
-                    ],
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            CustomPeerPALHeading3(
+                              text: "Datum: ",
+                              fontWeight: FontWeight.bold,
+                            ),
+                            CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy kk:mm').format(widget.activity.date!)), color: Colors.black)
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            CustomPeerPALHeading3(
+                             text: "Ort: ",
+                              fontWeight: FontWeight.bold,
+                            ),
+                            CustomPeerPALHeading3(text: widget.activity.location?.place ?? '', color: Colors.black,),
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            CustomPeerPALHeading3(
+                              text: "Teilnehmer: ",
+                              fontWeight: FontWeight.bold,
+                            ),
+                            CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? '0', color: Colors.black,),
+                          ],
+                        ),
+                       /* Row(
+                          children: [
+                            CustomPeerPALHeading3(
+                              text: "DEBUG Activity ID: ",
+                              fontWeight: FontWeight.bold,
+                            ),
+                            SizedBox(width: 10),
+                            Container(width: 100, child: Flexible(child: CustomPeerPALHeading3(text: widget.activity.id!, color: Colors.red,))),
+                          ],
+                        ),*/
+                      ],
+                    ),
                   )),
               ExpansionPanelList(
                 animationDuration: Duration(milliseconds: 500),
