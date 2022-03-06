@@ -25,6 +25,11 @@ class CustomSingleParticipantsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.black,
+    );
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -52,11 +57,19 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: CustomPeerPALHeading3(
-                            text: text!,
-                            color: Colors.black,
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: RichText(
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: text!,
+                                  style: textStyle,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         isArrowIconVisible
