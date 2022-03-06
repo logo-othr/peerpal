@@ -65,9 +65,7 @@ class InviteFriendsContent extends StatelessWidget {
                         AsyncSnapshot<List<PeerPALUser>> snapshot) {
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Center(
-                            child: CustomPeerPALButton(
-                          text: 'Freunde finden',
-                        ));
+                          child: Text("Sie haben noch keine Freunde in der App."),);
                       } else {
                         return ListView.builder(
                           itemBuilder: (context, index) =>
