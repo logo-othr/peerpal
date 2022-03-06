@@ -33,12 +33,12 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                customAnswerListTile(widget.textEditingController, 'Wie lautet deine Telefonnummer?'),
+                customAnswerListTile(widget.textEditingController, 'Möchten Sie telefonieren?'),
                 customAnswerListTile(widget.textEditingController, 'Ja'),
                 customAnswerListTile(widget.textEditingController, 'Nein'),
                 customAnswerListTile(widget.textEditingController, 'Hallo'),
-                customAnswerListTile(widget.textEditingController, 'Wie geht es dir?'),
-                customAnswerListTile(widget.textEditingController, 'Hast du lust etwas zu unternehmen?'),
+                customAnswerListTile(widget.textEditingController, 'Wie geht es Ihnen?'),
+                customAnswerListTile(widget.textEditingController, 'Möchten Sie etwas unternehmen?'),
                 customAnswerListTile(widget.textEditingController, 'Danke'),
                 customAnswerListTile(widget.textEditingController, 'Gern geschehen'),
               ],
