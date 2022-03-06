@@ -52,13 +52,13 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
   Future<void> updateActivity(String description) async {
     var updatedActivity = state.activity.copyWith(description: description);
     await _activityRepository.updateLocalActivity(updatedActivity);
-    await _activityRepository.postActivity(state.activity);
+    await _activityRepository.postActivity(updatedActivity);
   }
 
   Future<void> createActivity(String description) async {
     var updatedActivity = state.activity.copyWith(description: description);
     await _activityRepository.updateLocalActivity(updatedActivity);
-    await _activityRepository.postActivity(state.activity);
+    await _activityRepository.postActivity(updatedActivity);
   }
 }
 
