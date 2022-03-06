@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
@@ -31,6 +32,7 @@ class ChatPageContent extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   final TextEditingController textEditingController = TextEditingController();
+  FocusNode _focus = FocusNode();
   final ScrollController listScrollController = ScrollController();
   var currentUserId = FirebaseAuth.instance.currentUser!.uid;
   var newGroupChatId = '';
@@ -48,6 +50,11 @@ class ChatPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     listScrollController.addListener(_scrollListener);
+    _focus.addListener(() {
+      print("Focus: ${_focus.hasFocus.toString()}");
+
+
+    });
     return Scaffold(
       appBar: CustomAppBar(
         'Chat',
@@ -83,16 +90,17 @@ class ChatPageContent extends StatelessWidget {
               (!state.userChat.chat.chatRequestAccepted &&
                       state.userChat.chat.startedBy != state.appUser.id)
                   ? Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
-                    child: _showChatRequestButtons(context),
-                  )
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
+                      child: _showChatRequestButtons(context),
+                    )
                   : StreamBuilder<int>(
                       stream: sl<ChatRepository>()
                           .messageCountForChat(state.userChat.chat.chatId),
                       builder: (context, snapshot) {
-                        if(!snapshot.hasData) {
-                          return CustomLoadingIndicator(text: "Lade Nachrichten..");
-                        } else if(snapshot.data == 0) {
+                        if (!snapshot.hasData) {
+                          return CustomLoadingIndicator(
+                              text: "Lade Nachrichten..");
+                        } else if (snapshot.data == 0) {
                           return Container(
                             width: double.infinity,
                             height: 500,
@@ -102,15 +110,21 @@ class ChatPageContent extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text("Der Chat ist nicht mehr vorhanden."),
-                                SizedBox(height: 50,),
-                                CustomPeerPALButton(text: "Zurück", onPressed: () => Navigator.pop(context),)
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                CustomPeerPALButton(
+                                  text: "Zurück",
+                                  onPressed: () => Navigator.pop(context),
+                                )
                               ],
                             ),
                           );
                         } else {
                           return Column(
                             children: [
-                              ChatButtons(textEditingController: textEditingController),
+                              ChatButtons(
+                                  textEditingController: textEditingController),
                               singleChatTextFormField(state.chatPartner,
                                   state.userChat.chat.chatId, context),
                             ],
@@ -241,6 +255,7 @@ class ChatPageContent extends StatelessWidget {
             child: SizedBox(
               height: 40,
               child: TextField(
+                focusNode: _focus,
                 onSubmitted: (value) {
                   sendChatMessage(chatPartner, chatId,
                       textEditingController.text, "0", context);
@@ -262,7 +277,7 @@ class ChatPageContent extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.grey[100],
                   hintText: 'Nachricht',
-            /*      suffixIcon: Padding(
+                  /*      suffixIcon: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -338,7 +353,10 @@ class ChatPageContent extends StatelessWidget {
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
             /* newGroupChatId = uuid.v4().toString();*/
-            return Container(height: 100, alignment: Alignment.center,child: Text("Keine Nachrichten gefunden"));
+            return Container(
+                height: 100,
+                alignment: Alignment.center,
+                child: Text("Keine Nachrichten gefunden"));
           }
           return ListView.builder(
             padding: const EdgeInsets.all(10.0),
@@ -409,24 +427,23 @@ class ChatPageContent extends StatelessWidget {
       child: Column(
         children: [
           CustomPeerPALButton(
-            text: "Annehmen",
-            onPressed: () {
-             context
-                .read<ChatPageBloc>()
-                .add(SendChatRequestResponseButtonPressed(true));
-            Navigator.pop(context);}
-          ),
+              text: "Annehmen",
+              onPressed: () {
+                context
+                    .read<ChatPageBloc>()
+                    .add(SendChatRequestResponseButtonPressed(true));
+                Navigator.pop(context);
+              }),
           SizedBox(height: 8),
           CustomPeerPALButton(
-            text: "Ablehnen",
+              text: "Ablehnen",
               onPressed: () {
                 context
                     .read<ChatPageBloc>()
                     .add(SendChatRequestResponseButtonPressed(false));
-               // context.read<ChatListBloc>().add(ChatListLoaded());
-              Navigator.pop(context);
-       }
-          ),
+                // context.read<ChatListBloc>().add(ChatListLoaded());
+                Navigator.pop(context);
+              }),
         ],
       ),
     );

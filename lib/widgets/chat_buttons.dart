@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/chat_answer_button.dart';
 import 'package:peerpal/widgets/chat_emoji_button.dart';
@@ -8,6 +11,7 @@ class ChatButtons extends StatefulWidget {
 
   final TextEditingController textEditingController;
 
+
   ChatButtons({required this.textEditingController});
 
   @override
@@ -15,8 +19,32 @@ class ChatButtons extends StatefulWidget {
 }
 
 class _ChatButtonsState extends State<ChatButtons> {
-  bool toggleChatAnswerKeyboard = false;
-  bool toggleChatEmojiKeyboard = false;
+
+  late StreamSubscription<bool> keyboardSubscription;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    // Query
+    print('Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
+
+    // Subscribe
+    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+      print('Keyboard visibility update. Is visible: $visible');
+  if(visible) {
+    setState(() {
+      isAnswerKeyboardVisible = false;
+      isEmojiKeyboardVisible = false;
+    });
+  }
+    });
+  }
+
+  bool isAnswerKeyboardVisible = false;
+  bool isEmojiKeyboardVisible = false;
 
   void onCancelAnswerKeyboard() {
     /*  Future.delayed(
@@ -24,7 +52,7 @@ class _ChatButtonsState extends State<ChatButtons> {
     );*/
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     setState(() {
-      toggleChatAnswerKeyboard = false;
+      isAnswerKeyboardVisible = false;
     });
   }
 
@@ -33,7 +61,7 @@ class _ChatButtonsState extends State<ChatButtons> {
         const Duration(milliseconds: 800));*/
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     setState(() {
-      toggleChatEmojiKeyboard = false;
+      isEmojiKeyboardVisible = false;
     });
   }
 
@@ -44,29 +72,29 @@ class _ChatButtonsState extends State<ChatButtons> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        toggleChatAnswerKeyboard
+        isAnswerKeyboardVisible
             ? Container()
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
-                height: toggleChatEmojiKeyboard ? 200 : 35,
-                width: toggleChatEmojiKeyboard ? 280 : 35,
+                height: isEmojiKeyboardVisible ? 200 : 35,
+                width: isEmojiKeyboardVisible ? 280 : 35,
                 duration: const Duration(milliseconds: 0),
-                margin: toggleChatEmojiKeyboard
+                margin: isEmojiKeyboardVisible
                     ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
                     : const EdgeInsets.fromLTRB(0, 5, 5, 5),
                 decoration: BoxDecoration(
                   color: primaryColor,
-                  borderRadius: toggleChatEmojiKeyboard ?  borderRadius
+                  borderRadius: isEmojiKeyboardVisible ?  borderRadius
                       .subtract(const BorderRadius.only(bottomRight: radius)) :BorderRadius.circular(25),
                 ),
                 child: GestureDetector(
                   onTap: () {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
                     setState(() {
-                      toggleChatEmojiKeyboard = true;
+                      isEmojiKeyboardVisible = true;
                     });
                   },
-                  child: toggleChatEmojiKeyboard
+                  child: isEmojiKeyboardVisible
                       ? ChatEmojiKeyboard(
                           onCancel:
                               onCancelEmojiKeyboard, textEditingController: widget.textEditingController, /*onPressedEmojiKeyboardItem:*/
@@ -77,12 +105,12 @@ class _ChatButtonsState extends State<ChatButtons> {
                           color: Colors.white,
                         ),
                 )),
-        toggleChatEmojiKeyboard
+        isEmojiKeyboardVisible
             ? Container()
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
-                height: toggleChatAnswerKeyboard ? 250 : 35,
-                width: toggleChatAnswerKeyboard ? 300 : 120,
+                height: isAnswerKeyboardVisible ? 250 : 35,
+                width: isAnswerKeyboardVisible ? 300 : 120,
                 duration: const Duration(milliseconds: 0),
                 margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
                 decoration: BoxDecoration(
@@ -94,10 +122,10 @@ class _ChatButtonsState extends State<ChatButtons> {
                     onTap: () {
                       SystemChannels.textInput.invokeMethod('TextInput.hide');
                       setState(() {
-                        toggleChatAnswerKeyboard = true;
+                        isAnswerKeyboardVisible = true;
                       });
                     },
-                    child: toggleChatAnswerKeyboard
+                    child: isAnswerKeyboardVisible
                         ? ChatAnswerKeyboard(
                             onCancel:
                                 onCancelAnswerKeyboard, textEditingController: widget.textEditingController, /*onPressedAnswerKeyboardItem:*/
