@@ -18,6 +18,11 @@ class CustomSingleCreatorTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.black,
+    );
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -43,22 +48,37 @@ class CustomSingleCreatorTable extends StatelessWidget {
                 child: TextButton(
                     onPressed: onPressed,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundImage:  avatar,
-                              backgroundColor: Colors.white,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child:
-                              CustomPeerPALHeading3(text:text!, color: Colors.black,),
-                            ),
-                          ],
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage:  avatar,
+                                backgroundColor: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Flexible(
+                                child: RichText(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: text!,
+                                        style: textStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0,0,10,0),
