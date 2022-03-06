@@ -86,8 +86,8 @@ class CustomFriendRequestCard extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: CustomPeerPALHeading3(
+                      color: primaryColor,
                       text: userInformation.name!,
-                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
