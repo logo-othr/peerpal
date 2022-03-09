@@ -106,6 +106,13 @@ class ActivityRepository {
     });
   }
 
+  Future<void> deleteActivity(Activity activity) async {
+
+    await FirebaseFirestore.instance.collection('deleteActivity').doc().set({
+      'activityId': activity.id,
+    });
+  }
+
   Future<List<Location>> loadLocations() async {
     final jsonData = await rootBundle.loadString('assets/location.json');
     final list = json.decode(jsonData) as List<dynamic>;
@@ -119,14 +126,27 @@ class ActivityRepository {
         .orderBy('date', descending: true)
         .snapshots();
 
+
+    // ToDo: Add where('public', isEqualTo: false) ?
     Stream<QuerySnapshot> creatorStream = FirebaseFirestore.instance
         .collection('activities')
         .where('creatorId', isEqualTo: currentUserId)
         .orderBy('date', descending: true)
         .snapshots();
 
-    Stream<QuerySnapshot> mergedStream =
-        StreamGroup.merge([publicActivityStream, creatorStream]);
+    publicActivityStream.listen((event) {
+      print("------- Public Stream _------");
+      event.docs.map((e) => print(e.data()));
+    });
+
+    creatorStream.listen((event) {
+      print("------ Creator Stream ----- ");
+      event.docs.map((e) => print(e.data()));
+    });
+
+
+
+    Stream<QuerySnapshot> mergedStream = StreamGroup.merge([publicActivityStream, creatorStream]);
 
     /*
     Rx.combineLatest2(
@@ -140,7 +160,9 @@ class ActivityRepository {
   */
 
     List<Activity> myActivityList = <Activity>[];
+
     await for (QuerySnapshot querySnapshot in mergedStream) {
+      //myActivityList.clear();
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
