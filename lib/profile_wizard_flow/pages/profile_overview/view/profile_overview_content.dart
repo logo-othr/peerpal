@@ -58,18 +58,14 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                           color: primaryColor,
                                           width: 4.0,
                                         ),
-                                      ),
-                                      child: CircleAvatar(
-                                        radius: 70,
-                                        backgroundColor: Colors.white,
-                                        child: CircleAvatar(
-                                          radius: 70,
-                                          child:  ClipOval(
-                                            child: Image.network(text.data!),
-                                          ),
-                                          backgroundColor: Colors.white,
-                                        ),
-                                      )),
+                                      ),child: CircleAvatar(
+                                    radius: 70,
+                                    backgroundColor: Colors.white,
+                                    child:  ClipOval(
+                                      child: Image.network(text.data!,height: 140,width:                              140,fit: BoxFit.cover,),
+                                    ),
+                                  )
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
