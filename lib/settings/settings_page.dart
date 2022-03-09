@@ -14,7 +14,7 @@ import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_logout_dialog.dart';
+import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
 import 'package:peerpal/widgets/custom_table_row.dart';
 import 'package:provider/src/provider.dart';
@@ -54,7 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Align(
                 alignment: Alignment.center,
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10),
                     height: 120,
                     width: 120,
                     child:
@@ -143,7 +143,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return CustomLogoutDialog(onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()));
+                      return CustomDialog(
+                          actionButtonText: 'Ausloggen',
+                          dialogText: "Möchten Sie sich wirklich ausloggen?",
+                          onPressed: () => {
+                                context
+                                    .read<AppBloc>()
+                                    .add(AppLogoutRequested()),
+                            context
+                                .read<AppBloc>()
+                                .deleteDeviceTokenFromUser(),
+
+                              });
                     }),
               },
             ),
