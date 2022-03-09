@@ -9,14 +9,16 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 import '../../colors.dart';
 
-class CustomLogoutDialog extends StatefulWidget {
-  CustomLogoutDialog({ required this.onPressed});
-  VoidCallback onPressed;
+class CustomDialog extends StatefulWidget {
+  CustomDialog({ required this.onPressed, required this.dialogText, required this.actionButtonText});
+  VoidCallback? onPressed;
+  String dialogText;
+  String actionButtonText;
   @override
-  _CustomLogoutDialogState createState() => _CustomLogoutDialogState();
+  _CustomDialogState createState() => _CustomDialogState();
 }
 
-class _CustomLogoutDialogState extends State<CustomLogoutDialog> {
+class _CustomDialogState extends State<CustomDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -39,16 +41,16 @@ class _CustomLogoutDialogState extends State<CustomLogoutDialog> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("Möchten Sie sich wirklich ausloggen?", textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+          Text(widget.dialogText, textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
           SizedBox(height: 40,),
           Padding(
             padding: const EdgeInsets.fromLTRB(20.0,0,20,0),
             child: CustomPeerPALButton(
                 onPressed: () {
-                  widget.onPressed();
+                  widget.onPressed!();
                   Navigator.pop(context);
                 },
-                text: 'Ausloggen'),
+                text: widget.actionButtonText),
           ),
           SizedBox(height: 8),
           Padding(
