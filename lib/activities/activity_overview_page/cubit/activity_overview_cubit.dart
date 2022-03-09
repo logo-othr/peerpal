@@ -60,6 +60,11 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
     await _activityRepository.updateLocalActivity(updatedActivity);
     await _activityRepository.postActivity(updatedActivity);
   }
+
+  Future<void> deleteActivity() async {
+    var deleteActivity = state.activity;
+    await _activityRepository.deleteActivity(deleteActivity);
+  }
 }
 
 
