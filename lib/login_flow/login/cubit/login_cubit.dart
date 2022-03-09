@@ -53,6 +53,10 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  Future<void> deleteDeviceTokenFromUser() async {
+    _authenticationRepository.deleteDeviceTokenFromUser();
+  }
+
   Future<void> _firebaseLogin() async {
     await _authenticationRepository.loginWithEmailAndPassword(
       email: state.email.value,
