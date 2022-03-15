@@ -77,7 +77,7 @@ class _ChatButtonsState extends State<ChatButtons> {
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
                 height: isEmojiKeyboardVisible ? 200 : 35,
-                width: isEmojiKeyboardVisible ? 280 : 35,
+                width: isEmojiKeyboardVisible ? 300 : 35,
                 duration: const Duration(milliseconds: 0),
                 margin: isEmojiKeyboardVisible
                     ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
