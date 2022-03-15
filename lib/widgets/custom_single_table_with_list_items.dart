@@ -65,8 +65,11 @@ class CustomSingleTableWithListItems extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                             child: Row(
                               children: [
-                                Container(
-                                  width: 250,
+                                ConstrainedBox(
+                                  constraints: new BoxConstraints(
+                                    maxWidth: 250,
+                                  ),
+
                                   child: RichText(
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
