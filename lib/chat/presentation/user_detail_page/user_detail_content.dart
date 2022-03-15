@@ -12,6 +12,7 @@ import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/widgets/custom_activity_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -132,8 +133,20 @@ class UserDetailContent extends StatelessWidget {
                                 .map((e) => ActivityRepository.getActivityNameFromCode(e))
                                 .toList()
                                 .join(', '),
-                            isArrowIconVisible: false,
-                            onPressed: () {},
+                            isArrowIconVisible: true,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return CustomActivityDialog(
+                                        isOwnCreatedActivity:
+                                        false,
+                                        activities: state.user.discoverActivitiesCodes!
+                                            .map((e) => ActivityRepository.getActivityNameFromCode(e))
+                                            .toList());
+                                  });
+
+                            },
                           ),
                           CustomSingleTable(
                             heading: 'KOMMUNIKATIONSART',
