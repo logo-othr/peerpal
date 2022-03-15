@@ -77,7 +77,7 @@ Widget customAnswerHeaderBar(onCancel) {
               onCancel();
             },
             child: Text(
-              'Abbrechen',
+              'Schließen',
               style: TextStyle(
                 color: Colors.white,
               ),
