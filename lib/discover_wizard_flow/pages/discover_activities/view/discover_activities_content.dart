@@ -43,7 +43,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
             body: BlocBuilder<DiscoverActivitiesCubit,
                 DiscoverActivitiesState>(builder: (context, state) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -54,42 +54,47 @@ class DiscoverActivitiesContent extends StatelessWidget {
                     const SizedBox(
                       height: 50,
                     ),
-                    CupertinoSearchTextField(
-                     // enabled: (state is DiscoverActivitiesLoaded ||
-                    //      state is DiscoverActivitiesSelected),
-                      enabled: false,
-                      controller: searchBarController,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: CupertinoSearchTextField(
+                       // enabled: (state is DiscoverActivitiesLoaded ||
+                      //      state is DiscoverActivitiesSelected),
+                        enabled: true,
+                        controller: searchBarController,
+                      ),
                     ),
                     Expanded(
                       child: SingleChildScrollView(
-                        child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: Wrap(
-                                children: state.activities
-                                    .map(
-                                      (activity) => (activity.name
-                                      .toString()
-                                      .toLowerCase()
-                                      .startsWith(
-                                      state.searchQuery.toLowerCase()))
-                                      ? GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<
-                                            DiscoverActivitiesCubit>()
-                                            .toggleData(activity);
-                                      },
-                                      child: CustomCircleListItem(
-                                          label:
-                                          activity.name.toString(),
-                                          icon: ActivityIconData
-                                              .icons[activity.code],
-                                          active: state
-                                              .selectedActivities
-                                              .contains(activity)))
-                                      : Container(),
-                                )
-                                    .toList())),
+                        child:    Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Wrap(
+                                      alignment: WrapAlignment.start,
+                                    children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
+                                          ? GestureDetector(
+                                          onTap: () {
+                                            context
+                                                .read<
+                                                DiscoverActivitiesCubit>()
+                                                .toggleData(activity);
+                                          },
+                                          child: CustomCircleListItem(
+                                              label:
+                                              activity.name.toString(),
+                                              icon: ActivityIconData
+                                                  .icons[activity.code],
+                                              active: state
+                                                  .selectedActivities
+                                                  .contains(activity)))
+                                          : Container(),
+                                    )
+                                        .toList()))),
+                          ],
+                        ),
                       ),
                     ),
                     (state is DiscoverActivitiesPosting)
