@@ -68,65 +68,67 @@ class _PhonenumberInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
-        buildWhen: (previous, current) =>
-        previous.phoneNumber != current.phoneNumber,
-        builder: (context, state) {
+      buildWhen: (previous, current) =>
+          previous.phoneNumber != current.phoneNumber,
+      builder: (context, state) {
 
-          String? errorText = "";
-          var errorState = state.phoneNumber.error;
-          switch (errorState) {
-            case PhoneError.toLong:
-              errorText = "länge einer gültigen Telefonnummer überschritten";
-              break;
-            case PhoneError.toShort:
-              errorText = "Länge einer gültigen Telefennummer unterschritten";
-              break;
-            default:
-              errorText = null;
-              break;
-          }
-          return new FutureBuilder(future: context.read<PhoneInputCubit>().currentPhoneNumber(),
-              initialData: state.phoneNumber.value,
-              builder:(BuildContext context, AsyncSnapshot<String?>text){
-                return Container(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
-                      child: TextFormField(
-                        //discuss
-                        initialValue:pastPhone,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        style: const TextStyle(fontSize: 22),
-                        key: const Key('phone_input_phone_number_field'),
-                        onChanged: (phoneNumber) =>
-                            context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
-                          errorText: state.phoneNumber.invalid ? errorText : null,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(
-                              color: primaryColor,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide(
-                                color: primaryColor,
-                                width: 3,
-                              )),
-                        ),
-                      ),
+        String? errorText = "";
+        var errorState = state.phoneNumber.error;
+        switch (errorState) {
+          case PhoneError.toLong:
+            errorText = "länge einer gültigen Telefonnummer überschritten";
+            break;
+          case PhoneError.toShort:
+            errorText = "Länge einer gültigen Telefennummer unterschritten";
+            break;
+          default:
+            errorText = null;
+            break;
+        }
+        return new FutureBuilder(future: context.read<PhoneInputCubit>().currentPhoneNumber(),
+        initialData: state.phoneNumber.value,
+        builder:(BuildContext context, AsyncSnapshot<String?>text){
+        return Container(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
+              child: TextFormField(
+                maxLength: 15,
+                //discuss
+                initialValue:pastPhone,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                style: const TextStyle(fontSize: 22),
+                key: const Key('phone_input_phone_number_field'),
+                onChanged: (phoneNumber) =>
+                    context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
+                maxLines: 1,
+                decoration: InputDecoration(
+                  labelText: "Bsp: 01573243212323",
+                  contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
+                  errorText: state.phoneNumber.invalid ? errorText : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide: BorderSide(
+                      color: primaryColor,
                     ),
                   ),
-                );
-              }
-          );}
-    );
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide(
+                        color: primaryColor,
+                        width: 3,
+                      )),
+                ),
+              ),
+            ),
+          ),
+        );
+            }
+        );}
+      );
   }
 }
 
@@ -147,9 +149,9 @@ class _NextButton extends StatelessWidget {
           return CustomPeerPALButton(
             text: 'Weiter',
             onPressed: !state.phoneNumber.invalid ? () async {
-              await context
-                  .read<PhoneInputCubit>()
-                  .updatePhoneNumber(state.phoneNumber.value);
+                await context
+                    .read<PhoneInputCubit>()
+                    .updatePhoneNumber(state.phoneNumber.value);
 
               var phoneNumber = state.phoneNumber;
               if (isInFlowContext) {
@@ -178,23 +180,23 @@ class _Checkbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
       builder: (context, state) {
-        return  CustomPeerPALButton2(
+          return  CustomPeerPALButton2(
             text: 'Ich möchte keine Telefonnummer angeben',
             onPressed: () async {
               await context
                   .read<PhoneInputCubit>()
-                  .updatePhoneNumber('0');
+                  .updatePhoneNumber('');
 
               if (isInFlowContext) {
                 context
                     .flow<PeerPALUser>()
-                    .update((s) => s.copyWith(phoneNumber: '0'));
+                    .update((s) => s.copyWith(phoneNumber: ''));
               } else {
                 Navigator.pop(context);
               }
 
             }
-        );
+          );
 
       },
     );
