@@ -70,14 +70,6 @@ class ChatPageContent extends StatelessWidget {
               // ToDo: verify that state cast is correctly used
               chatHeader(context, state.chatPartner),
               friendRequestButton(context, state.chatPartner),
-              //singleChatTextFormField(state.chatPartner, null, context),
-              //const SingleChatAnswerButtons(),
-              /*singleChatTextFormField(
-                  state.chatPartner,
-                  (state is ChatPageChatExists)
-                      ? (state as ChatPageChatExists).userChat.chat.chatId
-                      : null,
-                  context)*/
             ],
           );
         } else if (state is ChatPageChatExists) {
@@ -148,8 +140,6 @@ class ChatPageContent extends StatelessWidget {
               friendRequestButton(context, state.chatPartner),
               Spacer(),
               ChatButtons(textEditingController: textEditingController),
-
-              //const SingleChatAnswerButtons(),
               singleChatTextFormField(state.chatPartner, null, context),
             ],
           );
@@ -252,59 +242,61 @@ class ChatPageContent extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: SizedBox(
-              height: 40,
-              child: TextField(
-                focusNode: _focus,
-                onSubmitted: (value) {
-                  sendChatMessage(chatPartner, chatId,
-                      textEditingController.text, "0", context);
-                },
-                controller: textEditingController,
-                textCapitalization: TextCapitalization.sentences,
-                autocorrect: true,
-                enableSuggestions: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 20),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: primaryColor, width: 3.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: primaryColor, width: 3.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  hintText: 'Nachricht',
-                  /*      suffixIcon: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () {},
-                          child: Icon(
-                            Icons.attach_file,
-                            color: primaryColor,
-                          ),
-                        ),
-                        textEditingController.text.toString().isEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(
-                                    Icons.camera_alt_outlined,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ),*/
+            child: TextField(
+              style: TextStyle(fontSize: 22),
+              textInputAction: TextInputAction.newline,
+              keyboardType: TextInputType.multiline,
+              minLines: 1,
+              maxLines: 5,
+              focusNode: _focus,
+              onSubmitted: (value) {
+                sendChatMessage(chatPartner, chatId,
+                    textEditingController.text, "0", context);
+              },
+              controller: textEditingController,
+              textCapitalization: TextCapitalization.sentences,
+              autocorrect: true,
+              enableSuggestions: true,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: primaryColor, width: 3.0),
                 ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: primaryColor, width: 3.0),
+                ),
+                filled: true,
+                fillColor: Colors.grey[100],
+                hintText: 'Nachricht',
+                /*      suffixIcon: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.attach_file,
+                          color: primaryColor,
+                        ),
+                      ),
+                      textEditingController.text.toString().isEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  color: primaryColor,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),*/
               ),
             ),
           ),
@@ -409,7 +401,7 @@ class ChatPageContent extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 220),
                 child: Text(
                   chatMessage.message,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white,fontSize: 20),
                   textAlign: TextAlign.start,
                 ),
               ),
