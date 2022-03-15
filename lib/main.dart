@@ -60,7 +60,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message ${message.data}");
   print('onResume: $message');
   if (message.notification != null) {
-    showNotification(message.notification!);
+    //showNotification(message.notification!);
   }
   return;
 }
@@ -99,7 +99,6 @@ Future<void> main() async {
   final authenticationRepository = sl<AppUserRepository>();
   await authenticationRepository.user.first;
 
-
   //await DebugHelper.createExampleUsers(appUserRepository: authenticationRepository, emailBase:  'pptestmailbase234', password: 'Abc12345678*');
   runApp(App());
 }
@@ -111,7 +110,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(
