@@ -120,7 +120,7 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                                   userNames: activityAttendees
                                       .map((e) => e.name)
                                       .toList(),
-                                  isArrowIconVisible: false),
+                                  isArrowIconVisible: true),
                               CustomSingleDescriptionTable(
                                 heading: "BESCHREIBUNG",
                                 isEditingModus: false,
