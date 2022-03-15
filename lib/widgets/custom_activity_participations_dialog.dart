@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:peerpal/widgets/custom_activity_participations_dialog_item.dart';
+import 'package:peerpal/widgets/custom_activity_dialog_item.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 import '../../colors.dart';
@@ -65,6 +65,9 @@ class _CustomActivityParticipationsDialogState
 
   contentBox(context) {
     return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(width: 2, color: primaryColor), borderRadius: BorderRadius.circular(10)),
       height: 300,
       child: Column(
         children: <Widget>[
@@ -74,7 +77,7 @@ class _CustomActivityParticipationsDialogState
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(
-                      bottom: BorderSide(width: 1, color: secondaryColor))),
+                      bottom: BorderSide(width: 1, color: primaryColor))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -116,14 +119,13 @@ class _CustomActivityParticipationsDialogState
                                     padding: const EdgeInsets.fromLTRB(
                                         0, 0, 0, 10.0),
                                     child:
-                                    CustomActivityParticipationsDialogItem(
+                                    CustomActivityDialogItem(
                                         name: entry.value[i].name,
                                         isOwnCreatedActivity:
                                         widget.isOwnCreatedActivity),
                                   ),
                               ],
                             ),
-                            SizedBox(height: 20),
                           ],
                         ),
                     ],
