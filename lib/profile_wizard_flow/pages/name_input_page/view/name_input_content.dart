@@ -1,7 +1,6 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/profile_wizard_flow/pages/name_input_page/cubit/name_input_cubit.dart';
@@ -41,7 +40,7 @@ class NameInputContent extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 CustomPeerPALHeading1('Wie ist dein Name?'),
                 const SizedBox(height: 120),
-                _UsernameInputField(isInFlowContext,pastName,),
+                _UsernameInputField(isInFlowContext,pastName),
                 const SizedBox(height: 190),
                 _NextButton(isInFlowContext),
               ],
@@ -70,10 +69,8 @@ class _UsernameInputField extends StatelessWidget {
           builder:(BuildContext context, AsyncSnapshot<String?>text){
 
           return new TextFormField(
+            maxLength: 30,
               initialValue:pastName,
-              inputFormatters: [
-                new LengthLimitingTextInputFormatter(30),
-              ],
             style: const TextStyle(fontSize: 22),
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.person),
