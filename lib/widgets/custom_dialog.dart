@@ -1,11 +1,6 @@
-import 'dart:collection';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/app/bloc/app_bloc.dart';
-import 'package:peerpal/widgets/custom_activity_participations_dialog_item.dart';
-import 'package:peerpal/widgets/custom_peerpal_button.dart';
-import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+
 
 import '../../colors.dart';
 
