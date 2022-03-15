@@ -20,72 +20,103 @@ class DiscoverLocationContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           'Standorte',
           hasBackButton: isInFlowContext,
         ),
         body: BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
             builder: (context, state) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      CustomPeerPALHeading1("Ich suche Freunde in"),
-                      _LocationSearchBar(
-                        searchBarController: searchBarController,
-                      ),
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  CustomPeerPALHeading1("Ich suche Freunde in"),
+                  _LocationSearchBar(
+                    searchBarController: searchBarController,
+                  ),
+                  context
+                      .read<DiscoverLocationCubit>()
+                      .state
+                      .filteredLocations
+                      .isEmpty &&
                       context
+                          .read<DiscoverLocationCubit>()
+                          .state
+                          .selectedLocations
+                          .isEmpty
+                      ? SizedBox(height: MediaQuery.of(context).size.height/6,) : Container(),
+                  context
+                              .read<DiscoverLocationCubit>()
+                              .state
+                              .filteredLocations
+                              .isEmpty &&
+                          context
+                              .read<DiscoverLocationCubit>()
+                              .state
+                              .selectedLocations
+                              .isEmpty
+                      ? Column(
+                          children: [
+                            Icon(Icons.location_on,
+                                color: secondaryColor, size: 60),
+                            SizedBox(height: 20),
+                            CustomPeerPALHeading2(
+                              "Es wurde noch kein\nOrt ausgewählt",
+                              color: secondaryColor,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  context
                           .read<DiscoverLocationCubit>()
                           .state
                           .filteredLocations
                           .isEmpty
-                          ? _LocationResultBox()
-                          : const _LocationSearchBox(),
-                      const Spacer(),
-                      (state is DiscoverLocationPosting)
-                          ? const CircularProgressIndicator()
-                          : CompletePageButton(
+                      ? _LocationResultBox()
+                      : const _LocationSearchBox(),
+                  const Spacer(),
+                  (state is DiscoverLocationPosting)
+                      ? const CircularProgressIndicator()
+                      : CompletePageButton(
                           isSaveButton: isInFlowContext,
                           onPressed: () async {
                             _update(state, context);
                           }),
-                    ],
-                  ),
-                ),
-              );
-            }));
+                ],
+              ),
+            ),
+          );
+        }));
   }
 
-  Future<void> _update(DiscoverLocationState state,
-      BuildContext context) async {
-    if(context.read<DiscoverLocationCubit>().state.selectedLocations.length < 1) {
+  Future<void> _update(
+      DiscoverLocationState state, BuildContext context) async {
+    if (context.read<DiscoverLocationCubit>().state.selectedLocations.length <
+        1) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(
-            SnackBar(
-                content: Text("Es muss mindestens ein Ort ausgewählt sein.")));
-            return;
+        ..showSnackBar(SnackBar(
+            content: Text("Es muss mindestens ein Ort ausgewählt sein.")));
+      return;
     }
     if (isInFlowContext) {
       await context.read<DiscoverLocationCubit>().postLocations();
       context.flow<PeerPALUser>().update(
           (s) => s.copyWith(discoverLocations: state.selectedLocations));
-
     } else {
       await context.read<DiscoverLocationCubit>().postLocations();
       Navigator.pop(context);
     }
   }
 }
-
 
 class _LocationResultBox extends StatelessWidget {
   const _LocationResultBox({Key? key}) : super(key: key);
@@ -98,19 +129,7 @@ class _LocationResultBox extends StatelessWidget {
             .read<DiscoverLocationCubit>()
             .state
             .selectedLocations
-            .isEmpty) {
-          return Column(
-            children: [
-              Icon(Icons.location_on, color: secondaryColor, size: 60),
-              SizedBox(height: 20),
-              CustomPeerPALHeading2(
-                "Es wurde noch kein\nOrt ausgewählt",
-                color: secondaryColor,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          );
-        } else {
+            .isNotEmpty) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: ConstrainedBox(
@@ -135,6 +154,8 @@ class _LocationResultBox extends StatelessWidget {
               ),
             ),
           );
+        } else {
+          return Container();
         }
       },
     );
@@ -192,8 +213,7 @@ class _LocationListItem extends StatelessWidget {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(
-                    content: Text(("${location.place} entfernt."))),
+                SnackBar(content: Text(("${location.place} entfernt."))),
               );
           },
           child: Row(
@@ -251,27 +271,30 @@ class _LocationSearchListItem extends StatelessWidget {
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            if( context.read<DiscoverLocationCubit>().state.selectedLocations.length >= 3) {
+            if (context
+                    .read<DiscoverLocationCubit>()
+                    .state
+                    .selectedLocations
+                    .length >=
+                3) {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                      content: Text(("Es können nicht mehr als 3 Orte hinzugefügt werden."))),
+                      content: Text(
+                          ("Es können nicht mehr als 3 Orte hinzugefügt werden."))),
                 );
-            }
-              else {
+            } else {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               context.read<DiscoverLocationCubit>().addLocation(location);
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
-                  SnackBar(
-                      content: Text(("${location.place} hinzugefügt."))),
+                  SnackBar(content: Text(("${location.place} hinzugefügt."))),
                 );
             }
-
-            },
+          },
           child: Row(
             children: [
               Padding(
