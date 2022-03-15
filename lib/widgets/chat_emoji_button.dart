@@ -68,33 +68,42 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
         .toList();
 
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           customEmojiHeaderBar(widget.onCancel),
-          SizedBox(
-            height: 100,
+          Expanded(
             child: Padding(
               padding: EdgeInsets.fromLTRB(15, 15, 0, 15),
               child: TabBarView(
                 children: [
-                  Wrap(
-                    children: activityEmojiButtons,
+                  SingleChildScrollView(
+                    child: Wrap(
+                      children: activityEmojiButtons,
+                    ),
                   ),
-                  Wrap(
-                    children: eatAndDrinkEmojis,
+                  SingleChildScrollView(
+                    child: Wrap(
+                      children: eatAndDrinkEmojis,
+                    ),
                   ),
-                  Wrap(
-                    children: year,
+                  SingleChildScrollView(
+                    child: Wrap(
+                      children: year,
+                    ),
                   ),
-                  Wrap(
-                    children: gestures,
+                  SingleChildScrollView(
+                    child: Wrap(
+                      children: gestures,
+                    ),
                   ),
-                  Wrap(
-                    children: smileyAndEmotionsEmojis,
+                  SingleChildScrollView(
+                    child: Wrap(
+                      children: smileyAndEmotionsEmojis,
+                    ),
                   ),
                 ],
               ),
@@ -119,36 +128,42 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: SizedBox(
-              height: 40,
-              width: 170,
-              child: TabBar(
-                  labelPadding: EdgeInsets.all(0),
-                  indicator: UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 1.0, color: Colors.white)),
-                  tabs: [
-                    EmojiButton(
-                        emojiCode: Emojis.activityEmojis.first.code),
-                    EmojiButton(emojiCode: Emojis.eatAndDrinkEmojis.first.code),
-                    EmojiButton(emojiCode: Emojis.year.first.code),
-                    EmojiButton(emojiCode: Emojis.gestures.first.code),
-                    EmojiButton(
-                        emojiCode: Emojis.smileyAndEmotionsEmojis.first.code),
-                  ]),
+          Flexible(
+            flex: 70,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: SizedBox(
+                height: 50,
+                child: TabBar(
+                  unselectedLabelColor: Colors.white,
+                    labelPadding: EdgeInsets.all(0),
+                    indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(width: 1.0, color: Colors.white)),
+                    tabs: [
+                      EmojiButton(
+                          emojiCode: Emojis.activityEmojis.first.code),
+                      EmojiButton(emojiCode: Emojis.eatAndDrinkEmojis.first.code),
+                      EmojiButton(emojiCode: Emojis.year.first.code),
+                      EmojiButton(emojiCode: Emojis.gestures.first.code),
+                      EmojiButton(
+                          emojiCode: Emojis.smileyAndEmotionsEmojis.first.code),
+                    ]),
+              ),
             ),
           ),
-          GestureDetector(
-              onTap: () {
-                onCancel();
-              },
-              child: const Text(
-                'Abbrechen',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              )),
+          Flexible(
+            flex: 30,
+            child: GestureDetector(
+                onTap: () {
+                  onCancel();
+                },
+                child: const Text(
+                  'Schließen',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                )),
+          ),
         ],
       ),
     );
