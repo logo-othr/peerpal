@@ -29,13 +29,13 @@ class _ImprintPageState extends State<ImprintPage> {
               ),
               SizedBox(height: 20),
               Text(
-                  "Katholische Hochschule Mainz (KH), Saarstr. 3, 55122 Mainz"),
-              SizedBox(height: 10),
+                  "Ostbayerische Technische Hochschule Regensburg (OTH), Seybothstr. 2, 93053 Regensburg"),
+              SizedBox(height: 20),
               Text("und"),
               SizedBox(height: 10),
               Text(
-                  "Ostbayerische Technische Hochschule Regensburg (OTH), Seybothstr. 2, 93053 Regensburg"),
-              SizedBox(height: 20),
+                  "Katholische Hochschule Mainz (KH), Saarstr. 3, 55122 Mainz"),
+              SizedBox(height: 10),
               Text("Förderkennzeichen:"),
               SizedBox(height: 10),
               Text("13FH515SA7 – KH Mainz"),
