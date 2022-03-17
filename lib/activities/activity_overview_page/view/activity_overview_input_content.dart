@@ -70,6 +70,7 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
               var cubit = context.read<OverviewInputCubit>();
+              if( activity.description != null) descriptionController.text = activity.description!;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
