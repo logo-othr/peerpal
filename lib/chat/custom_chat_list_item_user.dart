@@ -16,6 +16,11 @@ class CustomChatListItemUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      fontSize: 16,
+      fontFamily: 'Roboto',
+      color: Colors.black,
+    );
     return Row(
       children: [
         Padding(
@@ -48,8 +53,21 @@ class CustomChatListItemUser extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
                 SizedBox(height: 5),
-                CustomPeerPALHeading3(
-                    text: userInformation.chat.lastMessage == null ? "Nachricht konnte nicht geladen werden" :  userInformation.chat.lastMessage!.message.toString() , color: Colors.black),
+                RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: userInformation.chat.lastMessage == null ? "Nachricht konnte nicht geladen werden" :  userInformation.chat.lastMessage!.message.toString(),
+                        style: textStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5),
+                /*CustomPeerPALHeading3(
+                    text: userInformation.chat.lastMessage == null ? "Nachricht konnte nicht geladen werden" :  userInformation.chat.lastMessage!.message.toString() , color: Colors.black),*/
                 Text(DateFormat('yyyy-MM-dd - kk:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(userInformation.chat.lastUpdated))))
               ],
             ),
