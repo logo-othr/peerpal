@@ -10,11 +10,7 @@ import 'package:peerpal/repository/models/location.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
-
 class ActivityRepository {
-
   static String getActivityNameFromCode(String code) {
     final List<Activity> activities = [];
     activities.add(Activity(code: 'shopping', name: "Einkaufen"));
@@ -34,8 +30,8 @@ class ActivityRepository {
     activities.add(Activity(code: 'games', name: "Gesellschaftsspiele"));
     activities.add(Activity(code: 'culture', name: "Kultur"));
     activities.add(Activity(code: 'diy', name: "Heimwerken"));
-    for(Activity a in activities) {
-      if(a.code == code && a.name != null) return a.name!;
+    for (Activity a in activities) {
+      if (a.code == code && a.name != null) return a.name!;
     }
     return "<Aktivitätsname>";
   }
@@ -129,58 +125,49 @@ class ActivityRepository {
     Stream<QuerySnapshot> publicActivityStream = FirebaseFirestore.instance
         .collection('activities')
         .where('public', isEqualTo: true)
+        .where('creatorId', isNotEqualTo: currentUserId)
+        .orderBy('creatorId')
         .orderBy('date', descending: true)
         .snapshots();
 
+    List<Activity> publicActivityList = <Activity>[];
 
-    // ToDo: Add where('public', isEqualTo: false) ?
-    Stream<QuerySnapshot> creatorStream = FirebaseFirestore.instance
+    await for (QuerySnapshot querySnapshot in publicActivityStream) {
+      publicActivityList.clear();
+      querySnapshot.docs.forEach((document) {
+        var documentData = document.data() as Map<String, dynamic>;
+        var activity = Activity.fromJson(documentData);
+
+
+
+        publicActivityList.add(activity);
+        print("PublicActivityStream: $activity");
+      });
+      yield publicActivityList;
+    }
+  }
+
+  Stream<List<Activity>> getCreatedActivities(String currentUserId) async* {
+    Stream<QuerySnapshot> createdActivityStream = FirebaseFirestore.instance
         .collection('activities')
         .where('creatorId', isEqualTo: currentUserId)
         .orderBy('date', descending: true)
         .snapshots();
 
-    publicActivityStream.listen((event) {
-      print("------- Public Stream _------");
-      event.docs.map((e) => print(e.data()));
-    });
+    List<Activity> createdActivityList = <Activity>[];
 
-    creatorStream.listen((event) {
-      print("------ Creator Stream ----- ");
-      event.docs.map((e) => print(e.data()));
-    });
-
-
-
-    Stream<QuerySnapshot> mergedStream = StreamGroup.merge([publicActivityStream, creatorStream]);
-
-    /*
-    Rx.combineLatest2(
-        publicActivityStream, //a snapshot from firestore
-        creatorStream, //another snapshot from firestore
-            (var stream1, var stream2) {
-
-          return [...stream1.docs, ...stream2.docs]; //Concatenated list
-        }
-    )
-  */
-
-    List<Activity> myActivityList = <Activity>[];
-
-    await for (QuerySnapshot querySnapshot in mergedStream) {
-      //myActivityList.clear();
+    await for (QuerySnapshot querySnapshot in createdActivityStream) {
+      createdActivityList.clear();
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
-        myActivityList = _replaceOrAddActivity(myActivityList, activity);
-        print("PublicActivityStream: $activity");
+        createdActivityList.add(activity);
+        print("CreatedActivityStream: $activity");
       });
-
-      myActivityList = sortActivityList(myActivityList, currentUserId);
-
-      yield myActivityList;
+      yield createdActivityList;
     }
   }
+
 
   // ToDo: Workaround. Refactor.
   List<Activity> _replaceOrAddActivity(
