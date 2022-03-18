@@ -13,8 +13,9 @@ class CustomSingleCreatorTable extends StatelessWidget {
   VoidCallback? onPressed;
   IconData? tapIcon;
   ImageProvider avatar;
+  bool isOwnCreatedActivity;
 
-  CustomSingleCreatorTable({this.heading, this.text, this.onPressed, this.tapIcon, required this.avatar});
+  CustomSingleCreatorTable({this.heading, this.text, this.onPressed, this.tapIcon, required this.avatar, required this.isOwnCreatedActivity});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,7 @@ class CustomSingleCreatorTable extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0,0,10,0),
-                          child: Icon(
+                          child: isOwnCreatedActivity ? Container() : Icon(
                             tapIcon,
                             size: 30,
                             color: primaryColor,
