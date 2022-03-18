@@ -37,10 +37,15 @@ class CustomSingleDescriptionTable extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
                 child: TextField(
+                  textInputAction: TextInputAction.newline,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,
+                  maxLines: 5,
                   readOnly: isEditingModus! ? false : true,
                   style: TextStyle(fontSize: 15),
                   controller: textEditingController,
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 35, top: 35, right: 35),
                     hintMaxLines: 3,
                     filled: true,
                     fillColor: Colors.white,

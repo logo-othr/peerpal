@@ -55,7 +55,7 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                         top: BorderSide(width: 1, color: secondaryColor),
                         bottom: BorderSide(width: 1, color: secondaryColor))),
                 child: TextButton(
-                    onPressed: isArrowIconVisible ? () {
+                    onPressed: /* isArrowIconVisible ? () {
                       userNames?.sort();
                       showDialog(
                           context: context,
@@ -65,7 +65,7 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                                 isOwnCreatedActivity: isOwnCreatedActivity,
                                 userNames: userNames);
                           });
-                    } : onPressed,
+                    } : */onPressed,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

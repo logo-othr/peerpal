@@ -15,10 +15,11 @@ class Person {
 
 class CustomActivityParticipationsDialog extends StatefulWidget {
   final bool isOwnCreatedActivity;
-  final List<String?>? userNames;
+  final bool isAttendeeDialog;
+  final List<String>? userNames;
 
   const CustomActivityParticipationsDialog(
-      {required this.isOwnCreatedActivity,  this.userNames});
+      {required this.isOwnCreatedActivity,  this.userNames, required this.isAttendeeDialog});
 
   @override
   _CustomActivityParticipationsDialogState createState() =>
@@ -27,26 +28,17 @@ class CustomActivityParticipationsDialog extends StatefulWidget {
 
 class _CustomActivityParticipationsDialogState
     extends State<CustomActivityParticipationsDialog> {
-  final list = [
-    Person(name: "Xaver"),
-    Person(name: "Andreas Rothballer"),
-    Person(name: "Daniel Kreiter"),
-    Person(name: "Tim"),
-    Person(name: "Günther Schuhmann"),
-    Person(name: "Alexandra"),
-    Person(name: "Alex"),
-  ];
 
-  final Map<String, List<Person>> groupedLists = {};
+  final Map<String, List<String>> groupedList = {};
 
   void groupMyList() {
-    list.sort((a, b) => a.name.compareTo(b.name));
-    list.forEach((person) {
-      if (groupedLists['${person.name[0]}'] == null) {
-        groupedLists['${person.name[0]}'] = <Person>[];
+    widget.userNames?.sort((a, b) => a.compareTo(b));
+    widget.userNames?.forEach((userName) {
+      if (groupedList['${userName[0]}'] == null) {
+        groupedList['${userName[0]}'] = <String>[];
       }
 
-      groupedLists['${person.name[0]}']!.add(person);
+      groupedList['${userName[0]}']!.add(userName);
     });
   }
 
@@ -83,7 +75,7 @@ class _CustomActivityParticipationsDialogState
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 5, 0, 10),
-                    child: CustomPeerPALHeading1("Teilnehmer"),
+                    child: widget.isAttendeeDialog ? CustomPeerPALHeading1("Teilnehmer") : CustomPeerPALHeading1("Eingeladen"),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 5, 15, 10),
@@ -104,7 +96,7 @@ class _CustomActivityParticipationsDialogState
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var entry in groupedLists.entries)
+                      for (var entry in groupedList.entries)
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +112,7 @@ class _CustomActivityParticipationsDialogState
                                         0, 0, 0, 10.0),
                                     child:
                                     CustomActivityDialogItem(
-                                        name: entry.value[i].name,
+                                        name: entry.value[i],
                                         isOwnCreatedActivity:
                                         widget.isOwnCreatedActivity),
                                   ),
