@@ -21,6 +21,10 @@ class DiscoverActivitiesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height) / 3.5;
+    final double itemWidth = size.width / 2;
+
     var hasBackButton = (isInFlowContext) ? false : true;
     searchBarController.text = Strings.searchDisabled;
     return BlocBuilder<DiscoverActivitiesCubit,
@@ -59,11 +63,42 @@ class DiscoverActivitiesContent extends StatelessWidget {
                       child: CupertinoSearchTextField(
                        // enabled: (state is DiscoverActivitiesLoaded ||
                       //      state is DiscoverActivitiesSelected),
-                        enabled: true,
+                        enabled: false,
                         controller: searchBarController,
                       ),
                     ),
                     Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: GridView.count(
+                            childAspectRatio: (itemWidth / itemHeight),
+                          primary: true,
+                          crossAxisCount: 3,
+                          children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
+                                    ? GestureDetector(
+                                    onTap: () {
+                                      context
+                                          .read<
+                                          DiscoverActivitiesCubit>()
+                                          .toggleData(activity);
+                                    },
+                                    child: CustomCircleListItem(
+                                        label:
+                                        activity.name.toString(),
+                                        icon: ActivityIconData
+                                            .icons[activity.code],
+                                        active: state
+                                            .selectedActivities
+                                            .contains(activity)))
+                                    : Container(),
+                                )
+                                    .toList()
+
+
+                        ),
+                      ),
+                    ),
+               /*     Expanded(
                       child: SingleChildScrollView(
                         child:    Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -92,15 +127,16 @@ class DiscoverActivitiesContent extends StatelessWidget {
                                                   .contains(activity)))
                                           : Container(),
                                     )
-                                        .toList()))),
+                                        .toList()
+                                  ))),
                           ],
                         ),
                       ),
-                    ),
+                    ),*/
                     (state is DiscoverActivitiesPosting)
                         ? const CircularProgressIndicator()
                         : Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: CompletePageButton(
                           isSaveButton: isInFlowContext,
                           onPressed: () async {
