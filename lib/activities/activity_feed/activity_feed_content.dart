@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_feed/bloc/activity_feed_bloc.dart';
@@ -82,90 +83,208 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
     var searchFieldController = TextEditingController();
     searchFieldController.text = Strings.searchDisabled;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        StreamBuilder<List<Activity>>(
-          stream: context.read<ActivityFeedBloc>().state.activityRequestList,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Container();
-            } else {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ActivityRequestListPage()));
-                },
-                child: CustomInvitationButton(
-                    text: "Aktivitätseinladungen",
-                    icon: Icons.email,
-                    small: true,
-                    length: snapshot.data!.length.toString()),
-              );
-            }
-          },
-        ),
-        StreamBuilder<List<Activity>>(
-          stream: context.read<ActivityFeedBloc>().state.activityJoinedList,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Container();
-            } else {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ActivityJoinedListPage()));
-                },
-                child: CustomInvitationButton(
-                    text: "Beigetretene Aktivitäten",
-                    icon: Icons.nature_people_rounded,
-                    header: 'Öffentliche Aktivitäten',
-                    small: true,
-                    length: snapshot.data!.length.toString()),
-              );
-            }
-          },
-        ),
-        Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                    top: BorderSide(width: 1, color: secondaryColor),
-                    bottom: BorderSide(width: 1, color: secondaryColor))),
-            child: CustomCupertinoSearchBar(
-              enabled: false,
-                searchBarController: searchFieldController)),
-        Expanded(
-          child: StreamBuilder<List<Activity>>(
-            stream: context.read<ActivityFeedBloc>().state.activityStream,
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          StreamBuilder<List<Activity>>(
+            stream: context.read<ActivityFeedBloc>().state.activityRequestList,
             builder:
                 (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
-                );
+                return Container();
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) => buildActivityFeedCard(
-                      context,
-                      snapshot.data![index],
-                      context
-                          .read<ActivityFeedBloc>()
-                          .isOwnCreatedActivity(snapshot.data![index])),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ActivityRequestListPage()));
+                  },
+                  child: CustomInvitationButton(
+                      text: "Aktivitätseinladungen",
+                      icon: Icons.email,
+                      small: true,
+                      length: snapshot.data!.length.toString()),
                 );
               }
             },
           ),
-        ),
-      ],
+          StreamBuilder<List<Activity>>(
+            stream: context.read<ActivityFeedBloc>().state.activityJoinedList,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Container();
+              } else {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ActivityJoinedListPage()));
+                  },
+                  child: CustomInvitationButton(
+                      text: "Beigetretene Aktivitäten",
+                      icon: Icons.nature_people_rounded,
+                      //header: 'Öffentliche Aktivitäten',
+                      small: true,
+                      length: snapshot.data!.length.toString()),
+                );
+              }
+            },
+          ),
+/*          Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                      top: BorderSide(width: 1, color: secondaryColor),
+                      bottom: BorderSide(width: 1, color: secondaryColor))),
+              child: CustomCupertinoSearchBar(
+                enabled: false,
+                  searchBarController: searchFieldController)),*/
+
+          Container(
+            decoration: BoxDecoration(
+              color: CupertinoColors.systemGrey6,
+              border:
+                  Border(bottom: BorderSide(width: 1, color: secondaryColor)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 0.3,
+                  blurRadius: 5,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child:
+                TabBar(indicatorWeight: 3, indicatorColor: primaryColor, tabs: [
+              Tab(
+                  child: Text(
+                "ÖFFENTLICHE AKTIVITÄTEN",
+                style: TextStyle(color: primaryColor, fontSize: 11),
+              )),
+              Tab(
+                  child: Text(
+                "EIGENE AKTIVITÄTEN",
+                style: TextStyle(color: primaryColor, fontSize: 11),
+              )),
+            ]),
+          ),
+          Expanded(
+            child: TabBarView(children: [
+
+              //TAB ÖFFENTLICHE AKTIVITÄTEN
+              Column(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              //top: BorderSide(width: 1, color: secondaryColor),
+                              bottom: BorderSide(width: 1, color: secondaryColor))),
+                      child: CustomCupertinoSearchBar(
+                          enabled: false,
+                          searchBarController: searchFieldController)),
+                  Expanded(
+                    child: StreamBuilder<List<Activity>>(
+                      stream: context.read<ActivityFeedBloc>().state.publicActivityStream,
+                      builder:
+                          (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                            child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
+                          );
+                        } else {
+                          return ListView.builder(
+                            itemBuilder: (context, index) => buildActivityFeedCard(
+                                context,
+                                snapshot.data![index],
+                                context
+                                    .read<ActivityFeedBloc>()
+                                    .isOwnCreatedActivity(snapshot.data![index])),
+                            itemCount: snapshot.data!.length,
+                            controller: listScrollController,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+
+
+              //TAB EIGENE AKTIVITÄTEN
+              Column(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              //top: BorderSide(width: 1, color: secondaryColor),
+                              bottom: BorderSide(width: 1, color: secondaryColor))),
+                      child: CustomCupertinoSearchBar(
+                          enabled: false,
+                          searchBarController: searchFieldController)),
+                  Expanded(
+                    child: StreamBuilder<List<Activity>>(
+                      stream: context.read<ActivityFeedBloc>().state.createdActivityStream,
+                      builder:
+                          (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                            child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
+                          );
+                        } else {
+                          return ListView.builder(
+                            itemBuilder: (context, index) => buildActivityFeedCard(
+                                context,
+                                snapshot.data![index],
+                                context
+                                    .read<ActivityFeedBloc>()
+                                    .isOwnCreatedActivity(snapshot.data![index])),
+                            itemCount: snapshot.data!.length,
+                            controller: listScrollController,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+          ),
+
+          /* Expanded(
+            child: StreamBuilder<List<Activity>>(
+              stream: context.read<ActivityFeedBloc>().state.activityStream,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                    child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemBuilder: (context, index) => buildActivityFeedCard(
+                        context,
+                        snapshot.data![index],
+                        context
+                            .read<ActivityFeedBloc>()
+                            .isOwnCreatedActivity(snapshot.data![index])),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  );
+                }
+              },
+            ),
+          ),*/
+        ],
+      ),
     );
   }
 
@@ -182,9 +301,9 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => OverviewInputPage(
-                          isInFlowContext: false,
-                          activity: activity,
-                        )));
+                              isInFlowContext: false,
+                              activity: activity,
+                            )));
               },
               child: CustomActivityCard(
                 activity: activity,
