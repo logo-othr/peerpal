@@ -13,13 +13,15 @@ class CustomSingleParticipantsTable extends StatelessWidget {
   VoidCallback? onPressed;
   final bool isOwnCreatedActivity;
   final bool isArrowIconVisible;
-  List<String?>? userNames = [];
+  final bool isAttendeeDialog;
+  List<String>? userNames = [];
 
   CustomSingleParticipantsTable(
       {this.heading,
       this.text,
       this.onPressed,
       required this.isOwnCreatedActivity,
+        required this.isAttendeeDialog,
       required this.isArrowIconVisible,
       this.userNames});
 
@@ -53,22 +55,34 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                         top: BorderSide(width: 1, color: secondaryColor),
                         bottom: BorderSide(width: 1, color: secondaryColor))),
                 child: TextButton(
-                    onPressed: onPressed,
+                    onPressed: isArrowIconVisible ? () {
+                      userNames?.sort();
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CustomActivityParticipationsDialog(
+                                isAttendeeDialog: isAttendeeDialog,
+                                isOwnCreatedActivity: isOwnCreatedActivity,
+                                userNames: userNames);
+                          });
+                    } : onPressed,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 10),
                         Flexible(
-                          child: RichText(
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: text!,
-                                  style: textStyle,
-                                ),
-                              ],
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: text!,
+                                    style: textStyle,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -80,6 +94,7 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return CustomActivityParticipationsDialog(
+                                            isAttendeeDialog: isAttendeeDialog,
                                             isOwnCreatedActivity:
                                                 isOwnCreatedActivity,
                                             userNames: userNames);
