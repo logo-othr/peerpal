@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -18,7 +17,7 @@ class CustomCircleListItem extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: active ? Colors.green: primaryColor,
+                color: active ? Colors.green : primaryColor,
                 width: 2.0,
               ),
             ),
@@ -32,10 +31,15 @@ class CustomCircleListItem extends StatelessWidget {
               ),
             )),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-          child:
-          Container(width: 100,child: Center(child: CustomPeerPALHeading4(label, color: active ? Colors.green: primaryColor, alignment: TextAlign.center))),
-        )
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+          child: Center(
+              child: Container(
+            width: 100,
+            child: CustomPeerPALHeading4(label,
+                color: active ? Colors.green : primaryColor,
+                alignment: TextAlign.center),
+          )),
+        ),
       ],
     );
   }
