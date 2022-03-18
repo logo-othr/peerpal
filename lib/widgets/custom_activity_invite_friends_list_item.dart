@@ -34,8 +34,15 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'CustomPeerPalFontFamily',
+      color: primaryColor,
+    );
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,31 +65,39 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
           ),
           SizedBox(width: 15),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(width: 1, color: secondaryColor))),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                child: Row(
-                  children: [
-                    Container(
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage:  NetworkImage(peerPALUser.imagePath!),
-                          backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              child: Row(
+                children: [
+                  Container(
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage:  NetworkImage(peerPALUser.imagePath!),
+                        backgroundColor: Colors.white,
+                      ),
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: new Border.all(
+                          color: primaryColor,
+                          width: 2.0,
                         ),
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: new Border.all(
-                            color: primaryColor,
-                            width: 2.0,
+                      )),
+                  SizedBox(width: 15),
+                  Flexible(
+                    child: RichText(
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: peerPALUser.name!,
+                            style: textStyle,
                           ),
-                        )),
-                    SizedBox(width: 15),
-                    CustomPeerPALHeading2(peerPALUser.name!, color: primaryColor),
-                  ],
-                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
