@@ -1,15 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
-import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
 import 'package:peerpal/colors.dart';
@@ -18,8 +13,6 @@ import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
-import 'package:peerpal/widgets/custom_invitation_button.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/single_chat_cancel_friend_request_button.dart';
@@ -243,7 +236,6 @@ class ChatPageContent extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: TextField(
-              style: TextStyle(fontSize: 22),
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
               minLines: 1,
@@ -401,7 +393,7 @@ class ChatPageContent extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 220),
                 child: Text(
                   chatMessage.message,
-                  style: const TextStyle(color: Colors.white,fontSize: 20),
+                  style: const TextStyle(color: Colors.white,fontSize: 16),
                   textAlign: TextAlign.start,
                 ),
               ),
