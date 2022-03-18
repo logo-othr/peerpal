@@ -82,7 +82,7 @@ class InviteFriendsContent extends StatelessWidget {
                 CustomActivityInviteFriendsListItem(icon: Icons.face, name: "Tim"),
               ],
             ),*/
-                Spacer(),
+
                 CustomPeerPALButton(
                     text: "Weiter",
                     onPressed: () async  {
