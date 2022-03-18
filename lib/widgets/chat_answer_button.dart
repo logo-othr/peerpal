@@ -64,24 +64,31 @@ Widget customAnswerHeaderBar(onCancel) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'Antwort wählen',
-          style: TextStyle(
-            fontSize: 17,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        Flexible(
+          flex: 70,
+          child: const Text(
+            'Antwort wählen',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        GestureDetector(
-            onTap: () {
-              onCancel();
-            },
-            child: Text(
-              'Schließen',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            )),
+        Flexible(
+          flex: 30,
+          child: GestureDetector(
+              onTap: () {
+                onCancel();
+              },
+              child: Text(
+                'Schließen',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16
+                ),
+              )),
+        ),
       ],
     ),
   );
@@ -105,6 +112,7 @@ Widget customAnswerListTile(textEditingController, text) => Padding(
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.white,
+                  fontSize: 16
                 ),
               ),
             ),
