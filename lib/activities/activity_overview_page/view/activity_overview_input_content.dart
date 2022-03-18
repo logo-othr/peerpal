@@ -69,8 +69,8 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
               var activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
+              var activityInvitedFriends = state.invitationIds;
               var cubit = context.read<OverviewInputCubit>();
-              if( activity.description != null) descriptionController.text = activity.description!;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -97,7 +97,9 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                   text: activity.creatorName,
                                   avatar:
                                       NetworkImage(activityCreator.imagePath!),
-                                  tapIcon: Icons.email),
+                                  tapIcon: Icons.email,
+                                isOwnCreatedActivity: true),
+
                               CustomSingleTable(
                                 onPressed: () async => {
                                   await Navigator.push(
@@ -166,13 +168,29 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                         ..loadData())
                                 },
                                 heading: "EINGELADEN",
-                                text: activityAttendees
+                                text: activityInvitedFriends
                                     .map((e) => e.name)
                                     .toList()
                                     .join(", "),
-                                isOwnCreatedActivity: true,
+                                isOwnCreatedActivity: false,
+                                isAttendeeDialog: false,
                                 isArrowIconVisible: true,
+                                userNames: activityInvitedFriends
+                                    .map((e) => e.name!)
+                                    .toList(),
                               ),
+                              CustomSingleParticipantsTable(
+                                  heading: "TEILNEHMER",
+                                  text: activityAttendees
+                                      .map((e) => e.name)
+                                      .toList()
+                                      .join(", "),
+                                  isOwnCreatedActivity: false,
+                                  isAttendeeDialog: true,
+                                  userNames: activityAttendees
+                                      .map((e) => e.name!)
+                                      .toList(),
+                                  isArrowIconVisible: true),
                               CustomSingleDescriptionTable(
                                 heading: "BESCHREIBUNG",
                                 isEditingModus: true,
