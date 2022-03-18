@@ -161,6 +161,7 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
                   'Schließen',
                   style: TextStyle(
                     color: Colors.white,
+                      fontSize: 16
                   ),
                 )),
           ),
