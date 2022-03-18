@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:peerpal/activities/activity_public_overview_page/cubit/activity_public_overview_cubit.dart';
+import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
@@ -91,7 +92,15 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                                   text: activity.creatorName,
                                   avatar:
                                       NetworkImage(activityCreator.imagePath!),
-                                  tapIcon: Icons.email),
+                                  tapIcon: Icons.email,
+                                  isOwnCreatedActivity: false,
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserDetailPage(activity.creatorId!)));
+                                  }),
                               CustomSingleTable(
                                 heading: "DATUM",
                                 text: DateFormat('dd.MM.yyyy')
@@ -117,8 +126,9 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                                       .toList()
                                       .join(", "),
                                   isOwnCreatedActivity: false,
+                                  isAttendeeDialog: true,
                                   userNames: activityAttendees
-                                      .map((e) => e.name)
+                                      .map((e) => e.name!)
                                       .toList(),
                                   isArrowIconVisible: true),
                               CustomSingleDescriptionTable(
@@ -140,7 +150,7 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                             children: <Widget>[
                               CustomPeerPALButton(
                                 onPressed: () {
-                                 context
+                                  context
                                       .read<ActivityPublicOverviewCubit>()
                                       .leaveActivity();
 
