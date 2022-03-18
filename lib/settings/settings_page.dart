@@ -133,7 +133,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 showLicensePage(
                     context: context,
                     applicationName: "PeerPAL",
-                    applicationVersion: "0.01 - BETA",
+                    applicationVersion: "Testversion 2 - BETA 1.0.0 (2)",
                     applicationLegalese: Strings.applicationLegalese)
               },
             ),
