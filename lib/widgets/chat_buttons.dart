@@ -77,7 +77,7 @@ class _ChatButtonsState extends State<ChatButtons> {
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
                 height: isEmojiKeyboardVisible ? 200 : 35,
-                width: isEmojiKeyboardVisible ? 300 : 35,
+                width: isEmojiKeyboardVisible ? 320 : 35,
                 duration: const Duration(milliseconds: 0),
                 margin: isEmojiKeyboardVisible
                     ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
@@ -110,7 +110,7 @@ class _ChatButtonsState extends State<ChatButtons> {
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
                 height: isAnswerKeyboardVisible ? 250 : 35,
-                width: isAnswerKeyboardVisible ? 300 : 120,
+                width: isAnswerKeyboardVisible ? 300 : 150,
                 duration: const Duration(milliseconds: 0),
                 margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
                 decoration: BoxDecoration(
@@ -135,6 +135,7 @@ class _ChatButtonsState extends State<ChatButtons> {
                             'Antwort wählen',
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 16
                             ),
                           )))),
       ],
