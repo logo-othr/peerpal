@@ -4,7 +4,7 @@ class ActivityIconData {
   static final Map<String, IconData> icons =  {
     'biking' :  Icons.directions_bike_outlined,
     'shopping' : Icons.shopping_cart_outlined,
-    'walking' :Icons.hiking_outlined,
+    'walking' :Icons.directions_walk,
     'music' : Icons.music_note_outlined,
     'coffee': Icons.local_cafe_outlined,
     'phone' : Icons.call_outlined,
