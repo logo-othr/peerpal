@@ -98,13 +98,12 @@ class _ActivityRequestListContentState extends State<ActivityRequestListContent>
           border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
       child: TextButton(
         onPressed: () {
-          onPressed: () {
+
             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ActivityPublicOverviewPage(activity: activity))
             );
-          };
         },
         child: CustomActivityCard(activity: activity,isOwnCreatedActivity: false),
       ),
