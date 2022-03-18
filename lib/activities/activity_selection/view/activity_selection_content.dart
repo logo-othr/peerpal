@@ -21,6 +21,10 @@ class ActivitySelectionContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height) / 3.5;
+    final double itemWidth = size.width / 2;
+
     var searchFieldController = TextEditingController();
     searchFieldController.text = Strings.searchDisabled;
     return BlocBuilder<ActivitySelectionCubit, ActivitySelectionState>(
@@ -52,63 +56,55 @@ class ActivitySelectionContent extends StatelessWidget {
                     searchBarController: searchFieldController,
                     enabled: false,
                   )),
+
               Expanded(
-                child: (state is ActivitiesLoaded)
-                    ? SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Wrap(
-                                      runSpacing: 8,
-                                      spacing: 10,
-                                      alignment: WrapAlignment.start,
-                                      children:
-                                          state.activities.map((activity) {
-                                        return GestureDetector(
-                                            onTap: () async {
-                                              var cubit = context.read<
-                                                  ActivitySelectionCubit>();
-                                              if (isInFlowContext) {
-                                                var updatedActivity = (await cubit
-                                                        .getCurrentActivity())
-                                                    .copyWith(
-                                                        code: activity.code,
-                                                        name: activity.name);
-                                                await cubit.postData(
-                                                    updatedActivity); // ToDo: Update data in shared prefs
-                                                context.flow<Activity>().update(
-                                                    (s) => s.copyWith(
-                                                        code: activity.code,
-                                                        name: activity.name));
-                                              } else {
-                                                var currentActivity =
-                                                    await cubit
-                                                        .getCurrentActivity();
-                                                var updatedActivity =
-                                                    currentActivity.copyWith(
-                                                        code: activity.code,
-                                                        name: activity.name);
-                                                await cubit
-                                                    .postData(updatedActivity);
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: CustomCircleListItem(
-                                                label: activity.name.toString(),
-                                                icon: ActivityIconData
-                                                    .icons[activity.code],
-                                                active: false));
-                                      }).toList()),
-                                )),
-                          ],
-                        ),
-                      )
-                    : CircularProgressIndicator(),
-              ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  child: GridView.count(
+                      childAspectRatio: (itemWidth / itemHeight),
+                      primary: true,
+                      crossAxisCount: 3,
+                      children: state.activities.map((activity) {
+                        return GestureDetector(
+                            onTap: () async {
+                              var cubit = context.read<
+                                  ActivitySelectionCubit>();
+                              if (isInFlowContext) {
+                                var updatedActivity = (await cubit
+                                    .getCurrentActivity())
+                                    .copyWith(
+                                    code: activity.code,
+                                    name: activity.name);
+                                await cubit.postData(
+                                    updatedActivity); // ToDo: Update data in shared prefs
+                                context.flow<Activity>().update(
+                                        (s) => s.copyWith(
+                                        code: activity.code,
+                                        name: activity.name));
+                              } else {
+                                var currentActivity =
+                                await cubit
+                                    .getCurrentActivity();
+                                var updatedActivity =
+                                currentActivity.copyWith(
+                                    code: activity.code,
+                                    name: activity.name);
+                                await cubit
+                                    .postData(updatedActivity);
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: CustomCircleListItem(
+                                label: activity.name.toString(),
+                                icon: ActivityIconData
+                                    .icons[activity.code],
+                                active: false));
+                      }).toList()),
+
+
+                  ),
+                ),
+
             ],
           ),
         ),
