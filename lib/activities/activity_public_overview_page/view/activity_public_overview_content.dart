@@ -39,6 +39,11 @@ class ActivityPublicOverviewContent extends StatelessWidget {
               var activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
+              if(activity.description != null) descriptionController.text = activity.description!;
+              String location = "";
+              if(activity.location!.streetNumber == null) location = "${activity.location!.street}";
+              else location = "${activity.location!.street} ${activity.location!.streetNumber}";
+
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -117,7 +122,7 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                                   heading: "ORT",
                                   text: activity.location!.place,
                                   subText:
-                                      "${activity.location!.street} ${activity.location!.streetNumber}",
+                                  location,
                                   isArrowIconVisible: false),
                               CustomSingleParticipantsTable(
                                   heading: "TEILNEHMER",

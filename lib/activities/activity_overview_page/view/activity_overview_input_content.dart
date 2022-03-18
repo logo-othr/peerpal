@@ -66,11 +66,16 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
         child: BlocBuilder<OverviewInputCubit, ActivityOverviewState>(
           builder: (context, state) {
             if (state is ActivityOverviewLoaded) {
-              var activity = state.activity;
+              Activity activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
               var activityInvitedFriends = state.invitationIds;
               var cubit = context.read<OverviewInputCubit>();
+              if(activity.description != null) descriptionController.text = activity.description!;
+
+              String location = "";
+              if(activity.location!.streetNumber == null) location = "${activity.location!.street}";
+              else location = "${activity.location!.street} ${activity.location!.streetNumber}";
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -152,7 +157,7 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                   heading: "ORT",
                                   text: activity.location!.place,
                                   subText:
-                                      "${activity.location!.street} ${activity.location!.streetNumber}",
+                                  location,
                                   isArrowIconVisible: true),
                               CustomSingleParticipantsTable(
                                 onPressed: () async => {
