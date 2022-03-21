@@ -150,10 +150,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 context
                                     .read<AppBloc>()
                                     .add(AppLogoutRequested()),
-                            context
-                                .read<AppBloc>()
-                                .deleteDeviceTokenFromUser(),
-
                               });
                     }),
               },
