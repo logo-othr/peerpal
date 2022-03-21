@@ -391,14 +391,6 @@ Future<void> registerFCMDeviceToken() async{
     return list.map((e) => Location.fromJson(e)).toList();
   }
 
-  Future<void> deleteDeviceTokenFromUser() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance.collection('deleteDeviceToken').doc(DateTime.now().millisecondsSinceEpoch.toString()).set({
-      'id': currentUserId,
-    });
-  }
-
-
   //----------------------------------------------------
   //Friends Start
   //----------------------------------------------------

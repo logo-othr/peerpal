@@ -46,7 +46,5 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     return super.close();
   }
 
-  Future<void> deleteDeviceTokenFromUser() async {
-    _appUserRepository.deleteDeviceTokenFromUser();
-  }
+
 }
