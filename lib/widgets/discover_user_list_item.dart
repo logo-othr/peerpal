@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -128,7 +129,26 @@ class DiscoverUserListItem extends StatelessWidget {
               radius: 30,
               child: ClipOval(
                   child:
-                  Image.network(imageLink!)),
+                  CachedNetworkImage(imageUrl: imageLink!,
+                   /* placeholder: (BuildContext context, url) =>
+                        Container(
+                          width: 60,
+                          height: 60,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+
+                            ),
+                          ),
+                        ),*/
+                    errorWidget: (context, object, stackTrace) {
+                      return const Icon(
+                        Icons.account_circle,
+                        size: 60.0,
+                        color: Colors.grey,
+                      );
+                    },
+                  )),
               backgroundColor: Colors.white,
             ),
             decoration: new BoxDecoration(
