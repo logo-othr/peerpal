@@ -6,9 +6,8 @@ class ChatEmojiKeyboard extends StatefulWidget {
   VoidCallback onCancel;
   final TextEditingController textEditingController;
 
-
-  ChatEmojiKeyboard({required this.onCancel, required this.textEditingController
-      });
+  ChatEmojiKeyboard(
+      {required this.onCancel, required this.textEditingController});
 
   @override
   State<ChatEmojiKeyboard> createState() => _ChatEmojiKeyboardState();
@@ -75,32 +74,42 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           customEmojiHeaderBar(widget.onCancel),
+          Divider(
+            thickness: 1,
+            color: Colors.white,
+          ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(15, 15, 0, 15),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+              //color: Colors.green,
               child: TabBarView(
                 children: [
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Wrap(
                       children: activityEmojiButtons,
                     ),
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Wrap(
                       children: eatAndDrinkEmojis,
                     ),
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Wrap(
                       children: year,
                     ),
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Wrap(
                       children: gestures,
                     ),
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Wrap(
                       children: smileyAndEmotionsEmojis,
                     ),
@@ -116,39 +125,31 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
 
   Widget customEmojiHeaderBar(onCancel) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
       decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.white,
-            width: 1.0,
-          ),
-        ),
+        borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(25), topLeft: Radius.circular(25)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
             flex: 70,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: SizedBox(
-                height: 50,
-                child: TabBar(
+            child: Container(
+              height: 50,
+              child: TabBar(
                   unselectedLabelColor: Colors.white,
-                    labelPadding: EdgeInsets.all(0),
-                    indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(width: 1.0, color: Colors.white)),
-                    tabs: [
-                      EmojiButton(
-                          emojiCode: Emojis.activityEmojis.first.code),
-                      EmojiButton(emojiCode: Emojis.eatAndDrinkEmojis.first.code),
-                      EmojiButton(emojiCode: Emojis.year.first.code),
-                      EmojiButton(emojiCode: Emojis.gestures.first.code),
-                      EmojiButton(
-                          emojiCode: Emojis.smileyAndEmotionsEmojis.first.code),
-                    ]),
-              ),
+                  labelPadding: EdgeInsets.all(0),
+                  indicator: UnderlineTabIndicator(
+                      borderSide:
+                          BorderSide(width: 1.0, color: Colors.white)),
+                  tabs: [
+                    Text(Emojis.activityEmojis.first.code, style: TextStyle(fontSize: 28)),
+                    Text(Emojis.eatAndDrinkEmojis.first.code, style: TextStyle(fontSize: 28)),
+                    Text(Emojis.year.first.code, style: TextStyle(fontSize: 28)),
+                    Text(Emojis.gestures.first.code, style: TextStyle(fontSize: 28)),
+                    Text(Emojis.smileyAndEmotionsEmojis.first.code, style: TextStyle(fontSize: 28)),
+                  ]),
             ),
           ),
           Flexible(
@@ -157,11 +158,17 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
                 onTap: () {
                   onCancel();
                 },
-                child: const Text(
-                  'Schließen',
-                  style: TextStyle(
-                    color: Colors.white,
-                      fontSize: 16
+                child: Container(
+                  height: 50,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Schließen',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ],
                   ),
                 )),
           ),
