@@ -76,8 +76,8 @@ class _ChatButtonsState extends State<ChatButtons> {
             ? Container()
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
-                height: isEmojiKeyboardVisible ? 200 : 35,
-                width: isEmojiKeyboardVisible ? 320 : 35,
+                height: isEmojiKeyboardVisible ? 210 : 45,
+                width: isEmojiKeyboardVisible ? 320 : 45,
                 duration: const Duration(milliseconds: 0),
                 margin: isEmojiKeyboardVisible
                     ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
@@ -97,11 +97,11 @@ class _ChatButtonsState extends State<ChatButtons> {
                   child: isEmojiKeyboardVisible
                       ? ChatEmojiKeyboard(
                           onCancel:
-                              onCancelEmojiKeyboard, textEditingController: widget.textEditingController, /*onPressedEmojiKeyboardItem:*/
+                              onCancelEmojiKeyboard, textEditingController: widget.textEditingController,
                         )
                       : const Icon(
                           Icons.emoji_emotions_outlined,
-                          size: 25,
+                          size: 35,
                           color: Colors.white,
                         ),
                 )),
@@ -109,8 +109,8 @@ class _ChatButtonsState extends State<ChatButtons> {
             ? Container()
             : AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
-                height: isAnswerKeyboardVisible ? 250 : 35,
-                width: isAnswerKeyboardVisible ? 300 : 150,
+                height: isAnswerKeyboardVisible ? 250 : 45,
+                width: isAnswerKeyboardVisible ? 300 : 170,
                 duration: const Duration(milliseconds: 0),
                 margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
                 decoration: BoxDecoration(
@@ -135,7 +135,7 @@ class _ChatButtonsState extends State<ChatButtons> {
                             'Antwort wählen',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16
+                              fontSize: 20
                             ),
                           )))),
       ],
