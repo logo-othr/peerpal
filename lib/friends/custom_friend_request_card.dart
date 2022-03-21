@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,32 +40,22 @@ class CustomFriendRequestCard extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(25.0)),
                   clipBehavior: Clip.hardEdge,
                   child: userInformation.imagePath!.isNotEmpty
-                      ? Image.network(
+                      ? CachedNetworkImage(imageUrl:
                     userInformation.imagePath!,
                           fit: BoxFit.cover,
                           width: 50.0,
                           height: 50.0,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return SizedBox(
+                          placeholder: (BuildContext context, url) =>
+                           SizedBox(
                               width: 50,
                               height: 50,
                               child: Center(
                                 child: CircularProgressIndicator(
                                   color: primaryColor,
-                                  value: loadingProgress.expectedTotalBytes !=
-                                              null &&
-                                          loadingProgress.expectedTotalBytes !=
-                                              null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
                                 ),
                               ),
-                            );
-                          },
-                          errorBuilder: (context, object, stackTrace) {
+                            ),
+                          errorWidget: (context, object, stackTrace) {
                             return const Icon(
                               Icons.account_circle,
                               size: 50.0,
