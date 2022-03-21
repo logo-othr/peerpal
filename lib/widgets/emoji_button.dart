@@ -12,7 +12,10 @@ class EmojiButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(onTap: onPressed, child: Padding(
       padding: const EdgeInsets.all(5.0),
-      child: Text(emojiCode, style: TextStyle(fontSize: 28)),
+      child: Container(
+          color: Colors.transparent,
+          child: Text(emojiCode, style: TextStyle(fontSize: 28))
+      ),
     ));
   }
 }
