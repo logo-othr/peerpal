@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
@@ -22,32 +23,23 @@ class CustomFriendListItemUser extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
             clipBehavior: Clip.hardEdge,
             child: userInformation.imagePath!.isNotEmpty
-                ? Image.network(
+                ? CachedNetworkImage( imageUrl:
               userInformation.imagePath!,
               fit: BoxFit.cover,
               width: 60.0,
               height: 60.0,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
+              placeholder: (BuildContext context, url) =>
+                Container(
                   width: 60,
                   height: 60,
                   child: Center(
                     child: CircularProgressIndicator(
                       color: primaryColor,
-                      value: loadingProgress.expectedTotalBytes !=
-                          null &&
-                          loadingProgress.expectedTotalBytes !=
-                              null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                          : null,
+
                     ),
                   ),
-                );
-              },
-              errorBuilder: (context, object, stackTrace) {
+                ),
+              errorWidget: (context, object, stackTrace) {
                 return const Icon(
                   Icons.account_circle,
                   size: 60.0,
