@@ -172,9 +172,6 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.formValidationStatus.isValidated
                     ? () => {
                   context.read<LoginCubit>().login(),
-                  context
-                      .read<LoginCubit>()
-                      .deleteDeviceTokenFromUser(),
 
                 }
                     : null,
