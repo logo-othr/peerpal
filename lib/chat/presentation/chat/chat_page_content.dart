@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,9 +29,6 @@ class ChatPageContent extends StatelessWidget {
   FocusNode _focus = FocusNode();
   final ScrollController listScrollController = ScrollController();
   var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-  var newGroupChatId = '';
-  var uuid = Uuid();
-  var currentUserName = FirebaseAuth.instance.currentUser!.displayName;
 
   _scrollListener() {
     if (listScrollController.hasClients) {
@@ -115,13 +113,6 @@ class ChatPageContent extends StatelessWidget {
                             ],
                           );
                         }
-                        return Container();
-                        /* if (!snapshot.hasData || snapshot.data == 0) {
-
-
-                        } else {
-
-                        }*/
                       }),
             ],
           );
@@ -215,9 +206,6 @@ class ChatPageContent extends StatelessWidget {
         });
   }
 
-  /*
-
-              */
 
   Widget singleChatTextFormField(
       PeerPALUser chatPartner, String? chatId, context) {
@@ -236,6 +224,7 @@ class ChatPageContent extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: TextField(
+              style: TextStyle(fontSize: 22),
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
               minLines: 1,
@@ -250,7 +239,7 @@ class ChatPageContent extends StatelessWidget {
               autocorrect: true,
               enableSuggestions: true,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+                contentPadding: const EdgeInsets.only(left: 20, top: 30, right: 20),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide(color: primaryColor, width: 3.0),
@@ -298,7 +287,7 @@ class ChatPageContent extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 8.0),
               child: IconButton(
-                icon: const Icon(Icons.send, size: 30),
+                icon: const Icon(Icons.send, size: 35),
                 onPressed: () => sendChatMessage(chatPartner, chatId,
                     textEditingController.text, "0", context),
                 color: primaryColor,
@@ -312,19 +301,15 @@ class ChatPageContent extends StatelessWidget {
 
   Future<void> sendChatMessage(PeerPALUser chatPartner, String? chatId,
       String content, String type, BuildContext context) async {
-    // type: 0 = text, 1 = image, 2 = sticker
+    // type: 0 = text, 1 = image,
     if (content.trim() != '') {
       textEditingController.clear();
       await context.read<ChatPageBloc>().sendChatMessage(
             chatPartner,
             chatId,
             content,
-            type, /* newGroupChatId*/
+            type,
           );
-      if (listScrollController.hasClients) {
-        await listScrollController.animateTo(0.0,
-            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-      }
     } else {}
   }
 
@@ -336,7 +321,6 @@ class ChatPageContent extends StatelessWidget {
           (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
-            /* newGroupChatId = uuid.v4().toString();*/
             return Container(
                 height: 100,
                 alignment: Alignment.center,
@@ -393,12 +377,18 @@ class ChatPageContent extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 220),
                 child: Text(
                   chatMessage.message,
-                  style: const TextStyle(color: Colors.white,fontSize: 16),
+                  style: const TextStyle(color: Colors.white,fontSize: 19),
                   textAlign: TextAlign.start,
                 ),
               ),
               const SizedBox(width: 15),
-              CircleAvatar(radius: 16, backgroundImage: NetworkImage(imageUrl)),
+              ClipOval(child: CircleAvatar(backgroundColor: Colors.white,radius: 20, child: CachedNetworkImage(imageUrl: imageUrl, errorWidget: (context, object, stackTrace) {
+                return const Icon(
+                  Icons.account_circle,
+                  size: 40.0,
+                  color: Colors.grey,
+                );
+              },))),
             ],
           ),
         ),
