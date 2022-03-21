@@ -29,8 +29,15 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         customAnswerHeaderBar(widget.onCancel),
+
+        Divider(
+          thickness: 1,
+          color: Colors.white,
+        ),
+
         Expanded(
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: [
                 customAnswerListTile(widget.textEditingController, 'Möchten Sie telefonieren?'),
@@ -52,26 +59,31 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
 
 Widget customAnswerHeaderBar(onCancel) {
   return Container(
-    padding: const EdgeInsets.all(15),
+    padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
     decoration: const BoxDecoration(
-      border: Border(
-        bottom: BorderSide(
-          color: Colors.white,
-          width: 1.0,
-        ),
-      ),
+      borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(25), topLeft: Radius.circular(25)),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
           flex: 70,
-          child: const Text(
-            'Antwort wählen',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+          child: Container(
+            height: 50,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Antwort wählen',
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -81,11 +93,17 @@ Widget customAnswerHeaderBar(onCancel) {
               onTap: () {
                 onCancel();
               },
-              child: Text(
-                'Schließen',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16
+              child: Container(
+                height: 50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Schließen',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ],
                 ),
               )),
         ),
@@ -112,13 +130,13 @@ Widget customAnswerListTile(textEditingController, text) => Padding(
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16
+                  fontSize: 19
                 ),
               ),
             ),
           ),
           const Divider(
-            height: 3,
+            height: 1,
             color: Colors.white,
           )
         ],
