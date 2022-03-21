@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,13 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                                   heading: "ERSTELLER",
                                   text: activity.creatorName,
                                   avatar:
-                                      NetworkImage(activityCreator.imagePath!),
+                                      CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
+                                        return const Icon(
+                                          Icons.account_circle,
+                                          size: 40.0,
+                                          color: Colors.grey,
+                                        );
+                                      },),
                                   tapIcon: Icons.email,
                                   isOwnCreatedActivity: false,
                                   onPressed: () {
