@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
@@ -5,9 +6,7 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 import '../colors.dart';
 import 'custom_peerpal_heading.dart';
 
-
 class CustomActivityInviteFriendsListItem extends StatelessWidget {
-
   PeerPALUser peerPALUser;
   VoidCallback onActive;
   VoidCallback onInactive;
@@ -15,9 +14,9 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
 
   CustomActivityInviteFriendsListItem(
       {required this.peerPALUser,
-        required this.isActive,
-        required this.onActive,
-        required this.onInactive});
+      required this.isActive,
+      required this.onActive,
+      required this.onInactive});
 
   // https://api.flutter.dev/flutter/material/MaterialStateProperty-class.html
   Color getColor(Set<MaterialState> states) {
@@ -70,10 +69,21 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage:  NetworkImage(peerPALUser.imagePath!),
-                        backgroundColor: Colors.white,
+                      child: ClipOval(
+                        child: CircleAvatar(
+                          radius: 30,
+                          child: CachedNetworkImage(
+                            imageUrl: peerPALUser.imagePath!,
+                            errorWidget: (context, object, stackTrace) {
+                              return const Icon(
+                                Icons.account_circle,
+                                size: 60.0,
+                                color: Colors.grey,
+                              );
+                            },
+                          ),
+                          backgroundColor: Colors.white,
+                        ),
                       ),
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
