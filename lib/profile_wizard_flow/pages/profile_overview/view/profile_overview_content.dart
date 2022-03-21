@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,34 +24,37 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileOverviewCubit, ProfileOverviewState>(
         builder: (context, state) {
-          if(state is ProfileOverviewInitial) {
-            return CircularProgressIndicator();
-          }
-          else if(state is ProfileOverviewLoaded) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 40,
-                    ),
+      if (state is ProfileOverviewInitial) {
+        return CircularProgressIndicator();
+      } else if (state is ProfileOverviewLoaded) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(
+                  height: 40,
+                ),
                 new FutureBuilder(
                   future: context.read<ProfileOverviewCubit>().profilePicture(),
                   initialData: state.appUserInformation.imagePath!,
-                  builder:(BuildContext context, AsyncSnapshot<String?>text)=>
+                  builder: (BuildContext context,
+                          AsyncSnapshot<String?> text) =>
                       Container(
                           decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border(
-                                  top: BorderSide(width: 1, color: secondaryColor),
-                                  bottom: BorderSide(width: 1, color: secondaryColor))),
+                                  top: BorderSide(
+                                      width: 1, color: secondaryColor),
+                                  bottom: BorderSide(
+                                      width: 1, color: secondaryColor))),
                           child: Center(
                             child: Column(
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 20, 0, 0),
                                   child: Container(
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
@@ -58,28 +62,49 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                           color: primaryColor,
                                           width: 4.0,
                                         ),
-                                      ),child: CircleAvatar(
-                                    radius: 70,
-                                    backgroundColor: Colors.white,
-                                    child:  ClipOval(
-                                      child: Image.network(text.data!,height: 140,width:                              140,fit: BoxFit.cover,),
-                                    ),
-                                  )
-                                  ),
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 70,
+                                        backgroundColor: Colors.white,
+                                        child: ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: text.data!,
+                                            height: 140,
+                                            width: 140,
+                                            fit: BoxFit.cover,
+                                            errorWidget: (context, object, stackTrace) {
+                                              return const Icon(
+                                                Icons.account_circle,
+                                                size: 60.0,
+                                                color: Colors.grey,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      )),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   child: TextButton(
                                       onPressed: () async => {
-                                        await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ProfilePictureInputPage(isInFlowContext: false)),
-                                        ),
-                                        setState((){
-                                          context.read<ProfileOverviewCubit>().loadData();},)
-                                      },
+                                            await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfilePictureInputPage(
+                                                          isInFlowContext:
+                                                              false)),
+                                            ),
+                                            setState(
+                                              () {
+                                                context
+                                                    .read<
+                                                        ProfileOverviewCubit>()
+                                                    .loadData();
+                                              },
+                                            )
+                                          },
                                       style: TextButton.styleFrom(
                                         minimumSize: const Size(50, 15),
                                         backgroundColor: Colors.transparent,
@@ -91,76 +116,78 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                 )
                               ],
                             ),
-                          )
-                      ),
+                          )),
                 ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          CustomSingleTable(
-                                heading: "Name",
-                                text: state.appUserInformation.name!,
-                                isArrowIconVisible: true,
-                                onPressed: () async => {
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        CustomSingleTable(
+                            heading: "Name",
+                            text: state.appUserInformation.name!,
+                            isArrowIconVisible: true,
+                            onPressed: () async => {
                                   await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            NameInputPage(isInFlowContext: false,pastName: state.appUserInformation.name!)),
-                                  ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
+                                        builder: (context) => NameInputPage(
+                                            isInFlowContext: false,
+                                            pastName: state
+                                                .appUserInformation.name!)),
+                                  ).then((value) => context
+                                      .read<ProfileOverviewCubit>()
+                                      .loadData()),
                                 }),
-                          CustomSingleTable(
-                              heading: 'ALTER',
-                              text: state.appUserInformation.age.toString(),
-                              isArrowIconVisible: true,
-                              onPressed: () async => {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          AgeInputPage(isInFlowContext: false)),
-                                ).then((value) => context.read<ProfileOverviewCubit>().loadData())
-
-
-                              }
-
-                          ),
-
-                          CustomSingleTable(
-                              heading: 'TELEFONNUMMER',
-                              text: state.appUserInformation.phoneNumber.toString(),
-                              isArrowIconVisible: true,
-                              onPressed: () async => {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PhoneInputPage(isInFlowContext: false,pastPhone: state.appUserInformation.phoneNumber.toString())),
-                                ).then((value) => context.read<ProfileOverviewCubit>().loadData()),
-                              }
-                          ),
-
-
-                        ],
-                      ),
+                        CustomSingleTable(
+                            heading: 'ALTER',
+                            text: state.appUserInformation.age.toString(),
+                            isArrowIconVisible: true,
+                            onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AgeInputPage(
+                                            isInFlowContext: false)),
+                                  ).then((value) => context
+                                      .read<ProfileOverviewCubit>()
+                                      .loadData())
+                                }),
+                        CustomSingleTable(
+                            heading: 'TELEFONNUMMER',
+                            text:
+                                state.appUserInformation.phoneNumber.toString(),
+                            isArrowIconVisible: true,
+                            onPressed: () async => {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PhoneInputPage(
+                                            isInFlowContext: false,
+                                            pastPhone: state
+                                                .appUserInformation.phoneNumber
+                                                .toString())),
+                                  ).then((value) => context
+                                      .read<ProfileOverviewCubit>()
+                                      .loadData()),
+                                }),
+                      ],
                     ),
                   ),
-                    SizedBox(height: 20),
-                    Container(
-                        color: Colors.transparent,
-                        child: CustomPeerPALButton(
-                          text: 'Fertig',
-                          onPressed: () => Navigator.pop(context),
-                        ))
-                  ],
                 ),
-              ),
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-
+                SizedBox(height: 20),
+                Container(
+                    color: Colors.transparent,
+                    child: CustomPeerPALButton(
+                      text: 'Fertig',
+                      onPressed: () => Navigator.pop(context),
+                    ))
+              ],
+            ),
+          ),
+        );
+      } else {
+        return CircularProgressIndicator();
+      }
     });
   }
 }
