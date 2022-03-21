@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class SingleChatHeader extends StatelessWidget {
@@ -21,18 +22,27 @@ class SingleChatHeader extends StatelessWidget {
             ),
           ),
         ),
-        height: 60,
+        height: 68,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
             children: [
-              CircleAvatar(
-                  radius: 18, backgroundImage: NetworkImage(urlAvatar!)),
+              ClipOval(
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                    radius: 25, child: CachedNetworkImage(imageUrl: urlAvatar!, errorWidget: (context, object, stackTrace) {
+                  return const Icon(
+                    Icons.account_circle,
+                    size: 40.0,
+                    color: Colors.grey,
+                  );
+                },)),
+              ),
               const SizedBox(width: 15),
               Text(
                 name!,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
