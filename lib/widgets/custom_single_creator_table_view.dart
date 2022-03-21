@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -12,7 +13,7 @@ class CustomSingleCreatorTable extends StatelessWidget {
   String? text;
   VoidCallback? onPressed;
   IconData? tapIcon;
-  ImageProvider avatar;
+  CachedNetworkImage avatar;
   bool isOwnCreatedActivity;
 
   CustomSingleCreatorTable({this.heading, this.text, this.onPressed, this.tapIcon, required this.avatar, required this.isOwnCreatedActivity});
@@ -57,10 +58,15 @@ class CustomSingleCreatorTable extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage:  avatar,
-                                backgroundColor: Colors.white,
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: ClipOval(
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    child:  avatar,
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ),
                               ),
                               SizedBox(width: 10),
                               Flexible(
