@@ -87,8 +87,7 @@ class ActivityRepository {
 
   Future<void> joinActivity(Activity activity) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance.collection('joinActivity').doc(
-    ).set({
+    await FirebaseFirestore.instance.collection('joinActivity').doc().set({
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'activityId': activity.id,
       'joiningId': currentUserId,
@@ -98,8 +97,7 @@ class ActivityRepository {
 
   Future<void> leaveActivity(Activity activity) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance.collection('leaveActivity').doc(
-    ).set({
+    await FirebaseFirestore.instance.collection('leaveActivity').doc().set({
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'activityId': activity.id,
       'leavingId': currentUserId,
@@ -107,9 +105,7 @@ class ActivityRepository {
   }
 
   Future<void> deleteActivity(Activity activity) async {
-
-    await FirebaseFirestore.instance.collection('deleteActivity').doc(
-    ).set({
+    await FirebaseFirestore.instance.collection('deleteActivity').doc().set({
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'activityId': activity.id,
     });
@@ -138,11 +134,11 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
 
-
-
         publicActivityList.add(activity);
         print("PublicActivityStream: $activity");
       });
+      publicActivityList.sort((a, b) => a.date!.compareTo(b.date!));
+
       yield publicActivityList;
     }
   }
@@ -164,10 +160,10 @@ class ActivityRepository {
         createdActivityList.add(activity);
         print("CreatedActivityStream: $activity");
       });
+            createdActivityList.sort((a, b) => a.date!.compareTo(b.date!));
       yield createdActivityList;
     }
   }
-
 
   // ToDo: Workaround. Refactor.
   List<Activity> _replaceOrAddActivity(
