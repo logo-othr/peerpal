@@ -3,9 +3,7 @@ const admin = require('firebase-admin');
 const {
   v4: uuidv4,
 } = require('uuid');
-
-const serviceAccount = require("./firebase-admin-sdk.json"); // PP-Test-DB
-
+const serviceAccount = require("./peerpal-de516-firebase-adminsdk-rj6fw-496658170e.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -584,8 +582,6 @@ function sendPushNotificationForUseCase(useCase, db, change, userName) {
           body: `Neue Nachrichtenanfrage von ${userName}`,
         },
         data: {
-          title: `Nachrichtenanfrage`,
-          body: `Neue Nachrichtenanfrage von ${userName}`,
           id: change.doc.data().fromId,
           click_action: 'FLUTTER_NOTIFICATION_CLICK'
         }
@@ -636,8 +632,8 @@ function sendPushNotification(change, db, payload) {
       .then(documentQuerySnapshot => {
 
         var deviceToken = documentQuerySnapshot.data().pushToken;
-        deviceTokens.set(documentQuerySnapshot.id, deviceToken);
-        console.log(`deviceToken: ${deviceToken}`);
+        //deviceTokens.set(documentQuerySnapshot.id, deviceToken);
+        console.log(`deviceToken from Firebase: ${deviceToken}`);
 
         admin.messaging().sendToDevice(deviceToken, payload)
           .then(response => {
@@ -707,7 +703,7 @@ function sendPushNotificationsForActivity(change, db, payload) {
         .then(documentQuerySnapshot => {
 
           var deviceToken = documentQuerySnapshot.data().pushToken;
-          deviceTokens.set(documentQuerySnapshot.id, deviceToken);
+          //deviceTokens.set(documentQuerySnapshot.id, deviceToken);
           console.log(`deviceToken: ${deviceToken}`);
 
           admin.messaging().sendToDevice(deviceToken, payload)
@@ -824,10 +820,6 @@ async function handleDeleteActivity(db) {
 
 async function handleDeleteDeviceToken(db) {
 
-
-  //soll der Eintrag nach dem Schreiben auch wieder aus der deleteDeviceToken Sammlung gelöscht werden? (statistik)
-
-
   console.log('|///////////////////////////////////////////////////////////////////|');
   console.log('|----------------| Start handleDeleteDeviceToken |------------------|');
   console.log('|///////////////////////////////////////////////////////////////////|');
@@ -840,7 +832,9 @@ async function handleDeleteDeviceToken(db) {
           console.log('|------handleDeleteDeviceToken()------|');
           console.log(change.doc.id, '=>', change.doc.data());
 
-          deviceTokens.delete(change.doc.data().id);
+          //delete deviceToken from local array
+         /* deviceTokens.delete(change.doc.data().id);
+          console.log('Successfully delete deviceToken from local array')*/
 
           var collection = db.collection(`privateUserData`);
           collection.doc(change.doc.data().id).update(
@@ -851,8 +845,8 @@ async function handleDeleteDeviceToken(db) {
             .catch(error => { console.log('Error updating deviceToken:', error) });
 
           db.collection(`deleteDeviceToken`).doc(change.doc.id).delete()
-            .then(response => { console.log('Successfully delete activity:', response) })
-            .catch(error => { console.log('Error deleting activity:', error) });
+            .then(response => { console.log('Successfully delete deleteDeviceToken:', response) })
+            .catch(error => { console.log('Error deleting deleteDeviceToken:', error) });
         }
       });
     });
