@@ -116,13 +116,13 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                               CustomSingleTable(
                                 heading: "DATUM",
                                 text: DateFormat('dd.MM.yyyy')
-                                    .format(activity.date!),
+                                    .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)!),
                                 isArrowIconVisible: false,
                               ),
                               CustomSingleTable(
                                 heading: "UHRZEIT",
                                 text:
-                                    '${DateFormat('kk:mm').format(activity.date!)} Uhr',
+                                    '${DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!))} Uhr',
                                 isArrowIconVisible: false,
                               ),
                               CustomSingleLocationTable(

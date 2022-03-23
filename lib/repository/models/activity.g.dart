@@ -13,8 +13,7 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
       description: json['description'] as String?,
       creatorId: json['creatorId'] as String?,
       creatorName: json['creatorName'] as String?,
-      date:
-          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      date: json['date'] as int?,
       location: json['location'] == null
           ? null
           : Location.fromJson(json['location'] as Map<String, dynamic>),
@@ -34,7 +33,7 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'description': instance.description,
       'creatorId': instance.creatorId,
       'creatorName': instance.creatorName,
-      'date': instance.date?.toIso8601String(),
+      'date': instance.date,
       'location': instance.location?.toJson(),
       'attendeeIds': instance.attendeeIds,
       'invitationIds': instance.invitationIds,

@@ -38,7 +38,7 @@ class DateInputCubit extends Cubit<DateInputState> {
     // Timestamp ts = Timestamp.fromDate(dt);
     var activity = await _activityRepository.getCurrentActivity();
 
-    activity = activity.copyWith(date: dt);
+    activity = activity.copyWith(date: dt.millisecondsSinceEpoch);
     _activityRepository.updateLocalActivity(activity);
     return activity;
   }

@@ -121,8 +121,7 @@ class ActivityRepository {
     Stream<QuerySnapshot> publicActivityStream = FirebaseFirestore.instance
         .collection('activities')
         .where('public', isEqualTo: true)
-        .where('creatorId', isNotEqualTo: currentUserId)
-        .orderBy('creatorId')
+        .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('date', descending: true)
         .snapshots();
 
@@ -134,7 +133,7 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
 
-        publicActivityList.add(activity);
+        if(activity.creatorId != currentUserId) publicActivityList.add(activity);
         print("PublicActivityStream: $activity");
       });
       publicActivityList.sort((a, b) => a.date!.compareTo(b.date!));

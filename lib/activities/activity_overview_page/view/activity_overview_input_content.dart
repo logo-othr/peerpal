@@ -127,7 +127,7 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                 },
                                 heading: "DATUM",
                                 text: DateFormat('dd.MM.yyyy')
-                                    .format(activity.date!),
+                                    .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)!),
                                 isArrowIconVisible: true,
                               ),
                               CustomSingleTable(
@@ -145,7 +145,7 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                 },
                                 heading: "UHRZEIT",
                                 text:
-                                    DateFormat('kk:mm').format(activity.date!),
+                                    DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!)!),
                                 isArrowIconVisible: true,
                               ),
                               CustomSingleLocationTable(

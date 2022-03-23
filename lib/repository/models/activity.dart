@@ -19,7 +19,7 @@ class Activity extends Equatable {
   final String? description;
   final String? creatorId;
   final String? creatorName;
-  final DateTime? date;
+  final int? date;
   final Location? location;
   final List<String>? attendeeIds;
   final List<String>? invitationIds;
@@ -64,7 +64,7 @@ class Activity extends Equatable {
     String? description,
     String? creatorId,
     String? creatorName,
-    DateTime? date,
+    int? date,
     Location? location,
     List<String>? attendeeIds,
     List<String>? invitationIds,
