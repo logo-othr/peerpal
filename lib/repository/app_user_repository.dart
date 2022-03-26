@@ -86,25 +86,23 @@ class AppUserRepository {
     }
   }
 
+  Future<void> registerFCMDeviceToken() async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
+    await FirebaseMessaging.instance.getToken().then((token) {
+      print("user-id: $currentUserId");
+      print('pushToken: $token');
+      FirebaseFirestore.instance
+          .collection('privateUserData')
+          .doc(currentUserId)
+          .update({'pushToken': token});
+    }).catchError((err) {
+      print(err.message.toString());
+      print("Error while creating push noticiation");
+    });
+  }
 
-Future<void> registerFCMDeviceToken() async{
-  var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-
-  await FirebaseMessaging.instance.getToken().then((token) {
-    print("user-id: $currentUserId");
-    print('pushToken: $token');
-    FirebaseFirestore.instance
-        .collection('privateUserData')
-        .doc(currentUserId)
-        .update({'pushToken': token});
-  }).catchError((err) {
-    print(err.message.toString());
-    print("Error while creating push noticiation");
-  });
-
-}
-  Future<void> unregisterFCMDeviceToken() async{
+  Future<void> unregisterFCMDeviceToken() async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     print("delete device push token");
@@ -113,7 +111,6 @@ Future<void> registerFCMDeviceToken() async{
         .doc(currentUserId)
         .update({'pushToken': null});
   }
-
 
   Future<void> loginWithEmailAndPassword({
     required String email,
@@ -152,7 +149,6 @@ Future<void> registerFCMDeviceToken() async{
   }
 
   Future<void> logout() async {
-
     try {
       await unregisterFCMDeviceToken();
       await Future.wait([
@@ -162,7 +158,6 @@ Future<void> registerFCMDeviceToken() async{
     } on Exception {
       throw LogoutException();
     }
-
   }
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser,
@@ -198,6 +193,25 @@ Future<void> registerFCMDeviceToken() async{
 
   Future<PeerPALUser> getUserInformation(String uid) async {
     return (await _downloadUserInformation(uid)).toDomainObject();
+  }
+
+  Future<List<PeerPALUser>> getUserForName(String name) async {
+    QuerySnapshot<Map<String, dynamic>> userSnapshots = await _firestore
+        .collection(UserDatabaseContract.publicUsers)
+        .where('name', isEqualTo: name)
+        .get();
+
+    List<PeerPALUser> userList = <PeerPALUser>[];
+
+    userSnapshots.docs.forEach((document) {
+      var documentData = document.data();
+      var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
+      var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
+      var publicUser = peerPALUserDTO.toDomainObject();
+      if (publicUser.id != currentUser.id) userList.add(publicUser);
+    });
+
+    return userList;
   }
 
   Future<PeerPALUserDTO> _downloadUserInformation(String uid) async {
@@ -238,11 +252,11 @@ Future<void> registerFCMDeviceToken() async{
         .where(UserDatabaseContract.userAge,
             isLessThanOrEqualTo: currentUser.discoverToAge);
 
-
-
-    if(currentUser.discoverLocations != null && currentUser.discoverLocations!.isNotEmpty) query = query.where(UserDatabaseContract.discoverLocations,
-        arrayContainsAny:
-            currentUser.discoverLocations!.map((e) => e.place).toList());
+    if (currentUser.discoverLocations != null &&
+        currentUser.discoverLocations!.isNotEmpty)
+      query = query.where(UserDatabaseContract.discoverLocations,
+          arrayContainsAny:
+              currentUser.discoverLocations!.map((e) => e.place).toList());
 
 /*
  PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(currentUser);
@@ -252,15 +266,13 @@ Future<void> registerFCMDeviceToken() async{
  */
 
     //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
-   /* if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {
+    /* if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {
       query = query.where(UserDatabaseContract.discoverActivities,
           arrayContainsAny:
           currentUser.discoverActivitiesCodes);
     }*/
 
-
-
-  /*  query = query.where(UserDatabaseContract.phonePreference,
+    /*  query = query.where(UserDatabaseContract.phonePreference,
         isEqualTo: /*currentUser.discoverCommunicationPreferences!
             .contains(CommunicationType.phone)*/
             true);
@@ -269,7 +281,6 @@ Future<void> registerFCMDeviceToken() async{
         isEqualTo: /*currentUser.discoverCommunicationPreferences!
             .contains(CommunicationType.chat)*/
             true);*/
-
 
     query = query
         .orderBy(UserDatabaseContract.userAge)
@@ -283,7 +294,8 @@ Future<void> registerFCMDeviceToken() async{
     return query;
   }
 
-  Stream<List<PeerPALUser>> getMatchingUsersStream({int limit = 20}) async* {
+  // ToDo: Remove limit
+  Stream<List<PeerPALUser>> getMatchingUsersStream({int limit = 100}) async* {
     var currentPeerPALUser = await getCurrentUserInformation();
 
     var publicUserCollection =
@@ -305,7 +317,7 @@ Future<void> registerFCMDeviceToken() async{
         var peerPALUserDTO =
             PeerPALUserDTO(publicUserInformation: publicUserDTO);
         var publicUser = peerPALUserDTO.toDomainObject();
-        userList.add(publicUser);
+        if (publicUser.id != currentUser.id) userList.add(publicUser);
       });
       yield userList;
     }
@@ -314,7 +326,8 @@ Future<void> registerFCMDeviceToken() async{
   Future<List<PeerPALUser>> getMatchingUsers(
       {PeerPALUser? last = null, required int limit}) async {
     var currentPeerPALUser = await getCurrentUserInformation();
-    if(currentPeerPALUser.discoverLocations != null && currentPeerPALUser.discoverLocations!.isEmpty) return [];
+    if (currentPeerPALUser.discoverLocations != null &&
+        currentPeerPALUser.discoverLocations!.isEmpty) return [];
 
     var publicUserCollection =
         await _firestore.collection(UserDatabaseContract.publicUsers);

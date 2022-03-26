@@ -5,26 +5,25 @@ enum DiscoverTabStatus { initial, success, error }
 class DiscoverTabState extends Equatable {
   const DiscoverTabState({
     this.status = DiscoverTabStatus.initial,
-    this.users = const <PeerPALUser>[],
-    this.hasNoMoreUsers = false,
+    this.userStream = const Stream.empty(),
+    this.searchResults = const [],
   });
 
   final DiscoverTabStatus status;
-  final List<PeerPALUser> users;
-  final bool hasNoMoreUsers;
+  final Stream<List<PeerPALUser>> userStream;
+  final List<PeerPALUser> searchResults;
 
   DiscoverTabState copyWith({
     DiscoverTabStatus? status,
-    List<PeerPALUser>? users,
-    bool? hasNoMoreUsers,
+    Stream<List<PeerPALUser>>? userStream,
+    List<PeerPALUser>? searchResults,
   }) {
     return DiscoverTabState(
-      status: status ?? this.status,
-      users: users ?? this.users,
-      hasNoMoreUsers: hasNoMoreUsers ?? this.hasNoMoreUsers,
-    );
+        status: status ?? this.status,
+        userStream: userStream ?? this.userStream,
+        searchResults: searchResults ?? this.searchResults);
   }
 
   @override
-  List<Object> get props => [status, users, hasNoMoreUsers];
+  List<Object> get props => [status, userStream, searchResults];
 }

@@ -16,51 +16,34 @@ const limit = 10;
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
 
-  // StreamController<List<PeerPALUser>> _userStreamController = new BehaviorSubject();
+  StreamController<List<PeerPALUser>> _userStreamController =
+      new BehaviorSubject();
 
   DiscoverTabBloc(this._appUsersRepository) : super(DiscoverTabState());
 
   @override
   Stream<DiscoverTabState> mapEventToState(DiscoverTabEvent event) async* {
     if (event is UsersLoaded) {
-      yield await lazyLoadUserList(state);
-      // ToDo: Implement infinite list with streams and lazy loading
-      //yield lazyStreamUserList();
-
-    } else if (event is ReloadUsers) {
-      yield await lazyLoadUserList(DiscoverTabState());
+      Stream<List<PeerPALUser>> userStream =
+          _appUsersRepository.getMatchingUsersStream(limit: limit);
+      _userStreamController.addStream(userStream);
+      yield state.copyWith(
+        searchResults: state.searchResults,
+        status: DiscoverTabStatus.success,
+        userStream: _userStreamController.stream,
+      );
+    } else if (event is SearchUser) {
+      List<PeerPALUser> searchResults =
+          await _appUsersRepository.getUserForName(event.searchQuery);
+      yield state.copyWith(
+        searchResults: searchResults,
+        status: state.status,
+        userStream: state.userStream,
+      );
     }
   }
 
-  /*
-  Stream<List<PeerPALUser>> lazyStreamUserList() {
-    Stream<List<PeerPALUser>> userStream =  _appUsersRepository.getMatchingUsersStream(limit: limit);
-          _userStreamController.addStream(userStream);
-          yield state.copyWith(
-              status: DiscoverTabStatus.success,
-              users: _userStreamController.stream,
-              chatRequests: _userFriendRequestStreamController.stream
-          );
-  }
-   */
-
-  Future<List<PeerPALUser>> _removeCurrentUser(
-      List<PeerPALUser> userList) async {
-    final String currentUserId =
-        (await _appUsersRepository.getCurrentUserInformation()).id!;
-
-    var currentUser;
-    for (PeerPALUser peerPALUser in userList) {
-      if (peerPALUser.id == currentUserId) {
-        currentUser = peerPALUser;
-      }
-    }
-
-    userList.remove(currentUser);
-    return userList;
-  }
-
-  Future<DiscoverTabState> lazyLoadUserList(DiscoverTabState state) async {
+/*Future<DiscoverTabState> lazyLoadUserList(DiscoverTabState state) async {
     if (state.hasNoMoreUsers) return state;
     try {
       if (state.status == DiscoverTabStatus.initial) {
@@ -93,5 +76,5 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
     } on Exception {
       return state.copyWith(status: DiscoverTabStatus.error);
     }
-  }
+  }*/
 }
