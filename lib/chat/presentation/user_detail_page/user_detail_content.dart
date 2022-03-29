@@ -22,7 +22,10 @@ import 'package:peerpal/widgets/friend_request_peerpal_button.dart';
 import 'package:peerpal/widgets/single_chat_send_friend_request_button.dart';
 
 class UserDetailContent extends StatelessWidget {
+final bool hasMessageButton;
+
   UserDetailContent({
+    required this.hasMessageButton,
     Key? key,
   }) : super(key: key);
 
@@ -182,9 +185,9 @@ class UserDetailContent extends StatelessWidget {
                                               )),
                                     );
                                   },
-                                  child: CustomPeerPALButton(
+                                  child: hasMessageButton ? CustomPeerPALButton(
                                     text: "Nachricht schreiben",
-                                  ),
+                                  ) : Container(),
                                 ),
                               ],
                             )),
