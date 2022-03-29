@@ -48,14 +48,15 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
         hasBackButton: false,
         actionButtonWidget: !widget.isInFlowContext ? Center(
             child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-          child: Text('Löschen', style: TextStyle(fontSize: 16)),
-        )) : null,
+              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+              child: Text('Löschen', style: TextStyle(fontSize: 16)),
+            )) : null,
         onActionButtonPressed: !widget.isInFlowContext ? () {
           showDialog(
               context: context,
               builder: (BuildContext context) {
                 return CustomDialog(
+                    dialogHeight: 250,
                     actionButtonText: 'Löschen',
                     dialogText: "Möchten Sie diese Aktivität wirklich löschen?",
                     onPressed: onDeleteButtonPressed);
@@ -102,15 +103,15 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                   heading: "ERSTELLER",
                                   text: activity.creatorName,
                                   avatar:
-                                      CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
-                                        return const Icon(
-                                          Icons.account_circle,
-                                          size: 40.0,
-                                          color: Colors.grey,
-                                        );
-                                      },),
+                                  CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
+                                    return const Icon(
+                                      Icons.account_circle,
+                                      size: 40.0,
+                                      color: Colors.grey,
+                                    );
+                                  },),
                                   tapIcon: Icons.email,
-                                isOwnCreatedActivity: true),
+                                  isOwnCreatedActivity: true),
 
                               CustomSingleTable(
                                 onPressed: () async => {
@@ -122,12 +123,12 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                               isInFlowContext: false,
                                             )),
                                   ).then((value) =>
-                                      context.read<OverviewInputCubit>()
-                                        ..loadData())
+                                  context.read<OverviewInputCubit>()
+                                    ..loadData())
                                 },
                                 heading: "DATUM",
                                 text: DateFormat('dd.MM.yyyy')
-                                    .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)!),
+                                    .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
                                 isArrowIconVisible: true,
                               ),
                               CustomSingleTable(
@@ -140,27 +141,27 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                               isInFlowContext: false,
                                             )),
                                   ).then((value) =>
-                                      context.read<OverviewInputCubit>()
-                                        ..loadData())
+                                  context.read<OverviewInputCubit>()
+                                    ..loadData())
                                 },
                                 heading: "UHRZEIT",
                                 text:
-                                    DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!)!),
+                                DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
                                 isArrowIconVisible: true,
                               ),
                               CustomSingleLocationTable(
                                   onPressed: () async => {
-                                        await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LocationInputPage(
-                                                    isInFlowContext: false,
-                                                  )),
-                                        ).then((value) =>
-                                            context.read<OverviewInputCubit>()
-                                              ..loadData())
-                                      },
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocationInputPage(
+                                                isInFlowContext: false,
+                                              )),
+                                    ).then((value) =>
+                                    context.read<OverviewInputCubit>()
+                                      ..loadData())
+                                  },
                                   heading: "ORT",
                                   text: activity.location!.place,
                                   subText:
@@ -176,8 +177,8 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                               isInFlowContext: false,
                                             )),
                                   ).then((value) =>
-                                      context.read<OverviewInputCubit>()
-                                        ..loadData())
+                                  context.read<OverviewInputCubit>()
+                                    ..loadData())
                                 },
                                 heading: "EINGELADEN",
                                 text: activityInvitedFriends
@@ -221,26 +222,26 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                         children: <Widget>[
                           widget.isInFlowContext
                               ? CustomPeerPALButton(
-                                  onPressed: () async {
-                                    await context
-                                        .read<OverviewInputCubit>()
-                                        .createActivity(
-                                            descriptionController.text);
-                                    context.flow<Activity>().complete();
-                                    Navigator.pop(context);
-                                  },
-                                  text: "Aktivität erstellen",
-                                )
+                            onPressed: () async {
+                              await context
+                                  .read<OverviewInputCubit>()
+                                  .createActivity(
+                                  descriptionController.text);
+                              context.flow<Activity>().complete();
+                              Navigator.pop(context);
+                            },
+                            text: "Aktivität erstellen",
+                          )
                               : CustomPeerPALButton(
-                                  onPressed: () async {
-                                    await context
-                                        .read<OverviewInputCubit>()
-                                        .updateActivity(
-                                            descriptionController.text);
-                                    Navigator.pop(context);
-                                  },
-                                  text: "Aktivität speichern",
-                                )
+                            onPressed: () async {
+                              await context
+                                  .read<OverviewInputCubit>()
+                                  .updateActivity(
+                                  descriptionController.text);
+                              Navigator.pop(context);
+                            },
+                            text: "Aktivität speichern",
+                          )
                         ],
                       ))
                 ],
