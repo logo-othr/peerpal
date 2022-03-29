@@ -28,16 +28,23 @@ class CustomChatListItemUser extends StatelessWidget {
           child: Material(
             child: userInformation.user.imagePath!.isNotEmpty
                 ? CachedNetworkImage(
-                    imageUrl: userInformation.user.imagePath!,
-                    fit: BoxFit.cover,
-                    width: 60.0,
-                    height: 60.0,
-                  )
+              errorWidget: (context, object, stackTrace) {
+                return const Icon(
+                  Icons.account_circle,
+                  size: 60.0,
+                  color: Colors.grey,
+                );
+              },
+              imageUrl: userInformation.user.imagePath!,
+              fit: BoxFit.cover,
+              width: 60.0,
+              height: 60.0,
+            )
                 : Icon(
-                    Icons.account_circle,
-                    size: 60.0,
-                    color: Colors.grey,
-                  ),
+              Icons.account_circle,
+              size: 60.0,
+              color: Colors.grey,
+            ),
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
             clipBehavior: Clip.hardEdge,
           ),
@@ -59,7 +66,10 @@ class CustomChatListItemUser extends StatelessWidget {
                   text: TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                        text: userInformation.chat.lastMessage == null ? "Nachricht konnte nicht geladen werden" :  userInformation.chat.lastMessage!.message.toString(),
+                        text: userInformation.chat.lastMessage == null
+                            ? "Nachricht konnte nicht geladen werden"
+                            : userInformation.chat.lastMessage!.message
+                            .toString(),
                         style: textStyle,
                       ),
                     ],
@@ -68,7 +78,9 @@ class CustomChatListItemUser extends StatelessWidget {
                 SizedBox(height: 5),
                 /*CustomPeerPALHeading3(
                     text: userInformation.chat.lastMessage == null ? "Nachricht konnte nicht geladen werden" :  userInformation.chat.lastMessage!.message.toString() , color: Colors.black),*/
-                Text(DateFormat('yyyy-MM-dd - kk:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(userInformation.chat.lastUpdated))))
+                Text(DateFormat('yyyy-MM-dd - kk:mm').format(
+                    DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(userInformation.chat.lastUpdated))))
               ],
             ),
           ),
