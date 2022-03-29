@@ -20,5 +20,6 @@ class ActivityIconData {
     'games' :   Icons.casino_outlined,
     'culture' :  Icons.school_outlined,
     'diy' :  Icons.construction_outlined,
+    'other' :  Icons.emoji_people,
   };
 }
