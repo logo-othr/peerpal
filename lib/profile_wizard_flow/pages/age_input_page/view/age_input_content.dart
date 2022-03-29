@@ -23,7 +23,7 @@ class AgeInputContent extends StatelessWidget {
         ),
         body: BlocBuilder<AgeInputCubit, AgeInputState>(
             buildWhen: (previous, current) =>
-                previous.selectedAge != current.selectedAge,
+            previous.selectedAge != current.selectedAge,
             builder: (context, state) {
               return new FutureBuilder(
                   future: context.read<AgeInputCubit>().currentAge(),
@@ -55,7 +55,7 @@ class AgeInputContent extends StatelessWidget {
                                           width: 120,
                                           child: Image(
                                               image: AssetImage(
-                                                  'assets/PeerPAL-Logo.png')))),
+                                                  'assets/peerpal_logo.png')))),
                                   const SizedBox(
                                     height: 10,
                                     width: 100,
@@ -77,8 +77,8 @@ class AgeInputContent extends StatelessWidget {
                                         return context
                                             .read<AgeInputCubit>()
                                             .dataChanged(
-                                              (state.ages[value!]),
-                                            );
+                                          (state.ages[value!]),
+                                        );
                                       }),
                                 ],
                               ),
@@ -88,13 +88,13 @@ class AgeInputContent extends StatelessWidget {
                           (state is AgeInputPosting)
                               ? const CircularProgressIndicator()
                               : Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                                  child: CompletePageButton(
-                                      isSaveButton: isInFlowContext,
-                                      onPressed: () async {
-                                        _update(state, context);
-                                      }),
-                                ),
+                            padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                            child: CompletePageButton(
+                                isSaveButton: isInFlowContext,
+                                onPressed: () async {
+                                  _update(state, context);
+                                }),
+                          ),
                         ],
                       ),
                     );
