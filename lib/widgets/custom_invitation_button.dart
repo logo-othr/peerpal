@@ -6,17 +6,19 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 class CustomInvitationButton extends StatelessWidget {
   CustomInvitationButton(
       {Key? key,
-      required this.length,
-      required this.text,
-      required this.icon,
-      this.header,
-      this.small = false})
+        required this.length,
+        required this.text,
+        required this.icon,
+        this.header,
+        this.small = false,
+        this.badgeColor = Colors.red})
       : super(key: key);
-  String length;
-  String text;
-  IconData icon;
-  String? header;
-  bool small;
+  final String length;
+  final String text;
+  final IconData icon;
+  final String? header;
+  final bool small;
+  final Color badgeColor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +46,9 @@ class CustomInvitationButton extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.red,
+                    color: badgeColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(7.0),
@@ -66,18 +68,18 @@ class CustomInvitationButton extends StatelessWidget {
         ),
         header != null
             ? SizedBox(
-                height: 40,
-                child: Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: CustomPeerPALHeading3(
-                          text: header!, color: secondaryColor),
-                    ),
-                  ),
-                ),
-              )
+          height: 40,
+          child: Center(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                child: CustomPeerPALHeading3(
+                    text: header!, color: secondaryColor),
+              ),
+            ),
+          ),
+        )
             : Container(),
       ],
     );
