@@ -33,7 +33,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
 
   void scrollListener() {
     if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
+        listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -41,42 +41,42 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
         builder: (context, state) {
-      return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            var currentUserName = (await context
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                var currentUserName = (await context
                     .read<AppUserRepository>()
                     .getCurrentUserInformation())
-                .name;
-            Activity activity = Activity(
-              id: (Uuid()).v4().toString(),
-              creatorId: context.read<AppUserRepository>().currentUser.id,
-              creatorName: currentUserName,
-              public: false,
-            );
-            context.read<ActivityRepository>().updateLocalActivity(activity);
-            await Navigator.of(context).push(ActivityWizardFlow.route(
-                activity)); // ToDo: Move to domain layer
-          },
-          backgroundColor: primaryColor,
-          child: Icon(Icons.add),
-        ),
-        appBar: CustomAppBar(
-          'Aktivitäten',
-          hasBackButton: false,
-        ),
-        body: BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
-            builder: (context, state) {
-          if (state.status == ActivityFeedStatus.initial) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state.status == ActivityFeedStatus.success) {
-            return ActivityFeedList(context);
-          } else {
-            return ActivityFeedList(context);
-          }
-        }),
-      );
-    });
+                    .name;
+                Activity activity = Activity(
+                  id: (Uuid()).v4().toString(),
+                  creatorId: context.read<AppUserRepository>().currentUser.id,
+                  creatorName: currentUserName,
+                  public: false,
+                );
+                context.read<ActivityRepository>().updateLocalActivity(activity);
+                await Navigator.of(context).push(ActivityWizardFlow.route(
+                    activity)); // ToDo: Move to domain layer
+              },
+              backgroundColor: primaryColor,
+              child: Icon(Icons.add),
+            ),
+            appBar: CustomAppBar(
+              'Aktivitäten',
+              hasBackButton: false,
+            ),
+            body: BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
+                builder: (context, state) {
+                  if (state.status == ActivityFeedStatus.initial) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state.status == ActivityFeedStatus.success) {
+                    return ActivityFeedList(context);
+                  } else {
+                    return ActivityFeedList(context);
+                  }
+                }),
+          );
+        });
   }
 
   Widget ActivityFeedList(BuildContext context) {
@@ -129,7 +129,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                   child: CustomInvitationButton(
                       text: "Beigetretene Aktivitäten",
                       icon: Icons.nature_people_rounded,
-                      //header: 'Öffentliche Aktivitäten',
+                      badgeColor: Colors.green,
                       small: true,
                       length: snapshot.data!.length.toString()),
                 );
@@ -150,7 +150,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
             decoration: BoxDecoration(
               color: CupertinoColors.systemGrey6,
               border:
-                  Border(bottom: BorderSide(width: 1, color: secondaryColor)),
+              Border(bottom: BorderSide(width: 1, color: secondaryColor)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.4),
@@ -161,17 +161,17 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               ],
             ),
             child:
-                TabBar(indicatorWeight: 3, indicatorColor: primaryColor, tabs: [
+            TabBar(indicatorWeight: 3, indicatorColor: primaryColor, tabs: [
               Tab(
                   child: Text(
-                "ÖFFENTLICHE AKTIVITÄTEN",
-                style: TextStyle(color: primaryColor, fontSize: 11),
-              )),
+                    "ÖFFENTLICH",
+                    style: TextStyle(color: primaryColor, fontSize: 14),
+                  )),
               Tab(
                   child: Text(
-                "EIGENE AKTIVITÄTEN",
-                style: TextStyle(color: primaryColor, fontSize: 11),
-              )),
+                    "SELBST ERSTELLT",
+                    style: TextStyle(color: primaryColor, fontSize: 14),
+                  )),
             ]),
           ),
           Expanded(
@@ -184,7 +184,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                              //top: BorderSide(width: 1, color: secondaryColor),
+                            //top: BorderSide(width: 1, color: secondaryColor),
                               bottom: BorderSide(width: 1, color: secondaryColor))),
                       child: CustomCupertinoSearchBar(
                           enabled: false,
@@ -225,7 +225,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                              //top: BorderSide(width: 1, color: secondaryColor),
+                            //top: BorderSide(width: 1, color: secondaryColor),
                               bottom: BorderSide(width: 1, color: secondaryColor))),
                       child: CustomCupertinoSearchBar(
                           enabled: false,
@@ -296,34 +296,34 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
           border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
       child: isOwnCreatedActivity
           ? TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OverviewInputPage(
-                              isInFlowContext: false,
-                              activity: activity,
-                            )));
-              },
-              child: CustomActivityCard(
-                activity: activity,
-                isOwnCreatedActivity: isOwnCreatedActivity,
-              ),
-            )
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OverviewInputPage(
+                    isInFlowContext: false,
+                    activity: activity,
+                  )));
+        },
+        child: CustomActivityCard(
+          activity: activity,
+          isOwnCreatedActivity: isOwnCreatedActivity,
+        ),
+      )
           : TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ActivityPublicOverviewPage(activity: activity)),
-                );
-              },
-              child: CustomActivityCard(
-                activity: activity,
-                isOwnCreatedActivity: isOwnCreatedActivity,
-              ),
-            ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ActivityPublicOverviewPage(activity: activity)),
+          );
+        },
+        child: CustomActivityCard(
+          activity: activity,
+          isOwnCreatedActivity: isOwnCreatedActivity,
+        ),
+      ),
     );
   }
 }
