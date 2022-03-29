@@ -1,35 +1,33 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:async/async.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-
-import 'package:flutter/material.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/location.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {
   static String getActivityNameFromCode(String code) {
     final List<Activity> activities = [];
-    activities.add(Activity(code: 'shopping', name: "Einkaufen"));
-    activities.add(Activity(code: 'walking', name: "Spazieren"));
-    activities.add(Activity(code: 'music', name: "Musik hören"));
-    activities.add(Activity(code: 'coffee', name: "Kaffeetrinken"));
-    activities.add(Activity(code: 'phone', name: "Telefonieren"));
-    activities.add(Activity(code: 'visit', name: "Besuchen"));
-    activities.add(Activity(code: 'car', name: "Ausflug mit dem Auto"));
-    activities.add(Activity(code: 'tv', name: "Fernsehen schauen"));
-    activities.add(Activity(code: 'garden', name: "Gartenarbeit"));
-    activities.add(Activity(code: 'cooking', name: "Kochen"));
-    activities.add(Activity(code: 'eating', name: "Essen gehen"));
-    activities.add(Activity(code: 'travel', name: "Reisen"));
-    activities.add(Activity(code: 'sightseeing', name: "Sightseeing"));
+    activities.add(Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"));
+    activities.add(Activity(code: 'walking', name: "Spa\u00adzie\u00adren"));
+    activities.add(Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"));
+    activities.add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
+    activities.add(Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
+    activities.add(Activity(code: 'visit', name: "Be\u00adsuch\u00aden"));
+    activities.add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
+    activities.add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
+    activities.add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
+    activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
+    activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
+    activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
+    activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
     activities.add(Activity(code: 'sport', name: "Sport"));
-    activities.add(Activity(code: 'games', name: "Gesellschaftsspiele"));
-    activities.add(Activity(code: 'culture', name: "Kultur"));
-    activities.add(Activity(code: 'diy', name: "Heimwerken"));
+    activities.add(Activity(code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
+    activities.add(Activity(code: 'culture', name: "Kul\u00adtur"));
+    activities.add(Activity(code: 'diy', name: "Heim\u00adwer\u00adken"));
+    activities.add(Activity(code: 'other', name: "Sons\u00adti\u00adges"));
     for (Activity a in activities) {
       if (a.code == code && a.name != null) return a.name!;
     }
@@ -42,23 +40,24 @@ class ActivityRepository {
 
   Future<List<Activity>> loadActivityList() async {
     final List<Activity> activities = [];
-    activities.add(Activity(code: 'shopping', name: "Einkaufen"));
-    activities.add(Activity(code: 'walking', name: "Spazieren"));
-    activities.add(Activity(code: 'music', name: "Musik hören"));
-    activities.add(Activity(code: 'coffee', name: "Kaffeetrinken"));
-    activities.add(Activity(code: 'phone', name: "Telefonieren"));
-    activities.add(Activity(code: 'visit', name: "Besuchen"));
-    activities.add(Activity(code: 'car', name: "Ausflug mit dem Auto"));
-    activities.add(Activity(code: 'tv', name: "Fernsehen schauen"));
-    activities.add(Activity(code: 'garden', name: "Gartenarbeit"));
-    activities.add(Activity(code: 'cooking', name: "Kochen"));
-    activities.add(Activity(code: 'eating', name: "Essen gehen"));
-    activities.add(Activity(code: 'travel', name: "Reisen"));
-    activities.add(Activity(code: 'sightseeing', name: "Sightseeing"));
+    activities.add(Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"));
+    activities.add(Activity(code: 'walking', name: "Spa\u00adzie\u00adren"));
+    activities.add(Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"));
+    activities.add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
+    activities.add(Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
+    activities.add(Activity(code: 'visit', name: "Be\u00adsuch\u00aden"));
+    activities.add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
+    activities.add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
+    activities.add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
+    activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
+    activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
+    activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
+    activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
     activities.add(Activity(code: 'sport', name: "Sport"));
-    activities.add(Activity(code: 'games', name: "Gesellschaftsspiele"));
-    activities.add(Activity(code: 'culture', name: "Kultur"));
-    activities.add(Activity(code: 'diy', name: "Heimwerken"));
+    activities.add(Activity(code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
+    activities.add(Activity(code: 'culture', name: "Kul\u00adtur"));
+    activities.add(Activity(code: 'diy', name: "Heim\u00adwer\u00adken"));
+    activities.add(Activity(code: 'other', name: "Sons\u00adti\u00adges"));
     return activities;
   }
 
@@ -133,7 +132,7 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
 
-        if(activity.creatorId != currentUserId) publicActivityList.add(activity);
+        /*if(activity.creatorId != currentUserId)*/ publicActivityList.add(activity);
         print("PublicActivityStream: $activity");
       });
       publicActivityList.sort((a, b) => a.date!.compareTo(b.date!));
@@ -159,7 +158,7 @@ class ActivityRepository {
         createdActivityList.add(activity);
         print("CreatedActivityStream: $activity");
       });
-            createdActivityList.sort((a, b) => a.date!.compareTo(b.date!));
+      createdActivityList.sort((a, b) => a.date!.compareTo(b.date!));
       yield createdActivityList;
     }
   }
