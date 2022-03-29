@@ -17,14 +17,14 @@ import 'app/app.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 void configLocalNotification() {
   final AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings('@mipmap/ic_launcher');
+  const AndroidInitializationSettings('@drawable/peerpal_logo');
 
   final IOSInitializationSettings initializationSettingsIOS =
-      const IOSInitializationSettings();
+  const IOSInitializationSettings();
 
   final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -34,16 +34,16 @@ void configLocalNotification() {
 
 void showNotification(RemoteNotification remoteNotification) async {
   const NotificationDetails platformChannelSpecifics =
-      const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'app_notification',
-            'app_notification_channel',
-            'Channel for all app notifications',
-            playSound: true,
-            priority: Priority.high,
-            importance: Importance.max,
-          ),
-          iOS: IOSNotificationDetails());
+  const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'app_notification',
+        'app_notification_channel',
+        'Channel for all app notifications',
+        playSound: true,
+        priority: Priority.high,
+        importance: Importance.max,
+      ),
+      iOS: IOSNotificationDetails());
 
   print(remoteNotification);
 
