@@ -33,7 +33,7 @@ class ChatPageContent extends StatelessWidget {
   _scrollListener() {
     if (listScrollController.hasClients) {
       if (listScrollController.offset >=
-              listScrollController.position.maxScrollExtent &&
+          listScrollController.position.maxScrollExtent &&
           !listScrollController.position.outOfRange) {}
     }
   }
@@ -71,49 +71,50 @@ class ChatPageContent extends StatelessWidget {
               friendRequestButton(context, state.chatPartner),
               buildChatMessages(context, state),
               (!state.userChat.chat.chatRequestAccepted &&
-                      state.userChat.chat.startedBy != state.appUser.id)
+                  state.userChat.chat.startedBy != state.appUser.id)
                   ? Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
-                      child: _showChatRequestButtons(context),
-                    )
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
+                child: _showChatRequestButtons(context),
+              )
                   : StreamBuilder<int>(
-                      stream: sl<ChatRepository>()
-                          .messageCountForChat(state.userChat.chat.chatId),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return CustomLoadingIndicator(
-                              text: "Lade Nachrichten..");
-                        } else if (snapshot.data == 0) {
-                          return Container(
-                            width: double.infinity,
-                            height: 500,
-                            alignment: Alignment.center,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Der Chat ist nicht mehr vorhanden."),
-                                SizedBox(
-                                  height: 50,
-                                ),
-                                CustomPeerPALButton(
-                                  text: "Zurück",
-                                  onPressed: () => Navigator.pop(context),
-                                )
-                              ],
+                  stream: sl<ChatRepository>()
+                      .messageCountForChat(state.userChat.chat.chatId),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CustomLoadingIndicator(
+                          text: "Lade Nachrichten..");
+                    } else if (snapshot.data == 0) {
+                      return Container(
+                        width: double.infinity,
+                        height: 500,
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Der Chat ist nicht mehr vorhanden."),
+                            SizedBox(
+                              height: 50,
                             ),
-                          );
-                        } else {
-                          return Column(
-                            children: [
-                              ChatButtons(
-                                  textEditingController: textEditingController),
-                              singleChatTextFormField(state.chatPartner,
-                                  state.userChat.chat.chatId, context),
-                            ],
-                          );
-                        }
-                      }),
+                            CustomPeerPALButton(
+                              text: "Zurück",
+                              onPressed: () => Navigator.pop(context),
+                            )
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          ChatButtons(state.appUser.phoneNumber,
+
+                              textEditingController: textEditingController),
+                          singleChatTextFormField(state.chatPartner,
+                              state.userChat.chat.chatId, context),
+                        ],
+                      );
+                    }
+                  }),
             ],
           );
         } else if (state is ChatPageChatNotExists) {
@@ -123,7 +124,8 @@ class ChatPageContent extends StatelessWidget {
               chatHeader(context, state.chatPartner),
               friendRequestButton(context, state.chatPartner),
               Spacer(),
-              ChatButtons(textEditingController: textEditingController),
+              ChatButtons(state.appUser.phoneNumber,
+                  textEditingController: textEditingController),
               singleChatTextFormField(state.chatPartner, null, context),
             ],
           );
@@ -147,7 +149,7 @@ class ChatPageContent extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => UserDetailPage(
-                user.id!,
+                user.id!, hasMessageButton: false,
               ),
             ),
           );
@@ -305,50 +307,50 @@ class ChatPageContent extends StatelessWidget {
     if (content.trim() != '') {
       textEditingController.clear();
       await context.read<ChatPageBloc>().sendChatMessage(
-            chatPartner,
-            chatId,
-            content,
-            type,
-          );
+        chatPartner,
+        chatId,
+        content,
+        type,
+      );
     } else {}
   }
 
   Widget buildChatMessages(BuildContext context, ChatPageChatExists state) {
     return Flexible(
         child: StreamBuilder<List<ChatMessage>>(
-      stream: state.messages,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.isEmpty) {
-            return Container(
-                height: 100,
-                alignment: Alignment.center,
-                child: Text("Keine Nachrichten gefunden"));
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(10.0),
-            itemBuilder: (context, index) {
-              ChatMessage message = snapshot.data![index];
-              var isAppUserMessage = message.userId == state.appUser.id;
-              var imageUrl = isAppUserMessage
-                  ? state.appUser.imagePath
-                  : state.chatPartner.imagePath;
-              return buildChatMessage(message, isAppUserMessage, imageUrl!);
-            },
-            itemCount: snapshot.data?.length,
-            reverse: true,
-            controller: listScrollController,
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-            ),
-          );
-        }
-      },
-    ));
+          stream: state.messages,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return Container(
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: Text("Keine Nachrichten gefunden"));
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.all(10.0),
+                itemBuilder: (context, index) {
+                  ChatMessage message = snapshot.data![index];
+                  var isAppUserMessage = message.userId == state.appUser.id;
+                  var imageUrl = isAppUserMessage
+                      ? state.appUser.imagePath
+                      : state.chatPartner.imagePath;
+                  return buildChatMessage(message, isAppUserMessage, imageUrl!);
+                },
+                itemCount: snapshot.data?.length,
+                reverse: true,
+                controller: listScrollController,
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                ),
+              );
+            }
+          },
+        ));
   }
 
   Widget buildChatMessage(
@@ -357,7 +359,7 @@ class ChatPageContent extends StatelessWidget {
     const borderRadius = BorderRadius.all(radius);
     return Row(
       mainAxisAlignment:
-          isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
+      isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(10),
@@ -366,9 +368,9 @@ class ChatPageContent extends StatelessWidget {
             color: isRightAligned ? primaryColor : darkGreyColor,
             borderRadius: isRightAligned
                 ? borderRadius
-                    .subtract(const BorderRadius.only(topRight: radius))
+                .subtract(const BorderRadius.only(topRight: radius))
                 : borderRadius
-                    .subtract(const BorderRadius.only(topLeft: radius)),
+                .subtract(const BorderRadius.only(topLeft: radius)),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

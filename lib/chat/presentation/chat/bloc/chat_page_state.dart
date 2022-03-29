@@ -33,19 +33,19 @@ class ChatPageChatExists extends ChatPageState {
 
   ChatPageChatExists(
       {required this.chatPartner,
-      required this.messages,
-      required this.userId,
-      required this.userChat,
-      required this.appUser});
+        required this.messages,
+        required this.userId,
+        required this.userChat,
+        required this.appUser});
 }
 
 class ChatPageChatNotExists extends ChatPageState {
   final PeerPALUser chatPartner;
-
+  final PeerPALUser appUser;
   @override
-  List<Object?> get props => [chatPartner];
+  List<Object?> get props => [chatPartner, appUser];
 
-  ChatPageChatNotExists({required this.chatPartner});
+  ChatPageChatNotExists({required this.chatPartner, required this.appUser});
 }
 
 

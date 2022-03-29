@@ -29,18 +29,17 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   String chatPartnerId;
   AppUserRepository appUserRepository;
   StreamController<List<ChatMessage>> _chatMessageStream =
-      new BehaviorSubject();
+  new BehaviorSubject();
   StreamController<List<ChatMessage>> _chatMessageStreamController =
-      new BehaviorSubject();
+  new BehaviorSubject();
 
-  ChatPageBloc(
-      {required this.getMessagesForChat,
-      required this.getChatsForUser,
-      required this.getUserChatForChat,
-      required this.sendMessage,
-      required this.sendChatRequestResponse,
-      required this.appUserRepository,
-      required this.chatPartnerId})
+  ChatPageBloc({required this.getMessagesForChat,
+    required this.getChatsForUser,
+    required this.getUserChatForChat,
+    required this.sendMessage,
+    required this.sendChatRequestResponse,
+    required this.appUserRepository,
+    required this.chatPartnerId})
       : super(ChatPageInitial());
 
   @override
@@ -57,8 +56,11 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         await appUserRepository.getUserInformation(chatPartnerId);
         yield ChatPageLoading(chatPartner: chatPartner);
         if (event.userChat == null) {
+
           // ToDo: Use streamcontroller
-          yield ChatPageChatNotExists(chatPartner: chatPartner);
+          yield ChatPageChatNotExists(
+              chatPartner: chatPartner, appUser: await appUserRepository
+              .getCurrentUserInformation());
           Stream<List<Chat>> chatStream = getChatsForUser();
           Stream<List<UserChat>> userChatStream = getUserChatForChat(chatStream, false);
 
@@ -103,12 +105,10 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     }
   }
 
-  Future<void> sendChatMessage(
-    PeerPALUser userInformation,
-    String? chatId,
-    String content,
-    String type,
-  ) async {
+  Future<void> sendChatMessage(PeerPALUser userInformation,
+      String? chatId,
+      String content,
+      String type,) async {
     await sendMessage(
       userInformation,
       chatId,
