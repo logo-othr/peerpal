@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/widgets/custom_dialog.dart';
+
+import '../chat/presentation/chat/bloc/chat_page_bloc.dart';
+import '../injection.dart';
 
 class ChatAnswerKeyboard extends StatefulWidget {
   VoidCallback onCancel;
   final TextEditingController textEditingController;
+  String? appUserPhoneNumber;
 
-  ChatAnswerKeyboard({
-    required this.onCancel, required this.textEditingController
-  });
+
+  ChatAnswerKeyboard(this.appUserPhoneNumber,
+      {required this.onCancel, required this.textEditingController});
 
   @override
   State<ChatAnswerKeyboard> createState() => _ChatAnswerKeyboardState();
@@ -17,8 +25,8 @@ void addStringToTextController(
   String currentText = controller.text.toString();
   String updatedText = "${currentText}${string}";
   controller.text = updatedText;
-  controller.selection = TextSelection.fromPosition(
-      TextPosition(offset: controller.text.length));
+  controller.selection =
+      TextSelection.fromPosition(TextPosition(offset: controller.text.length));
 }
 
 class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
@@ -29,25 +37,37 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         customAnswerHeaderBar(widget.onCancel),
-
         Divider(
           thickness: 1,
           color: Colors.white,
         ),
-
         Expanded(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Column(
               children: [
-                customAnswerListTile(widget.textEditingController, 'Möchten Sie telefonieren?'),
+                customSendPhoneNumberListTile(
+                    widget.textEditingController,
+                    'Telefonnummer senden.',
+                    context,
+                    widget.appUserPhoneNumber),
+                customAnswerListTile(
+                    widget.textEditingController, 'Wie geht es Dir?'),
+                customAnswerListTile(
+                    widget.textEditingController, 'Wollen wir telefonieren?'),
+                customAnswerListTile(
+                    widget.textEditingController, 'Was hast du heute vor?'),
+                customAnswerListTile(widget.textEditingController, 'Hallo'),
                 customAnswerListTile(widget.textEditingController, 'Ja'),
                 customAnswerListTile(widget.textEditingController, 'Nein'),
-                customAnswerListTile(widget.textEditingController, 'Hallo'),
-                customAnswerListTile(widget.textEditingController, 'Wie geht es Ihnen?'),
-                customAnswerListTile(widget.textEditingController, 'Möchten Sie etwas unternehmen?'),
-                customAnswerListTile(widget.textEditingController, 'Danke'),
-                customAnswerListTile(widget.textEditingController, 'Gern geschehen'),
+                customAnswerListTile(widget.textEditingController, 'Ok'),
+                customAnswerListTile(
+                    widget.textEditingController, 'Vielleicht'),
+                customAnswerListTile(widget.textEditingController, 'Gut'),
+                customAnswerListTile(widget.textEditingController, 'Schlecht'),
+                customAnswerListTile(
+                    widget.textEditingController, 'Gute Nacht'),
+                customAnswerListTile(widget.textEditingController, 'Tschüss'),
               ],
             ),
           ),
@@ -113,25 +133,64 @@ Widget customAnswerHeaderBar(onCancel) {
 }
 
 Widget customAnswerListTile(textEditingController, text) => Padding(
-      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      GestureDetector(
+        onTap: () {
+          addStringToTextController(textEditingController, text);
+        },
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+          width: double.infinity,
+          height: 50,
+          child: Text(
+            text,
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.white, fontSize: 19),
+          ),
+        ),
+      ),
+      const Divider(
+        height: 1,
+        color: Colors.white,
+      )
+    ],
+  ),
+);
+
+Widget customSendPhoneNumberListTile(textEditingController, text, context,
+    appUserPhoneNumber) =>
+    Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
             onTap: () {
-              addStringToTextController(textEditingController, text);
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                        dialogHeight: 300,
+                        actionButtonText: 'Ja',
+                        dialogText:
+                        "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\nwirklich senden?",
+                        onPressed: () => {
+                          addStringToTextController(textEditingController, '${appUserPhoneNumber}'),
+                        });
+                  });
             },
             child: Container(
               padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              color: Colors.blueGrey,
               width: double.infinity,
               height: 50,
               child: Text(
                 text,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 19
-                ),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 19),
               ),
             ),
           ),
