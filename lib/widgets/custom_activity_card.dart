@@ -108,13 +108,13 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                             padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                             child: widget.isOwnCreatedActivity
                                 ? Icon(
-                                    Icons.edit,
-                                    color: primaryColor,
-                                    size: 30,
-                                  )
+                              Icons.edit,
+                              color: primaryColor,
+                              size: 30,
+                            )
                                 : Container(
-                                    width: 30,
-                                  ),
+                              width: 30,
+                            ),
                           ),
                         )
                       ],
@@ -138,8 +138,8 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                         Row(
                           children: [
                             CustomPeerPALHeading3(
-                              fontWeight: FontWeight.bold,
-                              text:"Ersteller: "
+                                fontWeight: FontWeight.bold,
+                                text:"Ersteller: "
                             ),
                             Flexible(
                               child: RichText(
@@ -165,14 +165,14 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                               text: "Datum: ",
                               fontWeight: FontWeight.bold,
                             ),
-                            CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy kk:mm').format(DateTime.fromMillisecondsSinceEpoch(widget.activity.date!)!)), color: Colors.black)
+                            CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy kk:mm').format(DateTime.fromMillisecondsSinceEpoch(widget.activity.date!))), color: Colors.black)
                           ],
                         ),
                         SizedBox(height: 5),
                         Row(
                           children: [
                             CustomPeerPALHeading3(
-                             text: "Ort: ",
+                              text: "Ort: ",
                               fontWeight: FontWeight.bold,
                             ),
                             CustomPeerPALHeading3(text: widget.activity.location?.place ?? '', color: Colors.black,),
@@ -188,7 +188,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                             CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? '0', color: Colors.black,),
                           ],
                         ),
-                       /* Row(
+                        /* Row(
                           children: [
                             CustomPeerPALHeading3(
                               text: "DEBUG Activity ID: ",
@@ -210,9 +210,9 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                       return ListTile(
                           title: _expanded
                               ? CustomPeerPALHeading3(text:'Beschreibung ausblenden',
-                                  color: primaryColor, fontWeight: FontWeight.bold,)
+                            color: primaryColor, fontWeight: FontWeight.bold,)
                               : CustomPeerPALHeading3(text:'Beschreibung anzeigen',
-                                  color: primaryColor, fontWeight: FontWeight.bold,));
+                            color: primaryColor, fontWeight: FontWeight.bold,));
                     },
                     body: ListTile(
                       title: Padding(
