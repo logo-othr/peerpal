@@ -58,7 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     height: 120,
                     width: 120,
                     child:
-                        Image(image: AssetImage('assets/PeerPAL-Logo.png')))),
+                    Image(image: AssetImage('assets/peerpal_logo.png')))),
             SizedBox(height: 10),
             Divider(thickness: 1, color: primaryColor),
             SizedBox(height: 10),
@@ -80,8 +80,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => DiscoverInterestsOverviewPage()),
-                ).then((value) =>
-                    context.read<DiscoverTabBloc>().add(ReloadUsers()))
+                )/*.then((value) =>
+                    context.read<DiscoverTabBloc>().add(ReloadUsers()))*/
               },
             ),
             CustomTableHeader(heading: "RECHTLICHES"),
@@ -144,13 +144,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     context: context,
                     builder: (BuildContext context) {
                       return CustomDialog(
+                          dialogHeight: 250,
                           actionButtonText: 'Ausloggen',
                           dialogText: "Möchten Sie sich wirklich ausloggen?",
                           onPressed: () => {
-                                context
-                                    .read<AppBloc>()
-                                    .add(AppLogoutRequested()),
-                              });
+                            context
+                                .read<AppBloc>()
+                                .add(AppLogoutRequested()),
+                          });
                     }),
               },
             ),
@@ -159,7 +160,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 CustomTableHeader(heading: "SONSTIGES"),
                 CustomTableRow(
                   text:
-                      "E-Mail: ${sl.get<AppUserRepository>().currentUser.email}",
+                  "E-Mail: ${sl.get<AppUserRepository>().currentUser.email}",
                 ),
               ],
             ),
@@ -171,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 FutureBuilder<PeerPALUser>(
                   future:
-                      sl.get<AppUserRepository>().getCurrentUserInformation(),
+                  sl.get<AppUserRepository>().getCurrentUserInformation(),
                   builder: (BuildContext context,
                       AsyncSnapshot<PeerPALUser> snapshot) {
                     switch (snapshot.connectionState) {
