@@ -122,6 +122,7 @@ class _PasswordInputField extends StatelessWidget {
               ),
               labelText: 'Passwort',
               helperText: '',
+              errorMaxLines: 2,
               errorText: errorText),
         );
       },
@@ -155,6 +156,7 @@ class _ConfirmPasswordInputField extends StatelessWidget {
             ),
             labelText: 'Passwort bestätigen',
             helperText: '',
+            errorMaxLines: 2,
             errorText: state.confirmedPassword.invalid
                 ? 'Passwort stimmt nicht überein'
                 : null,
