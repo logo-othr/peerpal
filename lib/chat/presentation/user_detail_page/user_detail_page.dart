@@ -7,7 +7,8 @@ import 'package:peerpal/repository/app_user_repository.dart';
 
 class UserDetailPage extends StatelessWidget {
   final String userId;
-  const UserDetailPage(this.userId, {Key? key}) : super(key: key);
+  final bool hasMessageButton;
+  const UserDetailPage(this.userId, {Key? key, this.hasMessageButton = true}) : super(key: key);
 
   static MaterialPage<void> page(String userId) {
     return MaterialPage<void>(child: UserDetailPage(userId));
@@ -20,7 +21,8 @@ class UserDetailPage extends StatelessWidget {
       child: BlocProvider<UserDetailBloc>(
         create: (context) => UserDetailBloc(userId, context.read<AppUserRepository>())
           ..add(LoadUserDetail()),
-        child: UserDetailContent(),
+        child: UserDetailContent(hasMessageButton:
+            hasMessageButton),
       ),
     );
   }
