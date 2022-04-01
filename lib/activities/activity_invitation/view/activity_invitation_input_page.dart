@@ -23,7 +23,7 @@ class InvitationInputPage extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return InvitationInputCubit(context.read<AppUserRepository>(), context.read<ActivityRepository>())..getFriendsFromUser();
+          return InvitationInputCubit(context.read<AppUserRepository>(), context.read<ActivityRepository>())..getData();
         },
         child: InviteFriendsContent(isInFlowContext: isInFlowContext),
       ),

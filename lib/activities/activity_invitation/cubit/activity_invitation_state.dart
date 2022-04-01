@@ -3,7 +3,7 @@ part of 'activity_invitation_cubit.dart';
 @immutable
 abstract class ActivityInvitationState extends Equatable {
  final Stream<List<PeerPALUser>> friends;
- final Stream<int> friendRequestsSize;
+ final Stream<int> friendRequestsSize; // ToDo: Remove friendRequestSize
  final List<PeerPALUser> invitations;
 
 

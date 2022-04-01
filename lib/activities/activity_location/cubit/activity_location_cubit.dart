@@ -15,7 +15,9 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
 
   Future<void> loadData() async {
     var locations = await _activityRepository.loadLocations();
-    emit(ActivityLocationLoaded(locations, <Location>[].cast<Location>(), <Location>[].cast<Location>()));
+    var activity = await _activityRepository.getCurrentActivity();
+    var locationList = activity.location != null ? <Location>[activity.location!] : <Location>[].cast<Location>();
+    emit(ActivityLocationLoaded(locations, locationList, <Location>[].cast<Location>()));
   }
 
   void searchQueryChanged(String searchQuery) {

@@ -13,6 +13,8 @@ import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
 class LocationInputContent extends StatelessWidget {
   final bool isInFlowContext;
+  TextEditingController streetController = TextEditingController();
+  TextEditingController streetNumberController = TextEditingController();
   TextEditingController searchBarController = TextEditingController();
 
   LocationInputContent({Key? key, required this.isInFlowContext})
@@ -27,57 +29,63 @@ class LocationInputContent extends StatelessWidget {
         ),
         body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
             builder: (context, state) {
-          return Container(
-            color: Colors.white,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    CustomPeerPALHeading1("Treffpunkt"),
-                    _LocationSearchBar(
-                      searchBarController: searchBarController,
-                    ),
-                    const Spacer(),
-                    context
+              return Container(
+                color: Colors.white,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        CustomPeerPALHeading1("Treffpunkt"),
+                        _LocationSearchBar(
+                          searchBarController: searchBarController,
+                        ),
+                        const Spacer(),
+                        context
+                            .read<ActivityLocationCubit>()
+                            .state
+                            .filteredLocations
+                            .isEmpty ||
+                            context
                                 .read<ActivityLocationCubit>()
                                 .state
-                                .filteredLocations
-                                .isEmpty ||
-                            context
-                                    .read<ActivityLocationCubit>()
-                                    .state
-                                    .selectedLocations
-                                    .length >
+                                .selectedLocations
+                                .length >
                                 0
-                        ? _LocationResultBox()
-                        : const _LocationSearchBox(),
-                    const Spacer(),
-                    (state is ActivityLocationPosting)
-                        ? const CircularProgressIndicator()
-                        : CompletePageButton(
+                            ? _LocationResultBox(
+                          streetController: streetController,
+                          streetNumberController: streetNumberController,)
+                            : const _LocationSearchBox(),
+                        const Spacer(),
+                        (state is ActivityLocationPosting)
+                            ? const CircularProgressIndicator()
+                            : CompletePageButton(
                             disabled: (state.selectedLocations.isEmpty ||
 
                                 (state.selectedLocations[0].street?.isEmpty ??
                                     true)),
                             isSaveButton: isInFlowContext,
                             onPressed: () async {
+                              context.read<ActivityLocationCubit>()
+                                  .updateSelectedLocation(state
+                                  .selectedLocations[0].copyWith(
+                                  street: streetController.text, streetNumber: streetNumberController.text));
                               _update(state, context);
                             }),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        }));
+              );
+            }));
   }
 
-  Future<void> _update(
-      ActivityLocationInputState state, BuildContext context) async {
+  Future<void> _update(ActivityLocationInputState state,
+      BuildContext context) async {
     var cubit = context.read<ActivityLocationCubit>();
     if (isInFlowContext) {
       var activity = await cubit.postActivityLocations();
@@ -90,7 +98,12 @@ class LocationInputContent extends StatelessWidget {
 }
 
 class _LocationResultBox extends StatelessWidget {
-  const _LocationResultBox({Key? key}) : super(key: key);
+  final TextEditingController streetController;
+  final TextEditingController streetNumberController;
+
+  const _LocationResultBox(
+      {Key? key, required this.streetController, required this.streetNumberController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +141,8 @@ class _LocationResultBox extends StatelessWidget {
                   return GestureDetector(
                       onTap: () {},
                       child: _LocationListItem(
+                        streetController: streetController,
+                        streetNumberController: streetNumberController,
                         location: context
                             .read<ActivityLocationCubit>()
                             .state
@@ -179,10 +194,33 @@ class _LocationSearchBox extends StatelessWidget {
   }
 }
 
-class _LocationListItem extends StatelessWidget {
+
+class _LocationListItem extends StatefulWidget {
   final Location location;
 
-  _LocationListItem({required this.location});
+  TextEditingController streetController;
+  TextEditingController streetNumberController;
+
+  _LocationListItem(
+      {required this.location, required this.streetController, required this.streetNumberController});
+
+  @override
+  State<_LocationListItem> createState() => _LocationListItemState();
+}
+
+class _LocationListItemState extends State<_LocationListItem> {
+
+
+  @override
+  void initState() {
+    if (widget.location.street != null && widget.location.street!.isNotEmpty)
+      widget.streetController.text = widget.location.street!;
+    if (widget.location.streetNumber != null &&
+        widget.location.streetNumber!.isNotEmpty)
+      widget.streetNumberController.text = widget.location.streetNumber!;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,11 +229,12 @@ class _LocationListItem extends StatelessWidget {
         var cubit = context.read<ActivityLocationCubit>();
         return GestureDetector(
           onTap: () {
-            context.read<ActivityLocationCubit>().removeLocation(location);
+            context.read<ActivityLocationCubit>().removeLocation(
+                widget.location);
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(content: Text(("${location.place} entfernt."))),
+                SnackBar(content: Text(("${widget.location.place} entfernt."))),
               );
           },
           child: Row(
@@ -225,7 +264,7 @@ class _LocationListItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomPeerPALText(
-                              text: location.place,
+                              text: widget.location.place,
                               fontSize: 20,
                             ),
                             Icon(
@@ -237,11 +276,7 @@ class _LocationListItem extends StatelessWidget {
                         ),
                       ),
                       TextField(
-                          onChanged: (text) {
-                            cubit.updateSelectedLocation(state
-                                .selectedLocations[0]
-                                .copyWith(street: text));
-                          },
+                          controller: widget.streetController,
                           style: const TextStyle(fontSize: 18),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -257,11 +292,7 @@ class _LocationListItem extends StatelessWidget {
                           ),
                           keyboardType: TextInputType.name),
                       TextField(
-                          onChanged: (text) {
-                            cubit.updateSelectedLocation(state
-                                .selectedLocations[0]
-                                .copyWith(streetNumber: text));
-                          },
+                          controller: widget.streetNumberController,
                           style: const TextStyle(fontSize: 18),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
