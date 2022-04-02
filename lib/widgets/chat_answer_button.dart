@@ -42,33 +42,37 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
           color: Colors.white,
         ),
         Expanded(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                customSendPhoneNumberListTile(
-                    widget.textEditingController,
-                    'Telefonnummer senden.',
-                    context,
-                    widget.appUserPhoneNumber),
-                customAnswerListTile(
-                    widget.textEditingController, 'Wie geht es Dir?'),
-                customAnswerListTile(
-                    widget.textEditingController, 'Wollen wir telefonieren?'),
-                customAnswerListTile(
-                    widget.textEditingController, 'Was hast du heute vor?'),
-                customAnswerListTile(widget.textEditingController, 'Hallo'),
-                customAnswerListTile(widget.textEditingController, 'Ja'),
-                customAnswerListTile(widget.textEditingController, 'Nein'),
-                customAnswerListTile(widget.textEditingController, 'Ok'),
-                customAnswerListTile(
-                    widget.textEditingController, 'Vielleicht'),
-                customAnswerListTile(widget.textEditingController, 'Gut'),
-                customAnswerListTile(widget.textEditingController, 'Schlecht'),
-                customAnswerListTile(
-                    widget.textEditingController, 'Gute Nacht'),
-                customAnswerListTile(widget.textEditingController, 'Tschüss'),
-              ],
+          child: Scrollbar(
+            isAlwaysShown: true,
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  if(widget.appUserPhoneNumber != "")
+                    customSendPhoneNumberListTile(
+                        widget.textEditingController,
+                        'Telefonnummer senden.',
+                        context,
+                        widget.appUserPhoneNumber),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Wie geht es Dir?'),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Wollen wir telefonieren?'),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Was hast du heute vor?'),
+                  customAnswerListTile(widget.textEditingController, 'Hallo'),
+                  customAnswerListTile(widget.textEditingController, 'Ja'),
+                  customAnswerListTile(widget.textEditingController, 'Nein'),
+                  customAnswerListTile(widget.textEditingController, 'Ok'),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Vielleicht'),
+                  customAnswerListTile(widget.textEditingController, 'Gut'),
+                  customAnswerListTile(widget.textEditingController, 'Schlecht'),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Gute Nacht'),
+                  customAnswerListTile(widget.textEditingController, 'Tschüss'),
+                ],
+              ),
             ),
           ),
         ),
