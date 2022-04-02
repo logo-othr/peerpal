@@ -23,6 +23,7 @@ class LocationInputContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           'Standorte',
           hasBackButton: isInFlowContext,
@@ -44,7 +45,43 @@ class LocationInputContent extends StatelessWidget {
                         _LocationSearchBar(
                           searchBarController: searchBarController,
                         ),
-                        const Spacer(),
+                        context
+                            .read<ActivityLocationCubit>()
+                            .state
+                            .filteredLocations
+                            .isEmpty &&
+                            context
+                                .read<ActivityLocationCubit>()
+                                .state
+                                .selectedLocations
+                                .isEmpty
+                            ? SizedBox(
+                          height: MediaQuery.of(context).size.height / 6,
+                        )
+                            : Container(),
+                        context
+                            .read<ActivityLocationCubit>()
+                            .state
+                            .filteredLocations
+                            .isEmpty &&
+                            context
+                                .read<ActivityLocationCubit>()
+                                .state
+                                .selectedLocations
+                                .isEmpty
+                            ? Column(
+                          children: [
+                            Icon(Icons.location_on,
+                                color: secondaryColor, size: 60),
+                            SizedBox(height: 20),
+                            CustomPeerPALHeading2(
+                              "Es wurde noch kein\nOrt ausgewählt",
+                              color: secondaryColor,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        )
+                            : Container(),
                         context
                             .read<ActivityLocationCubit>()
                             .state
@@ -112,53 +149,44 @@ class _LocationResultBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
-      builder: (context, state) {
-        if (context
-            .read<ActivityLocationCubit>()
-            .state
-            .selectedLocations
-            .isEmpty) {
-          return Column(
-            children: [
-              Icon(Icons.location_on, color: secondaryColor, size: 60),
-              SizedBox(height: 20),
-              CustomPeerPALHeading2(
-                "Es wurde noch kein\nOrt ausgewählt",
-                color: secondaryColor,
-                textAlign: TextAlign.center,
+        builder: (context, state) {
+          if (context
+              .read<ActivityLocationCubit>()
+              .state
+              .selectedLocations
+              .isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height / 2.5,
+                    minHeight: 0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: context
+                      .read<ActivityLocationCubit>()
+                      .state
+                      .selectedLocations
+                      .length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () {},
+                        child: _LocationListItem(
+                          streetController: streetController,
+                          streetNumberController: streetNumberController,
+                          location: context
+                              .read<ActivityLocationCubit>()
+                              .state
+                              .selectedLocations[index],
+                        ));
+                  },
+                ),
               ),
-            ],
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 170, minHeight: 170),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: context
-                    .read<ActivityLocationCubit>()
-                    .state
-                    .selectedLocations
-                    .length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                      onTap: () {},
-                      child: _LocationListItem(
-                        streetController: streetController,
-                        streetNumberController: streetNumberController,
-                        location: context
-                            .read<ActivityLocationCubit>()
-                            .state
-                            .selectedLocations[index],
-                      ));
-                },
-              ),
-            ),
-          );
-        }
-      },
-    );
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 }
 
@@ -241,20 +269,20 @@ class _LocationListItemState extends State<_LocationListItem> {
                 SnackBar(content: Text(("${widget.location.place} entfernt."))),
               );
           },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Icon(
-                  Icons.place,
-                  color: primaryColor,
-                  size: 30,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                  child: Icon(
+                    Icons.place,
+                    color: primaryColor,
+                    size: 30,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 5, 20, 8),
+                Expanded(
                   child: Column(
                     children: [
                       Container(
