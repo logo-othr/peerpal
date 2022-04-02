@@ -56,9 +56,9 @@ class DiscoverActivitiesContent extends StatelessWidget {
                     ),
                     CustomPeerPALHeading1("Interessen"),
                     const SizedBox(
-                      height: 50,
+                      height: 30,
                     ),
-                    Padding(
+                    /*        Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: CupertinoSearchTextField(
                        // enabled: (state is DiscoverActivitiesLoaded ||
@@ -66,39 +66,39 @@ class DiscoverActivitiesContent extends StatelessWidget {
                         enabled: false,
                         controller: searchBarController,
                       ),
-                    ),
+                    ),*/
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                         child: GridView.count(
                             childAspectRatio: (itemWidth / itemHeight),
-                          primary: true,
-                          crossAxisCount: 3,
-                          children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
-                                    ? GestureDetector(
-                                    onTap: () {
-                                      context
-                                          .read<
-                                          DiscoverActivitiesCubit>()
-                                          .toggleData(activity);
-                                    },
-                                    child: CustomCircleListItem(
-                                        label:
-                                        activity.name.toString(),
-                                        icon: ActivityIconData
-                                            .icons[activity.code],
-                                        active: state
-                                            .selectedActivities
-                                            .contains(activity)))
-                                    : Container(),
-                                )
-                                    .toList()
+                            primary: true,
+                            crossAxisCount: 3,
+                            children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
+                                ? GestureDetector(
+                                onTap: () {
+                                  context
+                                      .read<
+                                      DiscoverActivitiesCubit>()
+                                      .toggleData(activity);
+                                },
+                                child: CustomCircleListItem(
+                                    label:
+                                    activity.name.toString(),
+                                    icon: ActivityIconData
+                                        .icons[activity.code],
+                                    active: state
+                                        .selectedActivities
+                                        .contains(activity)))
+                                : Container(),
+                            )
+                                .toList()
 
 
                         ),
                       ),
                     ),
-               /*     Expanded(
+                    /*     Expanded(
                       child: SingleChildScrollView(
                         child:    Column(
                           mainAxisAlignment: MainAxisAlignment.start,
