@@ -64,10 +64,7 @@ class LocationInputContent extends StatelessWidget {
                         (state is ActivityLocationPosting)
                             ? const CircularProgressIndicator()
                             : CompletePageButton(
-                            disabled: (state.selectedLocations.isEmpty ||
-
-                                (state.selectedLocations[0].street?.isEmpty ??
-                                    true)),
+                            disabled: (state.selectedLocations.isEmpty),
                             isSaveButton: isInFlowContext,
                             onPressed: () async {
                               context.read<ActivityLocationCubit>()
@@ -87,6 +84,13 @@ class LocationInputContent extends StatelessWidget {
   Future<void> _update(ActivityLocationInputState state,
       BuildContext context) async {
     var cubit = context.read<ActivityLocationCubit>();
+    if(streetController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+            SnackBar(content: Text(("Es muss eine Straße angegeben werden."))));
+            return;
+    }
     if (isInFlowContext) {
       var activity = await cubit.postActivityLocations();
       context.flow<Activity>().update((s) => activity);
