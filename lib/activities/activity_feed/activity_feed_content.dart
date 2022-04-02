@@ -29,13 +29,6 @@ class ActivityFeedContent extends StatefulWidget {
 }
 
 class _ActivityFeedContentState extends State<ActivityFeedContent> {
-  final ScrollController listScrollController = ScrollController();
-
-  void scrollListener() {
-    if (listScrollController.offset >=
-        listScrollController.position.maxScrollExtent &&
-        !listScrollController.position.outOfRange) {}
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,14 +156,18 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
             child:
             TabBar(indicatorWeight: 3, indicatorColor: primaryColor, tabs: [
               Tab(
-                  child: Text(
-                    "ÖFFENTLICH",
-                    style: TextStyle(color: primaryColor, fontSize: 14),
+                  child: Center(
+                    child: Text(
+                      "ÖFFENTLICHE AKTIVITÄTEN",
+                      style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.width / 35),
+                    ),
                   )),
               Tab(
-                  child: Text(
-                    "SELBST ERSTELLT",
-                    style: TextStyle(color: primaryColor, fontSize: 14),
+                  child: Center(
+                    child: Text(
+                      "ERSTELLTE AKTIVTÄTEN",
+                      style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.width / 35),
+                    ),
                   )),
             ]),
           ),
@@ -180,7 +177,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               //TAB ÖFFENTLICHE AKTIVITÄTEN
               Column(
                 children: [
-                  Container(
+                  /*       Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
@@ -188,7 +185,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                               bottom: BorderSide(width: 1, color: secondaryColor))),
                       child: CustomCupertinoSearchBar(
                           enabled: false,
-                          searchBarController: searchFieldController)),
+                          searchBarController: searchFieldController)),*/
                   Expanded(
                     child: StreamBuilder<List<Activity>>(
                       stream: context.read<ActivityFeedBloc>().state.publicActivityStream,
@@ -199,15 +196,17 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                             child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
                           );
                         } else {
-                          return ListView.builder(
-                            itemBuilder: (context, index) => buildActivityFeedCard(
-                                context,
-                                snapshot.data![index],
-                                context
-                                    .read<ActivityFeedBloc>()
-                                    .isOwnCreatedActivity(snapshot.data![index])),
-                            itemCount: snapshot.data!.length,
-                            controller: listScrollController,
+                          return Scrollbar(
+                            child: ListView.builder(
+                              itemBuilder: (context, index) => buildActivityFeedCard(
+                                  context,
+                                  snapshot.data![index],
+                                  context
+                                      .read<ActivityFeedBloc>()
+                                      .isOwnCreatedActivity(snapshot.data![index])),
+                              itemCount: snapshot.data!.length,
+                              controller: ScrollController(),
+                            ),
                           );
                         }
                       },
@@ -221,7 +220,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               //TAB EIGENE AKTIVITÄTEN
               Column(
                 children: [
-                  Container(
+                  /*   Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
@@ -229,7 +228,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                               bottom: BorderSide(width: 1, color: secondaryColor))),
                       child: CustomCupertinoSearchBar(
                           enabled: false,
-                          searchBarController: searchFieldController)),
+                          searchBarController: searchFieldController)),*/
                   Expanded(
                     child: StreamBuilder<List<Activity>>(
                       stream: context.read<ActivityFeedBloc>().state.createdActivityStream,
@@ -237,18 +236,20 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                           (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return Center(
-                            child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
+                            child: Text("Du hast noch keine Aktivität erstellt."),
                           );
                         } else {
-                          return ListView.builder(
-                            itemBuilder: (context, index) => buildActivityFeedCard(
-                                context,
-                                snapshot.data![index],
-                                context
-                                    .read<ActivityFeedBloc>()
-                                    .isOwnCreatedActivity(snapshot.data![index])),
-                            itemCount: snapshot.data!.length,
-                            controller: listScrollController,
+                          return Scrollbar(
+                            child: ListView.builder(
+                              itemBuilder: (context, index) => buildActivityFeedCard(
+                                  context,
+                                  snapshot.data![index],
+                                  context
+                                      .read<ActivityFeedBloc>()
+                                      .isOwnCreatedActivity(snapshot.data![index])),
+                              itemCount: snapshot.data!.length,
+                              controller: ScrollController(),
+                            ),
                           );
                         }
                       },
