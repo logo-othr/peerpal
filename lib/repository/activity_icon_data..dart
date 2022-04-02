@@ -21,5 +21,6 @@ class ActivityIconData {
     'culture' :  Icons.school_outlined,
     'diy' :  Icons.construction_outlined,
     'other' :  Icons.emoji_people,
+    'goout' :  Icons.local_bar,
   };
 }
