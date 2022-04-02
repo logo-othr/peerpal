@@ -97,7 +97,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           flex: 50,
                           child: Text(
                             widget.activity.name!,
-                            style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.height/39,),
+                            style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.width/20,),
                             maxLines: 2,
                           ),
                         ),
