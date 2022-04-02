@@ -81,7 +81,7 @@ class DiscoverLocationContent extends StatelessWidget {
                           .filteredLocations
                           .isEmpty
                           ? _LocationResultBox()
-                          : const _LocationSearchBox(),
+                          : _LocationSearchBox(searchBarController: searchBarController),
                       const Spacer(),
                       (state is DiscoverLocationPosting)
                           ? const CircularProgressIndicator()
@@ -163,7 +163,8 @@ class _LocationResultBox extends StatelessWidget {
 }
 
 class _LocationSearchBox extends StatelessWidget {
-  const _LocationSearchBox({Key? key}) : super(key: key);
+  const _LocationSearchBox({Key? key, required this.searchBarController}) : super(key: key);
+  final TextEditingController searchBarController;
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +189,7 @@ class _LocationSearchBox extends StatelessWidget {
                           .read<DiscoverLocationCubit>()
                           .state
                           .filteredLocations[index],
+                      searchBarController: searchBarController,
                     ));
               },
             ),
@@ -261,7 +263,8 @@ class _LocationListItem extends StatelessWidget {
 }
 
 class _LocationSearchListItem extends StatelessWidget {
-  const _LocationSearchListItem({required this.location});
+  const _LocationSearchListItem({required this.location, required this.searchBarController});
+  final TextEditingController searchBarController;
 
   final Location location;
 
@@ -276,6 +279,9 @@ class _LocationSearchListItem extends StatelessWidget {
                 .state
                 .selectedLocations
                 .length >= 10) {
+              var text = '';
+              searchBarController.clear();
+              context.read<DiscoverLocationCubit>().searchQueryChanged(text);
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
@@ -285,6 +291,9 @@ class _LocationSearchListItem extends StatelessWidget {
                           ("Es können nicht mehr als 10 Orte hinzugefügt werden."))),
                 );
             } else {
+              var text = '';
+              searchBarController.clear();
+              context.read<DiscoverLocationCubit>().searchQueryChanged(text);
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               context.read<DiscoverLocationCubit>().addLocation(location);
               ScaffoldMessenger.of(context)
