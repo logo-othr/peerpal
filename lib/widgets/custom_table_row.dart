@@ -7,8 +7,9 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 class CustomTableRow extends StatelessWidget {
   String? text;
   VoidCallback? onPressed;
+  bool isArrowVisible;
 
-  CustomTableRow({this.text, this.onPressed});
+  CustomTableRow({this.text, this.onPressed, this.isArrowVisible = true});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +29,12 @@ class CustomTableRow extends StatelessWidget {
                 child:
                 CustomPeerPALHeading3(text: text!, color: Colors.black,),
               ),
+              isArrowVisible ?
               Icon(
                 Icons.arrow_forward_ios,
                 size: 15,
                 color: secondaryColor,
-              ),
+              ) : Container(),
             ],
           ),
           style: TextButton.styleFrom(
