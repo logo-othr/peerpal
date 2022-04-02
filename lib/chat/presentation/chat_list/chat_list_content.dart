@@ -30,7 +30,7 @@ class _ChatListContentState extends State<ChatListContent> {
 
   void scrollListener() {
     if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
+        listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -43,7 +43,7 @@ class _ChatListContentState extends State<ChatListContent> {
           hasBackButton: false,
         ),
         body:
-            BlocBuilder<ChatListBloc, ChatListState>(builder: (context, state) {
+        BlocBuilder<ChatListBloc, ChatListState>(builder: (context, state) {
           if (state.status == ChatListStatus.initial) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.status == ChatListStatus.success) {
@@ -86,7 +86,7 @@ class _ChatListContentState extends State<ChatListContent> {
             }
           },
         ),
-        Container(
+        /*  Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
@@ -94,7 +94,7 @@ class _ChatListContentState extends State<ChatListContent> {
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: CustomCupertinoSearchBar(
               enabled: false,
-                searchBarController: searchFieldController)),
+                searchBarController: searchFieldController)),*/
         Expanded(
           child: StreamBuilder<List<UserChat>>(
             stream: context.read<ChatListBloc>().state.chats,
@@ -117,11 +117,13 @@ class _ChatListContentState extends State<ChatListContent> {
                   ,
                 );
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildChatPartner(context, snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
+                return Scrollbar(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) =>
+                        buildChatPartner(context, snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  ),
                 );
               }
             },
@@ -142,9 +144,9 @@ class _ChatListContentState extends State<ChatListContent> {
               context,
               MaterialPageRoute(
                   builder: (context) => ChatPage(
-                        userChat: userChat,
-                        userId: userChat.user.id!,
-                      )));
+                    userChat: userChat,
+                    userId: userChat.user.id!,
+                  )));
         },
         child: CustomChatListItemUser(userInformation: userChat),
       ),
