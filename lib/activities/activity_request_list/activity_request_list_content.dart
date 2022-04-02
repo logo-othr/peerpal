@@ -58,14 +58,14 @@ class _ActivityRequestListContentState extends State<ActivityRequestListContent>
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Container(
+/*        Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: CustomCupertinoSearchBar(
-                searchBarController: searchFieldController)),
+                searchBarController: searchFieldController)),*/
         Expanded(
           child: StreamBuilder<List<Activity>>(
             stream: context.read<ActivityRequestListBloc>().state.activityRequestList,
@@ -77,11 +77,13 @@ class _ActivityRequestListContentState extends State<ActivityRequestListContent>
                       "Es existieren noch keine Einladungen."),
                 );
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildActivityRequestListCard(context, snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
+                return Scrollbar(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) =>
+                        buildActivityRequestListCard(context, snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  ),
                 );
               }
             },
@@ -99,11 +101,11 @@ class _ActivityRequestListContentState extends State<ActivityRequestListContent>
       child: TextButton(
         onPressed: () {
 
-            Navigator.push(
+          Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => ActivityPublicOverviewPage(activity: activity))
-            );
+          );
         },
         child: CustomActivityCard(activity: activity,isOwnCreatedActivity: false),
       ),
