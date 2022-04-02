@@ -77,10 +77,20 @@ class DiscoverActivitiesContent extends StatelessWidget {
                             children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
                                 ? GestureDetector(
                                 onTap: () {
-                                  context
-                                      .read<
-                                      DiscoverActivitiesCubit>()
-                                      .toggleData(activity);
+                                  if (state.selectedActivities
+                                      .length >=
+                                      10 && !state.selectedActivities.contains(activity)) {
+                                    ScaffoldMessenger.of(context)
+                                      ..hideCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              ("Es können maximal 10 Interessen ausgewählt werden."))));
+                                  } else {
+                                    context
+                                        .read<
+                                        DiscoverActivitiesCubit>()
+                                        .toggleData(activity);
+                                  }
                                 },
                                 child: CustomCircleListItem(
                                     label:
