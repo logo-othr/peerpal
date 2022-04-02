@@ -51,7 +51,7 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
                   )),
               Container(
                 width: 120,
-                child: CustomPeerPALHeading3(fontSize: MediaQuery.of(context).size.width / 21,fontWeight: FontWeight.bold, text: heading),
+                child: CustomPeerPALHeading3(fontSize: 20,fontWeight: FontWeight.bold, text: heading),
               ),
               //CustomPeerPALHeading2(heading),
               VerticalDivider(thickness: 1, color: secondaryColor),
