@@ -55,22 +55,22 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
                         context,
                         widget.appUserPhoneNumber),
                   customAnswerListTile(
-                      widget.textEditingController, 'Wie geht es Dir?'),
+                      widget.textEditingController, 'Wie geht es Dir?', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Wollen wir telefonieren?'),
+                      widget.textEditingController, 'Wollen wir telefonieren?', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Was hast du heute vor?'),
-                  customAnswerListTile(widget.textEditingController, 'Hallo'),
-                  customAnswerListTile(widget.textEditingController, 'Ja'),
-                  customAnswerListTile(widget.textEditingController, 'Nein'),
-                  customAnswerListTile(widget.textEditingController, 'Ok'),
+                      widget.textEditingController, 'Was hast du heute vor?', context),
+                  customAnswerListTile(widget.textEditingController, 'Hallo', context),
+                  customAnswerListTile(widget.textEditingController, 'Ja', context),
+                  customAnswerListTile(widget.textEditingController, 'Nein', context),
+                  customAnswerListTile(widget.textEditingController, 'Ok', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Vielleicht'),
-                  customAnswerListTile(widget.textEditingController, 'Gut'),
-                  customAnswerListTile(widget.textEditingController, 'Schlecht'),
+                      widget.textEditingController, 'Vielleicht', context),
+                  customAnswerListTile(widget.textEditingController, 'Gut', context),
+                  customAnswerListTile(widget.textEditingController, 'Schlecht', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Gute Nacht'),
-                  customAnswerListTile(widget.textEditingController, 'Tschüss'),
+                      widget.textEditingController, 'Gute Nacht', context),
+                  customAnswerListTile(widget.textEditingController, 'Tschüss', context),
                 ],
               ),
             ),
@@ -102,7 +102,7 @@ Widget customAnswerHeaderBar(onCancel) {
                 const Text(
                   'Antwort wählen',
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 22,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -136,72 +136,62 @@ Widget customAnswerHeaderBar(onCancel) {
   );
 }
 
-Widget customAnswerListTile(textEditingController, text) => Padding(
+Widget customAnswerListTile(textEditingController, text, context) => Padding(
   padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      GestureDetector(
-        onTap: () {
-          addStringToTextController(textEditingController, text);
-        },
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-          width: double.infinity,
-          height: 50,
-          child: Text(
-            text,
-            textAlign: TextAlign.start,
-            style: TextStyle(color: Colors.white, fontSize: 19),
-          ),
+  child: GestureDetector(
+    onTap: () {
+      addStringToTextController(textEditingController, text);
+    },
+    child: Container(
+      decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: Colors.white))),
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+        child: Text(
+          text,
+          maxLines: 3,
+          style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width / 20,),
         ),
       ),
-      const Divider(
-        height: 1,
-        color: Colors.white,
-      )
-    ],
+    ),
   ),
 );
 
 Widget customSendPhoneNumberListTile(textEditingController, text, context,
     appUserPhoneNumber) =>
-    Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                        dialogHeight: 300,
-                        actionButtonText: 'Ja',
-                        dialogText:
-                        "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\nwirklich senden?",
-                        onPressed: () => {
-                          addStringToTextController(textEditingController, '${appUserPhoneNumber}'),
-                        });
+    GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                  dialogHeight: 300,
+                  actionButtonText: 'Ja',
+                  dialogText:
+                  "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\nwirklich senden?",
+                  onPressed: () => {
+                    addStringToTextController(textEditingController, '${appUserPhoneNumber}'),
                   });
-            },
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-              color: Colors.blueGrey,
-              width: double.infinity,
-              height: 50,
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 19),
-              ),
-            ),
+            });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.blueGrey,
+            border: Border(
+                bottom: BorderSide(
+                    color: Colors.white))),
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0,15,0,15),
+          child: Text(
+            text,
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width / 20,),
           ),
-          const Divider(
-            height: 1,
-            color: Colors.white,
-          )
-        ],
+        ),
       ),
     );
