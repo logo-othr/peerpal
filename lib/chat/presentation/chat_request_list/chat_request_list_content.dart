@@ -21,7 +21,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
 
   void scrollListener() {
     if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
+        listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -29,23 +29,23 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
         builder: (context, state) {
-      return Scaffold(
-        appBar: CustomAppBar(
-          'Nachrichtenanfragen',
-          hasBackButton: true,
-        ),
-        body: BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
-            builder: (context, state) {
-          if (state.status == ChatRequestListStatus.initial) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state.status == ChatRequestListStatus.success) {
-            return ChatRequestList(context);
-          } else {
-            return ChatRequestList(context);
-          }
-        }),
-      );
-    });
+          return Scaffold(
+            appBar: CustomAppBar(
+              'Nachrichtenanfragen',
+              hasBackButton: true,
+            ),
+            body: BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
+                builder: (context, state) {
+                  if (state.status == ChatRequestListStatus.initial) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state.status == ChatRequestListStatus.success) {
+                    return ChatRequestList(context);
+                  } else {
+                    return ChatRequestList(context);
+                  }
+                }),
+          );
+        });
   }
 
   Widget ChatRequestList(BuildContext context) {
@@ -64,11 +64,13 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
                   ),
                 );
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildChatPartner(context, snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
+                return Scrollbar(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) =>
+                        buildChatPartner(context, snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  ),
                 );
               }
             },
