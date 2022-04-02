@@ -85,7 +85,8 @@ class _ChatButtonsState extends State<ChatButtons> {
                 ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
                 : const EdgeInsets.fromLTRB(0, 5, 5, 5),
             decoration: BoxDecoration(
-              color: primaryColor,
+              color: isEmojiKeyboardVisible ? Colors.white : primaryColor,
+              border: Border.all(width: 2, color: primaryColor),
               borderRadius: isEmojiKeyboardVisible ?  borderRadius
                   .subtract(const BorderRadius.only(bottomRight: radius)) :BorderRadius.circular(25),
             ),
