@@ -11,19 +11,14 @@ class CustomSingleParticipantsTable extends StatelessWidget {
   String? heading;
   String? text;
   VoidCallback? onPressed;
-  final bool isOwnCreatedActivity;
   final bool isArrowIconVisible;
-  final bool isAttendeeDialog;
-  List<String>? userNames = [];
+
 
   CustomSingleParticipantsTable(
       {this.heading,
-      this.text,
-      this.onPressed,
-      required this.isOwnCreatedActivity,
-        required this.isAttendeeDialog,
-      required this.isArrowIconVisible,
-      this.userNames});
+        this.text,
+        this.onPressed,
+        required this.isArrowIconVisible});
 
   @override
   Widget build(BuildContext context) {
@@ -55,17 +50,7 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                         top: BorderSide(width: 1, color: secondaryColor),
                         bottom: BorderSide(width: 1, color: secondaryColor))),
                 child: TextButton(
-                    onPressed: /* isArrowIconVisible ? () {
-                      userNames?.sort();
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return CustomActivityParticipationsDialog(
-                                isAttendeeDialog: isAttendeeDialog,
-                                isOwnCreatedActivity: isOwnCreatedActivity,
-                                userNames: userNames);
-                          });
-                    } : */onPressed,
+                    onPressed: onPressed,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -87,25 +72,11 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                           ),
                         ),
                         isArrowIconVisible
-                            ? GestureDetector(
-                                onTap: () {
-                                  userNames?.sort();
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomActivityParticipationsDialog(
-                                            isAttendeeDialog: isAttendeeDialog,
-                                            isOwnCreatedActivity:
-                                                isOwnCreatedActivity,
-                                            userNames: userNames);
-                                      });
-                                },
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 15,
-                                  color: secondaryColor,
-                                ),
-                              )
+                            ? Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: secondaryColor,
+                        )
                             : Container(),
                       ],
                     ),
