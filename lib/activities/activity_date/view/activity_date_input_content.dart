@@ -165,7 +165,7 @@ class _TimePickerState extends State<_TimePicker> {
                           onChanged: (date) {
                         print('change $date');
                       }, onConfirm: (date) {
-                        String formattedTime = DateFormat('kk:mm').format(date);
+                        String formattedTime = DateFormat('HH:mm').format(date);
                         var array = formattedTime.split(":");
                         if (array[1] == "01") {
                           array[1] = "15";
