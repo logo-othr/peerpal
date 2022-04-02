@@ -18,7 +18,7 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
     Activity activity = activityToChange ?? _activityRepository.getCurrentActivity();
     if(activityToChange != null) _activityRepository.updateLocalActivity(activity);
     PeerPALUser activityCreator =
-        await _appUserRepository.getUserInformation(activity.creatorId!);
+    await _appUserRepository.getUserInformation(activity.creatorId!);
     List<PeerPALUser> invitationIds = [];
     List<PeerPALUser> attendees = [];
 
@@ -59,7 +59,7 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
   Future<void> updateActivity(String description) async {
     var updatedActivity = state.activity.copyWith(description: description);
     await _activityRepository.updateLocalActivity(updatedActivity);
-    await _activityRepository.postActivity(updatedActivity);
+    await _activityRepository.updateActivity(updatedActivity);
   }
 
   Future<void> createActivity(String description) async {

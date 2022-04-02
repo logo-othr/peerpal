@@ -86,6 +86,24 @@ class ActivityRepository {
         .set(activity.toJson());
   }
 
+  Future<void> updateActivity(Activity activity) async {
+    await FirebaseFirestore.instance
+        .collection('activities')
+        .doc(activity.id)
+        .update({
+      'code': activity.code,
+      'creatorId': activity.creatorId,
+      'creatorName': activity.creatorName,
+      'date': activity.date,
+      'description': activity.description,
+      'id': activity.id,
+      'invitationIds': activity.invitationIds,
+      'location': activity.location?.toJson(),
+      'name': activity.name,
+      'public': activity.public,
+    });
+  }
+
   Future<void> joinActivity(Activity activity) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('joinActivity').doc().set({
