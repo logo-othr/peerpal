@@ -58,14 +58,14 @@ class _ActivityJoinedListContentState extends State<ActivityJoinedListContent> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Container(
+        /* Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
                     top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: CustomCupertinoSearchBar(
-                searchBarController: searchFieldController)),
+                searchBarController: searchFieldController)),*/
         Expanded(
           child: StreamBuilder<List<Activity>>(
             stream: context.read<ActivityJoinedListBloc>().state.activityJoinedList,
@@ -77,11 +77,13 @@ class _ActivityJoinedListContentState extends State<ActivityJoinedListContent> {
                       "Bu bist noch keiner Aktivität beigetreten."),
                 );
               } else {
-                return ListView.builder(
-                  itemBuilder: (context, index) =>
-                      buildActivityJoinedListCard(context, snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
-                  controller: listScrollController,
+                return Scrollbar(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) =>
+                        buildActivityJoinedListCard(context, snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
+                    controller: listScrollController,
+                  ),
                 );
               }
             },
