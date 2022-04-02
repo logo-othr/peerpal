@@ -23,7 +23,7 @@ class Location extends Equatable {
   Map<String, dynamic> toJson() => _$LocationToJson(this);
 
   @override
-  List<Object?> get props => [place, zipcode, street, streetNumber];
+  List<Object?> get props => [place, street, streetNumber];
 
 
   Location copyWith({
