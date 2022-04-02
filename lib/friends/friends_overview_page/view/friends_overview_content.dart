@@ -26,7 +26,7 @@ class FriendsOverviewContent extends StatelessWidget {
   void scrollListener() {
     listScrollController.addListener(scrollListener);
     if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
+        listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -34,24 +34,24 @@ class FriendsOverviewContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
         builder: (context, state) {
-      return Scaffold(
-        appBar: CustomAppBar(
-          'Freunde',
-          hasBackButton: false,
-        ),
-        body: BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
-            builder: (context, state) {
-          if (state is FriendsOverviewLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is FriendsOverviewLoaded ||
-              state is FriendsOverviewInitial) {
-            return friendList(context);
-          } else {
-            return friendList(context);
-          }
-        }),
-      );
-    });
+          return Scaffold(
+            appBar: CustomAppBar(
+              'Freunde',
+              hasBackButton: false,
+            ),
+            body: BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
+                builder: (context, state) {
+                  if (state is FriendsOverviewLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is FriendsOverviewLoaded ||
+                      state is FriendsOverviewInitial) {
+                    return friendList(context);
+                  } else {
+                    return friendList(context);
+                  }
+                }),
+          );
+        });
   }
 
   Widget friendList(BuildContext context) {
@@ -68,7 +68,7 @@ class FriendsOverviewContent extends StatelessWidget {
           },
           child: StreamBuilder<int>(
               stream:
-                  context.read<FriendsOverviewCubit>().state.friendRequestsSize,
+              context.read<FriendsOverviewCubit>().state.friendRequestsSize,
               builder: (context, AsyncSnapshot<int> snapshot) {
                 if (snapshot.data.toString() != '0' && snapshot.hasData) {
                   return CustomInvitationButton(
@@ -81,7 +81,7 @@ class FriendsOverviewContent extends StatelessWidget {
                 }
               }),
         ),
-        Container(
+        /*   Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
@@ -91,7 +91,7 @@ class FriendsOverviewContent extends StatelessWidget {
               enabled: false,
               heading: null,
               searchBarController: searchBarController,
-            )),
+            )),*/
         Expanded(
           child: StreamBuilder<List<dynamic>>(
             stream: context.read<FriendsOverviewCubit>().state.friends,
@@ -104,13 +104,15 @@ class FriendsOverviewContent extends StatelessWidget {
                 if (snapshot.hasError) {
                   return CustomCenteredInfoText(
                       text:
-                          'Es ist ein Fehler beim laden der Daten aufgetreten.');
+                      'Es ist ein Fehler beim laden der Daten aufgetreten.');
                 } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) =>
-                        buildFriend(context, snapshot.data![index]),
-                    itemCount: snapshot.data!.length,
-                    controller: listScrollController,
+                  return Scrollbar(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) =>
+                          buildFriend(context, snapshot.data![index]),
+                      itemCount: snapshot.data!.length,
+                      controller: listScrollController,
+                    ),
                   );
                 } else if (snapshot.hasData && snapshot.data!.isEmpty) {
                   return CustomCenteredInfoText(
@@ -122,7 +124,7 @@ class FriendsOverviewContent extends StatelessWidget {
               } else {
                 return CustomCenteredInfoText(
                     text:
-                        'Fehler beim laden. Status: ${snapshot.connectionState}');
+                    'Fehler beim laden. Status: ${snapshot.connectionState}');
               }
             },
           ),
@@ -143,18 +145,18 @@ class FriendsOverviewContent extends StatelessWidget {
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
                 builder: (context, state) {
-              return TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              UserDetailPage(userInformation.id!)));
-                },
-                child:
+                  return TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UserDetailPage(userInformation.id!)));
+                    },
+                    child:
                     CustomFriendListItemUser(userInformation: userInformation),
-              );
-            }));
+                  );
+                }));
       }
     } else {
       return const SizedBox.shrink();
