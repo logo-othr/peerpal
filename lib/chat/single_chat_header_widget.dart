@@ -41,7 +41,7 @@ class SingleChatHeader extends StatelessWidget {
           ClipOval(
             child: CircleAvatar(
                 backgroundColor: Colors.white,
-                radius: 25, child: CachedNetworkImage(imageUrl: urlAvatar!, errorWidget: (context, object, stackTrace) {
+                radius: 22, child: CachedNetworkImage(imageUrl: urlAvatar!, errorWidget: (context, object, stackTrace) {
               return const Icon(
                 Icons.account_circle,
                 size: 40.0,
