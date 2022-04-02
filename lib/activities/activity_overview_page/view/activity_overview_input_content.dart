@@ -13,6 +13,7 @@ import 'package:peerpal/activities/activity_public_overview_page/cubit/activity_
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
+import 'package:peerpal/widgets/custom_activity_participations_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -39,6 +40,18 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
     context.read<OverviewInputCubit>().deleteActivity();
     Navigator.pop(context);
   }
+
+  void showAttendeeDialog(activityAttendeesList) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomActivityParticipationsDialog(
+              isOwnCreatedActivity: false,
+              isAttendeeDialog: true,
+              userNames: activityAttendeesList);
+        });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +84,10 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
               Activity activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
+              List<String>? activityAttendeesList = activityAttendees
+                  .map((e) => e.name!)
+                  .toList();
+              activityAttendeesList.sort();
               var activityInvitedFriends = state.invitationIds;
               var cubit = context.read<OverviewInputCubit>();
               if(activity.description != null) descriptionController.text = activity.description!;
@@ -96,120 +113,116 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                       child: Container(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              CustomSingleCreatorTable(
-                                  heading: "ERSTELLER",
-                                  text: activity.creatorName,
-                                  avatar:
-                                  CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
-                                    return const Icon(
-                                      Icons.account_circle,
-                                      size: 40.0,
-                                      color: Colors.grey,
-                                    );
-                                  },),
-                                  tapIcon: Icons.email,
-                                  isOwnCreatedActivity: true),
+                        child: Scrollbar(
+                          isAlwaysShown: true,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: <Widget>[
+                                CustomSingleCreatorTable(
+                                    heading: "ERSTELLER",
+                                    text: activity.creatorName,
+                                    avatar:
+                                    CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
+                                      return const Icon(
+                                        Icons.account_circle,
+                                        size: 40.0,
+                                        color: Colors.grey,
+                                      );
+                                    },),
+                                    tapIcon: Icons.email,
+                                    isOwnCreatedActivity: true),
 
-                              CustomSingleTable(
-                                onPressed: () async => {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ActivitySelectDatePage(
-                                              isInFlowContext: false,
-                                            )),
-                                  ).then((value) =>
-                                  context.read<OverviewInputCubit>()
-                                    ..loadData())
-                                },
-                                heading: "DATUM",
-                                text: DateFormat('dd.MM.yyyy')
-                                    .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
-                                isArrowIconVisible: true,
-                              ),
-                              CustomSingleTable(
-                                onPressed: () async => {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ActivitySelectDatePage(
-                                              isInFlowContext: false,
-                                            )),
-                                  ).then((value) =>
-                                  context.read<OverviewInputCubit>()
-                                    ..loadData())
-                                },
-                                heading: "UHRZEIT",
-                                text:
-                                DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
-                                isArrowIconVisible: true,
-                              ),
-                              CustomSingleLocationTable(
+                                CustomSingleTable(
                                   onPressed: () async => {
                                     await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              LocationInputPage(
+                                              ActivitySelectDatePage(
                                                 isInFlowContext: false,
                                               )),
                                     ).then((value) =>
                                     context.read<OverviewInputCubit>()
                                       ..loadData())
                                   },
-                                  heading: "ORT",
-                                  text: activity.location!.place,
-                                  subText:
-                                  location,
-                                  isArrowIconVisible: true),
-                              CustomSingleParticipantsTable(
-                                onPressed: () async => {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            InvitationInputPage(
-                                              isInFlowContext: false,
-                                            )),
-                                  ).then((value) =>
-                                  context.read<OverviewInputCubit>()
-                                    ..loadData())
-                                },
-                                heading: "EINGELADEN",
-                                text: activityInvitedFriends
-                                    .map((e) => e.name)
-                                    .toList()
-                                    .join(", "),
-                                isOwnCreatedActivity: false,
-                                isAttendeeDialog: false,
-                                isArrowIconVisible: true,
-                                userNames: activityInvitedFriends
-                                    .map((e) => e.name!)
-                                    .toList(),
-                              ),
-                              CustomSingleParticipantsTable(
-                                  heading: "TEILNEHMER",
-                                  text: activityAttendees
+                                  heading: "DATUM",
+                                  text: DateFormat('dd.MM.yyyy')
+                                      .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
+                                  isArrowIconVisible: true,
+                                ),
+                                CustomSingleTable(
+                                  onPressed: () async => {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ActivitySelectDatePage(
+                                                isInFlowContext: false,
+                                              )),
+                                    ).then((value) =>
+                                    context.read<OverviewInputCubit>()
+                                      ..loadData())
+                                  },
+                                  heading: "UHRZEIT",
+                                  text:
+                                  DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
+                                  isArrowIconVisible: true,
+                                ),
+                                CustomSingleLocationTable(
+                                    onPressed: () async => {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LocationInputPage(
+                                                  isInFlowContext: false,
+                                                )),
+                                      ).then((value) =>
+                                      context.read<OverviewInputCubit>()
+                                        ..loadData())
+                                    },
+                                    heading: "ORT",
+                                    text: activity.location!.place,
+                                    subText:
+                                    location,
+                                    isArrowIconVisible: true),
+                                CustomSingleParticipantsTable(
+                                  onPressed: () async => {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              InvitationInputPage(
+                                                isInFlowContext: false,
+                                              )),
+                                    ).then((value) =>
+                                    context.read<OverviewInputCubit>()
+                                      ..loadData())
+                                  },
+                                  heading: "EINGELADEN",
+                                  text: activityInvitedFriends
                                       .map((e) => e.name)
                                       .toList()
                                       .join(", "),
-                                  isOwnCreatedActivity: false,
-                                  isAttendeeDialog: true,
-                                  userNames: activityAttendees
-                                      .map((e) => e.name!)
-                                      .toList(),
-                                  isArrowIconVisible: true),
-                              CustomSingleDescriptionTable(
-                                heading: "BESCHREIBUNG",
-                                isEditingModus: true,
-                                textEditingController: descriptionController,
-                              ),
-                            ],
+                                  isArrowIconVisible: true,
+                                ),
+                                CustomSingleParticipantsTable(
+                                    onPressed: () => {
+                                      showAttendeeDialog(activityAttendeesList)
+                                    },
+                                    heading: "TEILNEHMER",
+                                    text: activityAttendees
+                                        .map((e) => e.name)
+                                        .toList()
+                                        .join(", "),
+                                    isArrowIconVisible: true),
+                                CustomSingleDescriptionTable(
+                                  heading: "BESCHREIBUNG",
+                                  isEditingModus: true,
+                                  textEditingController: descriptionController,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
