@@ -14,7 +14,7 @@ class FriendRequestsContent extends StatelessWidget {
 
   void scrollListener() {
     if (listScrollController.offset >=
-            listScrollController.position.maxScrollExtent &&
+        listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -22,24 +22,24 @@ class FriendRequestsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FriendRequestsCubit, FriendRequestsState>(
         builder: (context, state) {
-      return Scaffold(
-        appBar: CustomAppBar(
-          'Freundschaftsanfragen',
-          hasBackButton: true,
-        ),
-        body: BlocBuilder<FriendRequestsCubit, FriendRequestsState>(
-            builder: (context, state) {
-          if (state is FriendRequestsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is FriendRequestsLoaded ||
-              state is FriendRequestsInitial) {
-            return friendRequestList(context);
-          } else {
-            return friendRequestList(context);
-          }
-        }),
-      );
-    });
+          return Scaffold(
+            appBar: CustomAppBar(
+              'Freundschaftsanfragen',
+              hasBackButton: true,
+            ),
+            body: BlocBuilder<FriendRequestsCubit, FriendRequestsState>(
+                builder: (context, state) {
+                  if (state is FriendRequestsLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is FriendRequestsLoaded ||
+                      state is FriendRequestsInitial) {
+                    return friendRequestList(context);
+                  } else {
+                    return friendRequestList(context);
+                  }
+                }),
+          );
+        });
   }
 
   Widget friendRequestList(BuildContext context) {
@@ -48,11 +48,13 @@ class FriendRequestsContent extends StatelessWidget {
       builder: (BuildContext context,
           AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder(
-            itemBuilder: (context, index) =>
-                buildFriendRequest(context, snapshot.data![index]),
-            itemCount: snapshot.data!.length,
-            controller: listScrollController,
+          return Scrollbar(
+            child: ListView.builder(
+              itemBuilder: (context, index) =>
+                  buildFriendRequest(context, snapshot.data![index]),
+              itemCount: snapshot.data!.length,
+              controller: listScrollController,
+            ),
           );
         } else {
           return Center(
