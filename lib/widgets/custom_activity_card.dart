@@ -70,7 +70,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Flexible(
-                          flex: 33,
+                          flex: 30,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
                             child: Container(
@@ -94,28 +94,27 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           ),
                         ),
                         Flexible(
-                          flex: 33,
-                          child: Center(
-                            child: CustomPeerPALHeading2(
-                              widget.activity.name!,
-                              color: primaryColor,
-                            ),
+                          flex: 50,
+                          child: Text(
+                            widget.activity.name!,
+                            style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.height/39,),
+                            maxLines: 2,
                           ),
                         ),
                         Flexible(
-                          flex: 33,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                            flex: 20,
                             child: widget.isOwnCreatedActivity
-                                ? Icon(
-                              Icons.edit,
-                              color: primaryColor,
-                              size: 30,
+                                ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                              child: Icon(
+                                Icons.edit,
+                                color: primaryColor,
+                                size: 30,
+                              ),
+                            ) : Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                              child: Container(width: 30),
                             )
-                                : Container(
-                              width: 30,
-                            ),
-                          ),
                         )
                       ],
                     )),
