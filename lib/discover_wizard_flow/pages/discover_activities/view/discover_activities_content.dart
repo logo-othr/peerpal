@@ -22,7 +22,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height) / 3.5;
+    final double itemHeight = (size.height) / 3.4;
     final double itemWidth = size.width / 2;
 
     var hasBackButton = (isInFlowContext) ? false : true;
