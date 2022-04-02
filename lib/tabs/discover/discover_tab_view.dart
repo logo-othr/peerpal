@@ -170,7 +170,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         decoration: BoxDecoration(
             color: Colors.grey[100],
             border:
-                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+            Border(bottom: BorderSide(width: 1, color: secondaryColor))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -219,11 +219,14 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
       children: [
         _buildUserListHeader(),
         Expanded(
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return _buildUser(users[index]);
-            },
-            itemCount: users.length,
+          child: Scrollbar(
+            isAlwaysShown: true,
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return _buildUser(users[index]);
+              },
+              itemCount: users.length,
+            ),
           ),
         ),
         isSearchFocused ? Container() : _buildChangeDiscoverCriteriaButton()
@@ -256,7 +259,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             decoration: BoxDecoration(
                 color: Colors.grey[100],
                 border: Border(
-                    //top: BorderSide(width: 1, color: secondaryColor),
+                  //top: BorderSide(width: 1, color: secondaryColor),
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
