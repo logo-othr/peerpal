@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/repository/emojis.dart';
 import 'package:peerpal/widgets/emoji_button.dart';
 
+import '../colors.dart';
+
 class ChatEmojiKeyboard extends StatefulWidget {
   VoidCallback onCancel;
   final TextEditingController textEditingController;
@@ -33,37 +35,37 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
   Widget build(BuildContext context) {
     activityEmojiButtons = Emojis.activityEmojis
         .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
+        onPressed: () => addStringToTextController(
+            widget.textEditingController, emojiData.code),
+        emojiCode: emojiData.code))
         .toList();
 
     eatAndDrinkEmojis = Emojis.eatAndDrinkEmojis
         .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
+        onPressed: () => addStringToTextController(
+            widget.textEditingController, emojiData.code),
+        emojiCode: emojiData.code))
         .toList();
 
     year = Emojis.year
         .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
+        onPressed: () => addStringToTextController(
+            widget.textEditingController, emojiData.code),
+        emojiCode: emojiData.code))
         .toList();
 
     gestures = Emojis.gestures
         .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
+        onPressed: () => addStringToTextController(
+            widget.textEditingController, emojiData.code),
+        emojiCode: emojiData.code))
         .toList();
 
     smileyAndEmotionsEmojis = Emojis.smileyAndEmotionsEmojis
         .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
+        onPressed: () => addStringToTextController(
+            widget.textEditingController, emojiData.code),
+        emojiCode: emojiData.code))
         .toList();
 
     return DefaultTabController(
@@ -75,8 +77,8 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
         children: [
           customEmojiHeaderBar(widget.onCancel),
           Divider(
-            thickness: 1,
-            color: Colors.white,
+            thickness: 2,
+            color: primaryColor,
           ),
           Expanded(
             child: Container(
@@ -142,7 +144,7 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
                   labelPadding: EdgeInsets.all(0),
                   indicator: UnderlineTabIndicator(
                       borderSide:
-                          BorderSide(width: 1.0, color: Colors.white)),
+                      BorderSide(width: 2.0, color: primaryColor)),
                   tabs: [
                     Text(Emojis.activityEmojis.first.code, style: TextStyle(fontSize: 28)),
                     Text(Emojis.eatAndDrinkEmojis.first.code, style: TextStyle(fontSize: 28)),
@@ -164,9 +166,9 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Schließen',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        style: TextStyle(color: primaryColor, fontSize: 18),
                       ),
                     ],
                   ),
