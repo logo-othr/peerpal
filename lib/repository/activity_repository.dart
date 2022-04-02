@@ -21,6 +21,7 @@ class ActivityRepository {
     activities.add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
     activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
     activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
+    activities.add(Activity(code: 'goout', name: "aus\u00adge\u00adhen"));
     activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
     activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
     activities.add(Activity(code: 'sport', name: "Sport"));
@@ -51,6 +52,7 @@ class ActivityRepository {
     activities.add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
     activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
     activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
+    activities.add(Activity(code: 'goout', name: "aus\u00adge\u00adhen"));
     activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
     activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
     activities.add(Activity(code: 'sport', name: "Sport"));
@@ -104,7 +106,9 @@ class ActivityRepository {
   }
 
   Future<void> deleteActivity(Activity activity) async {
+    String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('deleteActivity').doc().set({
+      'userId': currentUserId,
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'activityId': activity.id,
     });
@@ -208,6 +212,7 @@ class ActivityRepository {
         .instance
         .collection('activities')
         .where('invitationIds', arrayContains: currentUserId)
+        .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('date', descending: true)
         .snapshots();
 
@@ -220,6 +225,7 @@ class ActivityRepository {
         privateRequestActivitiesFromUserList.add(activity);
         print("PrivateRequestActivitiesFromUserStream: $activity");
       });
+      privateRequestActivitiesFromUserList.sort((a, b) => a.date!.compareTo(b.date!));
       yield privateRequestActivitiesFromUserList;
     }
   }
@@ -230,6 +236,7 @@ class ActivityRepository {
         .instance
         .collection('activities')
         .where('attendeeIds', arrayContains: currentUserId)
+        .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('date', descending: true)
         .snapshots();
 
@@ -242,6 +249,7 @@ class ActivityRepository {
         publicJoinedActivitiesFromUserList.add(activity);
         print("PublicJoinedActivitiesFromUserStream: $activity");
       });
+      publicJoinedActivitiesFromUserList.sort((a, b) => a.date!.compareTo(b.date!));
       yield publicJoinedActivitiesFromUserList;
     }
   }
