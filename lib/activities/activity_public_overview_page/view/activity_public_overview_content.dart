@@ -10,6 +10,7 @@ import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
+import 'package:peerpal/widgets/custom_activity_participations_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -19,10 +20,28 @@ import 'package:peerpal/widgets/custom_single_description_table_view.dart';
 import 'package:peerpal/widgets/custom_single_participants_table_view.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';
 
-class ActivityPublicOverviewContent extends StatelessWidget {
-  final TextEditingController descriptionController = TextEditingController();
+class ActivityPublicOverviewContent extends StatefulWidget {
 
   ActivityPublicOverviewContent({Key? key}) : super(key: key);
+
+  @override
+  State<ActivityPublicOverviewContent> createState() => _ActivityPublicOverviewContentState();
+}
+
+class _ActivityPublicOverviewContentState extends State<ActivityPublicOverviewContent> {
+  final TextEditingController descriptionController = TextEditingController();
+
+
+  void showAttendeeDialog(activityAttendeesList) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomActivityParticipationsDialog(
+              isOwnCreatedActivity: false,
+              isAttendeeDialog: true,
+              userNames: activityAttendeesList);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +59,11 @@ class ActivityPublicOverviewContent extends StatelessWidget {
               var activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
+              List<String>? activityAttendeesList = activityAttendees
+                  .map((e) => e.name!)
+                  .toList();
+              activityAttendeesList.sort();
+
               if(activity.description != null) descriptionController.text = activity.description!;
               String location = "";
               if(activity.location!.streetNumber == null) location = "${activity.location!.street}";
@@ -54,7 +78,7 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                           color: Colors.white,
                           border: Border(
                               bottom:
-                                  BorderSide(width: 1, color: secondaryColor))),
+                              BorderSide(width: 1, color: secondaryColor))),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -90,65 +114,66 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                       child: Container(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              CustomSingleCreatorTable(
-                                  heading: "ERSTELLER",
-                                  text: activity.creatorName,
-                                  avatar:
-                                      CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
-                                        return const Icon(
-                                          Icons.account_circle,
-                                          size: 40.0,
-                                          color: Colors.grey,
-                                        );
-                                      },),
-                                  tapIcon: Icons.email,
-                                  isOwnCreatedActivity: false,
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                UserDetailPage(activity.creatorId!)));
-                                  }),
-                              CustomSingleTable(
-                                heading: "DATUM",
-                                text: DateFormat('dd.MM.yyyy')
-                                    .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)!),
-                                isArrowIconVisible: false,
-                              ),
-                              CustomSingleTable(
-                                heading: "UHRZEIT",
-                                text:
-                                    '${DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!))} Uhr',
-                                isArrowIconVisible: false,
-                              ),
-                              CustomSingleLocationTable(
-                                  heading: "ORT",
-                                  text: activity.location!.place,
-                                  subText:
-                                  location,
-                                  isArrowIconVisible: false),
-                              CustomSingleParticipantsTable(
-                                  heading: "TEILNEHMER",
-                                  text: activityAttendees
-                                      .map((e) => e.name)
-                                      .toList()
-                                      .join(", "),
-                                  isOwnCreatedActivity: false,
-                                  isAttendeeDialog: true,
-                                  userNames: activityAttendees
-                                      .map((e) => e.name!)
-                                      .toList(),
-                                  isArrowIconVisible: true),
-                              CustomSingleDescriptionTable(
-                                heading: "BESCHREIBUNG",
-                                isEditingModus: false,
-                                textEditingController: descriptionController,
-                              ),
-                            ],
+                        child: Scrollbar(
+                          isAlwaysShown: true,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: <Widget>[
+                                CustomSingleCreatorTable(
+                                    heading: "ERSTELLER",
+                                    text: activity.creatorName,
+                                    avatar:
+                                    CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
+                                      return const Icon(
+                                        Icons.account_circle,
+                                        size: 40.0,
+                                        color: Colors.grey,
+                                      );
+                                    },),
+                                    tapIcon: Icons.email,
+                                    isOwnCreatedActivity: false,
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserDetailPage(activity.creatorId!)));
+                                    }),
+                                CustomSingleTable(
+                                  heading: "DATUM",
+                                  text: DateFormat('dd.MM.yyyy')
+                                      .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
+                                  isArrowIconVisible: false,
+                                ),
+                                CustomSingleTable(
+                                  heading: "UHRZEIT",
+                                  text:
+                                  '${DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!))} Uhr',
+                                  isArrowIconVisible: false,
+                                ),
+                                CustomSingleLocationTable(
+                                    heading: "ORT",
+                                    text: activity.location!.place,
+                                    subText:
+                                    location,
+                                    isArrowIconVisible: false),
+                                CustomSingleParticipantsTable(
+                                    onPressed: () => {
+                                      showAttendeeDialog(activityAttendeesList)
+                                    },
+                                    heading: "TEILNEHMER",
+                                    text: activityAttendees
+                                        .map((e) => e.name)
+                                        .toList()
+                                        .join(", "),
+                                    isArrowIconVisible: true),
+                                CustomSingleDescriptionTable(
+                                  heading: "BESCHREIBUNG",
+                                  isEditingModus: false,
+                                  textEditingController: descriptionController,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -156,43 +181,43 @@ class ActivityPublicOverviewContent extends StatelessWidget {
                   ),
                   state.isAttendee
                       ? Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              CustomPeerPALButton(
-                                onPressed: () {
-                                  context
-                                      .read<ActivityPublicOverviewCubit>()
-                                      .leaveActivity();
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          CustomPeerPALButton(
+                            onPressed: () {
+                              context
+                                  .read<ActivityPublicOverviewCubit>()
+                                  .leaveActivity();
 
-                                  Scaffold.of(context).showSnackBar(new SnackBar(
-                                      content: new Text(
-                                          "Du hast die Aktivität verlassen.")));
-                                },
-                                text: "Aktivität verlassen",
-                                color: Colors.red,
-                              ),
-                            ],
-                          ))
+                              Scaffold.of(context).showSnackBar(new SnackBar(
+                                  content: new Text(
+                                      "Du hast die Aktivität verlassen.")));
+                            },
+                            text: "Aktivität verlassen",
+                            color: Colors.red,
+                          ),
+                        ],
+                      ))
                       : Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              CustomPeerPALButton(
-                                onPressed: () {
-                                  context
-                                      .read<ActivityPublicOverviewCubit>()
-                                      .joinActivity();
-                                  Scaffold.of(context).showSnackBar(new SnackBar(
-                                      content: new Text(
-                                          "Du bist der Aktivität beigetreten.")));
-                                },
-                                text: "Aktivität beitreten",
-                              ),
-                            ],
-                          )),
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          CustomPeerPALButton(
+                            onPressed: () {
+                              context
+                                  .read<ActivityPublicOverviewCubit>()
+                                  .joinActivity();
+                              Scaffold.of(context).showSnackBar(new SnackBar(
+                                  content: new Text(
+                                      "Du bist der Aktivität beigetreten.")));
+                            },
+                            text: "Aktivität beitreten",
+                          ),
+                        ],
+                      )),
                 ],
               );
             } else
