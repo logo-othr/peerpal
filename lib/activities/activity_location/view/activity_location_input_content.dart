@@ -342,8 +342,7 @@ class _LocationListItemState extends State<_LocationListItem> {
                     ],
                   ),
                 ),
-              ),
-            ],
+              ]),
           ),
         );
       },
