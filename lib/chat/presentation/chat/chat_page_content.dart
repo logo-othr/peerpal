@@ -401,24 +401,26 @@ class ChatPageContent extends StatelessWidget {
   }
 
   Widget _showChatRequestButtons(BuildContext context) {
+
+    // ToDo: dispatch event instead of calling the repository manually
+    ChatPageBloc bloc = context
+        .read<ChatPageBloc>();
+    ChatPageChatExists currentState = bloc.state as ChatPageChatExists;
     return Container(
       child: Column(
         children: [
           CustomPeerPALButton(
               text: "Annehmen",
               onPressed: () {
-                context
-                    .read<ChatPageBloc>()
-                    .add(SendChatRequestResponseButtonPressed(true));
+                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, true);
                 Navigator.pop(context);
               }),
           SizedBox(height: 8),
           CustomPeerPALButton(
               text: "Ablehnen",
               onPressed: () {
-                context
-                    .read<ChatPageBloc>()
-                    .add(SendChatRequestResponseButtonPressed(false));
+
+                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, false);
                 // context.read<ChatListBloc>().add(ChatListLoaded());
                 Navigator.pop(context);
               }),
