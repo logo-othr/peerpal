@@ -14,9 +14,9 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
 
   CustomActivityInviteFriendsListItem(
       {required this.peerPALUser,
-      required this.isActive,
-      required this.onActive,
-      required this.onInactive});
+        required this.isActive,
+        required this.onActive,
+        required this.onInactive});
 
   // https://api.flutter.dev/flutter/material/MaterialStateProperty-class.html
   Color getColor(Set<MaterialState> states) {
@@ -72,7 +72,7 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
                       child: ClipOval(
                         child: CircleAvatar(
                           radius: 30,
-                          child: CachedNetworkImage(
+                          child: (peerPALUser.imagePath!.isEmpty || peerPALUser.imagePath == null) ? CachedNetworkImage(
                             imageUrl: peerPALUser.imagePath!,
                             errorWidget: (context, object, stackTrace) {
                               return const Icon(
@@ -81,6 +81,10 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
                                 color: Colors.grey,
                               );
                             },
+                          ) : Icon(
+                            Icons.account_circle,
+                            size: 60.0,
+                            color: Colors.grey,
                           ),
                           backgroundColor: Colors.white,
                         ),

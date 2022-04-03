@@ -22,7 +22,7 @@ import 'package:peerpal/widgets/friend_request_peerpal_button.dart';
 import 'package:peerpal/widgets/single_chat_send_friend_request_button.dart';
 
 class UserDetailContent extends StatelessWidget {
-final bool hasMessageButton;
+  final bool hasMessageButton;
 
   UserDetailContent({
     required this.hasMessageButton,
@@ -41,45 +41,52 @@ final bool hasMessageButton;
           body: state.status != UserDetailStatus.success
               ? Center(child: CircularProgressIndicator())
               : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                    top: BorderSide(
-                                        width: 1, color: secondaryColor),
-                                    bottom: BorderSide(
-                                        width: 1, color: secondaryColor))),
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                    child: Material(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(50.0)),
-                                      clipBehavior: Clip.hardEdge,
-                                      child: context
-                                              .read<UserDetailBloc>()
-                                              .state
-                                              .user
-                                              .imagePath!
-                                              .isNotEmpty
-                                          ? CachedNetworkImage(
-                                              imageUrl: context
-                                                  .read<UserDetailBloc>()
-                                                  .state
-                                                  .user
-                                                  .imagePath!,
-                                              fit: BoxFit.cover,
-                                              width: 100.0,
-                                              height: 100.0,
-                                            /*  placeholder:
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              top: BorderSide(
+                                  width: 1, color: secondaryColor),
+                              bottom: BorderSide(
+                                  width: 1, color: secondaryColor))),
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                              const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Material(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(50.0)),
+                                  clipBehavior: Clip.hardEdge,
+                                  child:
+                                  ( context.read<UserDetailBloc>()
+                                      .state
+                                      .user
+                                      .imagePath == null || context
+                                      .read<UserDetailBloc>()
+                                      .state
+                                      .user
+                                      .imagePath!
+                                      .isEmpty) ? Icon(
+                                    Icons.account_circle,
+                                    size: 100.0,
+                                    color: Colors.grey,
+                                  ) : CachedNetworkImage(
+                                    imageUrl: context
+                                        .read<UserDetailBloc>()
+                                        .state
+                                        .user
+                                        .imagePath!,
+                                    fit: BoxFit.cover,
+                                    width: 100.0,
+                                    height: 100.0,
+                                    /*  placeholder:
                                                   (BuildContext context, url) =>
                                                       SizedBox(
                                                 width: 100,
@@ -91,119 +98,119 @@ final bool hasMessageButton;
                                                   ),
                                                 ),
                                               ),*/
-                                              errorWidget: (context, object,
-                                                  stackTrace) {
-                                                return const Icon(
-                                                  Icons.account_circle,
-                                                  size: 100.0,
-                                                  color: Colors.grey,
-                                                );
-                                              },
-                                            )
-                                          : const Icon(
+                                    errorWidget: (context, object,
+                                        stackTrace) {
+                                      return const Icon(
+                                        Icons.account_circle,
+                                        size: 100.0,
+                                        color: Colors.grey,
+                                      );
+                                    },
+                                  )
+                                /* : const Icon(
                                               Icons.account_circle,
                                               size: 100.0,
                                               color: Colors.grey,
-                                            ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                    child: CustomPeerPALHeading2(
-                                      '${context.read<UserDetailBloc>().state.user.name} | ${context.read<UserDetailBloc>().state.user.age}',
-                                      color: Colors.black,
-                                    ),
-                                  )
-                                ],
+                                            ),*/
                               ),
-                            )),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                CustomSingleTable(
-                                  heading: 'AKTIVITÄTEN',
-                                  text: state.user.discoverActivitiesCodes!
-                                      .map((e) => ActivityRepository
-                                          .getActivityNameFromCode(e))
-                                      .toList()
-                                      .join(', '),
-                                  isArrowIconVisible: true,
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CustomActivityDialog(
-                                              isOwnCreatedActivity: false,
-                                              activities: state
-                                                  .user.discoverActivitiesCodes!
-                                                  .map((e) => ActivityRepository
-                                                      .getActivityNameFromCode(
-                                                          e))
-                                                  .toList());
-                                        });
-                                  },
-                                ),
-                                CustomSingleTable(
-                                  heading: 'KOMMUNIKATIONSART',
-                                  text: state
-                                      .user.discoverCommunicationPreferences!
-                                      .map((e) => e.toUIString)
-                                      .toList()
-                                      .join(', '),
-                                  isArrowIconVisible: false,
-                                  onPressed: () {},
-                                ),
-                                CustomSingleTable(
-                                  heading: 'ORT',
-                                  text: state.user.discoverLocations!
-                                      .map((e) => e.place)
-                                      .toList()
-                                      .join(', '),
-                                  isArrowIconVisible: false,
-                                  onPressed: () {},
-                                ),
-                              ],
                             ),
-                          ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                              child: CustomPeerPALHeading2(
+                                '${context.read<UserDetailBloc>().state.user.name} | ${context.read<UserDetailBloc>().state.user.age}',
+                                color: Colors.black,
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox(height: 20),
-                        Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ChatPage(
-                                                userId: state.user.id!,
-                                                userChat: null,
-                                              )),
-                                    );
-                                  },
-                                  child: hasMessageButton ? CustomPeerPALButton(
-                                    text: "Nachricht schreiben",
-                                  ) : Container(),
-                                ),
-                              ],
-                            )),
-                        SizedBox(height: 8),
-                        Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                friendRequestButton(context, state.user),
-                              ],
-                            ))
-                      ],
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          CustomSingleTable(
+                            heading: 'AKTIVITÄTEN',
+                            text: state.user.discoverActivitiesCodes!
+                                .map((e) => ActivityRepository
+                                .getActivityNameFromCode(e))
+                                .toList()
+                                .join(', '),
+                            isArrowIconVisible: true,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return CustomActivityDialog(
+                                        isOwnCreatedActivity: false,
+                                        activities: state
+                                            .user.discoverActivitiesCodes!
+                                            .map((e) => ActivityRepository
+                                            .getActivityNameFromCode(
+                                            e))
+                                            .toList());
+                                  });
+                            },
+                          ),
+                          CustomSingleTable(
+                            heading: 'KOMMUNIKATIONSART',
+                            text: state
+                                .user.discoverCommunicationPreferences!
+                                .map((e) => e.toUIString)
+                                .toList()
+                                .join(', '),
+                            isArrowIconVisible: false,
+                            onPressed: () {},
+                          ),
+                          CustomSingleTable(
+                            heading: 'ORT',
+                            text: state.user.discoverLocations!
+                                .map((e) => e.place)
+                                .toList()
+                                .join(', '),
+                            isArrowIconVisible: false,
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(height: 20),
+                  Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatPage(
+                                      userId: state.user.id!,
+                                      userChat: null,
+                                    )),
+                              );
+                            },
+                            child: hasMessageButton ? CustomPeerPALButton(
+                              text: "Nachricht schreiben",
+                            ) : Container(),
+                          ),
+                        ],
+                      )),
+                  SizedBox(height: 8),
+                  Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          friendRequestButton(context, state.user),
+                        ],
+                      ))
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

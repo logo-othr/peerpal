@@ -21,16 +21,16 @@ import 'package:peerpal/widgets/custom_single_participants_table_view.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';
 
 class ActivityPublicOverviewContent extends StatefulWidget {
-
   ActivityPublicOverviewContent({Key? key}) : super(key: key);
 
   @override
-  State<ActivityPublicOverviewContent> createState() => _ActivityPublicOverviewContentState();
+  State<ActivityPublicOverviewContent> createState() =>
+      _ActivityPublicOverviewContentState();
 }
 
-class _ActivityPublicOverviewContentState extends State<ActivityPublicOverviewContent> {
+class _ActivityPublicOverviewContentState
+    extends State<ActivityPublicOverviewContent> {
   final TextEditingController descriptionController = TextEditingController();
-
 
   void showAttendeeDialog(activityAttendeesList) async {
     showDialog(
@@ -59,15 +59,18 @@ class _ActivityPublicOverviewContentState extends State<ActivityPublicOverviewCo
               var activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
-              List<String>? activityAttendeesList = activityAttendees
-                  .map((e) => e.name!)
-                  .toList();
+              List<String>? activityAttendeesList =
+              activityAttendees.map((e) => e.name!).toList();
               activityAttendeesList.sort();
 
-              if(activity.description != null) descriptionController.text = activity.description!;
+              if (activity.description != null)
+                descriptionController.text = activity.description!;
               String location = "";
-              if(activity.location!.streetNumber == null) location = "${activity.location!.street}";
-              else location = "${activity.location!.street} ${activity.location!.streetNumber}";
+              if (activity.location!.streetNumber == null)
+                location = "${activity.location!.street}";
+              else
+                location =
+                "${activity.location!.street} ${activity.location!.streetNumber}";
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -122,14 +125,26 @@ class _ActivityPublicOverviewContentState extends State<ActivityPublicOverviewCo
                                 CustomSingleCreatorTable(
                                     heading: "ERSTELLER",
                                     text: activity.creatorName,
-                                    avatar:
-                                    CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
-                                      return const Icon(
-                                        Icons.account_circle,
-                                        size: 40.0,
-                                        color: Colors.grey,
-                                      );
-                                    },),
+                                    avatar: (activityCreator.imagePath ==
+                                        null ||
+                                        activityCreator.imagePath!.isEmpty)
+                                        ? Icon(
+                                      Icons.account_circle,
+                                      size: 40.0,
+                                      color: Colors.grey,
+                                    )
+                                        : CachedNetworkImage(
+                                      imageUrl:
+                                      activityCreator.imagePath!,
+                                      errorWidget:
+                                          (context, object, stackTrace) {
+                                        return const Icon(
+                                          Icons.account_circle,
+                                          size: 40.0,
+                                          color: Colors.grey,
+                                        );
+                                      },
+                                    ),
                                     tapIcon: Icons.email,
                                     isOwnCreatedActivity: false,
                                     onPressed: () {
@@ -137,12 +152,14 @@ class _ActivityPublicOverviewContentState extends State<ActivityPublicOverviewCo
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  UserDetailPage(activity.creatorId!)));
+                                                  UserDetailPage(
+                                                      activity.creatorId!)));
                                     }),
                                 CustomSingleTable(
                                   heading: "DATUM",
-                                  text: DateFormat('dd.MM.yyyy')
-                                      .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
+                                  text: DateFormat('dd.MM.yyyy').format(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          activity.date!)),
                                   isArrowIconVisible: false,
                                 ),
                                 CustomSingleTable(
@@ -154,12 +171,12 @@ class _ActivityPublicOverviewContentState extends State<ActivityPublicOverviewCo
                                 CustomSingleLocationTable(
                                     heading: "ORT",
                                     text: activity.location!.place,
-                                    subText:
-                                    location,
+                                    subText: location,
                                     isArrowIconVisible: false),
                                 CustomSingleParticipantsTable(
                                     onPressed: () => {
-                                      showAttendeeDialog(activityAttendeesList)
+                                      showAttendeeDialog(
+                                          activityAttendeesList)
                                     },
                                     heading: "TEILNEHMER",
                                     text: activityAttendees

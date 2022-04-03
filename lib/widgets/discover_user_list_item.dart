@@ -129,7 +129,11 @@ class DiscoverUserListItem extends StatelessWidget {
               radius: 30,
               child: ClipOval(
                   child:
-                  (imageLink == null || imageLink!.isEmpty) ? Container() : CachedNetworkImage(imageUrl: imageLink!,
+                  (imageLink == null || imageLink!.isEmpty) ? Icon(
+                    Icons.account_circle,
+                    size: 60.0,
+                    color: Colors.grey,
+                  ) : CachedNetworkImage(imageUrl: imageLink!,
                     errorWidget: (context, object, stackTrace) {
                       return const Icon(
                         Icons.account_circle,

@@ -26,8 +26,12 @@ class CustomChatListItemUser extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Material(
-            child: userInformation.user.imagePath!.isNotEmpty
-                ? CachedNetworkImage(
+            child: (userInformation.user.imagePath!.isEmpty || userInformation.user.imagePath == null)
+                ?  Icon(
+              Icons.account_circle,
+              size: 60.0,
+              color: Colors.grey,
+            ) : CachedNetworkImage(
               errorWidget: (context, object, stackTrace) {
                 return const Icon(
                   Icons.account_circle,
@@ -39,12 +43,8 @@ class CustomChatListItemUser extends StatelessWidget {
               fit: BoxFit.cover,
               width: 60.0,
               height: 60.0,
-            )
-                : Icon(
-              Icons.account_circle,
-              size: 60.0,
-              color: Colors.grey,
             ),
+
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
             clipBehavior: Clip.hardEdge,
           ),

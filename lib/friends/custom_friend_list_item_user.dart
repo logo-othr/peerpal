@@ -18,41 +18,40 @@ class CustomFriendListItemUser extends StatelessWidget {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,5,20,5),
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-            clipBehavior: Clip.hardEdge,
-            child: userInformation.imagePath!.isNotEmpty
-                ? CachedNetworkImage( imageUrl:
+            padding: const EdgeInsets.fromLTRB(20,5,20,5),
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(30.0)),
+              clipBehavior: Clip.hardEdge,
+              child: (userInformation.imagePath!.isEmpty || userInformation.imagePath == null)
+                  ?  const Icon(
+                Icons.account_circle,
+                size: 60.0,
+                color: Colors.grey,
+              ) : CachedNetworkImage( imageUrl:
               userInformation.imagePath!,
-              fit: BoxFit.cover,
-              width: 60.0,
-              height: 60.0,
-              placeholder: (BuildContext context, url) =>
-                Container(
-                  width: 60,
-                  height: 60,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
+                fit: BoxFit.cover,
+                width: 60.0,
+                height: 60.0,
+                placeholder: (BuildContext context, url) =>
+                    Container(
+                      width: 60,
+                      height: 60,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
 
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              errorWidget: (context, object, stackTrace) {
-                return const Icon(
-                  Icons.account_circle,
-                  size: 60.0,
-                  color: Colors.grey,
-                );
-              },
+                errorWidget: (context, object, stackTrace) {
+                  return const Icon(
+                    Icons.account_circle,
+                    size: 60.0,
+                    color: Colors.grey,
+                  );
+                },
+              ),
             )
-                : const Icon(
-              Icons.account_circle,
-              size: 60.0,
-              color: Colors.grey,
-            ),
-          ),
         ),
         Container(
           child: Column(

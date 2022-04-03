@@ -85,26 +85,31 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
     searchFieldController.text = Strings.searchDisabled;
     return BlocBuilder<InvitationInputCubit, ActivityInvitationState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: CustomAppBar(
-            "Aktivität planen",
-            hasBackButton: true,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 40,),
-                CustomPeerPALHeading1("Freunde einladen"),
-                SizedBox(height: 30),
-                _buildInivtationList(),
-                _buildSearchBar(),
-                isSearchEmpty
-                    ? _buildUserList(context)
-                    : _buildSearchResult(),
-                _buildNextButton(context),
-              ],
+        return GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: CustomAppBar(
+              "Aktivität planen",
+              hasBackButton: true,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  CustomPeerPALHeading1("Freunde einladen"),
+                  SizedBox(height: 20),
+                  _buildInivtationList(),
+                  SizedBox(height: 20),
+                  _buildSearchBar(),
+                  isSearchEmpty
+                      ? _buildUserList(context)
+                      : _buildSearchResultList(_invitationCubit.state.searchResults),
+                  _buildNextButton(context),
+                ],
+              ),
             ),
           ),
         );
@@ -112,16 +117,8 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
     );
   }
 
-  Widget _buildSearchResult() {
-    return Column(
-      children: [
-        _buildSearchResultList(_invitationCubit.state.searchResults),
-      ],
-    );
-  }
-
   Widget _buildSearchResultList(List<PeerPALUser> searchResults) {
-    return Container(
+    return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
@@ -255,23 +252,36 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
 
   Widget _buildInivtationList() {
     List<PeerPALUser> invitations= _invitationCubit.state.invitations;
-    return Container(
-      height:30,
-      width: double.infinity,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(5,0,5,0),
+      child: Container(
+        height:35,
+        width: double.infinity,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
-           return Container(
-              child: Text(invitations[index].name!),
-              decoration: BoxDecoration(
-                  color: Colors.black12,
-                border: Border.all(color: Colors.black26),
-                  borderRadius: BorderRadius.all(Radius.circular(20))
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.black12,
+                    border: Border.all(color: Colors.black26),
+                    borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Center(child: Text(invitations[index].name!)),
+                  ),
+
+                ),
               ),
             );
           },
           itemCount: invitations.length,
         ),
+      ),
     );
 
   }

@@ -13,7 +13,7 @@ class CustomSingleCreatorTable extends StatelessWidget {
   String? text;
   VoidCallback? onPressed;
   IconData? tapIcon;
-  CachedNetworkImage avatar;
+  var avatar;
   bool isOwnCreatedActivity;
 
   CustomSingleCreatorTable({this.heading, this.text, this.onPressed, this.tapIcon, required this.avatar, required this.isOwnCreatedActivity});

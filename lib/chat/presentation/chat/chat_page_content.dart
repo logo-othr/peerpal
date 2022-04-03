@@ -386,13 +386,22 @@ class ChatPageContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 15),
-              ClipOval(child: CircleAvatar(backgroundColor: Colors.white,radius: 20, child: CachedNetworkImage(imageUrl: imageUrl, errorWidget: (context, object, stackTrace) {
-                return const Icon(
-                  Icons.account_circle,
-                  size: 40.0,
-                  color: Colors.grey,
-                );
-              },))),
+              ClipOval(child:
+              CircleAvatar(backgroundColor: Colors.white,radius: 20,
+                  child:
+                  (imageUrl!.isEmpty || imageUrl == null)
+                      ?  Icon(
+                    Icons.account_circle,
+                    size: 40.0,
+                    color: Colors.grey,
+                  ) :
+                  CachedNetworkImage(imageUrl: imageUrl, errorWidget: (context, object, stackTrace) {
+                    return const Icon(
+                      Icons.account_circle,
+                      size: 40.0,
+                      color: Colors.grey,
+                    );
+                  },))),
             ],
           ),
         ),

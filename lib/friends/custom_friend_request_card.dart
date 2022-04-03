@@ -37,37 +37,36 @@ class CustomFriendRequestCard extends StatelessWidget {
                               UserDetailPage(userInformation.id!)));
                 },
                 child: Material(
-                  borderRadius: const BorderRadius.all(Radius.circular(25.0)),
-                  clipBehavior: Clip.hardEdge,
-                  child: userInformation.imagePath!.isNotEmpty
-                      ? CachedNetworkImage(imageUrl:
+                    borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                    clipBehavior: Clip.hardEdge,
+                    child: (userInformation.imagePath!.isEmpty || userInformation.imagePath == null)
+                        ?  const Icon(
+                      Icons.account_circle,
+                      size: 50.0,
+                      color: Colors.grey,
+                    ) : CachedNetworkImage(imageUrl:
                     userInformation.imagePath!,
-                          fit: BoxFit.cover,
-                          width: 50.0,
-                          height: 50.0,
-                          placeholder: (BuildContext context, url) =>
-                           SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: primaryColor,
-                                ),
+                      fit: BoxFit.cover,
+                      width: 50.0,
+                      height: 50.0,
+                      placeholder: (BuildContext context, url) =>
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
                               ),
                             ),
-                          errorWidget: (context, object, stackTrace) {
-                            return const Icon(
-                              Icons.account_circle,
-                              size: 50.0,
-                              color: Colors.grey,
-                            );
-                          },
-                        )
-                      : const Icon(
+                          ),
+                      errorWidget: (context, object, stackTrace) {
+                        return const Icon(
                           Icons.account_circle,
                           size: 50.0,
                           color: Colors.grey,
-                        ),
+                        );
+                      },
+                    )
                 ),
               ),
             ),
