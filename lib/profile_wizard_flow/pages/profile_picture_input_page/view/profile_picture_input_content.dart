@@ -27,7 +27,7 @@ class ProfilePictureInputContent extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
               CustomPeerPALHeading1('Nimm ein Foto von dir auf'),
               const Spacer(),
               InkWell(
@@ -49,12 +49,16 @@ class ProfilePictureInputContent extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(height: 10),
+              _Checkbox(isInFlowContext),
+
             ],
           ),
         ),
       ),
     );
   }
+
 
   Future<void> updatePicture(ProfilePictureState state, BuildContext context) async {
     if (state is ProfilePicturePicked) {
@@ -84,91 +88,142 @@ class _Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
-      return new FutureBuilder(
-          future: context.read<ProfilePictureCubit>().getProfilePicturePath(),
-          initialData: null,
-          builder:(BuildContext context, AsyncSnapshot<String?>text) {
-      if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
-        var imageURL = text.data;
-        //var imageURL = null; // ToDo: Stop using flow state as a source
-        if (imageURL != null && imageURL.isNotEmpty) {
-          return Container(
-            width: 150.0,
-            height: 150.0,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(imageURL),
-              ),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: primaryColor,
-                width: 4.0,
-              ),
-            ),
+          return new FutureBuilder(
+              future: context.read<ProfilePictureCubit>().getProfilePicturePath(),
+              initialData: null,
+              builder:(BuildContext context, AsyncSnapshot<String?>text) {
+                if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
+                  var imageURL = text.data;
+
+                  if (imageURL == '' || imageURL!.isEmpty) {
+                    return  Container(
+                        width: 150.0,
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: primaryColor,
+                            width: 4.0,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.account_circle,
+                          size: 140,
+                          color: Colors.grey,
+                        ));
+                  }
+                  //var imageURL = null; // ToDo: Stop using flow state as a source
+                  if (imageURL != null && imageURL.isNotEmpty && imageURL != '') {
+                    return Container(
+                      width: 150.0,
+                      height: 150.0,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: CachedNetworkImageProvider(imageURL),
+                        ),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: primaryColor,
+                          width: 4.0,
+                        ),
+                      ),
+                    );
+                  }
+                } else if (state is ProfilePicturePicked) {
+                  return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: FileImage(File(state.profilePicture!.path)),
+                      ),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                  );
+                } else if (state is ProfilePicturePosting) {
+                  return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: const CircularProgressIndicator(),
+                  );
+                } else if (state is ProfilePicturePosting) {
+                  return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: const CircularProgressIndicator(),
+                  );
+                }
+                return Container(
+                    width: 150.0,
+                    height: 150.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: primaryColor,
+                        width: 4.0,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 110,
+                      color: primaryColor,
+                    ));
+              }
           );
         }
-      } else if (state is ProfilePicturePicked) {
-        return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: FileImage(File(state.profilePicture!.path)),
-            ),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
+    );
+  }
+}
+
+class _Checkbox extends StatelessWidget {
+
+  final bool isInFlowContext;
+
+  _Checkbox(this.isInFlowContext);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
+      builder: (context, state) {
+        return  CustomPeerPALButton2(
+            text: 'Ich möchte kein Profilbild angeben',
+            onPressed: () async {
+              await context
+                  .read<ProfilePictureCubit>()
+                  .updateProfilePicture(null);
+
+              if (isInFlowContext) {
+                context
+                    .flow<PeerPALUser>()
+                    .update((s) => s.copyWith(imagePath: ''));
+              } else {
+                Navigator.pop(context);
+              }
+
+            }
         );
-      } else if (state is ProfilePicturePosting) {
-        return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-          child: const CircularProgressIndicator(),
-        );
-      } else if (state is ProfilePicturePosting) {
-        return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-          child: const CircularProgressIndicator(),
-        );
-      }
-      return Container(
-          width: 150.0,
-          height: 150.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: primaryColor,
-              width: 4.0,
-            ),
-          ),
-          child: Icon(
-            Icons.camera_alt_outlined,
-            size: 110,
-            color: primaryColor,
-          ));
-          }
-          );
-        }
-        );
+
+      },
+    );
   }
 }
