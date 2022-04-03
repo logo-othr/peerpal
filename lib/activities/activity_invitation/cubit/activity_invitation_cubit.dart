@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +8,7 @@ import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'activity_invitation_state.dart';
 
@@ -15,6 +18,9 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
 
   final AppUserRepository _appUserRepository;
   final ActivityRepository _activityRepository;
+
+  StreamController<List<PeerPALUser>> _userStreamController =
+  new BehaviorSubject();
 
   Future<void> getData() async {
     var friends = _appUserRepository.getFriendList();
@@ -30,15 +36,17 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
       invitations.add(peerPALUser);
     }
 
-    emit(ActivityInvitationLoaded(
-        friends, friendRequestsSize, invitations));
+    _userStreamController.addStream(friends);
+
+    emit(ActivityInvitationLoaded(state.searchResults,
+        _userStreamController.stream, friendRequestsSize, invitations));
   }
 
   void addInvitation(PeerPALUser user) {
     List<PeerPALUser> updatedInvitations = [];
     updatedInvitations.addAll(state.invitations);
     updatedInvitations.add(user);
-    emit(ActivityInvitationLoaded(
+    emit(ActivityInvitationLoaded(state.searchResults,
         state.friends, state.friendRequestsSize, updatedInvitations));
   }
 
@@ -46,7 +54,7 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
     List<PeerPALUser> updatedInvitations = [];
     updatedInvitations.addAll(state.invitations);
     updatedInvitations.remove(user);
-    emit(ActivityInvitationLoaded(
+    emit(ActivityInvitationLoaded(state.searchResults,
         state.friends, state.friendRequestsSize, updatedInvitations));
   }
 
@@ -63,5 +71,12 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
         invitationIds: state.invitations.map((e) => e.id!).toList());
     _activityRepository.updateLocalActivity(activity);
     return activity;
+  }
+
+  Future<void> searchUser(String searchQuery) async {
+    List<PeerPALUser> searchResults =
+        await _appUserRepository.getUserForName(searchQuery);
+    emit(ActivityInvitationLoaded(searchResults,
+        state.friends, state.friendRequestsSize, state.invitations));
   }
 }
