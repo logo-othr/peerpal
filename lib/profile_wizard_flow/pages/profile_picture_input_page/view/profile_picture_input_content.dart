@@ -95,7 +95,7 @@ class _Avatar extends StatelessWidget {
                 if (state is ProfilePictureInitial || state is ProfilePicturePosted) {
                   var imageURL = text.data;
 
-                  if (imageURL == '' || imageURL!.isEmpty) {
+                  if (imageURL == '') {
                     return  Container(
                         width: 150.0,
                         height: 150.0,
@@ -215,7 +215,7 @@ class _Checkbox extends StatelessWidget {
               if (isInFlowContext) {
                 context
                     .flow<PeerPALUser>()
-                    .update((s) => s.copyWith(imagePath: ''));
+                    .complete((s) => s.copyWith(imagePath: ''));
               } else {
                 Navigator.pop(context);
               }

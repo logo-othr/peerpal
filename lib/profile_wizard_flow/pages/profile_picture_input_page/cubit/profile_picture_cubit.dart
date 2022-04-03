@@ -40,6 +40,8 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
             showCropGrid: false,
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
+          doneButtonTitle: "Fertig",
+          cancelButtonTitle: "Abbrechen",
           title: 'Passe dein Foto an',
         )
     )!;
@@ -85,19 +87,19 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   }
 
   Future<String> updateProfilePicture(File? profilePicture) async {
+    var profilePictureURL = '';
+
     if(profilePicture == null){
       await _updateProfilePicturePath('');
-      return '';
     }
     else
     {
       emit(ProfilePicturePosting(profilePicture));
-      var profilePictureURL = await _uploadProfilePicture(profilePicture);
+      profilePictureURL = await _uploadProfilePicture(profilePicture);
       await _updateProfilePicturePath(profilePictureURL);
-      emit(ProfilePicturePosted(profilePictureURL));
-      return profilePictureURL;
     }
-
+    emit(ProfilePicturePosted(profilePictureURL));
+    return profilePictureURL;
   }
 
   Future<String> _uploadProfilePicture(File? profilePicture) async {
