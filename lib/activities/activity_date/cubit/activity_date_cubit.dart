@@ -28,8 +28,19 @@ class DateInputCubit extends Cubit<DateInputState> {
 
   Future<void> load() async {
     var activity = await _activityRepository.getCurrentActivity();
+    String? formattedDate;
+    String? formattedTime;
+    if (activity.date != null) {
+      formattedDate = DateFormat('dd.MM.yyyy')
+          .format(DateTime.fromMillisecondsSinceEpoch(activity.date!));
+      formattedTime = DateFormat('HH:mm')
+          .format(DateTime.fromMillisecondsSinceEpoch(activity.date!));
+    }
     emit(DateInputLoaded(
-        state.date, state.time, activity.name!, activity.code!));
+        formattedDate == null ? state.date : formattedDate,
+        formattedTime == null ? state.time : formattedTime,
+        activity.name!,
+        activity.code!));
   }
 
   Future<Activity> postData() async {

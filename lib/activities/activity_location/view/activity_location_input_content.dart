@@ -22,100 +22,103 @@ class LocationInputContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(
-          'Standorte',
-          hasBackButton: isInFlowContext,
-        ),
-        body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
-            builder: (context, state) {
-              return Container(
-                color: Colors.white,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        CustomPeerPALHeading1("Treffpunkt"),
-                        _LocationSearchBar(
-                          searchBarController: searchBarController,
-                        ),
-                        context
-                            .read<ActivityLocationCubit>()
-                            .state
-                            .filteredLocations
-                            .isEmpty &&
-                            context
-                                .read<ActivityLocationCubit>()
-                                .state
-                                .selectedLocations
-                                .isEmpty
-                            ? SizedBox(
-                          height: MediaQuery.of(context).size.height / 6,
-                        )
-                            : Container(),
-                        context
-                            .read<ActivityLocationCubit>()
-                            .state
-                            .filteredLocations
-                            .isEmpty &&
-                            context
-                                .read<ActivityLocationCubit>()
-                                .state
-                                .selectedLocations
-                                .isEmpty
-                            ? Column(
-                          children: [
-                            Icon(Icons.location_on,
-                                color: secondaryColor, size: 60),
-                            SizedBox(height: 20),
-                            CustomPeerPALHeading2(
-                              "Es wurde noch kein\nOrt ausgewählt",
-                              color: secondaryColor,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        )
-                            : Container(),
-                        context
-                            .read<ActivityLocationCubit>()
-                            .state
-                            .filteredLocations
-                            .isEmpty ||
-                            context
-                                .read<ActivityLocationCubit>()
-                                .state
-                                .selectedLocations
-                                .length >
-                                0
-                            ? _LocationResultBox(
-                          streetController: streetController,
-                          streetNumberController: streetNumberController,)
-                            : const _LocationSearchBox(),
-                        const Spacer(),
-                        (state is ActivityLocationPosting)
-                            ? const CircularProgressIndicator()
-                            : CompletePageButton(
-                            disabled: (state.selectedLocations.isEmpty),
-                            isSaveButton: isInFlowContext,
-                            onPressed: () async {
-                              context.read<ActivityLocationCubit>()
-                                  .updateSelectedLocation(state
-                                  .selectedLocations[0].copyWith(
-                                  street: streetController.text, streetNumber: streetNumberController.text));
-                              _update(state, context);
-                            }),
-                      ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: CustomAppBar(
+            'Standorte',
+            hasBackButton: isInFlowContext,
+          ),
+          body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
+              builder: (context, state) {
+                return Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          CustomPeerPALHeading1("Treffpunkt"),
+                          _LocationSearchBar(
+                            searchBarController: searchBarController,
+                          ),
+                          context
+                              .read<ActivityLocationCubit>()
+                              .state
+                              .filteredLocations
+                              .isEmpty &&
+                              context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .selectedLocations
+                                  .isEmpty
+                              ? SizedBox(
+                            height: MediaQuery.of(context).size.height / 6,
+                          )
+                              : Container(),
+                          context
+                              .read<ActivityLocationCubit>()
+                              .state
+                              .filteredLocations
+                              .isEmpty &&
+                              context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .selectedLocations
+                                  .isEmpty
+                              ? Column(
+                            children: [
+                              Icon(Icons.location_on,
+                                  color: secondaryColor, size: 60),
+                              SizedBox(height: 20),
+                              CustomPeerPALHeading2(
+                                "Es wurde noch kein\nOrt ausgewählt",
+                                color: secondaryColor,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
+                              : Container(),
+                          context
+                              .read<ActivityLocationCubit>()
+                              .state
+                              .filteredLocations
+                              .isEmpty ||
+                              context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .selectedLocations
+                                  .length >
+                                  0
+                              ? _LocationResultBox(
+                            streetController: streetController,
+                            streetNumberController: streetNumberController,)
+                              : const _LocationSearchBox(),
+                          const Spacer(),
+                          (state is ActivityLocationPosting)
+                              ? const CircularProgressIndicator()
+                              : CompletePageButton(
+                              disabled: (state.selectedLocations.isEmpty),
+                              isSaveButton: isInFlowContext,
+                              onPressed: () async {
+                                context.read<ActivityLocationCubit>()
+                                    .updateSelectedLocation(state
+                                    .selectedLocations[0].copyWith(
+                                    street: streetController.text, streetNumber: streetNumberController.text));
+                                _update(state, context);
+                              }),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }));
+                );
+              })),
+    );
   }
 
   Future<void> _update(ActivityLocationInputState state,

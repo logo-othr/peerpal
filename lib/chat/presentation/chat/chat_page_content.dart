@@ -255,33 +255,7 @@ class ChatPageContent extends StatelessWidget {
                 filled: true,
                 fillColor: Colors.grey[100],
                 hintText: 'Nachricht',
-                /*      suffixIcon: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 15.0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
-                        child: Icon(
-                          Icons.attach_file,
-                          color: primaryColor,
-                        ),
-                      ),
-                      textEditingController.text.toString().isEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: primaryColor,
-                                ),
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                ),*/
+
               ),
             ),
           ),
@@ -367,7 +341,7 @@ class ChatPageContent extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           decoration: BoxDecoration(
-            color: isRightAligned ? primaryColor : darkGreyColor,
+            color: isRightAligned ? primaryColor.shade400: secondaryColor.shade400,
             borderRadius: isRightAligned
                 ? borderRadius
                 .subtract(const BorderRadius.only(topRight: radius))
@@ -381,7 +355,7 @@ class ChatPageContent extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 220),
                 child: Text(
                   chatMessage.message,
-                  style: const TextStyle(color: Colors.white,fontSize: 19),
+                  style: const TextStyle(color: Colors.black,fontSize: 19),
                   textAlign: TextAlign.start,
                 ),
               ),

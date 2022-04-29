@@ -87,8 +87,7 @@ class _DatePicker extends StatefulWidget {
 }
 
 class _DatePickerState extends State<_DatePicker> {
-  var dateController = TextEditingController(
-      text: DateFormat('dd.MM.yyyy').format(DateTime.now()).toString());
+  var dateController = TextEditingController();
 
   String? datePickerText;
 
@@ -96,6 +95,7 @@ class _DatePickerState extends State<_DatePicker> {
   Widget build(BuildContext context) {
     return BlocBuilder<DateInputCubit, DateInputState>(
         builder: (context, state) {
+          dateController.text = state.date;
       return TextFormField(
         autofocus: false,
         readOnly: true,
@@ -144,13 +144,13 @@ class _TimePicker extends StatefulWidget {
 }
 
 class _TimePickerState extends State<_TimePicker> {
-  TextEditingController timeController = TextEditingController(
-      text: '${DateFormat('kk:mm').format(DateTime.now())} Uhr');
+  TextEditingController timeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DateInputCubit, DateInputState>(
       builder: (context, state) {
+        timeController.text = '${state.time} Uhr';
         return TextFormField(
           autofocus: false,
           readOnly: true,

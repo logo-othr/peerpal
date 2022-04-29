@@ -91,7 +91,7 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
             resizeToAvoidBottomInset: false,
             appBar: CustomAppBar(
               "Aktivität planen",
-              hasBackButton: true,
+              hasBackButton: false,
             ),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
