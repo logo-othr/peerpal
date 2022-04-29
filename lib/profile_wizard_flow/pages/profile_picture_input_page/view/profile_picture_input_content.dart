@@ -213,9 +213,16 @@ class _Checkbox extends StatelessWidget {
                   .updateProfilePicture(null);
 
               if (isInFlowContext) {
+
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileOverviewPage()),
+                );
+
                 context
                     .flow<PeerPALUser>()
                     .complete((s) => s.copyWith(imagePath: ''));
+
               } else {
                 Navigator.pop(context);
               }
