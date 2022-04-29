@@ -9,8 +9,11 @@ import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_wizard_flow/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
 import 'package:peerpal/tabs/discover/discover_tab_view.dart';
+import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -53,10 +56,29 @@ class HomeView extends StatelessWidget {
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
             if (state is HomeUserInformationFlowCompleted) {
+              context.read<AppUserRepository>().registerFCMDeviceToken();
               return MyTabView();
             }
             return Container(
-              child: Text("Nicht geladen"),
+              child: Container(
+                child: Scaffold(
+                    appBar: CustomAppBar("PeerPAL", hasBackButton: false,),
+                    body:  Center(
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                            child: Container(
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      const SizedBox(height: 300),
+                                      CustomPeerPALHeading1("Laden..."),
+                                      CircularProgressIndicator(),]
+                                )
+                            )
+                        )
+                    )
+                ),
+              ),
             );
           }),
     );
@@ -72,10 +94,10 @@ class MyTabView extends StatelessWidget {
 
   final tabs = [
     Center(
-      child: Container(child: DiscoverTabView()),
+      child: ActivityFeedPage(),
     ),
     Center(
-      child: ActivityFeedPage(),
+      child: Container(child: DiscoverTabView()),
     ),
     Center(
       child: Container(child: FriendsOverviewPage()),
@@ -84,7 +106,7 @@ class MyTabView extends StatelessWidget {
       child: Container(child: ChatListPage()),
     ),
     Center(
-      child: Container(),
+      child: Container(child: SettingsPage(),),
     ),
   ];
 

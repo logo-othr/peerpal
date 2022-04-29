@@ -69,6 +69,7 @@ class _UsernameInputField extends StatelessWidget {
           builder:(BuildContext context, AsyncSnapshot<String?>text){
 
           return new TextFormField(
+            maxLength: 30,
               initialValue:pastName,
             style: const TextStyle(fontSize: 22),
             decoration: InputDecoration(

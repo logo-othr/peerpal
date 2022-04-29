@@ -8,7 +8,7 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 List<Page> onGenerateProfileWizardPages(
     PeerPALUser userInformation, List<Page<dynamic>> pages) {
   return [
-    if (userInformation.age == null) AgeInputPage.page(isInFlowContext: true),
+    AgeInputPage.page(isInFlowContext: true),
     if (userInformation.age != null) NameInputPage.page(isInFlowContext: true),
     if (userInformation.name != null)
       PhoneInputPage.page(isInFlowContext: true,pastPhone: ""),

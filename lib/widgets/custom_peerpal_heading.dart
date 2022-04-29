@@ -42,9 +42,10 @@ class CustomPeerPALHeading3 extends StatelessWidget {
   FontWeight? fontWeight = FontWeight.normal;
   String text;
   Color? color;
+  TextAlign? textAlign;
 
   CustomPeerPALHeading3(
-      {required this.text, this.color, this.fontWeight, this.fontSize});
+      {required this.text, this.color, this.fontWeight, this.fontSize, this.textAlign});
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class CustomPeerPALHeading3 extends StatelessWidget {
       fontSize: fontSize,
       color: color,
       fontWeight: fontWeight,
+      textAlign: textAlign,
     );
   }
 }

@@ -4,4 +4,8 @@ abstract class Cache {
   bool containsKey(String key);
 
   T? get<T extends Object>({required String key});
+
+  void clear({String? key});
+
+  String toString();
 }

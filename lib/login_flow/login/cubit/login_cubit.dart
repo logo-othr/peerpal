@@ -53,6 +53,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+
   Future<void> _firebaseLogin() async {
     await _authenticationRepository.loginWithEmailAndPassword(
       email: state.email.value,

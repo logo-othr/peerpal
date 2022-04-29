@@ -81,15 +81,21 @@ class DateInputContent extends StatelessWidget {
   }
 }
 
-class _DatePicker extends StatelessWidget {
-  var dateController = TextEditingController(
-      text: DateFormat('dd.MM.yyyy').format(DateTime.now()).toString());
+class _DatePicker extends StatefulWidget {
+  @override
+  State<_DatePicker> createState() => _DatePickerState();
+}
+
+class _DatePickerState extends State<_DatePicker> {
+  var dateController = TextEditingController();
+
   String? datePickerText;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DateInputCubit, DateInputState>(
         builder: (context, state) {
+          dateController.text = state.date;
       return TextFormField(
         autofocus: false,
         readOnly: true,
@@ -132,14 +138,19 @@ class _DatePicker extends StatelessWidget {
   }
 }
 
-class _TimePicker extends StatelessWidget {
-  TextEditingController timeController = TextEditingController(
-      text: '${DateFormat('kk:mm').format(DateTime.now())} Uhr');
+class _TimePicker extends StatefulWidget {
+  @override
+  State<_TimePicker> createState() => _TimePickerState();
+}
+
+class _TimePickerState extends State<_TimePicker> {
+  TextEditingController timeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DateInputCubit, DateInputState>(
       builder: (context, state) {
+        timeController.text = '${state.time} Uhr';
         return TextFormField(
           autofocus: false,
           readOnly: true,
@@ -154,7 +165,7 @@ class _TimePicker extends StatelessWidget {
                           onChanged: (date) {
                         print('change $date');
                       }, onConfirm: (date) {
-                        String formattedTime = DateFormat('kk:mm').format(date);
+                        String formattedTime = DateFormat('HH:mm').format(date);
                         var array = formattedTime.split(":");
                         if (array[1] == "01") {
                           array[1] = "15";

@@ -18,12 +18,12 @@ final int index;
       selectedLabelStyle: const TextStyle(color: Colors.blueAccent),
       items: [
         BottomNavigationBarItem(
-            icon: const Icon(Icons.face),
-            label: 'Entdecken',
-            backgroundColor: secondaryColor),
-        BottomNavigationBarItem(
             icon: const Icon(Icons.nature_people),
             label: 'Aktivität',
+            backgroundColor: secondaryColor),
+        BottomNavigationBarItem(
+            icon: const Icon(Icons.face),
+            label: 'Entdecken',
             backgroundColor: secondaryColor),
         BottomNavigationBarItem(
             icon: const Icon(Icons.people),

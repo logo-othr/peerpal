@@ -8,12 +8,12 @@ class CustomSingleTable extends StatelessWidget {
   const CustomSingleTable(
       {required this.heading,
       required this.text,
-      required this.onPressed,
+      this.onPressed,
       this.isArrowIconVisible = true});
 
   final String heading;
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isArrowIconVisible;
 
   @override
@@ -49,11 +49,25 @@ class CustomSingleTable extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: CustomPeerPALHeading3(
-                            text: text,
-                            color: Colors.black,
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: text,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Roboto',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         isArrowIconVisible

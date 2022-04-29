@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_activities/cubit/discover_activities_cubit.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_activities/view/discover_activities_content.dart';
+import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 
 class DiscoverActivitiesPage extends StatelessWidget {
@@ -19,7 +20,7 @@ class DiscoverActivitiesPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocProvider.value(
-        value: DiscoverActivitiesCubit(context.read<AppUserRepository>())..loadData(),
+        value: DiscoverActivitiesCubit(context.read<AppUserRepository>(), context.read<ActivityRepository>())..loadData(),
         child: DiscoverActivitiesContent(isInFlowContext: isInFlowContext),
       ),
     );

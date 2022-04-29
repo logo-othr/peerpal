@@ -6,9 +6,10 @@ class CustomCupertinoSearchBar extends StatelessWidget {
   String? heading = "";
   bool enabled;
   TextEditingController searchBarController;
+  FocusNode? focusNode;
 
   CustomCupertinoSearchBar(
-      {this.heading, required this.searchBarController, this.enabled = true});
+      {this.heading, required this.searchBarController, this.enabled = true, this.focusNode});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class CustomCupertinoSearchBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: CupertinoSearchTextField(
+              focusNode: focusNode,
               enabled: enabled,
               controller: searchBarController,
               placeholder: "Suchen",

@@ -9,7 +9,7 @@ import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 class DebugHelper {
-  static Future<UserCredential?> createFirebaseUser(
+  /*static Future<UserCredential?> createFirebaseUser(
       String email, String password) async {
     UserCredential? userCredential;
     FirebaseApp app = await Firebase.initializeApp(
@@ -595,5 +595,5 @@ class DebugHelper {
       ],
     );
     appUserRepository.updateUserInformation(peerPALUser, id: uid);
-  }
+  }*/
 }

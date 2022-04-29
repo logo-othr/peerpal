@@ -39,8 +39,8 @@ class LoginForm extends StatelessWidget {
                 _EmailInputField(),
                 const SizedBox(height: 8.0),
                 _PasswordInputField(),
-                const SizedBox(height: 8.0),
-                _PasswordForgetTextButton(),
+                /* const SizedBox(height: 8.0),
+                _PasswordForgetTextButton(),*/
                 const SizedBox(height: 20.0),
                 _LoginButton(),
                 const SizedBox(height: 15.0),
@@ -130,18 +130,24 @@ class _PasswordInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password || previous.visible != current.visible,
+      buildWhen: (previous, current) =>
+          previous.password != current.password ||
+          previous.visible != current.visible,
       builder: (context, state) {
-        return  TextField(
+        return TextField(
           style: const TextStyle(fontSize: 22),
           onChanged: (password) =>
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: context.read<LoginCubit>().isVisible(),
-          decoration:  InputDecoration(
+          decoration: InputDecoration(
             prefixIcon: Icon(Icons.lock),
             suffixIcon: IconButton(
-              icon: Icon(context.read<LoginCubit>().isVisible()? Icons.visibility_off : Icons.visibility),
-              onPressed: () {context.read<LoginCubit>().changeVisibility();},
+              icon: Icon(context.read<LoginCubit>().isVisible()
+                  ? Icons.visibility_off
+                  : Icons.visibility),
+              onPressed: () {
+                context.read<LoginCubit>().changeVisibility();
+              },
             ),
             labelText: 'Passwort',
             helperText: '',
@@ -158,15 +164,18 @@ class _LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) =>
-      previous.formValidationStatus != current.formValidationStatus,
+          previous.formValidationStatus != current.formValidationStatus,
       builder: (context, state) {
         return state.formValidationStatus.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : CustomPeerPALButton(
-            onPressed: state.formValidationStatus.isValidated
-                ? () => context.read<LoginCubit>().login()
-                : null,
-            text: 'Login');
+                onPressed: state.formValidationStatus.isValidated
+                    ? () => {
+                  context.read<LoginCubit>().login(),
+
+                }
+                    : null,
+                text: 'Login');
       },
     );
   }

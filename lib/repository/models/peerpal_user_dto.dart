@@ -18,6 +18,20 @@ class PeerPALUserDTO {
         phoneNumber: peerPALUser.phoneNumber,
         pushToken: peerPALUser.pushToken);
 
+    bool? chatPreference;
+    bool? phonePreference;
+    if(peerPALUser.discoverCommunicationPreferences != null) {
+      phonePreference = peerPALUser
+          .discoverCommunicationPreferences
+          ?.contains(CommunicationType.phone) ??
+          false;
+      chatPreference = peerPALUser
+          .discoverCommunicationPreferences
+          ?.contains(CommunicationType.chat) ??
+          false;
+    }
+
+
     var publicUserInformation = PublicUserInformationDTO(
         imagePath: peerPALUser.imagePath,
         id: peerPALUser.id,
@@ -25,15 +39,9 @@ class PeerPALUserDTO {
         age: peerPALUser.age,
         discoverFromAge: peerPALUser.discoverFromAge,
         discoverToAge: peerPALUser.discoverToAge,
-        hasPhoneCommunicationPreference: peerPALUser
-                .discoverCommunicationPreferences
-                ?.contains(CommunicationType.phone) ??
-            false,
-        hasChatCommunicationPreference: peerPALUser
-                .discoverCommunicationPreferences
-                ?.contains(CommunicationType.chat) ??
-            false,
-        discoverActivities: peerPALUser.discoverActivities,
+        hasPhoneCommunicationPreference: phonePreference,
+        hasChatCommunicationPreference: chatPreference,
+        discoverActivities: peerPALUser.discoverActivitiesCodes,
         discoverLocations:
             peerPALUser.discoverLocations?.map((e) => e.place).toList());
 
@@ -46,12 +54,21 @@ class PeerPALUserDTO {
     var uid = privateUserInformation?.id ?? publicUserInformation?.id;
     var pushToken = privateUserInformation?.pushToken;
     List<CommunicationType>? discoverCommunicationPreferences;
+
+
     if (publicUserInformation != null) {
-      discoverCommunicationPreferences = [];
-      if (publicUserInformation!.hasPhoneCommunicationPreference)
-        discoverCommunicationPreferences.add(CommunicationType.phone);
-      if (publicUserInformation!.hasChatCommunicationPreference)
-        discoverCommunicationPreferences.add(CommunicationType.chat);
+      if(publicUserInformation!.hasChatCommunicationPreference == null ||
+          publicUserInformation!.hasPhoneCommunicationPreference == null) {
+        discoverCommunicationPreferences == null;
+      } else {
+        bool hasPhoneCommunicationPreference = publicUserInformation!.hasPhoneCommunicationPreference!;
+        bool hasChatCommunicationPreference = publicUserInformation!.hasChatCommunicationPreference!;
+        discoverCommunicationPreferences = [];
+        if (hasPhoneCommunicationPreference)
+          discoverCommunicationPreferences.add(CommunicationType.phone);
+        if (hasChatCommunicationPreference)
+          discoverCommunicationPreferences.add(CommunicationType.chat);
+      }
     }
 
     return PeerPALUser(
@@ -61,7 +78,7 @@ class PeerPALUserDTO {
       discoverFromAge: publicUserInformation?.discoverFromAge,
       discoverToAge: publicUserInformation?.discoverToAge,
       discoverCommunicationPreferences: discoverCommunicationPreferences,
-      discoverActivities: publicUserInformation?.discoverActivities,
+      discoverActivitiesCodes: publicUserInformation?.discoverActivities,
       discoverLocations: publicUserInformation?.discoverLocations
           ?.map((e) => Location(place: e))
           .toList(),
@@ -84,4 +101,10 @@ class PeerPALUserDTO {
       _$PeerPALUserDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$PeerPALUserDTOToJson(this);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "PrivateUser: ${privateUserInformation.toString()} PublicUser: ${publicUserInformation.toString()}";
+  }
 }

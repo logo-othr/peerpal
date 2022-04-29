@@ -15,7 +15,9 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
 
   Future<void> loadData() async {
     var locations = await _activityRepository.loadLocations();
-    emit(ActivityLocationLoaded(locations, <Location>[].cast<Location>(), <Location>[].cast<Location>()));
+    var activity = await _activityRepository.getCurrentActivity();
+    var locationList = activity.location != null ? <Location>[activity.location!] : <Location>[].cast<Location>();
+    emit(ActivityLocationLoaded(locations, locationList, <Location>[].cast<Location>()));
   }
 
   void searchQueryChanged(String searchQuery) {
@@ -74,12 +76,24 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
     }
   }
 
+  void updateSelectedLocation(Location location) {
+    if (state is ActivityLocationLoaded) {
+      state.selectedLocations.clear();
+      var updatedActivityLocations = List<Location>.from(state.selectedLocations);
+      updatedActivityLocations.add(location);
+
+      state.filteredLocations.remove(location); // ToDo: Test!
+      emit(ActivityLocationLoaded(state.locations,
+          updatedActivityLocations, state.filteredLocations));
+    }
+  }
+
   Future<Activity> postActivityLocations() async {
       emit(ActivityLocationPosting(state.locations, state.selectedLocations));
 
       var currentActivity = await _activityRepository.getCurrentActivity();
       var activity = currentActivity.copyWith(location: state.selectedLocations[0]);
-      _activityRepository.updateActivity(activity);
+      _activityRepository.updateLocalActivity(activity);
 
       emit(ActivityLocationPosted(state.locations, state.selectedLocations));
       return activity;

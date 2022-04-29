@@ -93,6 +93,7 @@ class _PhonenumberInputField extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
               child: TextFormField(
+                maxLength: 15,
                 //discuss
                 initialValue:pastPhone,
                 keyboardType: TextInputType.number,
@@ -105,6 +106,7 @@ class _PhonenumberInputField extends StatelessWidget {
                     context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
                 maxLines: 1,
                 decoration: InputDecoration(
+                  labelText: "Bsp: 01573243212323",
                   contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
                   errorText: state.phoneNumber.invalid ? errorText : null,
                   border: OutlineInputBorder(
@@ -181,16 +183,19 @@ class _Checkbox extends StatelessWidget {
           return  CustomPeerPALButton2(
             text: 'Ich möchte keine Telefonnummer angeben',
             onPressed: () async {
-
-              context
+              await context
                   .read<PhoneInputCubit>()
-                  .updatePhoneNumber("0");
-              context.flow<PeerPALUser>().update((s) => s.copyWith(phoneNumber: '0'));;
-              if (!isInFlowContext){
+                  .updatePhoneNumber('');
+
+              if (isInFlowContext) {
+                context
+                    .flow<PeerPALUser>()
+                    .update((s) => s.copyWith(phoneNumber: ''));
+              } else {
                 Navigator.pop(context);
               }
 
-            },
+            }
           );
 
       },

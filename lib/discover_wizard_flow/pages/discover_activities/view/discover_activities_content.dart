@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_activities/cubit/discover_activities_cubit.dart';
+import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
@@ -19,7 +21,12 @@ class DiscoverActivitiesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height) / 3.4;
+    final double itemWidth = size.width / 2;
+
     var hasBackButton = (isInFlowContext) ? false : true;
+    searchBarController.text = Strings.searchDisabled;
     return BlocBuilder<DiscoverActivitiesCubit,
         DiscoverActivitiesState>(
       builder: (context, state) {
@@ -49,56 +56,103 @@ class DiscoverActivitiesContent extends StatelessWidget {
                     ),
                     CustomPeerPALHeading1("Interessen"),
                     const SizedBox(
-                      height: 50,
+                      height: 30,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                    /*        Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: CupertinoSearchTextField(
-                        enabled: (state is DiscoverActivitiesLoaded ||
-                            state is DiscoverActivitiesSelected),
+                       // enabled: (state is DiscoverActivitiesLoaded ||
+                      //      state is DiscoverActivitiesSelected),
+                        enabled: false,
                         controller: searchBarController,
                       ),
+                    ),*/
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        child: GridView.count(
+                            childAspectRatio: (itemWidth / itemHeight),
+                            primary: true,
+                            crossAxisCount: 3,
+                            children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
+                                ? GestureDetector(
+                                onTap: () {
+                                  if (state.selectedActivities
+                                      .length >=
+                                      10 && !state.selectedActivities.contains(activity)) {
+                                    ScaffoldMessenger.of(context)
+                                      ..hideCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              ("Es können maximal 10 Interessen ausgewählt werden."))));
+                                  } else {
+                                    context
+                                        .read<
+                                        DiscoverActivitiesCubit>()
+                                        .toggleData(activity);
+                                  }
+                                },
+                                child: CustomCircleListItem(
+                                    label:
+                                    activity.name.toString(),
+                                    icon: ActivityIconData
+                                        .icons[activity.code],
+                                    active: state
+                                        .selectedActivities
+                                        .contains(activity)))
+                                : Container(),
+                            )
+                                .toList()
+
+
+                        ),
+                      ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                        child: Wrap(
-                            alignment: WrapAlignment.start,
-                            children: state.activities
-                                .map(
-                                  (activity) => (activity.name
-                                          .toString()
-                                          .toLowerCase()
-                                          .startsWith(
-                                              state.searchQuery.toLowerCase()))
-                                      ? Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 20, 0),
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                context
-                                                    .read<
-                                                    DiscoverActivitiesCubit>()
-                                                    .toggleData(activity);
-                                              },
-                                              child: CustomCircleListItem(
-                                                  label:
-                                                      activity.name.toString(),
-                                                  icon: Icons.directions_bike,
-                                                  active: state
-                                                      .selectedActivities
-                                                      .contains(activity))),
-                                        )
-                                      : Container(),
-                                )
-                                .toList())),
-                    const Spacer(),
+                    /*     Expanded(
+                      child: SingleChildScrollView(
+                        child:    Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Wrap(
+                                      alignment: WrapAlignment.start,
+                                    children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
+                                          ? GestureDetector(
+                                          onTap: () {
+                                            context
+                                                .read<
+                                                DiscoverActivitiesCubit>()
+                                                .toggleData(activity);
+                                          },
+                                          child: CustomCircleListItem(
+                                              label:
+                                              activity.name.toString(),
+                                              icon: ActivityIconData
+                                                  .icons[activity.code],
+                                              active: state
+                                                  .selectedActivities
+                                                  .contains(activity)))
+                                          : Container(),
+                                    )
+                                        .toList()
+                                  ))),
+                          ],
+                        ),
+                      ),
+                    ),*/
                     (state is DiscoverActivitiesPosting)
                         ? const CircularProgressIndicator()
-                        : CompletePageButton(
-                            isSaveButton: isInFlowContext,
-                            onPressed: () async {
-                              _update(state, context);
-                            }),
+                        : Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                      child: CompletePageButton(
+                          isSaveButton: isInFlowContext,
+                          onPressed: () async {
+                            _update(state, context);
+                          }),
+                    ),
                   ],
                 ),
               );
@@ -112,7 +166,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
     if (isInFlowContext) {
       await context.read<DiscoverActivitiesCubit>().postData();
       context.flow<PeerPALUser>().complete(
-          (s) => s.copyWith(discoverActivities: state.selectedActivities));
+              (s) => s.copyWith(discoverActivities: state.selectedActivities.map((e) => e.code!).toList()));
     } else {
       await context.read<DiscoverActivitiesCubit>().postData();
       Navigator.pop(context);

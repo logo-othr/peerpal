@@ -11,7 +11,9 @@ class DiscoverAgeCubit extends Cubit<DiscoverAgeState>{
   final AppUserRepository _appUserRepository;
 
   void ageChanged(int selectedFromAge, int selectedToAge) {
+
     emit(DiscoverAgeInitial(selectedFromAge, selectedToAge));
+
   }
 
 

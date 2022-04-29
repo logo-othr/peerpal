@@ -5,7 +5,7 @@ part 'public_user_information_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PublicUserInformationDTO {
-  const PublicUserInformationDTO(
+  PublicUserInformationDTO(
       {this.id,
       this.name,
       this.age,
@@ -15,18 +15,33 @@ class PublicUserInformationDTO {
       this.hasChatCommunicationPreference = false,
       this.discoverActivities,
       this.discoverLocations,
-      this.imagePath});
+      this.imagePath}) {
+    combined_location_activities = [];
+    if(discoverActivities != null) combined_location_activities.addAll(discoverActivities!);
+    if(discoverLocations != null) combined_location_activities.addAll(discoverLocations!);
+  }
 
   final String? id;
   final String? name;
   final int? age;
   final int? discoverFromAge;
   final int? discoverToAge;
-  final bool hasPhoneCommunicationPreference;
-  final bool hasChatCommunicationPreference;
-  final List<Activity>? discoverActivities;
+  final bool? hasPhoneCommunicationPreference;
+  final bool? hasChatCommunicationPreference;
+  final List<String>? discoverActivities;
   final List<String>? discoverLocations;
   final String? imagePath;
+
+  /**
+   * Private class member used for firebase query. Workaround because
+   * we can only use arrayContains once per query in firebase.
+   * Do not use this member outside of this class.
+   * Can't be private because of json generator.
+   * ToDo: Think about a better implementation
+   */
+  late List<String> combined_location_activities;
+
+
 
   PublicUserInformationDTO copyWith(
       {String? id,
@@ -36,7 +51,7 @@ class PublicUserInformationDTO {
       int? discoverToAge,
       bool? hasPhoneCommunicationPreference,
       bool? hasChatCommunicationPreference,
-      List<Activity>? discoverActivities,
+      List<String>? discoverActivities,
       List<String>? discoverLocations,
       String? imagePath}) {
     return PublicUserInformationDTO(
@@ -58,4 +73,10 @@ class PublicUserInformationDTO {
       _$PublicUserInformationDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$PublicUserInformationDTOToJson(this);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "$id, $name, $age, $discoverFromAge, $discoverToAge, $hasPhoneCommunicationPreference, $hasChatCommunicationPreference, $discoverActivities, $discoverLocations, $imagePath";
+  }
 }

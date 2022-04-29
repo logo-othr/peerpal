@@ -6,3 +6,11 @@ abstract class DiscoverTabEvent extends Equatable {
 }
 
 class UsersLoaded extends DiscoverTabEvent {}
+
+class ReloadUsers extends DiscoverTabEvent {}
+
+class SearchUser extends DiscoverTabEvent {
+  final searchQuery;
+
+  SearchUser(this.searchQuery);
+}

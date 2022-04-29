@@ -14,7 +14,7 @@ class PeerPALUser extends Equatable {
       this.discoverFromAge,
       this.discoverToAge,
       this.discoverCommunicationPreferences,
-      this.discoverActivities,
+      this.discoverActivitiesCodes,
       this.discoverLocations,
       this.pushToken});
 
@@ -26,7 +26,7 @@ class PeerPALUser extends Equatable {
   final int? discoverFromAge;
   final int? discoverToAge;
   final List<CommunicationType>? discoverCommunicationPreferences;
-  final List<Activity>? discoverActivities;
+  final List<String>? discoverActivitiesCodes;
   final List<Location>? discoverLocations;
   final String? pushToken;
 
@@ -53,7 +53,7 @@ class PeerPALUser extends Equatable {
     if (discoverFromAge != null &&
         discoverToAge != null &&
         discoverCommunicationPreferences != null &&
-        discoverActivities != null &&
+        discoverActivitiesCodes != null &&
         discoverLocations != null) {
       return true;
     } else {
@@ -73,7 +73,7 @@ class PeerPALUser extends Equatable {
         discoverFromAge,
         discoverToAge,
         discoverCommunicationPreferences,
-        discoverActivities,
+        discoverActivitiesCodes,
         discoverLocations,
         pushToken
       ];
@@ -87,7 +87,7 @@ class PeerPALUser extends Equatable {
     int? discoverFromAge,
     int? discoverToAge,
     List<CommunicationType>? discoverCommunicationPreferences,
-    List<Activity>? discoverActivities,
+    List<String>? discoverActivities,
     List<Location>? discoverLocations,
     String? pushToken,
   }) {
@@ -101,7 +101,7 @@ class PeerPALUser extends Equatable {
       discoverToAge: discoverToAge ?? this.discoverToAge,
       discoverCommunicationPreferences: discoverCommunicationPreferences ??
           this.discoverCommunicationPreferences,
-      discoverActivities: discoverActivities ?? this.discoverActivities,
+      discoverActivitiesCodes: discoverActivities ?? this.discoverActivitiesCodes,
       discoverLocations: discoverLocations ?? this.discoverLocations,
       pushToken: pushToken ?? this.pushToken,
     );
@@ -117,7 +117,7 @@ class PeerPALUser extends Equatable {
         "discoverFromAge: ${this.discoverFromAge} \n"
         "discoverToAge: ${this.discoverToAge} \n"
         "discoverCommunicationPreferences: ${this.discoverCommunicationPreferences?.map((e) => EnumToString.convertToString(e)).toList()} \n"
-        "discoverActivities: ${this.discoverActivities?.map((e) => e.name).toList()} \n"
+        "discoverActivities: ${this.discoverActivitiesCodes?.map((e) => e).toList()} \n"
         "discoverLocations: ${this.discoverLocations?.map((e) => e.place).toList()} \n"
         "------- \n";
   }

@@ -15,11 +15,14 @@ class SignUpForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           Navigator.of(context).pop();
-        } else if (state.status.isSubmissionFailure) {
+        } else         if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Registrierungs Fehler')),
+              SnackBar(
+                  content: Text((state.errorMessage.isEmpty
+                      ? 'Fehler bei der Registierung.'
+                      : state.errorMessage))),
             );
         }
       },
@@ -119,6 +122,7 @@ class _PasswordInputField extends StatelessWidget {
               ),
               labelText: 'Passwort',
               helperText: '',
+              errorMaxLines: 2,
               errorText: errorText),
         );
       },
@@ -152,6 +156,7 @@ class _ConfirmPasswordInputField extends StatelessWidget {
             ),
             labelText: 'Passwort bestätigen',
             helperText: '',
+            errorMaxLines: 2,
             errorText: state.confirmedPassword.invalid
                 ? 'Passwort stimmt nicht überein'
                 : null,

@@ -6,6 +6,12 @@ class MemoryCache implements Cache{
   final Map<String, Object> _memoryCache;
 
   @override
+  void clear({ String? key}) {
+    if(key == null) _memoryCache.clear();
+    else _memoryCache.remove(key);
+  }
+
+  @override
   void set<T extends Object>({required String key, required T value}) {
     _memoryCache[key] = value;
   }
@@ -20,5 +26,10 @@ class MemoryCache implements Cache{
     final value = _memoryCache[key];
     if (value is T) return value;
     return null;
+  }
+
+  @override
+  String toString() {
+    return _memoryCache.toString();
   }
 }

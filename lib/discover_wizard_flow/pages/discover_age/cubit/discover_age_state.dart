@@ -19,7 +19,7 @@ class DiscoverAgeInitial extends DiscoverAgeState {
       : super(selectedFromAge, selectedToAge);
 
   @override
-  List<Object?> get props => [selctedFromAge];
+  List<Object?> get props => [selctedFromAge, selectedToAge, fromMinAge, fromMaxAge, toMinAge, toMaxAge];
 }
 
 class DiscoverAgePosting extends DiscoverAgeState {
