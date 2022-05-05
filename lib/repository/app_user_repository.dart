@@ -223,20 +223,31 @@ class AppUserRepository {
         .collection(UserDatabaseContract.publicUsers)
         .doc(uid)
         .get();
-    var privateUserDocument = await _firestore
-        .collection(UserDatabaseContract.privateUsers)
-        .doc(uid)
-        .get();
+
+
+    var privateUserDocument = null;
+    try {
+      privateUserDocument = await _firestore
+          .collection(UserDatabaseContract.privateUsers)
+          .doc(uid)
+          .get();
+    } on Exception catch  (e) {
+      print('$e'); // ToDo: Use firebase error codes
+      print(e);
+    }
+
+
+
     if (publicUserDocument.exists && publicUserDocument.data() != null) {
       var publicUserData = publicUserDocument.data();
       publicUserDataDTO = PublicUserInformationDTO.fromJson(publicUserData!);
     }
-    if (privateUserDocument.exists && privateUserDocument.data() != null) {
+    if (privateUserDocument != null && privateUserDocument.exists && privateUserDocument.data() != null) {
       var privateUserData = privateUserDocument.data();
       privateUserDataDTO = PrivateUserInformationDTO.fromJson(privateUserData!);
     }
     peerPALUserDTO = PeerPALUserDTO(
-        privateUserInformation: privateUserDataDTO,
+        privateUserInformation: privateUserDataDTO ?? null,
         publicUserInformation: publicUserDataDTO);
     return peerPALUserDTO;
   }
