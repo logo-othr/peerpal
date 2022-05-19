@@ -41,6 +41,11 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
     Navigator.pop(context);
   }
 
+  void onCancelButtonPressed() async {
+    context.flow<Activity>().complete();
+    Navigator.pop(context);
+  }
+
   void showAttendeeDialog(activityAttendeesList) async {
     showDialog(
         context: context,
@@ -53,6 +58,30 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
   }
 
 
+  deleteActivity() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomDialog(
+              dialogHeight: 250,
+              actionButtonText: 'Löschen',
+              dialogText: "Möchten Sie diese Aktivität wirklich löschen?",
+              onPressed: onDeleteButtonPressed);
+        });
+  }
+
+  cancelActivity() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomDialog(
+              dialogHeight: 250,
+              actionButtonText: 'Die Aktivität verwerfen',
+              dialogText: "Möchten Sie diese Aktivität wirklich verwerfen?",
+              onPressed: onCancelButtonPressed);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,18 +92,12 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
               child: Text('Löschen', style: TextStyle(fontSize: 16)),
-            )) : null,
-        onActionButtonPressed: !widget.isInFlowContext ? () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CustomDialog(
-                    dialogHeight: 250,
-                    actionButtonText: 'Löschen',
-                    dialogText: "Möchten Sie diese Aktivität wirklich löschen?",
-                    onPressed: onDeleteButtonPressed);
-              });
-        } : null,
+            )) : Center(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+              child: Text('Verwerfen', style: TextStyle(fontSize: 16)),
+            )),
+        onActionButtonPressed: !widget.isInFlowContext ? () {deleteActivity();}: () {cancelActivity();},
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
