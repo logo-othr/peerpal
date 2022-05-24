@@ -7,7 +7,7 @@ import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/v
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/strings.dart';
-import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
+import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_bottom_indicator.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';

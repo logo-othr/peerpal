@@ -12,7 +12,7 @@ import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/licenses_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/strings.dart';
-import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
+import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
