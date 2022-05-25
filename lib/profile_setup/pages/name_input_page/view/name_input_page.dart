@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/profile_flow/pages/name_input_page/cubit/name_input_cubit.dart';
-import 'package:peerpal/profile_flow/pages/name_input_page/view/name_input_content.dart';
+import 'package:peerpal/profile_setup/pages/name_input_page/cubit/name_input_cubit.dart';
+import 'package:peerpal/profile_setup/pages/name_input_page/view/name_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 

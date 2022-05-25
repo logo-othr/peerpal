@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/profile_flow/pages/age_input_page/view/age_input_page.dart';
-import 'package:peerpal/profile_flow/pages/name_input_page/view/name_input_page.dart';
-import 'package:peerpal/profile_flow/pages/phone_input_page/view/phone_input_page.dart';
-import 'package:peerpal/profile_flow/pages/profile_picture_input_page/view/profile_picture_input_page.dart';
+import 'package:peerpal/profile_setup/pages/age_input_page/view/age_input_page.dart';
+import 'package:peerpal/profile_setup/pages/name_input_page/view/name_input_page.dart';
+import 'package:peerpal/profile_setup/pages/phone_input_page/view/phone_input_page.dart';
+import 'package:peerpal/profile_setup/pages/profile_picture_input_page/view/profile_picture_input_page.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 List<Page> onGenerateProfileWizardPages(

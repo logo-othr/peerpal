@@ -7,7 +7,7 @@ import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/profile_flow/pages/profile_wiazrd_flow.dart';
+import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/discover/discover_tab_bloc.dart';
