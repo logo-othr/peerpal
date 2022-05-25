@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
-import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
+import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';

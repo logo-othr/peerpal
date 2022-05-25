@@ -1,6 +1,6 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/discover_wizard_flow/discover_wizard_routes.dart';
+import 'package:peerpal/discover_setup/discover_wizard_routes.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 class DiscoverWizardFlow extends StatelessWidget {
