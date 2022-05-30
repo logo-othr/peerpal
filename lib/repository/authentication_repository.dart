@@ -26,13 +26,11 @@ class LogoutException implements Exception {
 class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final Cache cache;
-  final currentUserId;
 
   AuthenticationRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
     required this.cache,
-  })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        currentUserId = firebase_auth.FirebaseAuth.instance.currentUser!.uid;
+  })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   Stream<AuthUser> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {

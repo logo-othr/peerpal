@@ -22,14 +22,29 @@ class AppUserRepository {
     firebase_auth.FirebaseAuth? firebaseAuth,
     required this.cache,
   })
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        currentUserId = firebase_auth.FirebaseAuth.instance.currentUser!.uid;
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
 
   final Cache cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final currentUserId;
+
+
+  AuthUser get currentUser {
+    return _getUserFromFirebaseUser();
+  }
+
+  String get currentUserId {
+    return currentUser.id;
+  }
+
+  AuthUser _getUserFromFirebaseUser() {
+    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+
+    return (firebaseUser == null
+        ? AuthUser.empty
+        : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
+  }
 
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser,
