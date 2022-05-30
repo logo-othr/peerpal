@@ -9,6 +9,7 @@ import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/discover/discover_tab_view.dart';
@@ -56,7 +57,7 @@ class HomeView extends StatelessWidget {
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
             if (state is HomeUserInformationFlowCompleted) {
-              context.read<AppUserRepository>().registerFCMDeviceToken();
+              context.read<AuthenticationRepository>().registerFCMDeviceToken();
               return MyTabView();
             }
             return Container(
