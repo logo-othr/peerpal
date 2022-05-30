@@ -144,7 +144,11 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                 CustomSingleCreatorTable(
                                     heading: "ERSTELLER",
                                     text: activity.creatorName,
-                                    avatar:
+                                    avatar: (activityCreator.imagePath == null || activityCreator.imagePath!.isEmpty) ? Icon(
+                                      Icons.account_circle,
+                                      size: 40.0,
+                                      color: Colors.grey,
+                                    ) :
                                     CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
                                       return const Icon(
                                         Icons.account_circle,
@@ -262,7 +266,7 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                               await context
                                   .read<OverviewInputCubit>()
                                   .createActivity(
-                                  descriptionController.text);
+                                  descriptionController.text, DateTime.now().millisecondsSinceEpoch.toString());
                               context.flow<Activity>().complete();
                               Navigator.pop(context);
                             },
@@ -273,7 +277,7 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                               await context
                                   .read<OverviewInputCubit>()
                                   .updateActivity(
-                                  descriptionController.text);
+                                  descriptionController.text, DateTime.now().millisecondsSinceEpoch.toString());
                               Navigator.pop(context);
                             },
                             text: "Aktivität speichern",
