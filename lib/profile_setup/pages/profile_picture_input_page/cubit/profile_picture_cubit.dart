@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../colors.dart';
@@ -15,8 +16,8 @@ part 'profile_picture_state.dart';
 
 class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   final AppUserRepository _authRepository;
-
-  ProfilePictureCubit(this._authRepository) : super(ProfilePictureInitial());
+final AuthenticationRepository _authenticationRepository;
+  ProfilePictureCubit(this._authRepository, this._authenticationRepository) : super(ProfilePictureInitial());
 
 
   Future<void> pickProfilePictureFromGallery() async {
@@ -109,7 +110,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     var ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('user-profile-pictures')
-        .child(_authRepository.currentUser.id)
+        .child(_authenticationRepository.currentUser.id)
         .child('${uid.v4()}.jpg');
 
     final metadata = firebase_storage.SettableMetadata(

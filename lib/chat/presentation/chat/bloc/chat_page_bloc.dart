@@ -13,6 +13,7 @@ import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_request_response.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -28,6 +29,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   SendChatMessage sendMessage;
   String chatPartnerId;
   AppUserRepository appUserRepository;
+  AuthenticationRepository authenticationRepository;
   StreamController<List<ChatMessage>> _chatMessageStream =
   new BehaviorSubject();
   StreamController<List<ChatMessage>> _chatMessageStreamController =
@@ -39,6 +41,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     required this.sendMessage,
     required this.sendChatRequestResponse,
     required this.appUserRepository,
+    required this.authenticationRepository,
     required this.chatPartnerId})
       : super(ChatPageInitial());
 
@@ -97,7 +100,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         }
       } else if(event is SendChatRequestResponseButtonPressed) {
 
-        await sendChatRequestResponse(appUserRepository.currentUser.id, chatPartnerId, event.response);
+        await sendChatRequestResponse(authenticationRepository.currentUser.id, chatPartnerId, event.response);
       }
 
     } on Exception {

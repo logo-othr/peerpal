@@ -5,23 +5,24 @@ import 'package:peerpal/app/app.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/login_flow/routes.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
-    required AppUserRepository appUserRepository,
-  })  : _appUserRepository = appUserRepository,
+    required AuthenticationRepository authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(key: key);
 
-  final AppUserRepository _appUserRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: _appUserRepository,
+      value: _authenticationRepository,
       child: BlocProvider(
         create: (_) => AppBloc(
-          appUserRepository: _appUserRepository,
+          authenticationRepository: _authenticationRepository,
         ),
         child: const AppView(),
       ),

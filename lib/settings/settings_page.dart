@@ -7,6 +7,7 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/profile_overview/cubit/profile_overview_cubit.dart';
 import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/licenses_page.dart';
@@ -162,7 +163,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   CustomTableHeader(heading: "SONSTIGES"),
                   CustomTableRow(
                     text:
-                    "E-Mail: ${sl.get<AppUserRepository>().currentUser.email}",
+                    "E-Mail: ${sl.get<AuthenticationRepository>().currentUser.email}",
                     isArrowVisible: false,
                   ),
                 ],
@@ -171,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   CustomTableHeader(heading: "User-ID"),
                   CustomTableRow(
-                    text: "${sl.get<AppUserRepository>().currentUser.id}",
+                    text: "${sl.get<AuthenticationRepository>().currentUser.id}",
                     isArrowVisible: false,
                   ),
                 ],

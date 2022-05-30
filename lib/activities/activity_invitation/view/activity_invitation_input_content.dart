@@ -6,6 +6,7 @@ import 'package:peerpal/activities/activity_invitation/cubit/activity_invitation
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/strings.dart';
@@ -211,7 +212,7 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
   Widget buildFriend(PeerPALUser user) {
     if (user != null) {
       if (user.id == sl
-          .get<AppUserRepository>()
+          .get<AuthenticationRepository>()
           .currentUser
           .id) {
         return const SizedBox.shrink();
