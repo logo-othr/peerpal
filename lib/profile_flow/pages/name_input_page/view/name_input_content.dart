@@ -111,6 +111,7 @@ class _NextButton extends StatelessWidget {
                           .flow<PeerPALUser>()
                           .update((s) => s.copyWith(name: selectedName.value));
                     } else {
+                      await context.read<NameInputCubit>().updateNameAtServer(selectedName.value);
                       Navigator.pop(context);
                     }
                   }

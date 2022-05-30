@@ -19,6 +19,7 @@ class NameInputCubit extends Cubit<NameInputState> {
     ));
   }
 
+
   Future<void> postName() async {
     if (!state.formValidationStatus.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
@@ -35,6 +36,10 @@ class NameInputCubit extends Cubit<NameInputState> {
           status: FormzStatus.submissionFailure,
           errorMessage: "Fehler beim aktualisieren."));
     }
+  }
+
+  Future<void> updateNameAtServer(userName) async {
+    await _appUserRepository.updateNameAtServer(userName);
   }
 
   Future<String?>currentName() async{
