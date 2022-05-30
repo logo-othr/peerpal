@@ -56,16 +56,16 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
         updatedActivity, state.activityCreator, state.attendees, state.invitationIds));
   }
 
-  Future<void> updateActivity(String description) async {
-    var updatedActivity = state.activity.copyWith(description: description);
+  Future<void> updateActivity(String description, String timestamp) async {
+    var updatedActivity = state.activity.copyWith(description: description, timestamp: timestamp);
     await _activityRepository.updateLocalActivity(updatedActivity);
     await _activityRepository.updateActivity(updatedActivity);
   }
 
-  Future<void> createActivity(String description) async {
-    var updatedActivity = state.activity.copyWith(description: description);
-    await _activityRepository.updateLocalActivity(updatedActivity);
-    await _activityRepository.postActivity(updatedActivity);
+  Future<void> createActivity(String description, String timestamp) async {
+    var createActivity = state.activity.copyWith(description: description, timestamp: timestamp);
+    await _activityRepository.updateLocalActivity(createActivity);
+    await _activityRepository.postActivity(createActivity);
   }
 
   Future<void> deleteActivity() async {
