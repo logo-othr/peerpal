@@ -14,6 +14,8 @@ class Activity extends Equatable {
   bool get isNotEmpty => this != Activity.empty;
 
   final String? id;
+  ///The timestamp is used to store the time when the activity was created.
+  final String? timestamp;
   final String? name;
   final String? code;
   final String? description;
@@ -24,10 +26,15 @@ class Activity extends Equatable {
   final List<String>? attendeeIds;
   final List<String>? invitationIds;
   final bool? public;
+  ///The boolean "isAlreadyEvaluatedFromServer" is used to signal the server that it still needs to evaluate the activity.
+  ///This boolean should always be false when the activity is created.
+  ///Otherwise, the server will not send Push-Notifications to the invited users.
+  final bool? isAlreadyEvaluatedFromServer;
 
 
   const Activity({
     this.id,
+    this.timestamp,
     this.name,
     this.code,
     this.description,
@@ -38,12 +45,14 @@ class Activity extends Equatable {
     this.attendeeIds,
     this.invitationIds,
     this.public,
+    this.isAlreadyEvaluatedFromServer = false,
   });
 
   @override
   String toString() {
     return 'Activity{' +
         ' id: $id,' +
+        ' timestamp: $timestamp,' +
         ' name: $name,' +
         ' code: $code,' +
         ' description: $description,' +
@@ -54,11 +63,13 @@ class Activity extends Equatable {
         ' attendeeIds: $attendeeIds,' +
         ' invitationIds: $invitationIds,' +
         ' public: $public,' +
+        ' isAlreadyEvaluatedFromServer: $isAlreadyEvaluatedFromServer,'
         '}';
   }
 
   Activity copyWith({
     String? id,
+    String? timestamp,
     String? name,
     String? code,
     String? description,
@@ -69,9 +80,11 @@ class Activity extends Equatable {
     List<String>? attendeeIds,
     List<String>? invitationIds,
     bool? public,
+    bool? isAlreadyEvaluatedFromServer,
   }) {
     return Activity(
       id: id ?? this.id,
+      timestamp: timestamp ?? this.timestamp,
       name: name ?? this.name,
       code: code ?? this.code,
       description: description ?? this.description,
@@ -82,12 +95,15 @@ class Activity extends Equatable {
       attendeeIds: attendeeIds ?? this.attendeeIds,
       invitationIds: invitationIds ?? this.invitationIds,
       public: public ?? this.public,
+      isAlreadyEvaluatedFromServer: isAlreadyEvaluatedFromServer ?? this.isAlreadyEvaluatedFromServer,
+
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': this.id,
+      'timestamp': this.timestamp,
       'name': this.name,
       'code': this.code,
       'description': this.description,
@@ -98,6 +114,7 @@ class Activity extends Equatable {
       'attendeeIds': this.attendeeIds,
       'invitationIds': this.invitationIds,
       'public': this.public,
+      'isAlreadyEvaluatedFromServer': this.isAlreadyEvaluatedFromServer,
     };
   }
 
@@ -109,6 +126,7 @@ class Activity extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        timestamp,
         name,
         code,
         description,
@@ -118,6 +136,7 @@ class Activity extends Equatable {
         location,
         attendeeIds,
         invitationIds,
-        public
+        public,
+        isAlreadyEvaluatedFromServer,
       ];
 }
