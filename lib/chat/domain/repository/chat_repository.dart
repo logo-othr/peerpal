@@ -12,7 +12,7 @@ abstract class ChatRepository {
 
   Stream<int>  messageCountForChat(String chatId);
 
-  Future<void> sendChatRequestResponse(String currentUserId, String chatPartnerId, bool response);
+  Future<void> sendChatRequestResponse(String currentUserId, String chatPartnerId, bool response, String chatId);
 
 
 }

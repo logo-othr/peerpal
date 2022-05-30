@@ -14,6 +14,7 @@ class LoadChatPage extends ChatPageEvent {
 
 class SendChatRequestResponseButtonPressed extends ChatPageEvent {
   final bool response;
+  final String chatId;
 
-  SendChatRequestResponseButtonPressed(this.response);
+  SendChatRequestResponseButtonPressed(this.response, this.chatId);
 }

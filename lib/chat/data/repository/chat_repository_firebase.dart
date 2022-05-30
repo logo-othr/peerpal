@@ -60,7 +60,7 @@ print("Chat-Change");
 
     await FirebaseFirestore.instance
         .collection('chatNotifications')
-        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .doc()
         .set({
       'chatId': chatId,
       'message': message,
@@ -71,11 +71,12 @@ print("Chat-Change");
     });
   }
 
-  Future<void> sendChatRequestResponse(String currentUserId, String chatPartnerId, bool response)  async{
+  Future<void> sendChatRequestResponse(String currentUserId, String chatPartnerId, bool response, String chatId)  async{
     await FirebaseFirestore.instance
         .collection('chatRequestResponse')
         .doc()
         .set({
+      'chatId': chatId,
       'response': response,
       'fromId': currentUserId,
       'toId': chatPartnerId,
@@ -91,10 +92,13 @@ print("Chat-Change");
   }
 
   Stream<List<ChatMessage>> getChatMessagesForChat(chatId) async* {
+    String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
     Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
         .collection('chats')
         .doc(chatId)
         .collection('messages')
+        .where('uids', arrayContains: currentUserId)
         .orderBy('timestamp', descending: true)
         .limit(50) // ToDo: Remove limitation
         .snapshots();

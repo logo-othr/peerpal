@@ -61,6 +61,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
           yield ChatPageChatNotExists(
               chatPartner: chatPartner, appUser: await appUserRepository
               .getCurrentUserInformation());
+
+
           Stream<List<Chat>> chatStream = getChatsForUser();
           Stream<List<UserChat>> userChatStream = getUserChatForChat(chatStream, false);
 
@@ -97,7 +99,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         }
       } else if(event is SendChatRequestResponseButtonPressed) {
 
-        await sendChatRequestResponse(appUserRepository.currentUser.id, chatPartnerId, event.response);
+        await sendChatRequestResponse(appUserRepository.currentUser.id, chatPartnerId, event.response, event.chatId);
       }
 
     } on Exception {

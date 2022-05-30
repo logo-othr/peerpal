@@ -395,7 +395,7 @@ class ChatPageContent extends StatelessWidget {
           CustomPeerPALButton(
               text: "Annehmen",
               onPressed: () {
-                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, true);
+                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, true,  currentState.userChat.chat.chatId);
                 Navigator.pop(context);
               }),
           SizedBox(height: 8),
@@ -403,7 +403,7 @@ class ChatPageContent extends StatelessWidget {
               text: "Ablehnen",
               onPressed: () {
 
-                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, false);
+                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, false, currentState.userChat.chat.chatId);
                 // context.read<ChatListBloc>().add(ChatListLoaded());
                 Navigator.pop(context);
               }),
