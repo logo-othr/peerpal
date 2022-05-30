@@ -13,19 +13,25 @@ class ActivityRepository {
     activities.add(Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"));
     activities.add(Activity(code: 'walking', name: "Spa\u00adzie\u00adren"));
     activities.add(Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"));
-    activities.add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
-    activities.add(Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
+    activities
+        .add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
+    activities.add(
+        Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
     activities.add(Activity(code: 'visit', name: "Be\u00adsuch\u00aden"));
-    activities.add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
-    activities.add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
-    activities.add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
+    activities
+        .add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
+    activities
+        .add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
+    activities
+        .add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
     activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
     activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
-    activities.add(Activity(code: 'goout', name: "aus\u00adge\u00adhen"));
+    activities.add(Activity(code: 'goout', name: "Aus\u00adge\u00adhen"));
     activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
     activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
     activities.add(Activity(code: 'sport', name: "Sport"));
-    activities.add(Activity(code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
+    activities.add(Activity(
+        code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
     activities.add(Activity(code: 'culture', name: "Kul\u00adtur"));
     activities.add(Activity(code: 'diy', name: "Heim\u00adwer\u00adken"));
     activities.add(Activity(code: 'other', name: "Sons\u00adti\u00adges"));
@@ -44,19 +50,25 @@ class ActivityRepository {
     activities.add(Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"));
     activities.add(Activity(code: 'walking', name: "Spa\u00adzie\u00adren"));
     activities.add(Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"));
-    activities.add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
-    activities.add(Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
+    activities
+        .add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
+    activities.add(
+        Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
     activities.add(Activity(code: 'visit', name: "Be\u00adsuch\u00aden"));
-    activities.add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
-    activities.add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
-    activities.add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
+    activities
+        .add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
+    activities
+        .add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
+    activities
+        .add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
     activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
     activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
-    activities.add(Activity(code: 'goout', name: "aus\u00adge\u00adhen"));
+    activities.add(Activity(code: 'goout', name: "Aus\u00adge\u00adhen"));
     activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
     activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
     activities.add(Activity(code: 'sport', name: "Sport"));
-    activities.add(Activity(code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
+    activities.add(Activity(
+        code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
     activities.add(Activity(code: 'culture', name: "Kul\u00adtur"));
     activities.add(Activity(code: 'diy', name: "Heim\u00adwer\u00adken"));
     activities.add(Activity(code: 'other', name: "Sons\u00adti\u00adges"));
@@ -88,20 +100,9 @@ class ActivityRepository {
 
   Future<void> updateActivity(Activity activity) async {
     await FirebaseFirestore.instance
-        .collection('activities')
+        .collection('updateActivity')
         .doc(activity.id)
-        .update({
-      'code': activity.code,
-      'creatorId': activity.creatorId,
-      'creatorName': activity.creatorName,
-      'date': activity.date,
-      'description': activity.description,
-      'id': activity.id,
-      'invitationIds': activity.invitationIds,
-      'location': activity.location?.toJson(),
-      'name': activity.name,
-      'public': activity.public,
-    });
+        .set(activity.toJson());
   }
 
   Future<void> joinActivity(Activity activity) async {
@@ -110,7 +111,6 @@ class ActivityRepository {
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'activityId': activity.id,
       'joiningId': currentUserId,
-      'invitationIds': activity.invitationIds,
     });
   }
 
@@ -154,7 +154,8 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
 
-        /*if(activity.creatorId != currentUserId)*/ publicActivityList.add(activity);
+        /*if(activity.creatorId != currentUserId)*/
+        publicActivityList.add(activity);
         print("PublicActivityStream: $activity");
       });
       publicActivityList.sort((a, b) => a.date!.compareTo(b.date!));
@@ -243,7 +244,8 @@ class ActivityRepository {
         privateRequestActivitiesFromUserList.add(activity);
         print("PrivateRequestActivitiesFromUserStream: $activity");
       });
-      privateRequestActivitiesFromUserList.sort((a, b) => a.date!.compareTo(b.date!));
+      privateRequestActivitiesFromUserList
+          .sort((a, b) => a.date!.compareTo(b.date!));
       yield privateRequestActivitiesFromUserList;
     }
   }
@@ -267,7 +269,8 @@ class ActivityRepository {
         publicJoinedActivitiesFromUserList.add(activity);
         print("PublicJoinedActivitiesFromUserStream: $activity");
       });
-      publicJoinedActivitiesFromUserList.sort((a, b) => a.date!.compareTo(b.date!));
+      publicJoinedActivitiesFromUserList
+          .sort((a, b) => a.date!.compareTo(b.date!));
       yield publicJoinedActivitiesFromUserList;
     }
   }
