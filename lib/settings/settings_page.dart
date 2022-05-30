@@ -4,10 +4,8 @@ import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/profile_flow/pages/profile_overview/cubit/profile_overview_cubit.dart';
 import 'package:peerpal/profile_flow/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/licenses_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
@@ -153,6 +151,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               context
                                   .read<AppBloc>()
                                   .add(AppLogoutRequested()),
+                              //ToDo: deleteDeviceTokenFromServer() is called twice when the user logs in and when the user logs out.
+                              context.read<AppUserRepository>().deleteDeviceTokenFromServer(),
                             });
                       }),
                 },
