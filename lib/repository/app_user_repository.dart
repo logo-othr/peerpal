@@ -56,6 +56,14 @@ class AppUserRepository {
     return _getUserFromFirebaseUser();
   }
 
+  Future<void> updateNameAtServer(userName) async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance
+        .collection('updateNameAtServer')
+        .doc()
+        .set({'userId': currentUserId, 'name': userName});
+  }
+
   Future<void> signUp({required String email, required String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
@@ -112,6 +120,28 @@ class AppUserRepository {
         .update({'pushToken': null});
   }
 
+  Future<void> deleteDeviceTokenFromServer() async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    print('deleteDeviceTokenFromServer');
+    FirebaseFirestore.instance
+        .collection('deleteDeviceTokenFromServer')
+        .doc()
+        .set({'userId': currentUserId});
+  }
+
+  Future<void> updateDeviceTokenAtServer() async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseMessaging.instance.getToken().then((token) {
+      FirebaseFirestore.instance
+          .collection('updateDeviceTokenAtServer')
+          .doc()
+          .set({'userId': currentUserId, 'deviceToken': token});
+    }).catchError((err) {
+      print(err.message.toString());
+      print("Error while updating deviceToken");
+    });
+  }
+
   Future<void> loginWithEmailAndPassword({
     required String email,
     required String password,
@@ -146,6 +176,7 @@ class AppUserRepository {
     }
 
     await registerFCMDeviceToken();
+    await updateDeviceTokenAtServer();
   }
 
   Future<void> logout() async {
@@ -419,22 +450,13 @@ class AppUserRepository {
   //Friends Start
   //----------------------------------------------------
 
-  Stream<List<PeerPALUser>> getFriendRequestsFromUser() {
-    return getList('friendRequests');
-  }
-
-  Stream<int> getFriendRequestsSize() async* {
-    await for (var friendRequestList in getFriendRequestsFromUser()) {
-      yield friendRequestList.length;
-    }
-  }
-
   Future<void> sendFriendRequestToUser(PeerPALUser userInformation) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance
         .collection('friendRequestNotifications')
-        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .doc()
         .set({
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'fromId': currentUserId,
       'toId': userInformation.id,
     });
@@ -444,8 +466,9 @@ class AppUserRepository {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance
         .collection('canceledFriendRequests')
-        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .doc()
         .set({
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'fromId': currentUserId,
       'toId': userInformation.id,
     });
@@ -456,8 +479,9 @@ class AppUserRepository {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance
         .collection('friendRequestResponse')
-        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+        .doc()
         .set({
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
       'fromId': currentUserId,
       'toId': userInformation.id,
       'response': response,
@@ -469,9 +493,8 @@ class AppUserRepository {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     Stream<QuerySnapshot> stream = FirebaseFirestore.instance
-        .collection('privateUserData')
-        .doc(currentUserId)
         .collection('friends')
+        .where('fromId', isEqualTo: currentUserId)
         .snapshots();
 
     await for (QuerySnapshot querySnapshot in stream) {
@@ -480,7 +503,7 @@ class AppUserRepository {
         DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore
             .instance
             .collection('publicUserData')
-            .doc(doc.id)
+            .doc(doc['toId'])
             .get();
 
         var userDTO = PeerPALUserDTO(
@@ -497,18 +520,13 @@ class AppUserRepository {
     }
   }
 
-  Stream<List<PeerPALUser>> getSentFriendRequestsFromUser() {
-    return getList('sentFriendRequests');
-  }
-
-  Stream<List<PeerPALUser>> getList(String listName) async* {
+  Stream<List<PeerPALUser>> getSentFriendRequestsFromUser() async* {
     var currentList = <PeerPALUser>[];
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     Stream<QuerySnapshot> stream = FirebaseFirestore.instance
-        .collection('privateUserData')
-        .doc(currentUserId)
-        .collection(listName)
+        .collection('friendRequests')
+        .where('fromId', isEqualTo: currentUserId)
         .snapshots();
 
     await for (QuerySnapshot querySnapshot in stream) {
@@ -517,7 +535,7 @@ class AppUserRepository {
         DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore
             .instance
             .collection('publicUserData')
-            .doc(doc.id)
+            .doc(doc['toId'])
             .get();
 
         var userDTO = PeerPALUserDTO(
@@ -531,6 +549,44 @@ class AppUserRepository {
         }
       }
       yield currentList;
+    }
+  }
+
+  Stream<List<PeerPALUser>> getFriendRequestsFromUser() async* {
+    var currentList = <PeerPALUser>[];
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    Stream<QuerySnapshot> stream = FirebaseFirestore.instance
+        .collection('friendRequests')
+        .where('toId', isEqualTo: currentUserId)
+        .snapshots();
+
+    await for (QuerySnapshot querySnapshot in stream) {
+      currentList.clear();
+      for (var doc in querySnapshot.docs) {
+        DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore
+            .instance
+            .collection('publicUserData')
+            .doc(doc['fromId'])
+            .get();
+
+        var userDTO = PeerPALUserDTO(
+            publicUserInformation:
+                PublicUserInformationDTO.fromJson(userDoc.data()!));
+
+        PeerPALUser friend = userDTO.toDomainObject();
+
+        if (!currentList.contains(friend)) {
+          currentList.add(friend);
+        }
+      }
+      yield currentList;
+    }
+  }
+
+  Stream<int> getFriendRequestsSize() async* {
+    await for (var friendRequestList in getFriendRequestsFromUser()) {
+      yield friendRequestList.length;
     }
   }
 
