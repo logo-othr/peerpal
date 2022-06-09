@@ -4,23 +4,24 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/auth_user.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc({required AppUserRepository appUserRepository})
-      : _appUserRepository = appUserRepository,
+  AppBloc({required AuthenticationRepository authenticationRepository})
+      : _authenticationRepository = authenticationRepository,
         super(
-          appUserRepository.currentUser.isNotEmpty
-              ? AppState.authenticated(appUserRepository.currentUser)
+          authenticationRepository.currentUser.isNotEmpty
+              ? AppState.authenticated(authenticationRepository.currentUser)
               : const AppState.unauthenticated(),
         ) {
-    _userSubscription = _appUserRepository.user.listen(_onUserChanged);
+    _userSubscription = _authenticationRepository.user.listen(_onUserChanged);
   }
 
-  final AppUserRepository _appUserRepository;
+  final AuthenticationRepository _authenticationRepository;
   late final StreamSubscription<AuthUser> _userSubscription;
 
   void _onUserChanged(AuthUser user) => add(AppUserChanged(user));
@@ -30,7 +31,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (event is AppUserChanged) {
       yield _mapUserChangedToState(event, state);
     } else if (event is AppLogoutRequested) {
-      unawaited(_appUserRepository.logout());
+      unawaited(_authenticationRepository.logout());
     }
   }
 

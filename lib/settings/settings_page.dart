@@ -2,15 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/discover_wizard_flow/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
+import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/profile_flow/pages/profile_overview/view/profile_overview_page.dart';
+import 'package:peerpal/profile_setup/pages/profile_overview/cubit/profile_overview_cubit.dart';
+import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/licenses_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/strings.dart';
-import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
+import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
@@ -152,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   .read<AppBloc>()
                                   .add(AppLogoutRequested()),
                               //ToDo: deleteDeviceTokenFromServer() is called twice when the user logs in and when the user logs out.
-                              context.read<AppUserRepository>().deleteDeviceTokenFromServer(),
+                              context.read<AuthenticationRepository>().deleteDeviceTokenFromServer(),
                             });
                       }),
                 },
@@ -162,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   CustomTableHeader(heading: "SONSTIGES"),
                   CustomTableRow(
                     text:
-                    "E-Mail: ${sl.get<AppUserRepository>().currentUser.email}",
+                    "E-Mail: ${sl.get<AuthenticationRepository>().currentUser.email}",
                     isArrowVisible: false,
                   ),
                 ],
@@ -171,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   CustomTableHeader(heading: "User-ID"),
                   CustomTableRow(
-                    text: "${sl.get<AppUserRepository>().currentUser.id}",
+                    text: "${sl.get<AuthenticationRepository>().currentUser.id}",
                     isArrowVisible: false,
                   ),
                 ],

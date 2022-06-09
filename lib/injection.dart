@@ -11,6 +11,7 @@ import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/memory_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,19 +43,26 @@ Future<void> init() async {
   sl.registerFactory(
         () => ActivityJoinedListBloc(),
   );
+
   // UseCase
   sl.registerLazySingleton(() => GetChatsForUser(sl(), sl()));
-  sl.registerLazySingleton(() => GetUserChatForChat(sl(), sl()));
-  sl.registerLazySingleton(() => GetChatRequestForUser(sl(), sl()));
+  sl.registerLazySingleton(() => GetUserChatForChat(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => GetChatRequestForUser(sl(), sl(), sl()));
 
-  // Repo
+  // =============== Repository ===============
   sl.registerLazySingleton<ChatRepository>(
     () => ChatRepositoryFirebase(),
   );
+
   sl.registerLazySingleton<ActivityRepository>(
         () => ActivityRepository(sharedPreferences),
   );
+
   sl.registerLazySingleton(() => AppUserRepository(cache: sl()));
+
+  sl.registerLazySingleton<AuthenticationRepository>(
+        () => AuthenticationRepository(cache: sl()),
+  );
 
   // Source/Service/Cache
   sl.registerLazySingleton<Cache>(() => MemoryCache());

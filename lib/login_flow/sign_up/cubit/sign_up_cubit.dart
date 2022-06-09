@@ -5,13 +5,14 @@ import 'package:peerpal/login_flow/sign_up/models/confirmed_password_model.dart'
 import 'package:peerpal/login_flow/sign_up/models/email_model.dart';
 import 'package:peerpal/login_flow/sign_up/models/password_model.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 
 part 'sign_up_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
   SignupCubit(this._appUserRepository) : super(const SignupState());
 
-  final AppUserRepository _appUserRepository;
+  final AuthenticationRepository _appUserRepository;
 
   void changeEmail(String changedEmail) {
     final email = EmailModel.dirty(changedEmail);

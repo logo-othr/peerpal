@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/discover_wizard_flow/pages/discover_age/cubit/discover_age_cubit.dart';
+import 'package:peerpal/discover_setup/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:provider/provider.dart';
 

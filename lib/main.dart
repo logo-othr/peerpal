@@ -10,6 +10,7 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,14 +18,14 @@ import 'app/app.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 void configLocalNotification() {
   final AndroidInitializationSettings initializationSettingsAndroid =
-  const AndroidInitializationSettings('@drawable/peerpal_logo');
+      const AndroidInitializationSettings('@drawable/peerpal_logo');
 
   final IOSInitializationSettings initializationSettingsIOS =
-  const IOSInitializationSettings();
+      const IOSInitializationSettings();
 
   final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -34,16 +35,16 @@ void configLocalNotification() {
 
 void showNotification(RemoteNotification remoteNotification) async {
   const NotificationDetails platformChannelSpecifics =
-  const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'app_notification',
-        'app_notification_channel',
-        'Channel for all app notifications',
-        playSound: true,
-        priority: Priority.high,
-        importance: Importance.max,
-      ),
-      iOS: IOSNotificationDetails());
+      const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'app_notification',
+            'app_notification_channel',
+            'Channel for all app notifications',
+            playSound: true,
+            priority: Priority.high,
+            importance: Importance.max,
+          ),
+          iOS: IOSNotificationDetails());
 
   print(remoteNotification);
 
@@ -96,7 +97,7 @@ Future<void> main() async {
   configLocalNotification();
   await init();
 
-  final authenticationRepository = sl<AppUserRepository>();
+  final authenticationRepository = sl<AuthenticationRepository>();
   await authenticationRepository.user.first;
 
   //await DebugHelper.createExampleUsers(appUserRepository: authenticationRepository, emailBase:  'pptestmailbase234', password: 'Abc12345678*');
@@ -119,12 +120,16 @@ class App extends StatelessWidget {
           value: sl<ChatRepository>(),
         ),
         RepositoryProvider.value(
-          value: ActivityRepository(sl<SharedPreferences>()),
+          value: sl<AuthenticationRepository>(),
+        ),
+        RepositoryProvider.value(
+          value: ActivityRepository(
+              sl<SharedPreferences>()), // ToDo: use SL
         )
       ],
       child: BlocProvider(
         create: (_) => AppBloc(
-          appUserRepository: sl<AppUserRepository>(),
+          authenticationRepository: sl<AuthenticationRepository>(),
         ),
         child: const AppView(),
       ),

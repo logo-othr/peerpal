@@ -15,195 +15,57 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/repository/models/peerpal_user_dto.dart';
 import 'package:peerpal/repository/models/private_user_information_dto.dart';
 import 'package:peerpal/repository/models/public_user_information_dto.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class SignUpFailure implements Exception {
-  SignUpFailure({this.message = 'Fehler bei der Registierung'});
-
-  final String message;
-}
-
-class LoginException implements Exception {
-  LoginException({this.message = 'Fehler beim Login.'});
-
-  final String message;
-}
-
-class LogoutException implements Exception {
-  LogoutException({this.message = 'Fehler beim Ausloggen.'});
-
-  final String message;
-}
 
 class AppUserRepository {
   AppUserRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
     required this.cache,
-  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  })
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+
 
   final Cache cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<AuthUser> get user {
-    return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      return firebaseUser == null ? AuthUser.empty : _getUserFromFirebaseUser();
-    });
-  }
 
   AuthUser get currentUser {
     return _getUserFromFirebaseUser();
   }
 
-  Future<void> updateNameAtServer(userName) async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance
-        .collection('updateNameAtServer')
-        .doc()
-        .set({'userId': currentUserId, 'name': userName});
+
+
+  String get currentUserId {
+    return currentUser.id;
   }
 
-  Future<void> signUp({required String email, required String password}) async {
-    try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      // https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/createUserWithEmailAndPassword.html
-      switch (e.code) {
-        case 'email-already-in-use':
-          throw SignUpFailure(
-              message: "Diese E-Mail ist bereits in Benutzung.");
-        case 'operation-not-allowed':
-          throw SignUpFailure(
-              message: 'Es ist ein Fehler aufgetreten. '
-                  'Registierungen sind deaktiviert.');
-        case 'weak-password:':
-          throw SignUpFailure(message: 'Das gewählte Passwort ist zu schwach.');
-        case 'too-many-requests':
-          throw SignUpFailure(
-              message: 'Der Server ist ausgelastet. Bitte versuche es später '
-                  'oder morgen noch einmal.');
-        default:
-          throw SignUpFailure();
-      }
-    } on Exception {
-      throw SignUpFailure();
-    }
-  }
 
-  Future<void> registerFCMDeviceToken() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
-    await FirebaseMessaging.instance.getToken().then((token) {
-      print("user-id: $currentUserId");
-      print('pushToken: $token');
-      FirebaseFirestore.instance
-          .collection('privateUserData')
-          .doc(currentUserId)
-          .update({'pushToken': token});
-    }).catchError((err) {
-      print(err.message.toString());
-      print("Error while creating push noticiation");
-    });
-  }
+  AuthUser _getUserFromFirebaseUser() {
+    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
 
-  Future<void> unregisterFCMDeviceToken() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-
-    print("delete device push token");
-    FirebaseFirestore.instance
-        .collection('privateUserData')
-        .doc(currentUserId)
-        .update({'pushToken': null});
-  }
-
-  Future<void> deleteDeviceTokenFromServer() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    print('deleteDeviceTokenFromServer');
-    FirebaseFirestore.instance
-        .collection('deleteDeviceTokenFromServer')
-        .doc()
-        .set({'userId': currentUserId});
-  }
-
-  Future<void> updateDeviceTokenAtServer() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseMessaging.instance.getToken().then((token) {
-      FirebaseFirestore.instance
-          .collection('updateDeviceTokenAtServer')
-          .doc()
-          .set({'userId': currentUserId, 'deviceToken': token});
-    }).catchError((err) {
-      print(err.message.toString());
-      print("Error while updating deviceToken");
-    });
-  }
-
-  Future<void> loginWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      // error-codes: https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
-      switch (e.code) {
-        case 'wrong-password':
-        case 'user-not-found':
-          throw LoginException(
-              message:
-                  'Falsches Passwort oder die der Nutzer existiert nicht.');
-        case 'user-disabled':
-          throw LoginException(message: 'Der Account wurde deaktiviert.');
-        case 'invalid-email':
-          throw LoginException(message: 'Die E-Mail ist ungültig.');
-        case 'too-many-requests':
-          throw LoginException(
-              message:
-                  'Der Server ist ausgelastet. Bitte versuche es später oder '
-                  "morgen noch einmal.");
-        default:
-          throw LoginException();
-      }
-    } on Exception {
-      throw LoginException();
-    }
-
-    await registerFCMDeviceToken();
-    await updateDeviceTokenAtServer();
-  }
-
-  Future<void> logout() async {
-    try {
-      await unregisterFCMDeviceToken();
-      await Future.wait([
-        _firebaseAuth.signOut(),
-      ]);
-      cache.clear(key: '{$currentUser.uid}-userinformation');
-    } on Exception {
-      throw LogoutException();
-    }
+    return (firebaseUser == null
+        ? AuthUser.empty
+        : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser,
       {String? id}) async {
-    var uid = id == null ? currentUser.id : id;
+    firebase_auth.FirebaseAuth.instance.currentUser!.uid;
+
+
+    var uid = id == null ? currentUserId : id;
     peerPALUser = peerPALUser.copyWith(id: uid);
     var publicUserCollection =
-        _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
+    _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
     var privateUserCollection =
-        _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
+    _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
 
     var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
     cache.set<PeerPALUserDTO>(
-        key: '{$currentUser.uid}-userinformation', value: userDTO);
+        key: '{$currentUserId}-userinformation', value: userDTO);
 
     var publicUserInformationJson = userDTO.publicUserInformation?.toJson();
     var privateUserInformation = userDTO.privateUserInformation?.toJson();
@@ -239,7 +101,7 @@ class AppUserRepository {
       var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
       var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
       var publicUser = peerPALUserDTO.toDomainObject();
-      if (publicUser.id != currentUser.id) userList.add(publicUser);
+      if (publicUser.id != currentUserId) userList.add(publicUser);
     });
 
     return userList;
@@ -262,18 +124,18 @@ class AppUserRepository {
           .collection(UserDatabaseContract.privateUsers)
           .doc(uid)
           .get();
-    } on Exception catch  (e) {
+    } on Exception catch (e) {
       print('$e'); // ToDo: Use firebase error codes
       print(e);
     }
-
 
 
     if (publicUserDocument.exists && publicUserDocument.data() != null) {
       var publicUserData = publicUserDocument.data();
       publicUserDataDTO = PublicUserInformationDTO.fromJson(publicUserData!);
     }
-    if (privateUserDocument != null && privateUserDocument.exists && privateUserDocument.data() != null) {
+    if (privateUserDocument != null && privateUserDocument.exists &&
+        privateUserDocument.data() != null) {
       var privateUserData = privateUserDocument.data();
       privateUserDataDTO = PrivateUserInformationDTO.fromJson(privateUserData!);
     }
@@ -285,20 +147,20 @@ class AppUserRepository {
 
   Query<Map<String, dynamic>> _buildGetMatchingUsersQuery(
       {required PeerPALUser? lastUser,
-      required int limit,
-      required CollectionReference<Map<String, dynamic>> collection,
-      required PeerPALUser currentUser}) {
+        required int limit,
+        required CollectionReference<Map<String, dynamic>> collection,
+        required PeerPALUser currentUser}) {
     var query = collection
         .where(UserDatabaseContract.userAge,
-            isGreaterThanOrEqualTo: currentUser.discoverFromAge)
+        isGreaterThanOrEqualTo: currentUser.discoverFromAge)
         .where(UserDatabaseContract.userAge,
-            isLessThanOrEqualTo: currentUser.discoverToAge);
+        isLessThanOrEqualTo: currentUser.discoverToAge);
 
     if (currentUser.discoverLocations != null &&
         currentUser.discoverLocations!.isNotEmpty)
       query = query.where(UserDatabaseContract.discoverLocations,
           arrayContainsAny:
-              currentUser.discoverLocations!.map((e) => e.place).toList());
+          currentUser.discoverLocations!.map((e) => e.place).toList());
 
 /*
  PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(currentUser);
@@ -341,7 +203,7 @@ class AppUserRepository {
     var currentPeerPALUser = await getCurrentUserInformation();
 
     var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
+    await _firestore.collection(UserDatabaseContract.publicUsers);
 
     var query = _buildGetMatchingUsersQuery(
         lastUser: null,
@@ -357,9 +219,9 @@ class AppUserRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
         var peerPALUserDTO =
-            PeerPALUserDTO(publicUserInformation: publicUserDTO);
+        PeerPALUserDTO(publicUserInformation: publicUserDTO);
         var publicUser = peerPALUserDTO.toDomainObject();
-        if (publicUser.id != currentUser.id) userList.add(publicUser);
+        if (publicUser.id != currentUserId) userList.add(publicUser);
       });
       yield userList;
     }
@@ -372,7 +234,7 @@ class AppUserRepository {
         currentPeerPALUser.discoverLocations!.isEmpty) return [];
 
     var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
+    await _firestore.collection(UserDatabaseContract.publicUsers);
 
     var query = _buildGetMatchingUsersQuery(
         lastUser: last,
@@ -383,7 +245,7 @@ class AppUserRepository {
     var snapshots = await query.get();
 
     final matchedUserDocuments =
-        snapshots.docs.map((doc) => doc.data()).toList();
+    snapshots.docs.map((doc) => doc.data()).toList();
 
     var publicUsers = matchedUserDocuments
         .map((e) => PublicUserInformationDTO.fromJson(e))
@@ -402,25 +264,18 @@ class AppUserRepository {
   Future<PeerPALUser> getCurrentUserInformation() async {
     var userInformation = PeerPALUser.empty;
     var cachedUserDTO =
-        cache.get<PeerPALUserDTO>(key: '{$currentUser.uid}-userinformation');
+    cache.get<PeerPALUserDTO>(key: '{$currentUserId}-userinformation');
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
       var downloadedUserDTO = await _downloadCurrentUserInformation();
       cache.set<PeerPALUserDTO>(
-          key: '{$currentUser.uid}-userinformation', value: downloadedUserDTO);
+          key: '{$currentUserId}-userinformation', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
   }
 
-  AuthUser _getUserFromFirebaseUser() {
-    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
-
-    return (firebaseUser == null
-        ? AuthUser.empty
-        : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
-  }
 
   Future<List<Activity>> loadActivityList() async {
     final List<Activity> activities = [];
@@ -474,8 +329,8 @@ class AppUserRepository {
     });
   }
 
-  Future<void> friendRequestResponse(
-      PeerPALUser userInformation, bool response) async {
+  Future<void> friendRequestResponse(PeerPALUser userInformation,
+      bool response) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance
         .collection('friendRequestResponse')
@@ -508,7 +363,7 @@ class AppUserRepository {
 
         var userDTO = PeerPALUserDTO(
             publicUserInformation:
-                PublicUserInformationDTO.fromJson(userDoc.data()!));
+            PublicUserInformationDTO.fromJson(userDoc.data()!));
 
         PeerPALUser friend = userDTO.toDomainObject();
 
@@ -572,7 +427,7 @@ class AppUserRepository {
 
         var userDTO = PeerPALUserDTO(
             publicUserInformation:
-                PublicUserInformationDTO.fromJson(userDoc.data()!));
+            PublicUserInformationDTO.fromJson(userDoc.data()!));
 
         PeerPALUser friend = userDTO.toDomainObject();
 

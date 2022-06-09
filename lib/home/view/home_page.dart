@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
-import 'package:peerpal/discover_wizard_flow/discover_wizard_flow.dart';
+import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/profile_flow/pages/profile_wiazrd_flow.dart';
+import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/settings/settings_page.dart';
-import 'package:peerpal/tabs/discover/discover_tab_bloc.dart';
-import 'package:peerpal/tabs/discover/discover_tab_view.dart';
+import 'package:peerpal/discover/discover_tab_bloc.dart';
+import 'package:peerpal/discover/discover_tab_view.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
@@ -56,7 +57,7 @@ class HomeView extends StatelessWidget {
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
             if (state is HomeUserInformationFlowCompleted) {
-              context.read<AppUserRepository>().registerFCMDeviceToken();
+              context.read<AuthenticationRepository>().registerFCMDeviceToken();
               return MyTabView();
             }
             return Container(
