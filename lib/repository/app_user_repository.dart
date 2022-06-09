@@ -78,6 +78,14 @@ class AppUserRepository {
           privateUserInformation, SetOptions(merge: true));
   }
 
+  Future<void> updateNameAtServer(userName) async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance
+        .collection('updateNameAtServer')
+        .doc()
+        .set({'userId': currentUserId, 'name': userName});
+  }
+
   Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
     var uid = firebaseUser!.uid;

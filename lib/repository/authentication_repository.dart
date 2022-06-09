@@ -50,13 +50,7 @@ class AuthenticationRepository {
         : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
-  Future<void> updateNameAtServer(userName) async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance
-        .collection('updateNameAtServer')
-        .doc()
-        .set({'userId': currentUserId, 'name': userName});
-  }
+
 
   Future<void> deleteDeviceTokenFromServer() async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
