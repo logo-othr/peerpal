@@ -12,6 +12,7 @@ import 'package:peerpal/chat/presentation/chat/chat_page_content.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 
 class ChatPage extends StatelessWidget {
   final String userId;
@@ -36,6 +37,7 @@ class ChatPage extends StatelessWidget {
           appUserRepository: context.read<AppUserRepository>(),
           authenticationRepository: context.read<AuthenticationRepository>(),
           getUserChatForChat: sl<GetUserChatForChat>(),
+          getAuthenticatedUser: sl<GetAuthenticatedUser>(),
           sendMessage: SendChatMessage(context.read<ChatRepository>()),
           sendChatRequestResponse:
               SendChatRequestResponse(context.read<ChatRepository>()),

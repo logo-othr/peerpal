@@ -2,16 +2,18 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/activity.dart';
 
 part 'discover_activitys_state.dart';
 
 class DiscoverActivitiesCubit
     extends Cubit<DiscoverActivitiesState> {
-  DiscoverActivitiesCubit(this._appUserRepository, this._activityRepository)
+  DiscoverActivitiesCubit(this._appUserRepository, this._activityRepository, this._getAuthenticatedUser)
       : super(DiscoverActivitiesInitial());
   final AppUserRepository _appUserRepository;
   final ActivityRepository _activityRepository;
+  final GetAuthenticatedUser _getAuthenticatedUser;
 
   @override
   Future<void> loadData() async {
@@ -56,7 +58,7 @@ class DiscoverActivitiesCubit
       emit(DiscoverActivitiesPosting(
           state.activities, state.selectedActivities));
 
-      var userInformation = await _appUserRepository.getCurrentUserInformation();
+      var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation = userInformation.copyWith(
           discoverActivities: state.selectedActivities.map((e) => e.code!).toList());
       await _appUserRepository.updateUserInformation(updatedUserInformation);

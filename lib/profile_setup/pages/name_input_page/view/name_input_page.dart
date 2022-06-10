@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/name_input_page/cubit/name_input_cubit.dart';
 import 'package:peerpal/profile_setup/pages/name_input_page/view/name_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class NameInputPage extends StatelessWidget {
@@ -26,7 +28,7 @@ class NameInputPage extends StatelessWidget {
         appBar: CustomAppBar('PeerPAL', hasBackButton: true,),
         body: BlocProvider(
           create: (_) {
-            return NameInputCubit(context.read<AppUserRepository>(), context.read<AuthenticationRepository>());
+            return NameInputCubit(context.read<AppUserRepository>(), context.read<AuthenticationRepository>(), sl<GetAuthenticatedUser>());
           },
           child: NameInputContent(isInFlowContext: isInFlowContext, pastName: pastName,),
         ),

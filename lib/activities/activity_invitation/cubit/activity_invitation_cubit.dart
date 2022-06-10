@@ -75,7 +75,7 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
 
   Future<void> searchUser(String searchQuery) async {
     List<PeerPALUser> searchResults =
-        await _appUserRepository.getUserForName(searchQuery);
+        await _appUserRepository.findUserByName(searchQuery);
     emit(ActivityInvitationLoaded(searchResults,
         state.friends, state.friendRequestsSize, state.invitations));
   }

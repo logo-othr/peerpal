@@ -8,6 +8,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../colors.dart';
@@ -15,14 +17,21 @@ import '../../../../colors.dart';
 part 'profile_picture_state.dart';
 
 class ProfilePictureCubit extends Cubit<ProfilePictureState> {
-  final AppUserRepository _authRepository;
-final AuthenticationRepository _authenticationRepository;
-  ProfilePictureCubit(this._authRepository, this._authenticationRepository) : super(ProfilePictureInitial());
+  final AppUserRepository _userRepository;
+  final AuthenticationRepository _authRepository;
+  final GetAuthenticatedUser _getAuthenticatedUser;
 
+  ProfilePictureCubit(
+      this._userRepository, this._authRepository, this._getAuthenticatedUser)
+      : super(ProfilePictureInitial());
 
   Future<void> pickProfilePictureFromGallery() async {
-    var profilePicture =
-    (await ImagePicker().pickImage(source: ImageSource.gallery,maxHeight: 1280, maxWidth: 720, imageQuality: 65,))!;
+    var profilePicture = (await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 1280,
+      maxWidth: 720,
+      imageQuality: 65,
+    ))!;
     ImageCropper imageCropper = ImageCropper();
     File? croppedImage = await imageCropper.cropImage(
         sourcePath: profilePicture.path,
@@ -44,18 +53,20 @@ final AuthenticationRepository _authenticationRepository;
           doneButtonTitle: "Fertig",
           cancelButtonTitle: "Abbrechen",
           title: 'Passe dein Foto an',
-        )
-    )!;
+        ))!;
 
-    if(croppedImage !=null){
+    if (croppedImage != null) {
       profilePictureChanged(croppedImage);
     }
   }
 
-
   Future<void> pickProfilePictureFromCamera() async {
-    var profilePicture =
-    ((await ImagePicker().pickImage(source: ImageSource.camera,maxHeight: 1280, maxWidth: 720,imageQuality: 65,)))!;
+    var profilePicture = ((await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      maxHeight: 1280,
+      maxWidth: 720,
+      imageQuality: 65,
+    )))!;
     ImageCropper imageCropper = ImageCropper();
     File? croppedImage = await imageCropper.cropImage(
         sourcePath: profilePicture.path,
@@ -72,13 +83,11 @@ final AuthenticationRepository _authenticationRepository;
             initAspectRatio: CropAspectRatioPreset.original,
             hideBottomControls: true,
             showCropGrid: false,
-            lockAspectRatio: false
-        ),
+            lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           title: 'Passe dein Foto zurecht',
-        )
-    )!;
-    if(croppedImage!=null){
+        ))!;
+    if (croppedImage != null) {
       profilePictureChanged(croppedImage);
     }
   }
@@ -90,11 +99,9 @@ final AuthenticationRepository _authenticationRepository;
   Future<String> updateProfilePicture(File? profilePicture) async {
     var profilePictureURL = '';
 
-    if(profilePicture == null){
+    if (profilePicture == null) {
       await _updateProfilePicturePath('');
-    }
-    else
-    {
+    } else {
       emit(ProfilePicturePosting(profilePicture));
       profilePictureURL = await _uploadProfilePicture(profilePicture);
       await _updateProfilePicturePath(profilePictureURL);
@@ -110,7 +117,7 @@ final AuthenticationRepository _authenticationRepository;
     var ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('user-profile-pictures')
-        .child(_authenticationRepository.currentUser.id)
+        .child(_authRepository.currentUser.id)
         .child('${uid.v4()}.jpg');
 
     final metadata = firebase_storage.SettableMetadata(
@@ -129,15 +136,13 @@ final AuthenticationRepository _authenticationRepository;
   }
 
   Future<String?> getProfilePicturePath() async {
-    var userInformation = await _authRepository.getCurrentUserInformation();
+    var userInformation = await _getAuthenticatedUser();
     return userInformation.imagePath;
   }
 
   Future<void> _updateProfilePicturePath(String profilePicturePath) async {
-    var userInformation = await _authRepository.getCurrentUserInformation();
-    var updatedUserInformation =
-    userInformation.copyWith(imagePath: profilePicturePath);
-    await _authRepository.updateUserInformation(updatedUserInformation);
+    PeerPALUser user = await _getAuthenticatedUser();
+    PeerPALUser updatedUser = user.copyWith(imagePath: profilePicturePath);
+    await _userRepository.updateUserInformation(updatedUser);
   }
 }
-

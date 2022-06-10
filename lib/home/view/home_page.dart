@@ -10,6 +10,7 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/discover/discover_tab_view.dart';
@@ -26,7 +27,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) =>
-      HomeCubit(context.read<AppUserRepository>())..loadFlowState(),
+      HomeCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())..loadFlowState(),
       child: const HomeView(),
     );
   }
@@ -125,7 +126,7 @@ class MyTabView extends StatelessWidget {
             providers: [
               BlocProvider<DiscoverTabBloc>(
                 create: (context) =>
-                DiscoverTabBloc(context.read<AppUserRepository>())
+                DiscoverTabBloc(context.read<AppUserRepository>(), context.read<AuthenticationRepository>())
                   ..add(UsersLoaded()),
               ),
               BlocProvider<ChatListBloc>(

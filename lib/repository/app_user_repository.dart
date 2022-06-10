@@ -16,31 +16,20 @@ import 'package:peerpal/repository/models/peerpal_user_dto.dart';
 import 'package:peerpal/repository/models/private_user_information_dto.dart';
 import 'package:peerpal/repository/models/public_user_information_dto.dart';
 
-
 class AppUserRepository {
   AppUserRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
     required this.cache,
-  })
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
-
+  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   final Cache cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
-  AuthUser get currentUser {
-    return _getUserFromFirebaseUser();
-  }
-
-
-
+/*
   String get currentUserId {
-    return currentUser.id;
+    return _getUserFromFirebaseUser().id;
   }
-
-
 
   AuthUser _getUserFromFirebaseUser() {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
@@ -50,22 +39,18 @@ class AppUserRepository {
         : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
-  Future<void> updateUserInformation(PeerPALUser peerPALUser,
-      {String? id}) async {
-    firebase_auth.FirebaseAuth.instance.currentUser!.uid;
+ */
 
-
-    var uid = id == null ? currentUserId : id;
-    peerPALUser = peerPALUser.copyWith(id: uid);
+  Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
+    var uid = peerPALUser.id;
     var publicUserCollection =
-    _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
+        _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
     var privateUserCollection =
-    _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
+        _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
 
     var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
-    cache.set<PeerPALUserDTO>(
-        key: '{$currentUserId}-userinformation', value: userDTO);
+    cache.set<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
 
     var publicUserInformationJson = userDTO.publicUserInformation?.toJson();
     var privateUserInformation = userDTO.privateUserInformation?.toJson();
@@ -96,10 +81,11 @@ class AppUserRepository {
     return (await _downloadUserInformation(uid)).toDomainObject();
   }
 
-  Future<List<PeerPALUser>> getUserForName(String name) async {
+  Future<List<PeerPALUser>> findUserByName(String userName,
+      {List<String> ignoreList = const []}) async {
     QuerySnapshot<Map<String, dynamic>> userSnapshots = await _firestore
         .collection(UserDatabaseContract.publicUsers)
-        .where('name', isEqualTo: name)
+        .where('name', isEqualTo: userName)
         .get();
 
     List<PeerPALUser> userList = <PeerPALUser>[];
@@ -109,7 +95,8 @@ class AppUserRepository {
       var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
       var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
       var publicUser = peerPALUserDTO.toDomainObject();
-      if (publicUser.id != currentUserId) userList.add(publicUser);
+      if (!ignoreList.contains(publicUser.id))
+        userList.add(publicUser); // ToDo: Test.
     });
 
     return userList;
@@ -125,7 +112,6 @@ class AppUserRepository {
         .doc(uid)
         .get();
 
-
     var privateUserDocument = null;
     try {
       privateUserDocument = await _firestore
@@ -137,12 +123,12 @@ class AppUserRepository {
       print(e);
     }
 
-
     if (publicUserDocument.exists && publicUserDocument.data() != null) {
       var publicUserData = publicUserDocument.data();
       publicUserDataDTO = PublicUserInformationDTO.fromJson(publicUserData!);
     }
-    if (privateUserDocument != null && privateUserDocument.exists &&
+    if (privateUserDocument != null &&
+        privateUserDocument.exists &&
         privateUserDocument.data() != null) {
       var privateUserData = privateUserDocument.data();
       privateUserDataDTO = PrivateUserInformationDTO.fromJson(privateUserData!);
@@ -155,20 +141,20 @@ class AppUserRepository {
 
   Query<Map<String, dynamic>> _buildGetMatchingUsersQuery(
       {required PeerPALUser? lastUser,
-        required int limit,
-        required CollectionReference<Map<String, dynamic>> collection,
-        required PeerPALUser currentUser}) {
+      required int limit,
+      required CollectionReference<Map<String, dynamic>> collection,
+      required PeerPALUser currentUser}) {
     var query = collection
         .where(UserDatabaseContract.userAge,
-        isGreaterThanOrEqualTo: currentUser.discoverFromAge)
+            isGreaterThanOrEqualTo: currentUser.discoverFromAge)
         .where(UserDatabaseContract.userAge,
-        isLessThanOrEqualTo: currentUser.discoverToAge);
+            isLessThanOrEqualTo: currentUser.discoverToAge);
 
     if (currentUser.discoverLocations != null &&
         currentUser.discoverLocations!.isNotEmpty)
       query = query.where(UserDatabaseContract.discoverLocations,
           arrayContainsAny:
-          currentUser.discoverLocations!.map((e) => e.place).toList());
+              currentUser.discoverLocations!.map((e) => e.place).toList());
 
 /*
  PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(currentUser);
@@ -207,11 +193,13 @@ class AppUserRepository {
   }
 
   // ToDo: Remove limit
-  Stream<List<PeerPALUser>> getMatchingUsersStream({int limit = 100}) async* {
-    var currentPeerPALUser = await getCurrentUserInformation();
+  Stream<List<PeerPALUser>> getMatchingUsersStream(String authenticatedUserId,
+      {int limit = 100}) async* {
+    var currentPeerPALUser =
+        await getCurrentUserInformation(authenticatedUserId);
 
     var publicUserCollection =
-    await _firestore.collection(UserDatabaseContract.publicUsers);
+        await _firestore.collection(UserDatabaseContract.publicUsers);
 
     var query = _buildGetMatchingUsersQuery(
         lastUser: null,
@@ -227,22 +215,23 @@ class AppUserRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
         var peerPALUserDTO =
-        PeerPALUserDTO(publicUserInformation: publicUserDTO);
+            PeerPALUserDTO(publicUserInformation: publicUserDTO);
         var publicUser = peerPALUserDTO.toDomainObject();
-        if (publicUser.id != currentUserId) userList.add(publicUser);
+        if (publicUser.id != authenticatedUserId) userList.add(publicUser);
       });
       yield userList;
     }
   }
 
-  Future<List<PeerPALUser>> getMatchingUsers(
+  Future<List<PeerPALUser>> getMatchingUsers(String authenticatedUserId,
       {PeerPALUser? last = null, required int limit}) async {
-    var currentPeerPALUser = await getCurrentUserInformation();
+    var currentPeerPALUser =
+        await getCurrentUserInformation(authenticatedUserId);
     if (currentPeerPALUser.discoverLocations != null &&
         currentPeerPALUser.discoverLocations!.isEmpty) return [];
 
     var publicUserCollection =
-    await _firestore.collection(UserDatabaseContract.publicUsers);
+        await _firestore.collection(UserDatabaseContract.publicUsers);
 
     var query = _buildGetMatchingUsersQuery(
         lastUser: last,
@@ -253,7 +242,7 @@ class AppUserRepository {
     var snapshots = await query.get();
 
     final matchedUserDocuments =
-    snapshots.docs.map((doc) => doc.data()).toList();
+        snapshots.docs.map((doc) => doc.data()).toList();
 
     var publicUsers = matchedUserDocuments
         .map((e) => PublicUserInformationDTO.fromJson(e))
@@ -269,21 +258,20 @@ class AppUserRepository {
     return peerPALUsers;
   }
 
-  Future<PeerPALUser> getCurrentUserInformation() async {
+  Future<PeerPALUser> getCurrentUserInformation(String uid) async {
     var userInformation = PeerPALUser.empty;
     var cachedUserDTO =
-    cache.get<PeerPALUserDTO>(key: '{$currentUserId}-userinformation');
+        cache.get<PeerPALUserDTO>(key: '{$uid}-userinformation');
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
       var downloadedUserDTO = await _downloadCurrentUserInformation();
       cache.set<PeerPALUserDTO>(
-          key: '{$currentUserId}-userinformation', value: downloadedUserDTO);
+          key: '{$uid}-userinformation', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
   }
-
 
   Future<List<Activity>> loadActivityList() async {
     final List<Activity> activities = [];
@@ -337,8 +325,8 @@ class AppUserRepository {
     });
   }
 
-  Future<void> friendRequestResponse(PeerPALUser userInformation,
-      bool response) async {
+  Future<void> friendRequestResponse(
+      PeerPALUser userInformation, bool response) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance
         .collection('friendRequestResponse')
@@ -371,7 +359,7 @@ class AppUserRepository {
 
         var userDTO = PeerPALUserDTO(
             publicUserInformation:
-            PublicUserInformationDTO.fromJson(userDoc.data()!));
+                PublicUserInformationDTO.fromJson(userDoc.data()!));
 
         PeerPALUser friend = userDTO.toDomainObject();
 
@@ -435,7 +423,7 @@ class AppUserRepository {
 
         var userDTO = PeerPALUserDTO(
             publicUserInformation:
-            PublicUserInformationDTO.fromJson(userDoc.data()!));
+                PublicUserInformationDTO.fromJson(userDoc.data()!));
 
         PeerPALUser friend = userDTO.toDomainObject();
 

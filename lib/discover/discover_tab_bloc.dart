@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -15,17 +16,17 @@ const limit = 10;
 
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
-
+final AuthenticationRepository _authenticationRepository;
   StreamController<List<PeerPALUser>> _userStreamController =
       new BehaviorSubject();
 
-  DiscoverTabBloc(this._appUsersRepository) : super(DiscoverTabState());
+  DiscoverTabBloc(this._appUsersRepository, this._authenticationRepository) : super(DiscoverTabState());
 
   @override
   Stream<DiscoverTabState> mapEventToState(DiscoverTabEvent event) async* {
     if (event is UsersLoaded) {
       Stream<List<PeerPALUser>> userStream =
-          _appUsersRepository.getMatchingUsersStream(limit: limit);
+          _appUsersRepository.getMatchingUsersStream(_authenticationRepository.currentUser.id, limit: limit);
       _userStreamController.addStream(userStream);
       yield state.copyWith(
         searchResults: state.searchResults,
@@ -34,7 +35,7 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
       );
     } else if (event is SearchUser) {
       List<PeerPALUser> searchResults =
-          await _appUsersRepository.getUserForName(event.searchQuery);
+          await _appUsersRepository.findUserByName(event.searchQuery);
       yield state.copyWith(
         searchResults: searchResults,
         status: state.status,

@@ -2,37 +2,35 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 part 'profile_overview_state.dart';
 
 class ProfileOverviewCubit extends Cubit<ProfileOverviewState> {
-  ProfileOverviewCubit(this.repository) : super(ProfileOverviewInitial());
+  ProfileOverviewCubit(this.repository, this._getAuthenticatedUser) : super(ProfileOverviewInitial());
   final AppUserRepository repository;
+  final GetAuthenticatedUser _getAuthenticatedUser;
 
   Future<void> loadData() async {
-    var appUserInformation = await repository.getCurrentUserInformation();
+    var appUserInformation = await _getAuthenticatedUser();
     emit(ProfileOverviewLoaded(appUserInformation));
   }
 
   Future <String?> name() async{
-    var appUserInformation = await repository.getCurrentUserInformation();
-    return appUserInformation.name;
+    return (await _getAuthenticatedUser()).name;
 }
 
   Future <String?> age() async{
-    var appUserInformation = await repository.getCurrentUserInformation();
-    return appUserInformation.age.toString();
+    return (await _getAuthenticatedUser()).age.toString();
   }
 
   Future <String?> phoneNumber() async{
-    var appUserInformation = await repository.getCurrentUserInformation();
-    return appUserInformation.phoneNumber;
+    return (await _getAuthenticatedUser()).phoneNumber;
   }
 
   Future <String?> profilePicture() async{
-    var appUserInformation = await repository.getCurrentUserInformation();
-    return appUserInformation.imagePath;
+    return (await _getAuthenticatedUser()).imagePath;
   }
 
 }

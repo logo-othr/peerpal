@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/phone_input_page/cubit/phone_input_cubit.dart';
 import 'package:peerpal/profile_setup/pages/phone_input_page/view/phone_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 
@@ -26,7 +28,7 @@ class PhoneInputPage extends StatelessWidget {
         appBar: CustomAppBar("PeerPAL", hasBackButton: true,),
         body: BlocProvider(
           create: (_) {
-            return PhoneInputCubit(context.read<AppUserRepository>());
+            return PhoneInputCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
           },
           child: PhoneInputContent(isInFlowContext: isInFlowContext,pastPhone:pastPhone,),
         ),

@@ -8,9 +8,11 @@ import 'package:peerpal/activities/activity_public_overview_page/view/activity_p
 import 'package:peerpal/activities/activity_request_list/activity_request_list_page.dart';
 import 'package:peerpal/activities/activity_wizard_flow.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
@@ -34,9 +36,9 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                var currentUserName = (await context
-                    .read<AppUserRepository>()
-                    .getCurrentUserInformation())
+                // ToDo: Move into cubit/bloc
+                GetAuthenticatedUser _getAuthenticatedUser = sl<GetAuthenticatedUser>();
+                var currentUserName = (await _getAuthenticatedUser())
                     .name;
                 Activity activity = Activity(
                   id: (Uuid()).v4().toString(),

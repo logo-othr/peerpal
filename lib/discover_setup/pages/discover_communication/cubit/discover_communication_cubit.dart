@@ -1,15 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 
 part 'discover_communication_state.dart';
 
 class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
-  DiscoverCommunicationCubit(this._appUserRepository)
+  DiscoverCommunicationCubit(this._appUserRepository, this._getAuthenticatedUser)
       : super(DiscoverCommunicationInitial());
   final AppUserRepository _appUserRepository;
-
+final GetAuthenticatedUser _getAuthenticatedUser;
 
   Future<void> loadData() async {
     var activities = await _appUserRepository.loadCommunicationList();
@@ -45,7 +46,7 @@ class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
           state.communicationTypes, state.selectedCommunicationTypes));
 
       var userInformation =
-          await _appUserRepository.getCurrentUserInformation();
+          await _getAuthenticatedUser();
       var updatedUserInformation = userInformation.copyWith(
           discoverCommunicationPreferences: state.selectedCommunicationTypes);
       await _appUserRepository.updateUserInformation(updatedUserInformation);

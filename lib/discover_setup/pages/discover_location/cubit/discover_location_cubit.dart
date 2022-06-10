@@ -2,15 +2,17 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/location.dart';
 
 part 'discover_location_state.dart';
 
 class DiscoverLocationCubit extends Cubit<DiscoverLocationState> {
-  DiscoverLocationCubit(this._appUserRepository)
+  DiscoverLocationCubit(this._appUserRepository, this._getAuthenticatedUser)
       : super(DiscoverLocationInitial());
 
   final AppUserRepository _appUserRepository;
+  final GetAuthenticatedUser _getAuthenticatedUser;
 
   Future<void> loadData() async {
     var locations = await _appUserRepository.loadLocations();
@@ -77,7 +79,7 @@ for(var location in state.selectedLocations) {
       if(state is DiscoverLocationLoaded) {
       emit(DiscoverLocationPosting(state.locations, state.selectedLocations));
 
-      var userInformation = await _appUserRepository.getCurrentUserInformation();
+      var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation =
       userInformation.copyWith(discoverLocations: state.selectedLocations);
       await _appUserRepository.updateUserInformation(updatedUserInformation);
