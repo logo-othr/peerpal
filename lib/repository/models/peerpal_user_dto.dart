@@ -20,17 +20,14 @@ class PeerPALUserDTO {
 
     bool? chatPreference;
     bool? phonePreference;
-    if(peerPALUser.discoverCommunicationPreferences != null) {
-      phonePreference = peerPALUser
-          .discoverCommunicationPreferences
-          ?.contains(CommunicationType.phone) ??
+    if (peerPALUser.discoverCommunicationPreferences != null) {
+      phonePreference = peerPALUser.discoverCommunicationPreferences
+              ?.contains(CommunicationType.phone) ??
           false;
-      chatPreference = peerPALUser
-          .discoverCommunicationPreferences
-          ?.contains(CommunicationType.chat) ??
+      chatPreference = peerPALUser.discoverCommunicationPreferences
+              ?.contains(CommunicationType.chat) ??
           false;
     }
-
 
     var publicUserInformation = PublicUserInformationDTO(
         imagePath: peerPALUser.imagePath,
@@ -55,14 +52,15 @@ class PeerPALUserDTO {
     var pushToken = privateUserInformation?.pushToken;
     List<CommunicationType>? discoverCommunicationPreferences;
 
-
     if (publicUserInformation != null) {
-      if(publicUserInformation!.hasChatCommunicationPreference == null ||
+      if (publicUserInformation!.hasChatCommunicationPreference == null ||
           publicUserInformation!.hasPhoneCommunicationPreference == null) {
         discoverCommunicationPreferences == null;
       } else {
-        bool hasPhoneCommunicationPreference = publicUserInformation!.hasPhoneCommunicationPreference!;
-        bool hasChatCommunicationPreference = publicUserInformation!.hasChatCommunicationPreference!;
+        bool hasPhoneCommunicationPreference =
+            publicUserInformation!.hasPhoneCommunicationPreference!;
+        bool hasChatCommunicationPreference =
+            publicUserInformation!.hasChatCommunicationPreference!;
         discoverCommunicationPreferences = [];
         if (hasPhoneCommunicationPreference)
           discoverCommunicationPreferences.add(CommunicationType.phone);

@@ -39,35 +39,36 @@ class CustomFriendRequestCard extends StatelessWidget {
                 child: Material(
                     borderRadius: const BorderRadius.all(Radius.circular(25.0)),
                     clipBehavior: Clip.hardEdge,
-                    child: (userInformation.imagePath!.isEmpty || userInformation.imagePath == null)
-                        ?  const Icon(
-                      Icons.account_circle,
-                      size: 50.0,
-                      color: Colors.grey,
-                    ) : CachedNetworkImage(imageUrl:
-                    userInformation.imagePath!,
-                      fit: BoxFit.cover,
-                      width: 50.0,
-                      height: 50.0,
-                      placeholder: (BuildContext context, url) =>
-                          SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: primaryColor,
+                    child: (userInformation.imagePath!.isEmpty ||
+                            userInformation.imagePath == null)
+                        ? const Icon(
+                            Icons.account_circle,
+                            size: 50.0,
+                            color: Colors.grey,
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: userInformation.imagePath!,
+                            fit: BoxFit.cover,
+                            width: 50.0,
+                            height: 50.0,
+                            placeholder: (BuildContext context, url) =>
+                                SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: primaryColor,
+                                ),
                               ),
                             ),
-                          ),
-                      errorWidget: (context, object, stackTrace) {
-                        return const Icon(
-                          Icons.account_circle,
-                          size: 50.0,
-                          color: Colors.grey,
-                        );
-                      },
-                    )
-                ),
+                            errorWidget: (context, object, stackTrace) {
+                              return const Icon(
+                                Icons.account_circle,
+                                size: 50.0,
+                                color: Colors.grey,
+                              );
+                            },
+                          )),
               ),
             ),
             Flexible(
@@ -98,8 +99,7 @@ class CustomFriendRequestCard extends StatelessWidget {
                           onPressed: () {
                             context
                                 .read<FriendRequestsCubit>()
-                                .friendRequestResponse(
-                                userInformation, true);
+                                .friendRequestResponse(userInformation, true);
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(50, 20),
@@ -118,8 +118,7 @@ class CustomFriendRequestCard extends StatelessWidget {
                           onPressed: () {
                             context
                                 .read<FriendRequestsCubit>()
-                                .friendRequestResponse(
-                                userInformation, false);
+                                .friendRequestResponse(userInformation, false);
                           },
                           style: TextButton.styleFrom(
                               minimumSize: const Size(50, 20),

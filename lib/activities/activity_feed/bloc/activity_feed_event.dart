@@ -7,6 +7,3 @@ abstract class ActivityFeedEvent extends Equatable {
 }
 
 class LoadActivityFeed extends ActivityFeedEvent {}
-
-
-

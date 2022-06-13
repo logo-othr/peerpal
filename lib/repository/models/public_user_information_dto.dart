@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:peerpal/repository/models/activity.dart';
 
 part 'public_user_information_dto.g.dart';
 
@@ -17,8 +16,10 @@ class PublicUserInformationDTO {
       this.discoverLocations,
       this.imagePath}) {
     combined_location_activities = [];
-    if(discoverActivities != null) combined_location_activities.addAll(discoverActivities!);
-    if(discoverLocations != null) combined_location_activities.addAll(discoverLocations!);
+    if (discoverActivities != null)
+      combined_location_activities.addAll(discoverActivities!);
+    if (discoverLocations != null)
+      combined_location_activities.addAll(discoverLocations!);
   }
 
   final String? id;
@@ -40,8 +41,6 @@ class PublicUserInformationDTO {
    * ToDo: Think about a better implementation
    */
   late List<String> combined_location_activities;
-
-
 
   PublicUserInformationDTO copyWith(
       {String? id,

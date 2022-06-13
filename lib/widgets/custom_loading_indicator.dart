@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomLoadingIndicator extends StatelessWidget {
-  const CustomLoadingIndicator({Key? key, required this.text}) : super(key: key);
-final String text;
+  const CustomLoadingIndicator({Key? key, required this.text})
+      : super(key: key);
+  final String text;
+
   @override
   Widget build(BuildContext context) {
     return Center(

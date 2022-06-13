@@ -3,15 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
-import 'package:peerpal/repository/models/activity.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
-import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 part 'discover_interests_overview_state.dart';
 
-class DiscoverInterestsOverviewCubit extends Cubit<DiscoverInterestsOverviewState> {
-  DiscoverInterestsOverviewCubit(this.repository, this._getAuthenticatedUser) : super(DiscoverInterestsOverviewInitial());
+class DiscoverInterestsOverviewCubit
+    extends Cubit<DiscoverInterestsOverviewState> {
+  DiscoverInterestsOverviewCubit(this.repository, this._getAuthenticatedUser)
+      : super(DiscoverInterestsOverviewInitial());
   final AppUserRepository repository;
   final GetAuthenticatedUser _getAuthenticatedUser;
 
@@ -19,6 +18,4 @@ class DiscoverInterestsOverviewCubit extends Cubit<DiscoverInterestsOverviewStat
     PeerPALUser peerPALUser = await _getAuthenticatedUser();
     emit(DiscoverInterestsOverviewLoaded(peerPALUser));
   }
-
-
 }

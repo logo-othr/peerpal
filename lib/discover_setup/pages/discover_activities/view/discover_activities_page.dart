@@ -22,7 +22,9 @@ class DiscoverActivitiesPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocProvider.value(
-        value: DiscoverActivitiesCubit(context.read<AppUserRepository>(), context.read<ActivityRepository>(), sl<GetAuthenticatedUser>())..loadData(),
+        value: DiscoverActivitiesCubit(context.read<AppUserRepository>(),
+            context.read<ActivityRepository>(), sl<GetAuthenticatedUser>())
+          ..loadData(),
         child: DiscoverActivitiesContent(isInFlowContext: isInFlowContext),
       ),
     );

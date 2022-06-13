@@ -8,16 +8,19 @@ import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
-
 class PhoneInputPage extends StatelessWidget {
-
   final bool isInFlowContext;
   final String pastPhone;
-  PhoneInputPage({required this.isInFlowContext,required this.pastPhone});
 
-  static MaterialPage<void> page({required bool isInFlowContext,required String pastPhone}) {
+  PhoneInputPage({required this.isInFlowContext, required this.pastPhone});
+
+  static MaterialPage<void> page(
+      {required bool isInFlowContext, required String pastPhone}) {
     return MaterialPage<void>(
-        child: PhoneInputPage(isInFlowContext: isInFlowContext,pastPhone: pastPhone,));
+        child: PhoneInputPage(
+      isInFlowContext: isInFlowContext,
+      pastPhone: pastPhone,
+    ));
   }
 
   @override
@@ -25,12 +28,19 @@ class PhoneInputPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar("PeerPAL", hasBackButton: true,),
+        appBar: CustomAppBar(
+          "PeerPAL",
+          hasBackButton: true,
+        ),
         body: BlocProvider(
           create: (_) {
-            return PhoneInputCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
+            return PhoneInputCubit(
+                context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
           },
-          child: PhoneInputContent(isInFlowContext: isInFlowContext,pastPhone:pastPhone,),
+          child: PhoneInputContent(
+            isInFlowContext: isInFlowContext,
+            pastPhone: pastPhone,
+          ),
         ),
       ),
     );

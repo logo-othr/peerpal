@@ -1,11 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 import '../../colors.dart';
-
-
 
 // ignore: must_be_immutable
 class CustomSingleCreatorTable extends StatelessWidget {
@@ -16,7 +13,13 @@ class CustomSingleCreatorTable extends StatelessWidget {
   var avatar;
   bool isOwnCreatedActivity;
 
-  CustomSingleCreatorTable({this.heading, this.text, this.onPressed, this.tapIcon, required this.avatar, required this.isOwnCreatedActivity});
+  CustomSingleCreatorTable(
+      {this.heading,
+      this.text,
+      this.onPressed,
+      this.tapIcon,
+      required this.avatar,
+      required this.isOwnCreatedActivity});
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +40,8 @@ class CustomSingleCreatorTable extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-                child:
-                CustomPeerPALHeading3(text:heading!, color: secondaryColor),
+                child: CustomPeerPALHeading3(
+                    text: heading!, color: secondaryColor),
               ),
               Container(
                 height: 70,
@@ -63,7 +66,7 @@ class CustomSingleCreatorTable extends StatelessWidget {
                                 child: ClipOval(
                                   child: CircleAvatar(
                                     radius: 25,
-                                    child:  avatar,
+                                    child: avatar,
                                     backgroundColor: Colors.white,
                                   ),
                                 ),
@@ -83,17 +86,18 @@ class CustomSingleCreatorTable extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,10,0),
-                          child: isOwnCreatedActivity ? Container() : Icon(
-                            tapIcon,
-                            size: 30,
-                            color: primaryColor,
-                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: isOwnCreatedActivity
+                              ? Container()
+                              : Icon(
+                                  tapIcon,
+                                  size: 30,
+                                  color: primaryColor,
+                                ),
                         ),
                       ],
                     ),

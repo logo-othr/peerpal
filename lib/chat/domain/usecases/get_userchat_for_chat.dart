@@ -1,8 +1,8 @@
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
+import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 class GetUserChatForChat {
@@ -10,7 +10,8 @@ class GetUserChatForChat {
   final AppUserRepository appUserRepository;
   final AuthenticationRepository authenticationRepository;
 
-  GetUserChatForChat(this.chatRepository, this.appUserRepository, this.authenticationRepository);
+  GetUserChatForChat(this.chatRepository, this.appUserRepository,
+      this.authenticationRepository);
 
   Stream<List<UserChat>> call(
       Stream<List<Chat>> chatStream, bool filter) async* {
@@ -20,18 +21,17 @@ class GetUserChatForChat {
     await for (List<Chat> chatList in chatStream) {
       userChats.clear();
       for (Chat chat in chatList) {
-        if(chat.chatRequestAccepted == true) {
+        if (chat.chatRequestAccepted == true) {
           UserChat userChat = await chatToUserChat(chat, appUserId);
           userChats.add(userChat);
-        } else if(chat.chatRequestAccepted == false &&
+        } else if (chat.chatRequestAccepted == false &&
             chat.startedBy == appUserId) {
           UserChat userChat = await chatToUserChat(chat, appUserId);
           userChats.add(userChat);
-        } else if(filter == false) {
+        } else if (filter == false) {
           UserChat userChat = await chatToUserChat(chat, appUserId);
           userChats.add(userChat);
         }
-
       }
       yield userChats;
     }

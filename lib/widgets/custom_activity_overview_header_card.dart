@@ -7,10 +7,10 @@ import '../../colors.dart';
 class CustomActivityOverviewHeaderCard extends StatelessWidget {
   CustomActivityOverviewHeaderCard(
       {required this.heading,
-        required this.icon,
-        required this.isActive,
-        required this.onActive,
-        required this.onInactive});
+      required this.icon,
+      required this.isActive,
+      required this.onActive,
+      required this.onInactive});
 
   final IconData icon;
   final String heading;
@@ -26,7 +26,7 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             border:
-            Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,7 +51,10 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
                   )),
               Container(
                 width: 120,
-                child: CustomPeerPALHeading3(fontSize: MediaQuery.of(context).size.width / 21,fontWeight: FontWeight.bold, text: heading),
+                child: CustomPeerPALHeading3(
+                    fontSize: MediaQuery.of(context).size.width / 21,
+                    fontWeight: FontWeight.bold,
+                    text: heading),
               ),
               //CustomPeerPALHeading2(heading),
               VerticalDivider(thickness: 1, color: secondaryColor),

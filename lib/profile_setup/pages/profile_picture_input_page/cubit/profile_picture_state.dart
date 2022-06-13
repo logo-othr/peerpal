@@ -1,15 +1,14 @@
 part of 'profile_picture_cubit.dart';
 
 abstract class ProfilePictureState extends Equatable {
-
   const ProfilePictureState();
+
   @override
   List<Object?> get props => [];
 }
 
 class ProfilePictureInitial extends ProfilePictureState {
-
-  const ProfilePictureInitial() ;
+  const ProfilePictureInitial();
 
   @override
   List<Object?> get props => [];

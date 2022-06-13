@@ -20,10 +20,12 @@ class DiscoverCommunicationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-        child: BlocProvider.value(
-          value: DiscoverCommunicationCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())..loadData(),
-          child: DiscoverCommunicationContent(isInFlowContext: isInFlowContext),
-        ),
+      child: BlocProvider.value(
+        value: DiscoverCommunicationCubit(
+            context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+          ..loadData(),
+        child: DiscoverCommunicationContent(isInFlowContext: isInFlowContext),
+      ),
     );
   }
 }

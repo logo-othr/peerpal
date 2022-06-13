@@ -1,14 +1,16 @@
 import 'package:peerpal/repository/cache.dart';
 
-class MemoryCache implements Cache{
+class MemoryCache implements Cache {
   MemoryCache() : _memoryCache = <String, Object>{};
 
   final Map<String, Object> _memoryCache;
 
   @override
-  void clear({ String? key}) {
-    if(key == null) _memoryCache.clear();
-    else _memoryCache.remove(key);
+  void clear({String? key}) {
+    if (key == null)
+      _memoryCache.clear();
+    else
+      _memoryCache.remove(key);
   }
 
   @override

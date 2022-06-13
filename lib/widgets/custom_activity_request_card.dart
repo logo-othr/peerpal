@@ -5,7 +5,6 @@ import 'package:peerpal/widgets/custom_peerpal_request_button.dart';
 
 import '../../colors.dart';
 
-
 // ignore: must_be_immutable
 class CustomActivityRequestCard extends StatelessWidget {
   String? heading;
@@ -13,7 +12,8 @@ class CustomActivityRequestCard extends StatelessWidget {
   String? time;
   IconData? icon;
 
-  CustomActivityRequestCard({ this.heading,  this.activity,  this.time,  this.icon});
+  CustomActivityRequestCard(
+      {this.heading, this.activity, this.time, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +60,18 @@ class CustomActivityRequestCard extends StatelessWidget {
                       children: [
                         CustomPeerPALHeading2(heading!, color: primaryColor),
                         SizedBox(height: 5),
-                        CustomPeerPALHeading3(color: primaryColor, text: activity!),
+                        CustomPeerPALHeading3(
+                            color: primaryColor, text: activity!),
                         SizedBox(height: 5),
                         Row(
                           children: [
-                            CustomPeerPALHeading3(color: Colors.black, text: 'Uhrzeit:',),
+                            CustomPeerPALHeading3(
+                              color: Colors.black,
+                              text: 'Uhrzeit:',
+                            ),
                             SizedBox(width: 5),
-                            CustomPeerPALHeading3(color: Colors.black, text:time!),
+                            CustomPeerPALHeading3(
+                                color: Colors.black, text: time!),
                           ],
                         ),
                         SizedBox(height: 10),

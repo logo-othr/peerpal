@@ -1,7 +1,7 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/models/auth_user.dart';
 
@@ -30,7 +30,7 @@ class AuthenticationRepository {
   AuthenticationRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
     required this.cache,
-  })  : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   Stream<AuthUser> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
@@ -49,8 +49,6 @@ class AuthenticationRepository {
         ? AuthUser.empty
         : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
-
-
 
   Future<void> deleteDeviceTokenFromServer() async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;

@@ -11,10 +11,11 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class PhoneInputContent extends StatelessWidget {
-
   final bool isInFlowContext;
   final String pastPhone;
-  PhoneInputContent({Key? key, required this.isInFlowContext,this.pastPhone=""})
+
+  PhoneInputContent(
+      {Key? key, required this.isInFlowContext, this.pastPhone = ""})
       : super(key: key);
 
   TextEditingController nameController = TextEditingController();
@@ -46,9 +47,11 @@ class PhoneInputContent extends StatelessWidget {
                 const SizedBox(height: 1.0),
                 FittedBox(
                   fit: BoxFit.fitWidth,
-                  child: CustomPeerPALHeading1("Wie lautet deine Telefonnummer?"),),
+                  child:
+                      CustomPeerPALHeading1("Wie lautet deine Telefonnummer?"),
+                ),
                 const SizedBox(height: 150.0),
-                _PhonenumberInputField(isInFlowContext,pastPhone),
+                _PhonenumberInputField(isInFlowContext, pastPhone),
                 const SizedBox(height: 190),
                 _NextButton(isInFlowContext),
                 const SizedBox(height: 20),
@@ -64,80 +67,82 @@ class PhoneInputContent extends StatelessWidget {
 
 class _PhonenumberInputField extends StatelessWidget {
   _PhonenumberInputField(bool isInFlowContext, this.pastPhone);
+
   String pastPhone;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
-      buildWhen: (previous, current) =>
-          previous.phoneNumber != current.phoneNumber,
-      builder: (context, state) {
-
-        String? errorText = "";
-        var errorState = state.phoneNumber.error;
-        switch (errorState) {
-          case PhoneError.toLong:
-            errorText = "länge einer gültigen Telefonnummer überschritten";
-            break;
-          case PhoneError.toShort:
-            errorText = "Länge einer gültigen Telefennummer unterschritten";
-            break;
-          default:
-            errorText = null;
-            break;
-        }
-        return new FutureBuilder(future: context.read<PhoneInputCubit>().currentPhoneNumber(),
-        initialData: state.phoneNumber.value,
-        builder:(BuildContext context, AsyncSnapshot<String?>text){
-        return Container(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
-              child: TextFormField(
-                maxLength: 15,
-                //discuss
-                initialValue:pastPhone,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                style: const TextStyle(fontSize: 22),
-                key: const Key('phone_input_phone_number_field'),
-                onChanged: (phoneNumber) =>
-                    context.read<PhoneInputCubit>().phoneChanged(phoneNumber),
-                maxLines: 1,
-                decoration: InputDecoration(
-                  labelText: "Bsp: 01573243212323",
-                  contentPadding: const EdgeInsets.fromLTRB(30, 30, 0, 30),
-                  errorText: state.phoneNumber.invalid ? errorText : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                    borderSide: BorderSide(
-                      color: primaryColor,
+        buildWhen: (previous, current) =>
+            previous.phoneNumber != current.phoneNumber,
+        builder: (context, state) {
+          String? errorText = "";
+          var errorState = state.phoneNumber.error;
+          switch (errorState) {
+            case PhoneError.toLong:
+              errorText = "länge einer gültigen Telefonnummer überschritten";
+              break;
+            case PhoneError.toShort:
+              errorText = "Länge einer gültigen Telefennummer unterschritten";
+              break;
+            default:
+              errorText = null;
+              break;
+          }
+          return new FutureBuilder(
+              future: context.read<PhoneInputCubit>().currentPhoneNumber(),
+              initialData: state.phoneNumber.value,
+              builder: (BuildContext context, AsyncSnapshot<String?> text) {
+                return Container(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
+                      child: TextFormField(
+                        maxLength: 15,
+                        //discuss
+                        initialValue: pastPhone,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        style: const TextStyle(fontSize: 22),
+                        key: const Key('phone_input_phone_number_field'),
+                        onChanged: (phoneNumber) => context
+                            .read<PhoneInputCubit>()
+                            .phoneChanged(phoneNumber),
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          labelText: "Bsp: 01573243212323",
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(30, 30, 0, 30),
+                          errorText:
+                              state.phoneNumber.invalid ? errorText : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(
+                              color: primaryColor,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(
+                                color: primaryColor,
+                                width: 3,
+                              )),
+                        ),
+                      ),
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                      borderSide: BorderSide(
-                        color: primaryColor,
-                        width: 3,
-                      )),
-                ),
-              ),
-            ),
-          ),
-        );
-            }
-        );}
-      );
+                );
+              });
+        });
   }
 }
 
 class _NextButton extends StatelessWidget {
-
   final bool isInFlowContext;
 
   _NextButton(this.isInFlowContext);
-
 
   @override
   Widget build(BuildContext context) {
@@ -148,21 +153,21 @@ class _NextButton extends StatelessWidget {
         } else {
           return CustomPeerPALButton(
             text: 'Weiter',
-            onPressed: !state.phoneNumber.invalid ? () async {
-                await context
-                    .read<PhoneInputCubit>()
-                    .updatePhoneNumber(state.phoneNumber.value);
+            onPressed: !state.phoneNumber.invalid
+                ? () async {
+                    await context
+                        .read<PhoneInputCubit>()
+                        .updatePhoneNumber(state.phoneNumber.value);
 
-              var phoneNumber = state.phoneNumber;
-              if (isInFlowContext) {
-                context
-                    .flow<PeerPALUser>()
-                    .update((s) => s.copyWith(phoneNumber: phoneNumber.value));
-              } else {
-                Navigator.pop(context);
-              }
-
-            } : null,
+                    var phoneNumber = state.phoneNumber;
+                    if (isInFlowContext) {
+                      context.flow<PeerPALUser>().update(
+                          (s) => s.copyWith(phoneNumber: phoneNumber.value));
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  }
+                : null,
           );
         }
       },
@@ -171,7 +176,6 @@ class _NextButton extends StatelessWidget {
 }
 
 class _Checkbox extends StatelessWidget {
-
   final bool isInFlowContext;
 
   _Checkbox(this.isInFlowContext);
@@ -180,12 +184,10 @@ class _Checkbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
       builder: (context, state) {
-          return  CustomPeerPALButton2(
+        return CustomPeerPALButton2(
             text: 'Ich möchte keine Telefonnummer angeben',
             onPressed: () async {
-              await context
-                  .read<PhoneInputCubit>()
-                  .updatePhoneNumber('');
+              await context.read<PhoneInputCubit>().updatePhoneNumber('');
 
               if (isInFlowContext) {
                 context
@@ -194,10 +196,7 @@ class _Checkbox extends StatelessWidget {
               } else {
                 Navigator.pop(context);
               }
-
-            }
-          );
-
+            });
       },
     );
   }

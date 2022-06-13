@@ -1,13 +1,3 @@
-import 'dart:math';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/activity.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
-import 'package:peerpal/repository/models/location.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
-
 class DebugHelper {
   /*static Future<UserCredential?> createFirebaseUser(
       String email, String password) async {

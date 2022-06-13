@@ -22,7 +22,8 @@ class DiscoverAgePage extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return DiscoverAgeCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
+          return DiscoverAgeCubit(
+              context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
         },
         child: DiscoverAgeContent(isInFlowContext: isInFlowContext),
       ),

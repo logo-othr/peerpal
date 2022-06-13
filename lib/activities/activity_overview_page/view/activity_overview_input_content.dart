@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:peerpal/activities/activity_date/view/activity_date_input_page.dart';
-import 'package:peerpal/activities/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/activities/activity_invitation/view/activity_invitation_input_page.dart';
 import 'package:peerpal/activities/activity_location/view/activity_location_input_page.dart';
 import 'package:peerpal/activities/activity_overview_page/cubit/activity_overview_cubit.dart';
-import 'package:peerpal/activities/activity_public_overview_page/cubit/activity_public_overview_cubit.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
@@ -17,9 +15,9 @@ import 'package:peerpal/widgets/custom_activity_participations_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
-import 'package:peerpal/widgets/custom_single_location_table_view.dart';
 import 'package:peerpal/widgets/custom_single_creator_table_view.dart';
 import 'package:peerpal/widgets/custom_single_description_table_view.dart';
+import 'package:peerpal/widgets/custom_single_location_table_view.dart';
 import 'package:peerpal/widgets/custom_single_participants_table_view.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';
 
@@ -57,7 +55,6 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
         });
   }
 
-
   deleteActivity() {
     showDialog(
         context: context,
@@ -88,16 +85,24 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
       appBar: CustomAppBar(
         "Aktivität",
         hasBackButton: false,
-        actionButtonWidget: !widget.isInFlowContext ? Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Text('Löschen', style: TextStyle(fontSize: 16)),
-            )) : Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Text('Verwerfen', style: TextStyle(fontSize: 16)),
-            )),
-        onActionButtonPressed: !widget.isInFlowContext ? () {deleteActivity();}: () {cancelActivity();},
+        actionButtonWidget: !widget.isInFlowContext
+            ? Center(
+                child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                child: Text('Löschen', style: TextStyle(fontSize: 16)),
+              ))
+            : Center(
+                child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                child: Text('Verwerfen', style: TextStyle(fontSize: 16)),
+              )),
+        onActionButtonPressed: !widget.isInFlowContext
+            ? () {
+                deleteActivity();
+              }
+            : () {
+                cancelActivity();
+              },
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
@@ -107,17 +112,20 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
               Activity activity = state.activity;
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
-              List<String>? activityAttendeesList = activityAttendees
-                  .map((e) => e.name!)
-                  .toList();
+              List<String>? activityAttendeesList =
+                  activityAttendees.map((e) => e.name!).toList();
               activityAttendeesList.sort();
               var activityInvitedFriends = state.invitationIds;
               var cubit = context.read<OverviewInputCubit>();
-              if(activity.description != null) descriptionController.text = activity.description!;
+              if (activity.description != null)
+                descriptionController.text = activity.description!;
 
               String location = "";
-              if(activity.location!.streetNumber == null) location = "${activity.location!.street}";
-              else location = "${activity.location!.street} ${activity.location!.streetNumber}";
+              if (activity.location!.streetNumber == null)
+                location = "${activity.location!.street}";
+              else
+                location =
+                    "${activity.location!.street} ${activity.location!.streetNumber}";
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -144,21 +152,28 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                 CustomSingleCreatorTable(
                                     heading: "ERSTELLER",
                                     text: activity.creatorName,
-                                    avatar: (activityCreator.imagePath == null || activityCreator.imagePath!.isEmpty) ? Icon(
-                                      Icons.account_circle,
-                                      size: 40.0,
-                                      color: Colors.grey,
-                                    ) :
-                                    CachedNetworkImage(imageUrl: activityCreator.imagePath!, errorWidget: (context, object, stackTrace) {
-                                      return const Icon(
-                                        Icons.account_circle,
-                                        size: 40.0,
-                                        color: Colors.grey,
-                                      );
-                                    },),
+                                    avatar: (activityCreator.imagePath ==
+                                                null ||
+                                            activityCreator.imagePath!.isEmpty)
+                                        ? Icon(
+                                            Icons.account_circle,
+                                            size: 40.0,
+                                            color: Colors.grey,
+                                          )
+                                        : CachedNetworkImage(
+                                            imageUrl:
+                                                activityCreator.imagePath!,
+                                            errorWidget:
+                                                (context, object, stackTrace) {
+                                              return const Icon(
+                                                Icons.account_circle,
+                                                size: 40.0,
+                                                color: Colors.grey,
+                                              );
+                                            },
+                                          ),
                                     tapIcon: Icons.email,
                                     isOwnCreatedActivity: true),
-
                                 CustomSingleTable(
                                   onPressed: () async => {
                                     await Navigator.push(
@@ -169,12 +184,13 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                                 isInFlowContext: false,
                                               )),
                                     ).then((value) =>
-                                    context.read<OverviewInputCubit>()
-                                      ..loadData())
+                                        context.read<OverviewInputCubit>()
+                                          ..loadData())
                                   },
                                   heading: "DATUM",
-                                  text: DateFormat('dd.MM.yyyy')
-                                      .format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
+                                  text: DateFormat('dd.MM.yyyy').format(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          activity.date!)),
                                   isArrowIconVisible: true,
                                 ),
                                 CustomSingleTable(
@@ -187,31 +203,31 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                                 isInFlowContext: false,
                                               )),
                                     ).then((value) =>
-                                    context.read<OverviewInputCubit>()
-                                      ..loadData())
+                                        context.read<OverviewInputCubit>()
+                                          ..loadData())
                                   },
                                   heading: "UHRZEIT",
-                                  text:
-                                  DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!)),
+                                  text: DateFormat('kk:mm').format(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          activity.date!)),
                                   isArrowIconVisible: true,
                                 ),
                                 CustomSingleLocationTable(
                                     onPressed: () async => {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LocationInputPage(
-                                                  isInFlowContext: false,
-                                                )),
-                                      ).then((value) =>
-                                      context.read<OverviewInputCubit>()
-                                        ..loadData())
-                                    },
+                                          await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LocationInputPage(
+                                                      isInFlowContext: false,
+                                                    )),
+                                          ).then((value) =>
+                                              context.read<OverviewInputCubit>()
+                                                ..loadData())
+                                        },
                                     heading: "ORT",
                                     text: activity.location!.place,
-                                    subText:
-                                    location,
+                                    subText: location,
                                     isArrowIconVisible: true),
                                 CustomSingleParticipantsTable(
                                   onPressed: () async => {
@@ -223,8 +239,8 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                                 isInFlowContext: false,
                                               )),
                                     ).then((value) =>
-                                    context.read<OverviewInputCubit>()
-                                      ..loadData())
+                                        context.read<OverviewInputCubit>()
+                                          ..loadData())
                                   },
                                   heading: "EINGELADEN",
                                   text: activityInvitedFriends
@@ -235,8 +251,9 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                                 ),
                                 CustomSingleParticipantsTable(
                                     onPressed: () => {
-                                      showAttendeeDialog(activityAttendeesList)
-                                    },
+                                          showAttendeeDialog(
+                                              activityAttendeesList)
+                                        },
                                     heading: "TEILNEHMER",
                                     text: activityAttendees
                                         .map((e) => e.name)
@@ -262,26 +279,32 @@ class _OverviewInputContentState extends State<OverviewInputContent> {
                         children: <Widget>[
                           widget.isInFlowContext
                               ? CustomPeerPALButton(
-                            onPressed: () async {
-                              await context
-                                  .read<OverviewInputCubit>()
-                                  .createActivity(
-                                  descriptionController.text, DateTime.now().millisecondsSinceEpoch.toString());
-                              context.flow<Activity>().complete();
-                              Navigator.pop(context);
-                            },
-                            text: "Aktivität erstellen",
-                          )
+                                  onPressed: () async {
+                                    await context
+                                        .read<OverviewInputCubit>()
+                                        .createActivity(
+                                            descriptionController.text,
+                                            DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString());
+                                    context.flow<Activity>().complete();
+                                    Navigator.pop(context);
+                                  },
+                                  text: "Aktivität erstellen",
+                                )
                               : CustomPeerPALButton(
-                            onPressed: () async {
-                              await context
-                                  .read<OverviewInputCubit>()
-                                  .updateActivity(
-                                  descriptionController.text, DateTime.now().millisecondsSinceEpoch.toString());
-                              Navigator.pop(context);
-                            },
-                            text: "Aktivität speichern",
-                          )
+                                  onPressed: () async {
+                                    await context
+                                        .read<OverviewInputCubit>()
+                                        .updateActivity(
+                                            descriptionController.text,
+                                            DateTime.now()
+                                                .millisecondsSinceEpoch
+                                                .toString());
+                                    Navigator.pop(context);
+                                  },
+                                  text: "Aktivität speichern",
+                                )
                         ],
                       ))
                 ],

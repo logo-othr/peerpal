@@ -1,6 +1,5 @@
 part of 'discover_interests_overview_cubit.dart';
 
-
 @immutable
 abstract class DiscoverInterestsOverviewState extends Equatable {
   const DiscoverInterestsOverviewState();
@@ -20,5 +19,4 @@ class DiscoverInterestsOverviewLoaded extends DiscoverInterestsOverviewState {
 
   @override
   List<Object?> get props => [appUserInformation];
-
 }

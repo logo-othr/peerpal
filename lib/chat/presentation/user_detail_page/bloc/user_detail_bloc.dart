@@ -7,7 +7,6 @@ import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 part 'user_detail_event.dart';
-
 part 'user_detail_state.dart';
 
 class UserDetailBloc extends Bloc<UserDetailEvent, UserDetailState> {
@@ -21,11 +20,9 @@ class UserDetailBloc extends Bloc<UserDetailEvent, UserDetailState> {
   Stream<UserDetailState> mapEventToState(UserDetailEvent event) async* {
     if (event is LoadUserDetail) {
       PeerPALUser user =
-      await appUserRepository.getUserInformation(this.userId);
+          await appUserRepository.getUserInformation(this.userId);
 
       yield state.copyWith(status: UserDetailStatus.success, user: user);
     }
   }
 }
-
-

@@ -17,8 +17,7 @@ class CustomTableRow extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(
-              bottom: BorderSide(width: 1, color: secondaryColor))),
+          border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
       child: TextButton(
           onPressed: onPressed,
           child: Row(
@@ -26,15 +25,18 @@ class CustomTableRow extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child:
-                CustomPeerPALHeading3(text: text!, color: Colors.black,),
+                child: CustomPeerPALHeading3(
+                  text: text!,
+                  color: Colors.black,
+                ),
               ),
-              isArrowVisible ?
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 15,
-                color: secondaryColor,
-              ) : Container(),
+              isArrowVisible
+                  ? Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                      color: secondaryColor,
+                    )
+                  : Container(),
             ],
           ),
           style: TextButton.styleFrom(

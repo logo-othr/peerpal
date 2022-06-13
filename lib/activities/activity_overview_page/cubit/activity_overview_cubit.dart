@@ -15,10 +15,12 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
   final AppUserRepository _appUserRepository;
 
   Future<void> loadData({Activity? activityToChange}) async {
-    Activity activity = activityToChange ?? _activityRepository.getCurrentActivity();
-    if(activityToChange != null) _activityRepository.updateLocalActivity(activity);
+    Activity activity =
+        activityToChange ?? _activityRepository.getCurrentActivity();
+    if (activityToChange != null)
+      _activityRepository.updateLocalActivity(activity);
     PeerPALUser activityCreator =
-    await _appUserRepository.getUserInformation(activity.creatorId!);
+        await _appUserRepository.getUserInformation(activity.creatorId!);
     List<PeerPALUser> invitationIds = [];
     List<PeerPALUser> attendees = [];
 
@@ -35,35 +37,34 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
       });
     }
 
-    emit(ActivityOverviewLoaded(activity, activityCreator, attendees, invitationIds));
+    emit(ActivityOverviewLoaded(
+        activity, activityCreator, attendees, invitationIds));
   }
-
-
 
   setActivityToPublic() async {
     var updatedActivity = state.activity.copyWith(public: true);
     await _activityRepository.updateLocalActivity(updatedActivity);
-    emit(ActivityOverviewLoaded(
-        updatedActivity, state.activityCreator, state.attendees, state.invitationIds));
+    emit(ActivityOverviewLoaded(updatedActivity, state.activityCreator,
+        state.attendees, state.invitationIds));
   }
-
-
 
   setActivityToPrivate() async {
     var updatedActivity = state.activity.copyWith(public: false);
     await _activityRepository.updateLocalActivity(updatedActivity);
-    emit(ActivityOverviewLoaded(
-        updatedActivity, state.activityCreator, state.attendees, state.invitationIds));
+    emit(ActivityOverviewLoaded(updatedActivity, state.activityCreator,
+        state.attendees, state.invitationIds));
   }
 
   Future<void> updateActivity(String description, String timestamp) async {
-    var updatedActivity = state.activity.copyWith(description: description, timestamp: timestamp);
+    var updatedActivity =
+        state.activity.copyWith(description: description, timestamp: timestamp);
     await _activityRepository.updateLocalActivity(updatedActivity);
     await _activityRepository.updateActivity(updatedActivity);
   }
 
   Future<void> createActivity(String description, String timestamp) async {
-    var createActivity = state.activity.copyWith(description: description, timestamp: timestamp);
+    var createActivity =
+        state.activity.copyWith(description: description, timestamp: timestamp);
     await _activityRepository.updateLocalActivity(createActivity);
     await _activityRepository.postActivity(createActivity);
   }
@@ -73,5 +74,3 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
     await _activityRepository.deleteActivity(deleteActivity);
   }
 }
-
-

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-
 // ignore: must_be_immutable
 class CustomTableHeader extends StatelessWidget {
   String? heading;
@@ -24,7 +23,8 @@ class CustomTableHeader extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-                child: CustomPeerPALHeading3(text: heading!, color: secondaryColor),
+                child: CustomPeerPALHeading3(
+                    text: heading!, color: secondaryColor),
               ),
               Container(
                 decoration: BoxDecoration(

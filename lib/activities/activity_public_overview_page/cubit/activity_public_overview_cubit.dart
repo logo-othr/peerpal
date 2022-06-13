@@ -9,7 +9,8 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 part 'activity_public_overview_state.dart';
 
 class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
-  ActivityPublicOverviewCubit(this._activityRepository, this._appUserRepository, this._authenticationRepository)
+  ActivityPublicOverviewCubit(this._activityRepository, this._appUserRepository,
+      this._authenticationRepository)
       : super(ActivityPublicOverviewInitial());
 
   final ActivityRepository _activityRepository;
@@ -19,7 +20,8 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
   Future<void> loadData(Activity activity) async {
     bool isAttendee = false;
     if (activity.attendeeIds != null) {
-      if (activity.attendeeIds!.contains(_authenticationRepository.currentUser.id)) {
+      if (activity.attendeeIds!
+          .contains(_authenticationRepository.currentUser.id)) {
         isAttendee = true;
       }
     }

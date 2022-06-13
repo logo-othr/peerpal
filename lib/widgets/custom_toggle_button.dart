@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_text.dart';
-import 'package:provider/provider.dart';
 
 class CustomToggleButton extends StatelessWidget {
   bool communicationButtonActive = false;
@@ -15,11 +14,11 @@ class CustomToggleButton extends StatelessWidget {
 
   CustomToggleButton(
       {this.text,
-        required this.textColor,
-        required this.height,
-        required this.width,
-        required this.onPressed,
-        required this.active});
+      required this.textColor,
+      required this.height,
+      required this.width,
+      required this.onPressed,
+      required this.active});
 
   @override
   Widget build(BuildContext context) {

@@ -45,6 +45,4 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _userSubscription.cancel();
     return super.close();
   }
-
-
 }

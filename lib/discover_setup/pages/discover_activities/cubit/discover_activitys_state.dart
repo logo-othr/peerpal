@@ -34,7 +34,8 @@ class DiscoverActivitiesSelected extends DiscoverActivitiesState {
 }
 
 class DiscoverActivitiesPosting extends DiscoverActivitiesState {
-  DiscoverActivitiesPosting(List<Activity> activities, List<Activity> selectedActivities)
+  DiscoverActivitiesPosting(
+      List<Activity> activities, List<Activity> selectedActivities)
       : super(activities, selectedActivities, '');
 
   @override
@@ -42,7 +43,8 @@ class DiscoverActivitiesPosting extends DiscoverActivitiesState {
 }
 
 class DiscoverActivitiesPosted extends DiscoverActivitiesState {
-  DiscoverActivitiesPosted(List<Activity> activities, List<Activity> selectedActivities)
+  DiscoverActivitiesPosted(
+      List<Activity> activities, List<Activity> selectedActivities)
       : super(activities, selectedActivities, '');
 
   @override

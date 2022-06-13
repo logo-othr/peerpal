@@ -1,5 +1,8 @@
+import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:peerpal/activities/activity_date/cubit/activity_date_cubit.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
@@ -7,11 +10,9 @@ import 'package:peerpal/widgets/custom_activity_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:peerpal/widgets/custom_picker.dart';
+
 import '../../../colors.dart';
-import 'package:flow_builder/flow_builder.dart';
 
 class DateInputContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -34,8 +35,8 @@ class DateInputContent extends StatelessWidget {
               children: <Widget>[
                 (state is DateInputLoaded)
                     ? CustomActivityHeaderCard(
-                        activity: state.activityName,
-                        icon: ActivityIconData.icons[state.activityCode]!)
+                    activity: state.activityName,
+                    icon: ActivityIconData.icons[state.activityCode]!)
                     : CircularProgressIndicator(),
                 SizedBox(
                   height: 40,
@@ -58,20 +59,17 @@ class DateInputContent extends StatelessWidget {
                 ),
                 Spacer(),
                 CustomPeerPALButton(
-                  text: "Weiter",
-                  onPressed: () async  {
-                    var cubit = context.read<
-                        DateInputCubit>();
-                    if (isInFlowContext) {
-                      var activity = await cubit.postData();
-                      context.flow<Activity>().update(
-                              (s) => activity);
-                    } else {
-                      await cubit.postData();
-                      Navigator.pop(context);
-                    }
-                  }
-                ),
+                    text: "Weiter",
+                    onPressed: () async {
+                      var cubit = context.read<DateInputCubit>();
+                      if (isInFlowContext) {
+                        var activity = await cubit.postData();
+                        context.flow<Activity>().update((s) => activity);
+                      } else {
+                        await cubit.postData();
+                        Navigator.pop(context);
+                      }
+                    }),
               ],
             ),
           );
@@ -109,32 +107,32 @@ class _DatePickerState extends State<_DatePicker> {
                     DatePicker.showDatePicker(context,
                         showTitleActions: true,
                         minTime: DateTime.now(), onChanged: (date) {
-                      print('change $date');
-                    }, onConfirm: (date) {
-                      String formattedDate =
+                          print('change $date');
+                        }, onConfirm: (date) {
+                          String formattedDate =
                           DateFormat('dd.MM.yyyy').format(date);
-                      dateController.text = formattedDate;
-                      context
-                          .read<DateInputCubit>()
-                          .dataChanged(formattedDate, state.time);
-                    }, currentTime: DateTime.now(), locale: LocaleType.de)
+                          dateController.text = formattedDate;
+                          context
+                              .read<DateInputCubit>()
+                              .dataChanged(formattedDate, state.time);
+                        }, currentTime: DateTime.now(), locale: LocaleType.de)
                   },
-              icon: Icon(Icons.edit)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-              color: primaryColor,
+                  icon: Icon(Icons.edit)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: primaryColor,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: primaryColor,
+                    width: 3,
+                  )),
             ),
-          ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                color: primaryColor,
-                width: 3,
-              )),
-        ),
-      );
-    });
+          );
+        });
   }
 }
 
@@ -161,8 +159,8 @@ class _TimePickerState extends State<_TimePicker> {
           decoration: InputDecoration(
             suffixIcon: IconButton(
                 onPressed: () => {
-                      DatePicker.showPicker(context, showTitleActions: true,
-                          onChanged: (date) {
+                  DatePicker.showPicker(context, showTitleActions: true,
+                      onChanged: (date) {
                         print('change $date');
                       }, onConfirm: (date) {
                         String formattedTime = DateFormat('HH:mm').format(date);
@@ -182,10 +180,10 @@ class _TimePickerState extends State<_TimePicker> {
                             .dataChanged(state.date, formattedTime);
                         timeController.text = '$formattedTime Uhr';
                       },
-                          pickerModel:
-                              CustomPicker(currentTime: DateTime.now()),
-                          locale: LocaleType.de)
-                    },
+                      pickerModel:
+                      CustomPicker(currentTime: DateTime.now()),
+                      locale: LocaleType.de)
+                },
                 icon: Icon(Icons.edit)),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

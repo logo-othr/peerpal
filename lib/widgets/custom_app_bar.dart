@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activities/activity_overview_page/cubit/activity_overview_cubit.dart';
-import 'package:peerpal/widgets/custom_dialog.dart';
 
 import 'custom_peerpal_text.dart';
 

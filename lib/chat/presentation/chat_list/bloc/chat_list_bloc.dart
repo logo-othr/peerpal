@@ -11,7 +11,6 @@ import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_list_event.dart';
-
 part 'chat_list_state.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
@@ -19,34 +18,39 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   GetUserChatForChat _getUserChatForChat;
   GetChatRequestForUser _getChatRequestForUser;
   StreamController<List<Chat>> _chatStreamController = new BehaviorSubject();
-  StreamController<List<UserChat>> _userChatStreamController = new BehaviorSubject();
-  StreamController<List<UserChat>> _userFriendRequestStreamController = new BehaviorSubject();
-  ChatListBloc(this._getChatsForUser, this._getUserChatForChat, this._getChatRequestForUser) : super(ChatListState());
+  StreamController<List<UserChat>> _userChatStreamController =
+      new BehaviorSubject();
+  StreamController<List<UserChat>> _userFriendRequestStreamController =
+      new BehaviorSubject();
+
+  ChatListBloc(this._getChatsForUser, this._getUserChatForChat,
+      this._getChatRequestForUser)
+      : super(ChatListState());
 
   @override
   Future<void> close() {
-   _userChatStreamController.close();
+    _userChatStreamController.close();
     return super.close();
   }
 
   @override
   Stream<ChatListState> mapEventToState(ChatListEvent event) async* {
-      if (event is ChatListLoaded) {
-        Stream<List<Chat>> chatStream = _getChatsForUser();
-        _chatStreamController.addStream(chatStream);
+    if (event is ChatListLoaded) {
+      Stream<List<Chat>> chatStream = _getChatsForUser();
+      _chatStreamController.addStream(chatStream);
 
-        Stream<List<UserChat>> userChatStream = _getUserChatForChat(_chatStreamController.stream, true);
-        _userChatStreamController.addStream(userChatStream);
+      Stream<List<UserChat>> userChatStream =
+          _getUserChatForChat(_chatStreamController.stream, true);
+      _userChatStreamController.addStream(userChatStream);
 
-        Stream<List<UserChat>> chatRequestStream = _getChatRequestForUser(_chatStreamController.stream);
-        _userFriendRequestStreamController.addStream(chatRequestStream);
+      Stream<List<UserChat>> chatRequestStream =
+          _getChatRequestForUser(_chatStreamController.stream);
+      _userFriendRequestStreamController.addStream(chatRequestStream);
 
-        yield state.copyWith(
+      yield state.copyWith(
           status: ChatListStatus.success,
           chats: _userChatStreamController.stream,
-          chatRequests: _userFriendRequestStreamController.stream
-        );
-      }
-
+          chatRequests: _userFriendRequestStreamController.stream);
+    }
   }
 }

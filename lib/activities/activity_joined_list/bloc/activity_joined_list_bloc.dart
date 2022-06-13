@@ -12,10 +12,10 @@ import 'package:rxdart/rxdart.dart';
 part 'activity_joined_list_event.dart';
 part 'activity_joined_list_state.dart';
 
-class ActivityJoinedListBloc extends Bloc<ActivityJoinedListEvent, ActivityJoinedListState> {
-
-  StreamController<List<Activity>> _activityJoinedListStreamController = new BehaviorSubject();
-
+class ActivityJoinedListBloc
+    extends Bloc<ActivityJoinedListEvent, ActivityJoinedListState> {
+  StreamController<List<Activity>> _activityJoinedListStreamController =
+      new BehaviorSubject();
 
   var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -27,18 +27,16 @@ class ActivityJoinedListBloc extends Bloc<ActivityJoinedListEvent, ActivityJoine
   }
 
   @override
-  Stream<ActivityJoinedListState> mapEventToState(ActivityJoinedListEvent event) async* {
-
+  Stream<ActivityJoinedListState> mapEventToState(
+      ActivityJoinedListEvent event) async* {
     if (event is LoadActivityJoinedList) {
-      Stream<List<Activity>> activityJoinedListStream = sl<ActivityRepository>().getPrivateJoinedActivitiesForUser(currentUserId);
+      Stream<List<Activity>> activityJoinedListStream = sl<ActivityRepository>()
+          .getPrivateJoinedActivitiesForUser(currentUserId);
       _activityJoinedListStreamController.addStream(activityJoinedListStream);
 
       yield state.copyWith(
           status: ActivityJoinedListStatus.success,
-          activityJoinedList: _activityJoinedListStreamController.stream
-      );
+          activityJoinedList: _activityJoinedListStreamController.stream);
     }
   }
 }
-
-

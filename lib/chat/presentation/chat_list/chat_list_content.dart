@@ -1,21 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/chat/custom_chat_list_item_user.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_page.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
-import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:provider/provider.dart';
 
 class ChatListContent extends StatefulWidget {
@@ -30,7 +23,7 @@ class _ChatListContentState extends State<ChatListContent> {
 
   void scrollListener() {
     if (listScrollController.offset >=
-        listScrollController.position.maxScrollExtent &&
+            listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -100,11 +93,13 @@ class _ChatListContentState extends State<ChatListContent> {
             stream: context.read<ChatListBloc>().state.chats,
             builder:
                 (BuildContext context, AsyncSnapshot<List<UserChat>> snapshot) {
-              print("-------------- SteamBuilder Chat Build ---------- ");
+                  print("-------------- SteamBuilder Chat Build ---------- ");
               print(snapshot.connectionState);
-              if(snapshot.hasData) print("chat snapshot.hasData");
-              if(snapshot.hasData && snapshot.data!.isEmpty) print("chat snapshot.hasData && snapshot.data!.isEmpty");
-              if(snapshot.hasData) print("chat length: ${snapshot.data!.length}");
+              if (snapshot.hasData) print("chat snapshot.hasData");
+              if (snapshot.hasData && snapshot.data!.isEmpty)
+                print("chat snapshot.hasData && snapshot.data!.isEmpty");
+              if (snapshot.hasData)
+                print("chat length: ${snapshot.data!.length}");
               print("-------------- SteamBuilder Chat Build /ENDE ---------- ");
               // ToDo: stream<int> message count
 
@@ -144,9 +139,9 @@ class _ChatListContentState extends State<ChatListContent> {
               context,
               MaterialPageRoute(
                   builder: (context) => ChatPage(
-                    userChat: userChat,
-                    userId: userChat.user.id!,
-                  )));
+                        userChat: userChat,
+                        userId: userChat.user.id!,
+                      )));
         },
         child: CustomChatListItemUser(userInformation: userChat),
       ),

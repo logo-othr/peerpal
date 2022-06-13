@@ -11,7 +11,8 @@ class HomeCubit extends Cubit<HomeState> {
   final AppUserRepository _appuserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
 
-  HomeCubit(this._appuserRepository, this._getAuthenticatedUser) : super(HomeInitial());
+  HomeCubit(this._appuserRepository, this._getAuthenticatedUser)
+      : super(HomeInitial());
 
   Future<void> getCurrentUserInformation() async {
     emit(HomeLoading());
@@ -20,13 +21,8 @@ class HomeCubit extends Cubit<HomeState> {
     loadFlowState();
   }
 
-
-
-  Future<void> loadFlowState() async  {
-
-
-    PeerPALUser userInformation =
-    await _getAuthenticatedUser();
+  Future<void> loadFlowState() async {
+    PeerPALUser userInformation = await _getAuthenticatedUser();
     if (userInformation.isProfileNotComplete) {
       emit(HomeProfileFlow(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
@@ -36,7 +32,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void indexChanged(int index){
+  void indexChanged(int index) {
     emit(HomeUserInformationFlowCompleted(index));
   }
 }

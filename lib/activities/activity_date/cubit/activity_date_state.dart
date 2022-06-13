@@ -18,8 +18,9 @@ class DateInputInitial extends DateInputState {
 }
 
 class DateInputLoaded extends DateInputState {
-
-  DateInputLoaded(String date, String time, String activityName, String activityCode) : super(date, time, activityName, activityCode);
+  DateInputLoaded(
+      String date, String time, String activityName, String activityCode)
+      : super(date, time, activityName, activityCode);
 
   List<Object?> get props => [date, time, activityName, activityCode];
 }

@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-
 import '../../../colors.dart';
-
 
 // ignore: must_be_immutable
 class CustomSingleDescriptionTable extends StatelessWidget {
@@ -14,8 +12,12 @@ class CustomSingleDescriptionTable extends StatelessWidget {
   VoidCallback? onPressed;
   TextEditingController? textEditingController;
 
-  CustomSingleDescriptionTable({this.heading, this.description, this.onPressed, this.isEditingModus, this.textEditingController});
-
+  CustomSingleDescriptionTable(
+      {this.heading,
+      this.description,
+      this.onPressed,
+      this.isEditingModus,
+      this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,8 @@ class CustomSingleDescriptionTable extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-                child:
-                CustomPeerPALHeading3(text: heading!, color: secondaryColor),
+                child: CustomPeerPALHeading3(
+                    text: heading!, color: secondaryColor),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
@@ -45,7 +47,8 @@ class CustomSingleDescriptionTable extends StatelessWidget {
                   style: TextStyle(fontSize: 15),
                   controller: textEditingController,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 35, top: 35, right: 35),
+                    contentPadding:
+                        const EdgeInsets.only(left: 35, top: 35, right: 35),
                     hintMaxLines: 3,
                     filled: true,
                     fillColor: Colors.white,

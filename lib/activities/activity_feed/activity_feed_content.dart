@@ -27,47 +27,47 @@ class ActivityFeedContent extends StatefulWidget {
 }
 
 class _ActivityFeedContentState extends State<ActivityFeedContent> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
         builder: (context, state) {
-          return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                // ToDo: Move into cubit/bloc
-                GetAuthenticatedUser _getAuthenticatedUser = sl<GetAuthenticatedUser>();
-                var currentUserName = (await _getAuthenticatedUser())
-                    .name;
-                Activity activity = Activity(
-                  id: (Uuid()).v4().toString(),
-                  creatorId: context.read<AuthenticationRepository>().currentUser.id,
-                  creatorName: currentUserName,
-                  public: false,
-                );
-                context.read<ActivityRepository>().updateLocalActivity(activity);
-                await Navigator.of(context).push(ActivityWizardFlow.route(
-                    activity)); // ToDo: Move to domain layer
-              },
-              backgroundColor: primaryColor,
-              child: Icon(Icons.add),
-            ),
-            appBar: CustomAppBar(
-              'Aktivitäten',
-              hasBackButton: false,
-            ),
-            body: BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
-                builder: (context, state) {
-                  if (state.status == ActivityFeedStatus.initial) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state.status == ActivityFeedStatus.success) {
-                    return ActivityFeedList(context);
-                  } else {
-                    return ActivityFeedList(context);
-                  }
-                }),
-          );
-        });
+      return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            // ToDo: Move into cubit/bloc
+            GetAuthenticatedUser _getAuthenticatedUser =
+                sl<GetAuthenticatedUser>();
+            var currentUserName = (await _getAuthenticatedUser()).name;
+            Activity activity = Activity(
+              id: (Uuid()).v4().toString(),
+              creatorId:
+                  context.read<AuthenticationRepository>().currentUser.id,
+              creatorName: currentUserName,
+              public: false,
+            );
+            context.read<ActivityRepository>().updateLocalActivity(activity);
+            await Navigator.of(context).push(ActivityWizardFlow.route(
+                activity)); // ToDo: Move to domain layer
+          },
+          backgroundColor: primaryColor,
+          child: Icon(Icons.add),
+        ),
+        appBar: CustomAppBar(
+          'Aktivitäten',
+          hasBackButton: false,
+        ),
+        body: BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
+            builder: (context, state) {
+          if (state.status == ActivityFeedStatus.initial) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.status == ActivityFeedStatus.success) {
+            return ActivityFeedList(context);
+          } else {
+            return ActivityFeedList(context);
+          }
+        }),
+      );
+    });
   }
 
   Widget ActivityFeedList(BuildContext context) {
@@ -141,7 +141,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
             decoration: BoxDecoration(
               color: CupertinoColors.systemGrey6,
               border:
-              Border(bottom: BorderSide(width: 1, color: secondaryColor)),
+                  Border(bottom: BorderSide(width: 1, color: secondaryColor)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.4),
@@ -155,23 +155,26 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
             TabBar(indicatorWeight: 3, indicatorColor: primaryColor, tabs: [
               Tab(
                   child: Center(
-                    child: Text(
-                      "ÖFFENTLICHE AKTIVITÄTEN",
-                      style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.width / 35),
-                    ),
-                  )),
+                child: Text(
+                  "ÖFFENTLICHE AKTIVITÄTEN",
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: MediaQuery.of(context).size.width / 35),
+                ),
+              )),
               Tab(
                   child: Center(
-                    child: Text(
-                      "ERSTELLTE AKTIVTÄTEN",
-                      style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.width / 35),
-                    ),
-                  )),
+                child: Text(
+                  "ERSTELLTE AKTIVTÄTEN",
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: MediaQuery.of(context).size.width / 35),
+                ),
+              )),
             ]),
           ),
           Expanded(
             child: TabBarView(children: [
-
               //TAB ÖFFENTLICHE AKTIVITÄTEN
               Column(
                 children: [
@@ -186,22 +189,28 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                           searchBarController: searchFieldController)),*/
                   Expanded(
                     child: StreamBuilder<List<Activity>>(
-                      stream: context.read<ActivityFeedBloc>().state.publicActivityStream,
-                      builder:
-                          (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+                      stream: context
+                          .read<ActivityFeedBloc>()
+                          .state
+                          .publicActivityStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Activity>> snapshot) {
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return Center(
-                            child: Text("Es gibt noch keine öffentlichen Aktivitäten."),
+                            child: Text(
+                                "Es gibt noch keine öffentlichen Aktivitäten."),
                           );
                         } else {
                           return Scrollbar(
                             child: ListView.builder(
-                              itemBuilder: (context, index) => buildActivityFeedCard(
-                                  context,
-                                  snapshot.data![index],
-                                  context
-                                      .read<ActivityFeedBloc>()
-                                      .isOwnCreatedActivity(snapshot.data![index])),
+                              itemBuilder: (context, index) =>
+                                  buildActivityFeedCard(
+                                      context,
+                                      snapshot.data![index],
+                                      context
+                                          .read<ActivityFeedBloc>()
+                                          .isOwnCreatedActivity(
+                                              snapshot.data![index])),
                               itemCount: snapshot.data!.length,
                               controller: ScrollController(),
                             ),
@@ -212,8 +221,6 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                   ),
                 ],
               ),
-
-
 
               //TAB EIGENE AKTIVITÄTEN
               Column(
@@ -229,22 +236,28 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                           searchBarController: searchFieldController)),*/
                   Expanded(
                     child: StreamBuilder<List<Activity>>(
-                      stream: context.read<ActivityFeedBloc>().state.createdActivityStream,
-                      builder:
-                          (BuildContext context, AsyncSnapshot<List<Activity>> snapshot) {
+                      stream: context
+                          .read<ActivityFeedBloc>()
+                          .state
+                          .createdActivityStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Activity>> snapshot) {
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return Center(
-                            child: Text("Du hast noch keine Aktivität erstellt."),
+                            child:
+                                Text("Du hast noch keine Aktivität erstellt."),
                           );
                         } else {
                           return Scrollbar(
                             child: ListView.builder(
-                              itemBuilder: (context, index) => buildActivityFeedCard(
-                                  context,
-                                  snapshot.data![index],
-                                  context
-                                      .read<ActivityFeedBloc>()
-                                      .isOwnCreatedActivity(snapshot.data![index])),
+                              itemBuilder: (context, index) =>
+                                  buildActivityFeedCard(
+                                      context,
+                                      snapshot.data![index],
+                                      context
+                                          .read<ActivityFeedBloc>()
+                                          .isOwnCreatedActivity(
+                                              snapshot.data![index])),
                               itemCount: snapshot.data!.length,
                               controller: ScrollController(),
                             ),
@@ -295,34 +308,34 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
           border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
       child: isOwnCreatedActivity
           ? TextButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OverviewInputPage(
-                    isInFlowContext: false,
-                    activity: activity,
-                  )));
-        },
-        child: CustomActivityCard(
-          activity: activity,
-          isOwnCreatedActivity: isOwnCreatedActivity,
-        ),
-      )
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OverviewInputPage(
+                              isInFlowContext: false,
+                              activity: activity,
+                            )));
+              },
+              child: CustomActivityCard(
+                activity: activity,
+                isOwnCreatedActivity: isOwnCreatedActivity,
+              ),
+            )
           : TextButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    ActivityPublicOverviewPage(activity: activity)),
-          );
-        },
-        child: CustomActivityCard(
-          activity: activity,
-          isOwnCreatedActivity: isOwnCreatedActivity,
-        ),
-      ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ActivityPublicOverviewPage(activity: activity)),
+                );
+              },
+              child: CustomActivityCard(
+                activity: activity,
+                isOwnCreatedActivity: isOwnCreatedActivity,
+              ),
+            ),
     );
   }
 }

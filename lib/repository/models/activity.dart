@@ -6,7 +6,6 @@ part 'activity.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Activity extends Equatable {
-
   static const empty = Activity();
 
   bool get isEmpty => this == Activity.empty;
@@ -14,6 +13,7 @@ class Activity extends Equatable {
   bool get isNotEmpty => this != Activity.empty;
 
   final String? id;
+
   ///The timestamp is used to store the time when the activity was created.
   final String? timestamp;
   final String? name;
@@ -26,11 +26,11 @@ class Activity extends Equatable {
   final List<String>? attendeeIds;
   final List<String>? invitationIds;
   final bool? public;
+
   ///The boolean "isAlreadyEvaluatedFromServer" is used to signal the server that it still needs to evaluate the activity.
   ///This boolean should always be false when the activity is created.
   ///Otherwise, the server will not send Push-Notifications to the invited users.
   final bool? isAlreadyEvaluatedFromServer;
-
 
   const Activity({
     this.id,
@@ -64,7 +64,7 @@ class Activity extends Equatable {
         ' invitationIds: $invitationIds,' +
         ' public: $public,' +
         ' isAlreadyEvaluatedFromServer: $isAlreadyEvaluatedFromServer,'
-        '}';
+            '}';
   }
 
   Activity copyWith({
@@ -95,8 +95,8 @@ class Activity extends Equatable {
       attendeeIds: attendeeIds ?? this.attendeeIds,
       invitationIds: invitationIds ?? this.invitationIds,
       public: public ?? this.public,
-      isAlreadyEvaluatedFromServer: isAlreadyEvaluatedFromServer ?? this.isAlreadyEvaluatedFromServer,
-
+      isAlreadyEvaluatedFromServer:
+          isAlreadyEvaluatedFromServer ?? this.isAlreadyEvaluatedFromServer,
     );
   }
 

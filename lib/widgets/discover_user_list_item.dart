@@ -12,10 +12,10 @@ class DiscoverUserListItem extends StatelessWidget {
 
   DiscoverUserListItem(
       {required this.header,
-        this.imageLink,
-        required this.locations,
-        required this.activities,
-        required this.onPressed});
+      this.imageLink,
+      required this.locations,
+      required this.activities,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,12 @@ class DiscoverUserListItem extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: CustomPeerPALHeading3(text: header!, color: primaryColor, fontSize: 18,fontWeight: FontWeight.bold,)),
+            child: CustomPeerPALHeading3(
+              text: header!,
+              color: primaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            )),
       ),
     );
   }
@@ -121,27 +126,28 @@ class DiscoverUserListItem extends StatelessWidget {
   }
 
   Widget _Avatar(String imageURL) {
-
     return Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Container(
             child: CircleAvatar(
               radius: 30,
               child: ClipOval(
-                  child:
-                  (imageLink == null || imageLink!.isEmpty) ? Icon(
-                    Icons.account_circle,
-                    size: 60.0,
-                    color: Colors.grey,
-                  ) : CachedNetworkImage(imageUrl: imageLink!,
-                    errorWidget: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 60.0,
-                        color: Colors.grey,
-                      );
-                    },
-                  )),
+                  child: (imageLink == null || imageLink!.isEmpty)
+                      ? Icon(
+                          Icons.account_circle,
+                          size: 60.0,
+                          color: Colors.grey,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: imageLink!,
+                          errorWidget: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 60.0,
+                              color: Colors.grey,
+                            );
+                          },
+                        )),
               backgroundColor: Colors.white,
             ),
             decoration: new BoxDecoration(
@@ -150,7 +156,6 @@ class DiscoverUserListItem extends StatelessWidget {
                 color: primaryColor,
                 width: 4,
               ),
-            ))
-    );
+            )));
   }
 }

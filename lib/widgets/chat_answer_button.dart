@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
-
-import '../chat/presentation/chat/bloc/chat_page_bloc.dart';
-import '../injection.dart';
 
 class ChatAnswerKeyboard extends StatefulWidget {
   VoidCallback onCancel;
   final TextEditingController textEditingController;
   String? appUserPhoneNumber;
-
 
   ChatAnswerKeyboard(this.appUserPhoneNumber,
       {required this.onCancel, required this.textEditingController});
@@ -48,29 +41,36 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
               physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  if(widget.appUserPhoneNumber != "")
+                  if (widget.appUserPhoneNumber != "")
                     customSendPhoneNumberListTile(
                         widget.textEditingController,
                         'Telefonnummer senden.',
                         context,
                         widget.appUserPhoneNumber),
+                  customAnswerListTile(widget.textEditingController,
+                      'Wie geht es Dir?', context),
+                  customAnswerListTile(widget.textEditingController,
+                      'Wollen wir telefonieren?', context),
+                  customAnswerListTile(widget.textEditingController,
+                      'Was hast du heute vor?', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Wie geht es Dir?', context),
+                      widget.textEditingController, 'Hallo', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Wollen wir telefonieren?', context),
+                      widget.textEditingController, 'Ja', context),
                   customAnswerListTile(
-                      widget.textEditingController, 'Was hast du heute vor?', context),
-                  customAnswerListTile(widget.textEditingController, 'Hallo', context),
-                  customAnswerListTile(widget.textEditingController, 'Ja', context),
-                  customAnswerListTile(widget.textEditingController, 'Nein', context),
-                  customAnswerListTile(widget.textEditingController, 'Ok', context),
+                      widget.textEditingController, 'Nein', context),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Ok', context),
                   customAnswerListTile(
                       widget.textEditingController, 'Vielleicht', context),
-                  customAnswerListTile(widget.textEditingController, 'Gut', context),
-                  customAnswerListTile(widget.textEditingController, 'Schlecht', context),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Gut', context),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Schlecht', context),
                   customAnswerListTile(
                       widget.textEditingController, 'Gute Nacht', context),
-                  customAnswerListTile(widget.textEditingController, 'Tschüss', context),
+                  customAnswerListTile(
+                      widget.textEditingController, 'Tschüss', context),
                 ],
               ),
             ),
@@ -137,31 +137,32 @@ Widget customAnswerHeaderBar(onCancel) {
 }
 
 Widget customAnswerListTile(textEditingController, text, context) => Padding(
-  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-  child: GestureDetector(
-    onTap: () {
-      addStringToTextController(textEditingController, text);
-    },
-    child: Container(
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  color: Colors.white))),
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-        child: Text(
-          text,
-          maxLines: 3,
-          style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width / 20,),
+      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+      child: GestureDetector(
+        onTap: () {
+          addStringToTextController(textEditingController, text);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.white))),
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: Text(
+              text,
+              maxLines: 3,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: MediaQuery.of(context).size.width / 20,
+              ),
+            ),
+          ),
         ),
       ),
-    ),
-  ),
-);
+    );
 
-Widget customSendPhoneNumberListTile(textEditingController, text, context,
-    appUserPhoneNumber) =>
+Widget customSendPhoneNumberListTile(
+        textEditingController, text, context, appUserPhoneNumber) =>
     GestureDetector(
       onTap: () {
         showDialog(
@@ -171,26 +172,28 @@ Widget customSendPhoneNumberListTile(textEditingController, text, context,
                   dialogHeight: 300,
                   actionButtonText: 'Ja',
                   dialogText:
-                  "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\nwirklich senden?",
+                      "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\nwirklich senden?",
                   onPressed: () => {
-                    addStringToTextController(textEditingController, '${appUserPhoneNumber}'),
-                  });
+                        addStringToTextController(
+                            textEditingController, '${appUserPhoneNumber}'),
+                      });
             });
       },
       child: Container(
         decoration: BoxDecoration(
             color: Colors.blueGrey,
-            border: Border(
-                bottom: BorderSide(
-                    color: Colors.white))),
+            border: Border(bottom: BorderSide(color: Colors.white))),
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0,15,0,15),
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
           child: Text(
             text,
             maxLines: 2,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width / 20,),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: MediaQuery.of(context).size.width / 20,
+            ),
           ),
         ),
       ),

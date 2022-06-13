@@ -5,41 +5,40 @@ abstract class ActivityLocationInputState extends Equatable {
   List<Location> selectedLocations;
   List<Location> filteredLocations;
 
-  ActivityLocationInputState(this.locations, this.selectedLocations, this.filteredLocations);
-
+  ActivityLocationInputState(
+      this.locations, this.selectedLocations, this.filteredLocations);
 }
 
-
-
 class ActivityLocationInitial extends ActivityLocationInputState {
- ActivityLocationInitial()
-     : super([], [], []);
+  ActivityLocationInitial() : super([], [], []);
 
- @override
- List<Object?> get props => [locations, selectedLocations, filteredLocations];
+  @override
+  List<Object?> get props => [locations, selectedLocations, filteredLocations];
 }
 
 class ActivityLocationLoaded extends ActivityLocationInputState {
- ActivityLocationLoaded(List<Location> locations, List<Location>  selectedLocations, List<Location>  filteredLocations)
-     : super(locations, selectedLocations,filteredLocations);
+  ActivityLocationLoaded(List<Location> locations,
+      List<Location> selectedLocations, List<Location> filteredLocations)
+      : super(locations, selectedLocations, filteredLocations);
 
- @override
- List<Object?> get props => [locations, selectedLocations, filteredLocations];
+  @override
+  List<Object?> get props => [locations, selectedLocations, filteredLocations];
 }
 
 class ActivityLocationPosting extends ActivityLocationInputState {
- ActivityLocationPosting(List<Location>  locations, List<Location>  selectedLocations)
-     : super(locations, selectedLocations, []);
+  ActivityLocationPosting(
+      List<Location> locations, List<Location> selectedLocations)
+      : super(locations, selectedLocations, []);
 
- @override
- List<Object?> get props => [locations, selectedLocations, filteredLocations];
+  @override
+  List<Object?> get props => [locations, selectedLocations, filteredLocations];
 }
 
 class ActivityLocationPosted extends ActivityLocationInputState {
- ActivityLocationPosted(List<Location>  locations, List<Location> selectedLocations)
-     : super(locations, selectedLocations, []);
+  ActivityLocationPosted(
+      List<Location> locations, List<Location> selectedLocations)
+      : super(locations, selectedLocations, []);
 
- @override
- List<Object?> get props => [locations, selectedLocations, filteredLocations];
+  @override
+  List<Object?> get props => [locations, selectedLocations, filteredLocations];
 }
-

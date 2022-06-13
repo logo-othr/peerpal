@@ -8,7 +8,8 @@ import 'package:peerpal/repository/get_user_usecase.dart';
 part 'name_input_state.dart';
 
 class NameInputCubit extends Cubit<NameInputState> {
-  NameInputCubit(this._appUserRepository, this._getAuthenticatedUser) : super(const NameInputState());
+  NameInputCubit(this._appUserRepository, this._getAuthenticatedUser)
+      : super(const NameInputState());
 
   final AppUserRepository _appUserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
@@ -21,14 +22,12 @@ class NameInputCubit extends Cubit<NameInputState> {
     ));
   }
 
-
   Future<void> postName() async {
     if (!state.formValidationStatus.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     try {
-      var userInformation =
-          await _getAuthenticatedUser();
+      var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation =
           userInformation.copyWith(name: state.username.value);
       await _appUserRepository.updateUserInformation(updatedUserInformation);
@@ -44,7 +43,7 @@ class NameInputCubit extends Cubit<NameInputState> {
     await _appUserRepository.updateNameAtServer(userName);
   }
 
-  Future<String?>currentName() async{
+  Future<String?> currentName() async {
     return (await _getAuthenticatedUser()).name;
   }
 }

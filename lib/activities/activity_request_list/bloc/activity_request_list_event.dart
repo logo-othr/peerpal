@@ -1,6 +1,5 @@
 part of 'activity_request_list_bloc.dart';
 
-
 @immutable
 abstract class ActivityRequestListEvent extends Equatable {
   @override
@@ -8,6 +7,3 @@ abstract class ActivityRequestListEvent extends Equatable {
 }
 
 class LoadActivityRequestList extends ActivityRequestListEvent {}
-
-
-

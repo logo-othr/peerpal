@@ -9,8 +9,8 @@ class SignupState extends Equatable {
     this.errorMessage = '',
     this.confirmedPassword = const ConfirmedPasswordModel.pure(),
     this.status = FormzStatus.pure,
-    this.visible=true,
-    this.confirmVisible=true,
+    this.visible = true,
+    this.confirmVisible = true,
   });
 
   final EmailModel email;
@@ -22,7 +22,8 @@ class SignupState extends Equatable {
   final bool confirmVisible;
 
   @override
-  List<Object> get props => [email, password, confirmedPassword, status,visible,confirmVisible];
+  List<Object> get props =>
+      [email, password, confirmedPassword, status, visible, confirmVisible];
 
   SignupState copyWith({
     EmailModel? email,

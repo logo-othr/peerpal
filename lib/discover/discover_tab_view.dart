@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
-import 'package:peerpal/strings.dart';
-import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_bottom_indicator.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -117,7 +114,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                 enabled: true,
                 heading: 'Personensuche',
                 searchBarController: this.searchFieldController),
-            isSearchEmpty ? Container() : _buildSearchButton() ,
+            isSearchEmpty ? Container() : _buildSearchButton(),
           ],
         ));
   }
@@ -170,7 +167,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         decoration: BoxDecoration(
             color: Colors.grey[100],
             border:
-            Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

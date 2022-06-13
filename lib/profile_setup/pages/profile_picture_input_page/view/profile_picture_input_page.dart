@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/profile_setup/pages/profile_picture_input_page/cubit/profile_picture_cubit.dart';
 import 'package:peerpal/profile_setup/pages/profile_picture_input_page/view/profile_picture_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
@@ -24,10 +24,16 @@ class ProfilePictureInputPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar("PeerPAL", hasBackButton: true,),
+        appBar: CustomAppBar(
+          "PeerPAL",
+          hasBackButton: true,
+        ),
         body: BlocProvider(
           create: (_) {
-            return ProfilePictureCubit(context.read<AppUserRepository>(), context.read<AuthenticationRepository>(), sl<GetAuthenticatedUser>());
+            return ProfilePictureCubit(
+                context.read<AppUserRepository>(),
+                context.read<AuthenticationRepository>(),
+                sl<GetAuthenticatedUser>());
           },
           child: ProfilePictureInputContent(isInFlowContext: isInFlowContext),
         ),

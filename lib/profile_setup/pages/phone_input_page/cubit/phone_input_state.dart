@@ -5,7 +5,6 @@ abstract class PhoneInputState extends Equatable {
   final PhoneModel phoneNumber;
 
   const PhoneInputState(this.phoneNumber);
-
 }
 
 class PhoneInputInitial extends PhoneInputState {

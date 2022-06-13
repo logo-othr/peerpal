@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../colors.dart';
-import 'custom_activity_participations_dialog.dart';
 import 'custom_peerpal_heading.dart';
 
 // ignore: must_be_immutable
@@ -13,12 +11,11 @@ class CustomSingleParticipantsTable extends StatelessWidget {
   VoidCallback? onPressed;
   final bool isArrowIconVisible;
 
-
   CustomSingleParticipantsTable(
       {this.heading,
-        this.text,
-        this.onPressed,
-        required this.isArrowIconVisible});
+      this.text,
+      this.onPressed,
+      required this.isArrowIconVisible});
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +70,10 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                         ),
                         isArrowIconVisible
                             ? Icon(
-                          Icons.arrow_forward_ios,
-                          size: 15,
-                          color: secondaryColor,
-                        )
+                                Icons.arrow_forward_ios,
+                                size: 15,
+                                color: secondaryColor,
+                              )
                             : Container(),
                       ],
                     ),

@@ -65,10 +65,10 @@ class HomeDiscoverFlow extends HomeState {
 }
 
 class HomeUserInformationFlowCompleted extends HomeState {
-
   final int index;
 
-  const HomeUserInformationFlowCompleted(this.index) : super(const PeerPALUser());
+  const HomeUserInformationFlowCompleted(this.index)
+      : super(const PeerPALUser());
 
   @override
   List<Object?> get props => [index];

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/peerpal_next_button.dart';
@@ -11,19 +9,22 @@ class CompletePageButton extends StatelessWidget {
   final bool disabled;
 
   const CompletePageButton(
-      {Key? key,  this.disabled = false, required this.isSaveButton, required this.onPressed})
+      {Key? key,
+      this.disabled = false,
+      required this.isSaveButton,
+      required this.onPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(disabled) return Container();
+    if (disabled) return Container();
     if (isSaveButton) {
       return PeerPALSaveButton(
         onPressed: onPressed,
       );
     } else {
       return PeerPALNextButton(
-        onPressed:  onPressed,
+        onPressed: onPressed,
       );
     }
   }

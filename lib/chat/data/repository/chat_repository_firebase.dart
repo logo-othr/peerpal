@@ -11,8 +11,6 @@ import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 
 class ChatRepositoryFirebase implements ChatRepository {
-
-
   /* StreamSubscription<QuerySnapshot<Map<String, dynamic>>> streamSubscription;
 
     List<Chat> chatList = <Chat>[];
@@ -27,25 +25,22 @@ class ChatRepositoryFirebase implements ChatRepository {
     });
 */
 
-
   @override
   Stream<List<Chat>> getChatListForUserId(String currentUserId) async* {
-
     //ToDo: Implement strategy to dispose firebase stream
     Stream<QuerySnapshot> chatStream = FirebaseFirestore.instance
         .collection(UserDatabaseContract.chat)
         .where(UserDatabaseContract.chatUids, arrayContains: currentUserId)
         .orderBy(UserDatabaseContract.chatTimestamp, descending: true)
-       /* .limit(10)*/
+        /* .limit(10)*/
         .snapshots();
     print("Chat-Stream created.");
 
     List<Chat> chatList = <Chat>[];
     await for (QuerySnapshot querySnapshot in chatStream) {
-print("Chat-Change");
+      print("Chat-Change");
       chatList.clear();
       querySnapshot.docs.forEach((document) {
-
         var documentData = document.data() as Map<String, dynamic>;
         var chat = ChatDTO.fromJson(documentData);
         chatList.add(chat);
@@ -54,14 +49,11 @@ print("Chat-Change");
     }
   }
 
-  Future<void> sendChatMessage(
-      PeerPALUser userInformation, String? chatId, String message, String type) async {
+  Future<void> sendChatMessage(PeerPALUser userInformation, String? chatId,
+      String message, String type) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
-    await FirebaseFirestore.instance
-        .collection('chatNotifications')
-        .doc()
-        .set({
+    await FirebaseFirestore.instance.collection('chatNotifications').doc().set({
       'chatId': chatId,
       'message': message,
       'fromId': currentUserId,
@@ -71,7 +63,8 @@ print("Chat-Change");
     });
   }
 
-  Future<void> sendChatRequestResponse(String currentUserId, String chatPartnerId, bool response, String chatId)  async{
+  Future<void> sendChatRequestResponse(String currentUserId,
+      String chatPartnerId, bool response, String chatId) async {
     await FirebaseFirestore.instance
         .collection('chatRequestResponse')
         .doc()
@@ -83,7 +76,6 @@ print("Chat-Change");
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
     });
   }
-
 
   Stream<int> messageCountForChat(chatId) async* {
     await for (var messageList in getChatMessagesForChat(chatId)) {
@@ -107,7 +99,6 @@ print("Chat-Change");
     await for (QuerySnapshot querySnapshot in messageStream) {
       chatList.clear();
       querySnapshot.docs.forEach((document) {
-
         var documentData = document.data() as Map<String, dynamic>;
         var chat = ChatMessageDTO.fromJson(documentData);
         chatList.add(chat);
@@ -115,5 +106,4 @@ print("Chat-Change");
       yield chatList;
     }
   }
-
 }

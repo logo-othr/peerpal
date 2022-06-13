@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +6,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-
 
 import 'app/app.dart';
 
@@ -123,8 +120,7 @@ class App extends StatelessWidget {
           value: sl<AuthenticationRepository>(),
         ),
         RepositoryProvider.value(
-          value: ActivityRepository(
-              sl<SharedPreferences>()), // ToDo: use SL
+          value: ActivityRepository(sl<SharedPreferences>()), // ToDo: use SL
         )
       ],
       child: BlocProvider(

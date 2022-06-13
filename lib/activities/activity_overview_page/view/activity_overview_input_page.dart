@@ -5,6 +5,7 @@ import 'package:peerpal/activities/activity_overview_page/cubit/activity_overvie
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
+
 import 'activity_overview_input_content.dart';
 
 class OverviewInputPage extends StatelessWidget {
@@ -13,9 +14,11 @@ class OverviewInputPage extends StatelessWidget {
 
   OverviewInputPage({required this.isInFlowContext, this.activity});
 
-  static MaterialPage<void> page({required bool isInFlowContext, Activity? activity}) {
+  static MaterialPage<void> page(
+      {required bool isInFlowContext, Activity? activity}) {
     return MaterialPage<void>(
-        child: OverviewInputPage(isInFlowContext: isInFlowContext, activity: activity));
+        child: OverviewInputPage(
+            isInFlowContext: isInFlowContext, activity: activity));
   }
 
   @override

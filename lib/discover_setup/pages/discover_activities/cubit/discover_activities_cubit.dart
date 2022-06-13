@@ -7,9 +7,9 @@ import 'package:peerpal/repository/models/activity.dart';
 
 part 'discover_activitys_state.dart';
 
-class DiscoverActivitiesCubit
-    extends Cubit<DiscoverActivitiesState> {
-  DiscoverActivitiesCubit(this._appUserRepository, this._activityRepository, this._getAuthenticatedUser)
+class DiscoverActivitiesCubit extends Cubit<DiscoverActivitiesState> {
+  DiscoverActivitiesCubit(this._appUserRepository, this._activityRepository,
+      this._getAuthenticatedUser)
       : super(DiscoverActivitiesInitial());
   final AppUserRepository _appUserRepository;
   final ActivityRepository _activityRepository;
@@ -60,7 +60,8 @@ class DiscoverActivitiesCubit
 
       var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation = userInformation.copyWith(
-          discoverActivities: state.selectedActivities.map((e) => e.code!).toList());
+          discoverActivities:
+              state.selectedActivities.map((e) => e.code!).toList());
       await _appUserRepository.updateUserInformation(updatedUserInformation);
 
       emit(

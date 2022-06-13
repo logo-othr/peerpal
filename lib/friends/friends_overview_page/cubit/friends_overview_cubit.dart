@@ -17,5 +17,4 @@ class FriendsOverviewCubit extends Cubit<FriendsOverviewState> {
     var friendRequestsSize = _appUserRepository.getFriendRequestsSize();
     emit(FriendsOverviewLoaded(friends, friendRequestsSize));
   }
-
 }

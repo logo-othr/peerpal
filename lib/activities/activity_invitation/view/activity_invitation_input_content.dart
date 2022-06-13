@@ -77,7 +77,6 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
     searchFieldController.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     TextEditingController searchFieldController = TextEditingController();
@@ -105,7 +104,8 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
                   _buildSearchBar(),
                   isSearchEmpty
                       ? _buildUserList(context)
-                      : _buildSearchResultList(_invitationCubit.state.searchResults),
+                      : _buildSearchResultList(
+                          _invitationCubit.state.searchResults),
                   _buildNextButton(context),
                 ],
               ),
@@ -128,10 +128,6 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
     );
   }
 
-
-
-
-
   Widget _buildSearchBar() {
     return Container(
         decoration: BoxDecoration(
@@ -146,7 +142,7 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
                 enabled: true,
                 heading: 'Personensuche',
                 searchBarController: this.searchFieldController),
-            isSearchEmpty ? Container() : _buildSearchButton() ,
+            isSearchEmpty ? Container() : _buildSearchButton(),
           ],
         ));
   }
@@ -166,15 +162,13 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
   Widget _buildUserList(BuildContext context) {
     return Expanded(
       child: StreamBuilder<List<PeerPALUser>>(
-        stream: context
-            .read<InvitationInputCubit>()
-            .state
-            .friends,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<PeerPALUser>> snapshot) {
+        stream: context.read<InvitationInputCubit>().state.friends,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
-              child: Text("Sie haben noch keine Freunde in der App."),);
+              child: Text("Sie haben noch keine Freunde in der App."),
+            );
           } else {
             return ListView.builder(
               itemBuilder: (context, index) =>
@@ -192,27 +186,20 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
     return CustomPeerPALButton(
         text: "Weiter",
         onPressed: () async {
-          var cubit = context.read<
-              InvitationInputCubit>();
+          var cubit = context.read<InvitationInputCubit>();
           if (widget.isInFlowContext) {
             var activity = await cubit.postData();
-            context.flow<Activity>().update(
-                    (s) => activity);
+            context.flow<Activity>().update((s) => activity);
           } else {
             await cubit.postData();
             Navigator.pop(context);
           }
-        }
-    );
-
+        });
   }
 
   Widget buildFriend(PeerPALUser user) {
     if (user != null) {
-      if (user.id == sl
-          .get<AuthenticationRepository>()
-          .currentUser
-          .id) {
+      if (user.id == sl.get<AuthenticationRepository>().currentUser.id) {
         return const SizedBox.shrink();
       } else {
         return Container(
@@ -222,27 +209,28 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
                     bottom: BorderSide(width: 1, color: secondaryColor))),
             child: BlocBuilder<InvitationInputCubit, ActivityInvitationState>(
                 builder: (context, state) {
-                  var cubit = context.read<InvitationInputCubit>();
-                  return TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserDetailPage(user.id!)));
-                    },
-                    child: CustomActivityInviteFriendsListItem(
-                      peerPALUser: user,
-                      isActive: context.read<InvitationInputCubit>()
-                          .invitationContains(user),
-                      onActive: () {
-                        cubit.addInvitation(user);
-                      },
-                      onInactive: () {
-                        cubit.removeInvitation(user);
-                      },
-                    ),
-                  );
-                }));
+              var cubit = context.read<InvitationInputCubit>();
+              return TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserDetailPage(user.id!)));
+                },
+                child: CustomActivityInviteFriendsListItem(
+                  peerPALUser: user,
+                  isActive: context
+                      .read<InvitationInputCubit>()
+                      .invitationContains(user),
+                  onActive: () {
+                    cubit.addInvitation(user);
+                  },
+                  onInactive: () {
+                    cubit.removeInvitation(user);
+                  },
+                ),
+              );
+            }));
       }
     } else {
       return const SizedBox.shrink();
@@ -250,30 +238,28 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
   }
 
   Widget _buildInivtationList() {
-    List<PeerPALUser> invitations= _invitationCubit.state.invitations;
+    List<PeerPALUser> invitations = _invitationCubit.state.invitations;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(5,0,5,0),
+      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
       child: Container(
-        height:35,
+        height: 35,
         width: double.infinity,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.black12,
                     border: Border.all(color: Colors.black26),
-                    borderRadius: BorderRadius.all(Radius.circular(20))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Center(child: Text(invitations[index].name!)),
                   ),
-
                 ),
               ),
             );
@@ -282,6 +268,5 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
         ),
       ),
     );
-
   }
 }

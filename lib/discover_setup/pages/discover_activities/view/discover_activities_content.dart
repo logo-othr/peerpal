@@ -27,8 +27,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
 
     var hasBackButton = (isInFlowContext) ? false : true;
     searchBarController.text = Strings.searchDisabled;
-    return BlocBuilder<DiscoverActivitiesCubit,
-        DiscoverActivitiesState>(
+    return BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
       builder: (context, state) {
         searchQueryChangedListener() => context
             .read<DiscoverActivitiesCubit>()
@@ -44,8 +43,8 @@ class DiscoverActivitiesContent extends StatelessWidget {
               'PeerPAL',
               hasBackButton: hasBackButton,
             ),
-            body: BlocBuilder<DiscoverActivitiesCubit,
-                DiscoverActivitiesState>(builder: (context, state) {
+            body: BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
+                builder: (context, state) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Column(
@@ -74,38 +73,41 @@ class DiscoverActivitiesContent extends StatelessWidget {
                             childAspectRatio: (itemWidth / itemHeight),
                             primary: true,
                             crossAxisCount: 3,
-                            children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
-                                ? GestureDetector(
-                                onTap: () {
-                                  if (state.selectedActivities
-                                      .length >=
-                                      10 && !state.selectedActivities.contains(activity)) {
-                                    ScaffoldMessenger.of(context)
-                                      ..hideCurrentSnackBar()
-                                      ..showSnackBar(SnackBar(
-                                          content: Text(
-                                              ("Es können maximal 10 Interessen ausgewählt werden."))));
-                                  } else {
-                                    context
-                                        .read<
-                                        DiscoverActivitiesCubit>()
-                                        .toggleData(activity);
-                                  }
-                                },
-                                child: CustomCircleListItem(
-                                    label:
-                                    activity.name.toString(),
-                                    icon: ActivityIconData
-                                        .icons[activity.code],
-                                    active: state
-                                        .selectedActivities
-                                        .contains(activity)))
-                                : Container(),
-                            )
-                                .toList()
-
-
-                        ),
+                            children: state.activities
+                                .map(
+                                  (activity) => (activity.name
+                                          .toString()
+                                          .toLowerCase()
+                                          .startsWith(
+                                              state.searchQuery.toLowerCase()))
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            if (state.selectedActivities
+                                                        .length >=
+                                                    10 &&
+                                                !state.selectedActivities
+                                                    .contains(activity)) {
+                                              ScaffoldMessenger.of(context)
+                                                ..hideCurrentSnackBar()
+                                                ..showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        ("Es können maximal 10 Interessen ausgewählt werden."))));
+                                            } else {
+                                              context
+                                                  .read<
+                                                      DiscoverActivitiesCubit>()
+                                                  .toggleData(activity);
+                                            }
+                                          },
+                                          child: CustomCircleListItem(
+                                              label: activity.name.toString(),
+                                              icon: ActivityIconData
+                                                  .icons[activity.code],
+                                              active: state.selectedActivities
+                                                  .contains(activity)))
+                                      : Container(),
+                                )
+                                .toList()),
                       ),
                     ),
                     /*     Expanded(
@@ -146,13 +148,13 @@ class DiscoverActivitiesContent extends StatelessWidget {
                     (state is DiscoverActivitiesPosting)
                         ? const CircularProgressIndicator()
                         : Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                      child: CompletePageButton(
-                          isSaveButton: isInFlowContext,
-                          onPressed: () async {
-                            _update(state, context);
-                          }),
-                    ),
+                            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                            child: CompletePageButton(
+                                isSaveButton: isInFlowContext,
+                                onPressed: () async {
+                                  _update(state, context);
+                                }),
+                          ),
                   ],
                 ),
               );
@@ -165,8 +167,9 @@ class DiscoverActivitiesContent extends StatelessWidget {
       DiscoverActivitiesState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverActivitiesCubit>().postData();
-      context.flow<PeerPALUser>().complete(
-              (s) => s.copyWith(discoverActivities: state.selectedActivities.map((e) => e.code!).toList()));
+      context.flow<PeerPALUser>().complete((s) => s.copyWith(
+          discoverActivities:
+              state.selectedActivities.map((e) => e.code!).toList()));
     } else {
       await context.read<DiscoverActivitiesCubit>().postData();
       Navigator.pop(context);

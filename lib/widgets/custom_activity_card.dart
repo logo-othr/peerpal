@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:peerpal/activities/activity_overview_page/view/activity_overview_input_content.dart';
-import 'package:peerpal/activities/activity_overview_page/view/activity_overview_input_page.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
-import 'package:peerpal/widgets/custom_peerpal_text.dart';
-
 
 import '../../colors.dart';
 
@@ -16,7 +12,8 @@ class CustomActivityCard extends StatefulWidget {
   Activity activity;
   bool isOwnCreatedActivity = false;
 
-  CustomActivityCard({required this.activity, required this.isOwnCreatedActivity});
+  CustomActivityCard(
+      {required this.activity, required this.isOwnCreatedActivity});
 
   @override
   _CustomActivityCardState createState() => _CustomActivityCardState();
@@ -24,7 +21,6 @@ class CustomActivityCard extends StatefulWidget {
 
 class _CustomActivityCardState extends State<CustomActivityCard> {
   bool _expanded = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +93,10 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           flex: 50,
                           child: Text(
                             widget.activity.name!,
-                            style: TextStyle(color: primaryColor, fontSize: MediaQuery.of(context).size.width/20,),
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: MediaQuery.of(context).size.width / 20,
+                            ),
                             maxLines: 2,
                           ),
                         ),
@@ -105,17 +104,19 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                             flex: 20,
                             child: widget.isOwnCreatedActivity
                                 ? Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                              child: Icon(
-                                Icons.edit,
-                                color: primaryColor,
-                                size: 30,
-                              ),
-                            ) : Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                              child: Container(width: 30),
-                            )
-                        )
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: primaryColor,
+                                      size: 30,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                    child: Container(width: 30),
+                                  ))
                       ],
                     )),
               ),
@@ -138,8 +139,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           children: [
                             CustomPeerPALHeading3(
                                 fontWeight: FontWeight.bold,
-                                text:"Ersteller: "
-                            ),
+                                text: "Ersteller: "),
                             Flexible(
                               child: RichText(
                                 maxLines: 1,
@@ -164,7 +164,11 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                               text: "Datum: ",
                               fontWeight: FontWeight.bold,
                             ),
-                            CustomPeerPALHeading3(text: (DateFormat('dd.MM.yyyy kk:mm').format(DateTime.fromMillisecondsSinceEpoch(widget.activity.date!))), color: Colors.black)
+                            CustomPeerPALHeading3(
+                                text: (DateFormat('dd.MM.yyyy kk:mm').format(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        widget.activity.date!))),
+                                color: Colors.black)
                           ],
                         ),
                         SizedBox(height: 5),
@@ -174,7 +178,10 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                               text: "Ort: ",
                               fontWeight: FontWeight.bold,
                             ),
-                            CustomPeerPALHeading3(text: widget.activity.location?.place ?? '', color: Colors.black,),
+                            CustomPeerPALHeading3(
+                              text: widget.activity.location?.place ?? '',
+                              color: Colors.black,
+                            ),
                           ],
                         ),
                         SizedBox(height: 5),
@@ -184,7 +191,12 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                               text: "Teilnehmer: ",
                               fontWeight: FontWeight.bold,
                             ),
-                            CustomPeerPALHeading3(text: widget.activity.attendeeIds?.length.toString() ?? '0', color: Colors.black,),
+                            CustomPeerPALHeading3(
+                              text: widget.activity.attendeeIds?.length
+                                      .toString() ??
+                                  '0',
+                              color: Colors.black,
+                            ),
                           ],
                         ),
                         /* Row(
@@ -208,16 +220,23 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                     headerBuilder: (context, isExpanded) {
                       return ListTile(
                           title: _expanded
-                              ? CustomPeerPALHeading3(text:'Beschreibung ausblenden',
-                            color: primaryColor, fontWeight: FontWeight.bold,)
-                              : CustomPeerPALHeading3(text:'Beschreibung anzeigen',
-                            color: primaryColor, fontWeight: FontWeight.bold,));
+                              ? CustomPeerPALHeading3(
+                                  text: 'Beschreibung ausblenden',
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                )
+                              : CustomPeerPALHeading3(
+                                  text: 'Beschreibung anzeigen',
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ));
                     },
                     body: ListTile(
                       title: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 20.0),
                         child: CustomPeerPALHeading3(
-                            text:widget.activity.description ?? '', color: Colors.black),
+                            text: widget.activity.description ?? '',
+                            color: Colors.black),
                       ),
                     ),
                     isExpanded: _expanded,

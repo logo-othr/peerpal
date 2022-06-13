@@ -9,12 +9,11 @@ class CustomPeerPALHeading1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPeerPALText(
-      text: text,
-      fontSize: 25,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      textAlign: TextAlign.center
-    );
+        text: text,
+        fontSize: 25,
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        textAlign: TextAlign.center);
   }
 }
 
@@ -45,7 +44,11 @@ class CustomPeerPALHeading3 extends StatelessWidget {
   TextAlign? textAlign;
 
   CustomPeerPALHeading3(
-      {required this.text, this.color, this.fontWeight, this.fontSize, this.textAlign});
+      {required this.text,
+      this.color,
+      this.fontWeight,
+      this.fontSize,
+      this.textAlign});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,11 @@ class CustomPeerPALHeading4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPeerPALText(
-      text: text, fontSize: 14, color: color, fontWeight: FontWeight.normal, textAlign: alignment,);
+      text: text,
+      fontSize: 14,
+      color: color,
+      fontWeight: FontWeight.normal,
+      textAlign: alignment,
+    );
   }
 }
-

@@ -8,14 +8,18 @@ class CustomPeerPALText extends StatelessWidget {
   final Color? color;
   final TextAlign? textAlign;
 
-
-  CustomPeerPALText({this.text, this.fontSize, this.color, this.fontWeight, this.textAlign});
+  CustomPeerPALText(
+      {this.text, this.fontSize, this.color, this.fontWeight, this.textAlign});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text!,
-      style: TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight, fontFamily: 'CustomPeerPalFontFamily'),
+      style: TextStyle(
+          fontSize: fontSize,
+          color: color,
+          fontWeight: fontWeight,
+          fontFamily: 'CustomPeerPalFontFamily'),
       textAlign: textAlign,
     );
   }

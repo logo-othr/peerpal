@@ -28,7 +28,8 @@ class AgePicker extends StatelessWidget {
           itemExtent: 30,
           backgroundColor: Colors.transparent,
           onSelectedItemChanged: onChanged,
-          scrollController: FixedExtentScrollController(initialItem: items.indexOf(start.toString())),
+          scrollController: FixedExtentScrollController(
+              initialItem: items.indexOf(start.toString())),
           children: <Widget>[for (var i in items) Text(i.toString())],
         ),
       ),

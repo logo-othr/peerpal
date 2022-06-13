@@ -9,7 +9,6 @@ class Chat extends Equatable {
   final bool chatRequestAccepted;
   final String startedBy;
 
-
   Chat(
       {required this.uids,
       required this.lastMessage,
@@ -19,5 +18,6 @@ class Chat extends Equatable {
       required this.startedBy});
 
   @override
-  List<Object?> get props => [uids, lastMessage, chatId, lastUpdated, chatRequestAccepted, startedBy];
+  List<Object?> get props =>
+      [uids, lastMessage, chatId, lastUpdated, chatRequestAccepted, startedBy];
 }

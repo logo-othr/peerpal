@@ -9,9 +9,9 @@ import 'package:peerpal/chat/domain/usecases/get_chats_for_users.dart';
 import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/memory_cache.dart';
@@ -20,7 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-
   // =============== DataSource ===============
   // SharedPreferences
   var sharedPreferences = await SharedPreferences.getInstance();
@@ -29,7 +28,6 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton<Cache>(() => MemoryCache());
-
 
   // =============== Chat ===============
   // Bloc
@@ -67,20 +65,13 @@ Future<void> init() async {
   // Repo
   sl.registerLazySingleton(() => AppUserRepository(cache: sl()));
 
-
   // =============== Repository ===============
-
 
   sl.registerLazySingleton<ActivityRepository>(
         () => ActivityRepository(sharedPreferences),
   );
 
-
-
   sl.registerLazySingleton<AuthenticationRepository>(
         () => AuthenticationRepository(cache: sl()),
   );
-
-
-
 }

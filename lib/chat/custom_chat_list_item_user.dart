@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 import 'domain/usecase_response/user_chat.dart';
@@ -26,25 +25,26 @@ class CustomChatListItemUser extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: Material(
-            child: (userInformation.user.imagePath!.isEmpty || userInformation.user.imagePath == null)
-                ?  Icon(
-              Icons.account_circle,
-              size: 60.0,
-              color: Colors.grey,
-            ) : CachedNetworkImage(
-              errorWidget: (context, object, stackTrace) {
-                return const Icon(
-                  Icons.account_circle,
-                  size: 60.0,
-                  color: Colors.grey,
-                );
-              },
-              imageUrl: userInformation.user.imagePath!,
-              fit: BoxFit.cover,
-              width: 60.0,
-              height: 60.0,
-            ),
-
+            child: (userInformation.user.imagePath!.isEmpty ||
+                    userInformation.user.imagePath == null)
+                ? Icon(
+                    Icons.account_circle,
+                    size: 60.0,
+                    color: Colors.grey,
+                  )
+                : CachedNetworkImage(
+                    errorWidget: (context, object, stackTrace) {
+                      return const Icon(
+                        Icons.account_circle,
+                        size: 60.0,
+                        color: Colors.grey,
+                      );
+                    },
+                    imageUrl: userInformation.user.imagePath!,
+                    fit: BoxFit.cover,
+                    width: 60.0,
+                    height: 60.0,
+                  ),
             borderRadius: BorderRadius.all(Radius.circular(30.0)),
             clipBehavior: Clip.hardEdge,
           ),
@@ -69,7 +69,7 @@ class CustomChatListItemUser extends StatelessWidget {
                         text: userInformation.chat.lastMessage == null
                             ? "Nachricht konnte nicht geladen werden"
                             : userInformation.chat.lastMessage!.message
-                            .toString(),
+                                .toString(),
                         style: textStyle,
                       ),
                     ],

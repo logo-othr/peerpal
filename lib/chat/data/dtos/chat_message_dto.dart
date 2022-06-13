@@ -5,18 +5,16 @@ part 'chat_message_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ChatMessageDTO extends ChatMessage {
-
-
-  ChatMessageDTO(String message, String timestamp, String type, String userId) : super(
-    message: message,
-    timestamp: timestamp,
-    type: type,
-    userId: userId,
-  );
+  ChatMessageDTO(String message, String timestamp, String type, String userId)
+      : super(
+          message: message,
+          timestamp: timestamp,
+          type: type,
+          userId: userId,
+        );
 
   factory ChatMessageDTO.fromJson(Map<String, dynamic> json) =>
       _$ChatMessageDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$ChatMessageDTOToJson(this);
-
 }

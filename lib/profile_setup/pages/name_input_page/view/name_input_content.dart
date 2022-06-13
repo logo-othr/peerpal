@@ -12,7 +12,9 @@ class NameInputContent extends StatelessWidget {
   final bool isInFlowContext;
   final String pastName;
 
-  NameInputContent({Key? key, required this.isInFlowContext, required this.pastName}) : super(key: key);
+  NameInputContent(
+      {Key? key, required this.isInFlowContext, required this.pastName})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class NameInputContent extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 CustomPeerPALHeading1('Wie ist dein Name?'),
                 const SizedBox(height: 120),
-                _UsernameInputField(isInFlowContext,pastName),
+                _UsernameInputField(isInFlowContext, pastName),
                 const SizedBox(height: 190),
                 _NextButton(isInFlowContext),
               ],
@@ -53,10 +55,10 @@ class NameInputContent extends StatelessWidget {
 }
 
 class _UsernameInputField extends StatelessWidget {
-
   final bool isInFlowContext;
   final String pastName;
-  _UsernameInputField(this.isInFlowContext,this.pastName);
+
+  _UsernameInputField(this.isInFlowContext, this.pastName);
 
   @override
   Widget build(BuildContext context) {
@@ -66,23 +68,26 @@ class _UsernameInputField extends StatelessWidget {
         return new FutureBuilder(
           future: context.read<NameInputCubit>().currentName(),
           initialData: pastName,
-          builder:(BuildContext context, AsyncSnapshot<String?>text){
-
-          return new TextFormField(
-            maxLength: 30,
-              initialValue:pastName,
-            style: const TextStyle(fontSize: 22),
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.person),
-              helperText: '',
-              errorText: state.username.invalid ? 'Bitte geben sie Ihren Namen ein' : null,
-            ),
-            key: const Key('name_selection_username_field'),
-            onChanged: (username) {
-                context.read<NameInputCubit>().nameChanged(username);
+          builder: (BuildContext context, AsyncSnapshot<String?> text) {
+            return new TextFormField(
+                maxLength: 30,
+                initialValue: pastName,
+                style: const TextStyle(fontSize: 22),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.person),
+                  helperText: '',
+                  errorText: state.username.invalid
+                      ? 'Bitte geben sie Ihren Namen ein'
+                      : null,
+                ),
+                key: const Key('name_selection_username_field'),
+                onChanged: (username) {
+                  context.read<NameInputCubit>().nameChanged(username);
                 },
-            keyboardType: TextInputType.name);
-      },);},
+                keyboardType: TextInputType.name);
+          },
+        );
+      },
     );
   }
 }
@@ -111,7 +116,9 @@ class _NextButton extends StatelessWidget {
                           .flow<PeerPALUser>()
                           .update((s) => s.copyWith(name: selectedName.value));
                     } else {
-                      await context.read<NameInputCubit>().updateNameAtServer(selectedName.value);
+                      await context
+                          .read<NameInputCubit>()
+                          .updateNameAtServer(selectedName.value);
                       Navigator.pop(context);
                     }
                   }

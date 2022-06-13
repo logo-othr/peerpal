@@ -70,18 +70,18 @@ class CustomPicker extends CommonPickerModel {
   DateTime finalTime() {
     return currentTime.isUtc
         ? DateTime.utc(
-        currentTime.year,
-        currentTime.month,
-        currentTime.day,
-        this.currentLeftIndex(),
-        this.currentMiddleIndex(),
-        this.currentRightIndex())
+            currentTime.year,
+            currentTime.month,
+            currentTime.day,
+            this.currentLeftIndex(),
+            this.currentMiddleIndex(),
+            this.currentRightIndex())
         : DateTime(
-        currentTime.year,
-        currentTime.month,
-        currentTime.day,
-        this.currentLeftIndex(),
-        this.currentMiddleIndex(),
-        this.currentRightIndex());
+            currentTime.year,
+            currentTime.month,
+            currentTime.day,
+            this.currentLeftIndex(),
+            this.currentMiddleIndex(),
+            this.currentRightIndex());
   }
 }

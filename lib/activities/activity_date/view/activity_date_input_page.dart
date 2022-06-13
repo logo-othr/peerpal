@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_date/cubit/activity_date_cubit.dart';
 import 'package:peerpal/repository/activity_repository.dart';
+
 //platzhalter
 
 import 'activity_date_input_content.dart';
 
 class ActivitySelectDatePage extends StatelessWidget {
-   final bool isInFlowContext;
+  final bool isInFlowContext;
 
   ActivitySelectDatePage({required this.isInFlowContext});
 

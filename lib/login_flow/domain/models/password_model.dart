@@ -1,22 +1,23 @@
 import 'package:formz/formz.dart';
 import 'package:zxcvbn/zxcvbn.dart';
 
-enum PasswordError { invalid, empty, veryWeak, weak, toShort, toLong}
+enum PasswordError { invalid, empty, veryWeak, weak, toShort, toLong }
 
 class PasswordModel extends FormzInput<String, PasswordError> {
   const PasswordModel.pure() : super.pure('');
+
   const PasswordModel.dirty([String password = '']) : super.dirty(password);
 
   @override
   PasswordError? validator(String? password) {
-    if(password == null)  return PasswordError.invalid;
+    if (password == null) return PasswordError.invalid;
 
     // Quote: OWASP recommendation, 01.07.2021
     // Source: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
     // "Minimum length of the passwords should be enforced by the application.
     // Passwords shorter than 8 characters are considered to be weak
     // (NIST SP800-63B)."
-    if(password.length < 8) return  PasswordError.toShort;
+    if (password.length < 8) return PasswordError.toShort;
 
     // Quote: OWASP recommendation, 01.07.2021
     // Source: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
@@ -27,7 +28,7 @@ class PasswordModel extends FormzInput<String, PasswordError> {
     // in the Password Storage Cheat Sheet. It is important to set
     // a maximum password length to prevent long password
     // Denial of Service attacks."
-    if(password.length > 62) return PasswordError.toLong;
+    if (password.length > 62) return PasswordError.toLong;
 
     /// Quote: OWASP recommendation, 01.07.2021
     /// Source: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
@@ -48,13 +49,11 @@ class PasswordModel extends FormzInput<String, PasswordError> {
     /// The result zxcvbn level
     final result = zxcvbn.evaluate(password);
 
-    if(result.score == 0) return PasswordError.veryWeak;
+    if (result.score == 0) return PasswordError.veryWeak;
 
-    if(result.score == 1) return PasswordError.weak;
+    if (result.score == 1) return PasswordError.weak;
 
     // The password meets the criteria
     return null;
   }
-
-
 }

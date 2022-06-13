@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/login_flow/domain/domain.dart';
 import 'package:peerpal/login_flow/presentation/presentation.dart';
-
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -16,7 +15,7 @@ class SignUpForm extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionSuccess) {
           Navigator.of(context).pop();
-        } else         if (state.status.isSubmissionFailure) {
+        } else if (state.status.isSubmissionFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -82,7 +81,9 @@ class _PasswordInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.password != current.password || previous.visible != current.visible,
+      buildWhen: (previous, current) =>
+          previous.password != current.password ||
+          previous.visible != current.visible,
       builder: (context, state) {
         String? errorText = "";
         var errorState = state.password.error;
@@ -114,12 +115,12 @@ class _PasswordInputField extends StatelessWidget {
           decoration: InputDecoration(
               prefixIcon: Icon(Icons.lock),
               suffixIcon: IconButton(
-                icon: Icon(
-                    context.read<SignupCubit>().isVisible(0)? Icons.visibility_off : Icons.visibility),
-                onPressed: (){
+                icon: Icon(context.read<SignupCubit>().isVisible(0)
+                    ? Icons.visibility_off
+                    : Icons.visibility),
+                onPressed: () {
                   context.read<SignupCubit>().changeVisibility(0);
                 },
-
               ),
               labelText: 'Passwort',
               helperText: '',
@@ -136,8 +137,9 @@ class _ConfirmPasswordInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) =>
-      previous.password != current.password ||
-          previous.confirmedPassword != current.confirmedPassword || previous.confirmVisible != current.confirmVisible,
+          previous.password != current.password ||
+          previous.confirmedPassword != current.confirmedPassword ||
+          previous.confirmVisible != current.confirmVisible,
       builder: (context, state) {
         return TextField(
           style: TextStyle(fontSize: 22),
@@ -148,12 +150,12 @@ class _ConfirmPasswordInputField extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.lock),
             suffixIcon: IconButton(
-              icon: Icon(
-                  context.read<SignupCubit>().isVisible(1)? Icons.visibility_off : Icons.visibility),
-              onPressed: (){
+              icon: Icon(context.read<SignupCubit>().isVisible(1)
+                  ? Icons.visibility_off
+                  : Icons.visibility),
+              onPressed: () {
                 context.read<SignupCubit>().changeVisibility(1);
               },
-
             ),
             labelText: 'Passwort bestätigen',
             helperText: '',
@@ -177,10 +179,10 @@ class _SignUpButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? const CircularProgressIndicator()
             : CustomPeerPALButton(
-            onPressed: state.status.isValidated
-                ? () => context.read<SignupCubit>().submitSignupForm()
-                : null,
-            text: "Registrieren");
+                onPressed: state.status.isValidated
+                    ? () => context.read<SignupCubit>().submitSignupForm()
+                    : null,
+                text: "Registrieren");
       },
     );
   }

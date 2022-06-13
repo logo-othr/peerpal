@@ -4,8 +4,6 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 import '../../colors.dart';
 
-
-
 // ignore: must_be_immutable
 class CustomEmptyListHint extends StatelessWidget {
   IconData? icon;
@@ -19,8 +17,12 @@ class CustomEmptyListHint extends StatelessWidget {
       children: [
         Icon(icon, color: secondaryColor, size: 60),
         SizedBox(height: 20),
-        CustomPeerPALHeading2(text!, color: secondaryColor, textAlign: TextAlign.center,),
-        ],
+        CustomPeerPALHeading2(
+          text!,
+          color: secondaryColor,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

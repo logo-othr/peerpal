@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,15 +7,13 @@ import 'package:peerpal/activities/activity_public_overview_page/cubit/activity_
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/activity_icon_data..dart';
-import 'package:peerpal/repository/models/activity.dart';
-import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
 import 'package:peerpal/widgets/custom_activity_participations_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
-import 'package:peerpal/widgets/custom_single_location_table_view.dart';
 import 'package:peerpal/widgets/custom_single_creator_table_view.dart';
 import 'package:peerpal/widgets/custom_single_description_table_view.dart';
+import 'package:peerpal/widgets/custom_single_location_table_view.dart';
 import 'package:peerpal/widgets/custom_single_participants_table_view.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';
 
@@ -60,7 +57,7 @@ class _ActivityPublicOverviewContentState
               var activityCreator = state.activityCreator;
               var activityAttendees = state.attendees;
               List<String>? activityAttendeesList =
-              activityAttendees.map((e) => e.name!).toList();
+                  activityAttendees.map((e) => e.name!).toList();
               activityAttendeesList.sort();
 
               if (activity.description != null)
@@ -70,7 +67,7 @@ class _ActivityPublicOverviewContentState
                 location = "${activity.location!.street}";
               else
                 location =
-                "${activity.location!.street} ${activity.location!.streetNumber}";
+                    "${activity.location!.street} ${activity.location!.streetNumber}";
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -81,7 +78,7 @@ class _ActivityPublicOverviewContentState
                           color: Colors.white,
                           border: Border(
                               bottom:
-                              BorderSide(width: 1, color: secondaryColor))),
+                                  BorderSide(width: 1, color: secondaryColor))),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -126,25 +123,25 @@ class _ActivityPublicOverviewContentState
                                     heading: "ERSTELLER",
                                     text: activity.creatorName,
                                     avatar: (activityCreator.imagePath ==
-                                        null ||
-                                        activityCreator.imagePath!.isEmpty)
+                                                null ||
+                                            activityCreator.imagePath!.isEmpty)
                                         ? Icon(
-                                      Icons.account_circle,
-                                      size: 40.0,
-                                      color: Colors.grey,
-                                    )
+                                            Icons.account_circle,
+                                            size: 40.0,
+                                            color: Colors.grey,
+                                          )
                                         : CachedNetworkImage(
-                                      imageUrl:
-                                      activityCreator.imagePath!,
-                                      errorWidget:
-                                          (context, object, stackTrace) {
-                                        return const Icon(
-                                          Icons.account_circle,
-                                          size: 40.0,
-                                          color: Colors.grey,
-                                        );
-                                      },
-                                    ),
+                                            imageUrl:
+                                                activityCreator.imagePath!,
+                                            errorWidget:
+                                                (context, object, stackTrace) {
+                                              return const Icon(
+                                                Icons.account_circle,
+                                                size: 40.0,
+                                                color: Colors.grey,
+                                              );
+                                            },
+                                          ),
                                     tapIcon: Icons.email,
                                     isOwnCreatedActivity: false,
                                     onPressed: () {
@@ -165,7 +162,7 @@ class _ActivityPublicOverviewContentState
                                 CustomSingleTable(
                                   heading: "UHRZEIT",
                                   text:
-                                  '${DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!))} Uhr',
+                                      '${DateFormat('kk:mm').format(DateTime.fromMillisecondsSinceEpoch(activity.date!))} Uhr',
                                   isArrowIconVisible: false,
                                 ),
                                 CustomSingleLocationTable(
@@ -175,9 +172,9 @@ class _ActivityPublicOverviewContentState
                                     isArrowIconVisible: false),
                                 CustomSingleParticipantsTable(
                                     onPressed: () => {
-                                      showAttendeeDialog(
-                                          activityAttendeesList)
-                                    },
+                                          showAttendeeDialog(
+                                              activityAttendeesList)
+                                        },
                                     heading: "TEILNEHMER",
                                     text: activityAttendees
                                         .map((e) => e.name)
@@ -198,43 +195,43 @@ class _ActivityPublicOverviewContentState
                   ),
                   state.isAttendee
                       ? Container(
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          CustomPeerPALButton(
-                            onPressed: () {
-                              context
-                                  .read<ActivityPublicOverviewCubit>()
-                                  .leaveActivity();
+                          color: Colors.transparent,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              CustomPeerPALButton(
+                                onPressed: () {
+                                  context
+                                      .read<ActivityPublicOverviewCubit>()
+                                      .leaveActivity();
 
-                              Scaffold.of(context).showSnackBar(new SnackBar(
-                                  content: new Text(
-                                      "Du hast die Aktivität verlassen.")));
-                            },
-                            text: "Aktivität verlassen",
-                            color: Colors.red,
-                          ),
-                        ],
-                      ))
+                                  Scaffold.of(context).showSnackBar(new SnackBar(
+                                      content: new Text(
+                                          "Du hast die Aktivität verlassen.")));
+                                },
+                                text: "Aktivität verlassen",
+                                color: Colors.red,
+                              ),
+                            ],
+                          ))
                       : Container(
-                      color: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          CustomPeerPALButton(
-                            onPressed: () {
-                              context
-                                  .read<ActivityPublicOverviewCubit>()
-                                  .joinActivity();
-                              Scaffold.of(context).showSnackBar(new SnackBar(
-                                  content: new Text(
-                                      "Du bist der Aktivität beigetreten.")));
-                            },
-                            text: "Aktivität beitreten",
-                          ),
-                        ],
-                      )),
+                          color: Colors.transparent,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              CustomPeerPALButton(
+                                onPressed: () {
+                                  context
+                                      .read<ActivityPublicOverviewCubit>()
+                                      .joinActivity();
+                                  Scaffold.of(context).showSnackBar(new SnackBar(
+                                      content: new Text(
+                                          "Du bist der Aktivität beigetreten.")));
+                                },
+                                text: "Aktivität beitreten",
+                              ),
+                            ],
+                          )),
                 ],
               );
             } else

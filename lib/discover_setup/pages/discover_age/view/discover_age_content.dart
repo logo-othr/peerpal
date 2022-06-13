@@ -27,7 +27,7 @@ class DiscoverAgeContent extends StatelessWidget {
         ),
         body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
             builder: (context, state) {
-              context.read<DiscoverAgeCubit>();
+          context.read<DiscoverAgeCubit>();
           return Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
@@ -53,10 +53,10 @@ class DiscoverAgeContent extends StatelessWidget {
                   (state is DiscoverAgePosting)
                       ? const CircularProgressIndicator()
                       : CompletePageButton(
-                      isSaveButton: isInFlowContext,
-                      onPressed: () async {
-                        _update(state, context);
-                      }),
+                          isSaveButton: isInFlowContext,
+                          onPressed: () async {
+                            _update(state, context);
+                          }),
                 ],
               ),
             ),
@@ -64,8 +64,7 @@ class DiscoverAgeContent extends StatelessWidget {
         }));
   }
 
-  Future<void> _update(
-      DiscoverAgeState state, BuildContext context) async {
+  Future<void> _update(DiscoverAgeState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverAgeCubit>().postData();
       context.flow<PeerPALUser>().complete((s) => s.copyWith(

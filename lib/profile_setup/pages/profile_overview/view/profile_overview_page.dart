@@ -9,7 +9,6 @@ import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class ProfileOverviewPage extends StatelessWidget {
-
   static MaterialPage<void> page() {
     return MaterialPage<void>(child: ProfileOverviewPage());
   }
@@ -21,7 +20,9 @@ class ProfileOverviewPage extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar("Überblick", hasBackButton: false),
         body: BlocProvider.value(
-          value: ProfileOverviewCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())..loadData(),
+          value: ProfileOverviewCubit(
+              context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+            ..loadData(),
           child: ProfileOverviewContent(),
         ),
       ),

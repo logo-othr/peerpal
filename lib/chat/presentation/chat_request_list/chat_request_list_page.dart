@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/chat/presentation/chat_list/chat_list_content.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_content.dart';
 import 'package:peerpal/injection.dart';

@@ -7,7 +7,8 @@ import 'package:peerpal/repository/get_user_usecase.dart';
 part 'age_input_state.dart';
 
 class AgeInputCubit extends Cubit<AgeInputState> {
-  AgeInputCubit(this._appUserRepository, this._getAuthenticatedUser) : super(AgeInputInitial(10));
+  AgeInputCubit(this._appUserRepository, this._getAuthenticatedUser)
+      : super(AgeInputInitial(10));
 
   final AppUserRepository _appUserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
@@ -19,7 +20,6 @@ class AgeInputCubit extends Cubit<AgeInputState> {
   Future<void> postData() async {
     emit(AgeInputPosting(state.selectedAge));
 
-
     var userInformation = await _getAuthenticatedUser();
     var updatedUserInformation =
         userInformation.copyWith(age: state.selectedAge);
@@ -27,7 +27,7 @@ class AgeInputCubit extends Cubit<AgeInputState> {
     emit(AgeInputPosted(state.selectedAge));
   }
 
-  Future<int?>currentAge() async{
+  Future<int?> currentAge() async {
     return (await _getAuthenticatedUser()).age;
   }
 }

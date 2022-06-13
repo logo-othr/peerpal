@@ -72,23 +72,20 @@ class SignupCubit extends Cubit<SignupState> {
     }
   }
 
-  void changeVisibility(int version){
-    if(version==0){
+  void changeVisibility(int version) {
+    if (version == 0) {
       emit(state.copyWith(visible: !state.visible));
     }
-    if(version==1){
+    if (version == 1) {
       emit(state.copyWith(confirmVisible: !state.confirmVisible));
     }
   }
 
-  bool isVisible(int version){
-    if(version==0){
+  bool isVisible(int version) {
+    if (version == 0) {
       return state.visible;
-    }
-    else{
+    } else {
       return state.confirmVisible;
     }
   }
-
-
 }

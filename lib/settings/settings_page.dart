@@ -4,16 +4,11 @@ import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/profile_setup/pages/profile_overview/cubit/profile_overview_cubit.dart';
-import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/settings/imprint_page.dart';
-import 'package:peerpal/settings/licenses_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/strings.dart';
-import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
@@ -61,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       height: 120,
                       width: 120,
                       child:
-                      Image(image: AssetImage('assets/peerpal_logo.png')))),
+                          Image(image: AssetImage('assets/peerpal_logo.png')))),
               SizedBox(height: 10),
               Divider(thickness: 1, color: primaryColor),
               SizedBox(height: 10),
@@ -78,12 +73,13 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               CustomTableRow(
                 text: "Interessen",
-                onPressed: () async => {
+                onPressed: () async =>
+                {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => DiscoverInterestsOverviewPage()),
-                  )/*.then((value) =>
+                  ) /*.then((value) =>
                       context.read<DiscoverTabBloc>().add(ReloadUsers()))*/
                 },
               ),
@@ -93,7 +89,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 onPressed: () async => {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+                    MaterialPageRoute(
+                        builder: (context) => PrivacyPolicyPage()),
                   ),
                 },
               ),
@@ -151,12 +148,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             actionButtonText: 'Ausloggen',
                             dialogText: "Möchten Sie sich wirklich ausloggen?",
                             onPressed: () => {
-                              context
-                                  .read<AppBloc>()
-                                  .add(AppLogoutRequested()),
-                              //ToDo: deleteDeviceTokenFromServer() is called twice when the user logs in and when the user logs out.
-                              context.read<AuthenticationRepository>().deleteDeviceTokenFromServer(),
-                            });
+                                  context
+                                      .read<AppBloc>()
+                                      .add(AppLogoutRequested()),
+                                  //ToDo: deleteDeviceTokenFromServer() is called twice when the user logs in and when the user logs out.
+                                  context
+                                      .read<AuthenticationRepository>()
+                                      .deleteDeviceTokenFromServer(),
+                                });
                       }),
                 },
               ),
@@ -165,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   CustomTableHeader(heading: "SONSTIGES"),
                   CustomTableRow(
                     text:
-                    "E-Mail: ${sl.get<AuthenticationRepository>().currentUser.email}",
+                        "E-Mail: ${sl.get<AuthenticationRepository>().currentUser.email}",
                     isArrowVisible: false,
                   ),
                 ],
@@ -174,7 +173,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   CustomTableHeader(heading: "User-ID"),
                   CustomTableRow(
-                    text: "${sl.get<AuthenticationRepository>().currentUser.id}",
+                    text:
+                        "${sl.get<AuthenticationRepository>().currentUser.id}",
                     isArrowVisible: false,
                   ),
                 ],

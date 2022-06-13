@@ -2,11 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
+
 part 'activity_selection_state.dart';
 
 class ActivitySelectionCubit extends Cubit<ActivitySelectionState> {
-
-
   ActivitySelectionCubit(this._activityRepository) : super(ActivitiesInitial());
   final ActivityRepository _activityRepository;
 
@@ -15,11 +14,10 @@ class ActivitySelectionCubit extends Cubit<ActivitySelectionState> {
     emit(ActivitiesLoaded(activities));
   }
 
-
-Future<Activity> getCurrentActivity() async {
+  Future<Activity> getCurrentActivity() async {
     var activity = await _activityRepository.getCurrentActivity();
     return activity;
-}
+  }
 
   Future<void> postData(Activity activity) async {
     if (state is ActivitiesLoaded) {
@@ -27,5 +25,4 @@ Future<Activity> getCurrentActivity() async {
       _activityRepository.updateLocalActivity(activity);
     }
   }
-
 }

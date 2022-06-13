@@ -6,8 +6,9 @@ import 'package:peerpal/widgets/custom_peerpal_text.dart';
 class CustomPeerPALButton extends StatelessWidget {
   final String? text;
   final VoidCallback? onPressed;
-final Color? color;
-  CustomPeerPALButton({ required this.text, this.onPressed, this.color});
+  final Color? color;
+
+  CustomPeerPALButton({required this.text, this.onPressed, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class CustomPeerPALButton2 extends StatelessWidget {
   final String? text;
   final VoidCallback? onPressed;
 
-  CustomPeerPALButton2({ required this.text, this.onPressed});
+  CustomPeerPALButton2({required this.text, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

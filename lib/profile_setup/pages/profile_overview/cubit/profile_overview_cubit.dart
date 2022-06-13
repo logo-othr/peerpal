@@ -8,7 +8,8 @@ import 'package:peerpal/repository/models/peerpal_user.dart';
 part 'profile_overview_state.dart';
 
 class ProfileOverviewCubit extends Cubit<ProfileOverviewState> {
-  ProfileOverviewCubit(this.repository, this._getAuthenticatedUser) : super(ProfileOverviewInitial());
+  ProfileOverviewCubit(this.repository, this._getAuthenticatedUser)
+      : super(ProfileOverviewInitial());
   final AppUserRepository repository;
   final GetAuthenticatedUser _getAuthenticatedUser;
 
@@ -17,20 +18,19 @@ class ProfileOverviewCubit extends Cubit<ProfileOverviewState> {
     emit(ProfileOverviewLoaded(appUserInformation));
   }
 
-  Future <String?> name() async{
+  Future<String?> name() async {
     return (await _getAuthenticatedUser()).name;
-}
+  }
 
-  Future <String?> age() async{
+  Future<String?> age() async {
     return (await _getAuthenticatedUser()).age.toString();
   }
 
-  Future <String?> phoneNumber() async{
+  Future<String?> phoneNumber() async {
     return (await _getAuthenticatedUser()).phoneNumber;
   }
 
-  Future <String?> profilePicture() async{
+  Future<String?> profilePicture() async {
     return (await _getAuthenticatedUser()).imagePath;
   }
-
 }

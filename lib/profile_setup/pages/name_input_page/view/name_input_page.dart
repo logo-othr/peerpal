@@ -5,7 +5,6 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/name_input_page/cubit/name_input_cubit.dart';
 import 'package:peerpal/profile_setup/pages/name_input_page/view/name_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
@@ -13,7 +12,7 @@ class NameInputPage extends StatelessWidget {
   final bool isInFlowContext;
   final String pastName;
 
-  NameInputPage({required this.isInFlowContext,this.pastName=''});
+  NameInputPage({required this.isInFlowContext, this.pastName = ''});
 
   static MaterialPage<void> page({required bool isInFlowContext}) {
     return MaterialPage<void>(
@@ -25,12 +24,19 @@ class NameInputPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: CustomAppBar('PeerPAL', hasBackButton: true,),
+        appBar: CustomAppBar(
+          'PeerPAL',
+          hasBackButton: true,
+        ),
         body: BlocProvider(
           create: (_) {
-            return NameInputCubit(context.read<AppUserRepository>(),sl<GetAuthenticatedUser>());
+            return NameInputCubit(
+                context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
           },
-          child: NameInputContent(isInFlowContext: isInFlowContext, pastName: pastName,),
+          child: NameInputContent(
+            isInFlowContext: isInFlowContext,
+            pastName: pastName,
+          ),
         ),
       ),
     );

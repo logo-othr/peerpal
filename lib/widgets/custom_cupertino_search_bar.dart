@@ -9,7 +9,10 @@ class CustomCupertinoSearchBar extends StatelessWidget {
   FocusNode? focusNode;
 
   CustomCupertinoSearchBar(
-      {this.heading, required this.searchBarController, this.enabled = true, this.focusNode});
+      {this.heading,
+      required this.searchBarController,
+      this.enabled = true,
+      this.focusNode});
 
   @override
   Widget build(BuildContext context) {

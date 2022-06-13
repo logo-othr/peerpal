@@ -1,16 +1,15 @@
 part of 'discover_communication_cubit.dart';
 
-
 abstract class DiscoverCommunicationState extends Equatable {
   List<CommunicationType> communicationTypes;
   List<CommunicationType> selectedCommunicationTypes;
 
-  DiscoverCommunicationState(this.communicationTypes, this.selectedCommunicationTypes);
+  DiscoverCommunicationState(
+      this.communicationTypes, this.selectedCommunicationTypes);
 }
 
 class DiscoverCommunicationInitial extends DiscoverCommunicationState {
-  DiscoverCommunicationInitial()
-      : super([], []);
+  DiscoverCommunicationInitial() : super([], []);
 
   @override
   List<Object?> get props => [communicationTypes, selectedCommunicationTypes];
@@ -25,7 +24,8 @@ class DiscoverCommunicationLoaded extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationSelected extends DiscoverCommunicationState {
-  DiscoverCommunicationSelected(List<CommunicationType> communications, List<CommunicationType> selectedCommunicationTypes)
+  DiscoverCommunicationSelected(List<CommunicationType> communications,
+      List<CommunicationType> selectedCommunicationTypes)
       : super(communications, selectedCommunicationTypes);
 
   @override
@@ -33,7 +33,8 @@ class DiscoverCommunicationSelected extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationPosting extends DiscoverCommunicationState {
-  DiscoverCommunicationPosting(List<CommunicationType>  communications, List<CommunicationType>  selectedCommunicationTypes)
+  DiscoverCommunicationPosting(List<CommunicationType> communications,
+      List<CommunicationType> selectedCommunicationTypes)
       : super(communications, selectedCommunicationTypes);
 
   @override
@@ -41,19 +42,18 @@ class DiscoverCommunicationPosting extends DiscoverCommunicationState {
 }
 
 class DiscoverCommunicationPosted extends DiscoverCommunicationState {
-  DiscoverCommunicationPosted(List<CommunicationType> communications, List<CommunicationType> selectedCommunicationTypes)
+  DiscoverCommunicationPosted(List<CommunicationType> communications,
+      List<CommunicationType> selectedCommunicationTypes)
       : super(communications, selectedCommunicationTypes);
 
   @override
   List<Object?> get props => [communicationTypes, selectedCommunicationTypes];
 }
 
-
 class DiscoverCommunicationError extends DiscoverCommunicationState {
   final String message;
 
-  DiscoverCommunicationError(this.message)
-      : super([], []);
+  DiscoverCommunicationError(this.message) : super([], []);
 
   @override
   List<Object?> get props => [message];

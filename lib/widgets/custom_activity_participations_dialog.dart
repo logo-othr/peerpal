@@ -1,11 +1,10 @@
-import 'dart:collection';
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_activity_dialog_item.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 import '../../colors.dart';
-
 
 class Person {
   String name;
@@ -19,7 +18,9 @@ class CustomActivityParticipationsDialog extends StatefulWidget {
   final List<String>? userNames;
 
   const CustomActivityParticipationsDialog(
-      {required this.isOwnCreatedActivity,  this.userNames, required this.isAttendeeDialog});
+      {required this.isOwnCreatedActivity,
+      this.userNames,
+      required this.isAttendeeDialog});
 
   @override
   _CustomActivityParticipationsDialogState createState() =>
@@ -28,7 +29,6 @@ class CustomActivityParticipationsDialog extends StatefulWidget {
 
 class _CustomActivityParticipationsDialogState
     extends State<CustomActivityParticipationsDialog> {
-
   final Map<String, List<String>> groupedList = {};
 
   void groupMyList() {
@@ -59,7 +59,8 @@ class _CustomActivityParticipationsDialogState
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(width: 2, color: primaryColor), borderRadius: BorderRadius.circular(10)),
+          border: Border.all(width: 2, color: primaryColor),
+          borderRadius: BorderRadius.circular(10)),
       height: 300,
       child: Column(
         children: <Widget>[
@@ -75,7 +76,9 @@ class _CustomActivityParticipationsDialogState
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 5, 0, 10),
-                    child: widget.isAttendeeDialog ? CustomPeerPALHeading1("Teilnehmer") : CustomPeerPALHeading1("Eingeladen"),
+                    child: widget.isAttendeeDialog
+                        ? CustomPeerPALHeading1("Teilnehmer")
+                        : CustomPeerPALHeading1("Eingeladen"),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 5, 15, 10),
@@ -101,8 +104,8 @@ class _CustomActivityParticipationsDialogState
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomPeerPALHeading3(text:entry.key,
-                                fontWeight: FontWeight.bold),
+                            CustomPeerPALHeading3(
+                                text: entry.key, fontWeight: FontWeight.bold),
                             SizedBox(height: 10),
                             Column(
                               children: [
@@ -110,11 +113,10 @@ class _CustomActivityParticipationsDialogState
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(
                                         0, 0, 0, 10.0),
-                                    child:
-                                    CustomActivityDialogItem(
+                                    child: CustomActivityDialogItem(
                                         name: entry.value[i],
                                         isOwnCreatedActivity:
-                                        widget.isOwnCreatedActivity),
+                                            widget.isOwnCreatedActivity),
                                   ),
                               ],
                             ),

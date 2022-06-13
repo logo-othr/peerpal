@@ -13,6 +13,9 @@ class FriendRequestPeerPALButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPeerPALButton(
-      text: buttonText, color: color, onPressed: onPressed,);
+      text: buttonText,
+      color: color,
+      onPressed: onPressed,
+    );
   }
 }

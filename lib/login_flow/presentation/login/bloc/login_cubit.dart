@@ -4,9 +4,7 @@ import 'package:formz/formz.dart';
 import 'package:peerpal/login_flow/domain/domain.dart';
 import 'package:peerpal/login_flow/persistence/persistence.dart';
 
-
 part 'login_state.dart';
-
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationRepository) : super(const LoginState());
@@ -37,7 +35,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(
           status: FormzStatus.submissionFailure,
           errorMessage:
-          'Zu viele Fehlversuche. Bitte versuchen Sie es später erneut.'));
+              'Zu viele Fehlversuche. Bitte versuchen Sie es später erneut.'));
       return;
     }
     emit(state.copyWith(
@@ -54,7 +52,6 @@ class LoginCubit extends Cubit<LoginState> {
           errorMessage: e.message));
     }
   }
-
 
   Future<void> _firebaseLogin() async {
     await _authenticationRepository.loginWithEmailAndPassword(
@@ -86,12 +83,11 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  void changeVisibility(){
+  void changeVisibility() {
     emit(state.copyWith(visible: !state.visible));
   }
 
-  bool isVisible(){
+  bool isVisible() {
     return state.visible;
   }
-
 }

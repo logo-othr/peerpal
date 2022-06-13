@@ -11,14 +11,13 @@ List<Page> onGenerateActivityWizardPages(
     Activity activityFlowState, List<Page<dynamic>> pages) {
   return [
     ActivitySelectionPage.page(isInFlowContext: true),
-    if (activityFlowState.name != null &&
-        activityFlowState.code != null)
+    if (activityFlowState.name != null && activityFlowState.code != null)
       ActivitySelectDatePage.page(isInFlowContext: true),
     if (activityFlowState.date != null)
       LocationInputPage.page(isInFlowContext: true),
     if (activityFlowState.location != null)
       InvitationInputPage.page(isInFlowContext: true),
-    if(activityFlowState.invitationIds != null)
-      OverviewInputPage.page(isInFlowContext:true),
+    if (activityFlowState.invitationIds != null)
+      OverviewInputPage.page(isInFlowContext: true),
   ];
 }

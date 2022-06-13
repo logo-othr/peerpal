@@ -12,10 +12,10 @@ import 'package:rxdart/rxdart.dart';
 part 'activity_request_list_event.dart';
 part 'activity_request_list_state.dart';
 
-class ActivityRequestListBloc extends Bloc<ActivityRequestListEvent, ActivityRequestListState> {
-
-  StreamController<List<Activity>> _activityRequestListStreamController = new BehaviorSubject();
-
+class ActivityRequestListBloc
+    extends Bloc<ActivityRequestListEvent, ActivityRequestListState> {
+  StreamController<List<Activity>> _activityRequestListStreamController =
+      new BehaviorSubject();
 
   var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -27,18 +27,17 @@ class ActivityRequestListBloc extends Bloc<ActivityRequestListEvent, ActivityReq
   }
 
   @override
-  Stream<ActivityRequestListState> mapEventToState(ActivityRequestListEvent event) async* {
-
+  Stream<ActivityRequestListState> mapEventToState(
+      ActivityRequestListEvent event) async* {
     if (event is LoadActivityRequestList) {
-      Stream<List<Activity>> activityRequestListStream = sl<ActivityRepository>().getPrivateRequestActivitiesForUser(currentUserId);
+      Stream<List<Activity>> activityRequestListStream =
+          sl<ActivityRepository>()
+              .getPrivateRequestActivitiesForUser(currentUserId);
       _activityRequestListStreamController.addStream(activityRequestListStream);
 
       yield state.copyWith(
           status: ActivityRequestListStatus.success,
-          activityRequestList: _activityRequestListStreamController.stream
-      );
+          activityRequestList: _activityRequestListStreamController.stream);
     }
   }
 }
-
-

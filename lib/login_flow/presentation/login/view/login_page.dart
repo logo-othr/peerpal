@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/login_flow/presentation/presentation.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-
+import 'package:peerpal/login_flow/presentation/presentation.dart';
+import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,7 +12,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar('PeerPAL', hasBackButton: false,),
+      appBar: CustomAppBar(
+        'PeerPAL',
+        hasBackButton: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(

@@ -1,6 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/location.dart';
 
@@ -64,8 +63,7 @@ class PeerPALUser extends Equatable {
   bool get isDiscoverNotComplete => isDiscoverComplete != true;
 
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
         name,
         age,
         phoneNumber,
@@ -101,7 +99,8 @@ class PeerPALUser extends Equatable {
       discoverToAge: discoverToAge ?? this.discoverToAge,
       discoverCommunicationPreferences: discoverCommunicationPreferences ??
           this.discoverCommunicationPreferences,
-      discoverActivitiesCodes: discoverActivities ?? this.discoverActivitiesCodes,
+      discoverActivitiesCodes:
+          discoverActivities ?? this.discoverActivitiesCodes,
       discoverLocations: discoverLocations ?? this.discoverLocations,
       pushToken: pushToken ?? this.pushToken,
     );

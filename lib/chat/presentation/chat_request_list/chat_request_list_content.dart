@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/custom_chat_list_item_user.dart';
@@ -7,7 +6,6 @@ import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
-import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
 class ChatRequestListContent extends StatefulWidget {
   ChatRequestListContent({Key? key}) : super(key: key);
@@ -21,7 +19,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
 
   void scrollListener() {
     if (listScrollController.offset >=
-        listScrollController.position.maxScrollExtent &&
+            listScrollController.position.maxScrollExtent &&
         !listScrollController.position.outOfRange) {}
   }
 
@@ -29,23 +27,23 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: CustomAppBar(
-              'Nachrichtenanfragen',
-              hasBackButton: true,
-            ),
-            body: BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
-                builder: (context, state) {
-                  if (state.status == ChatRequestListStatus.initial) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state.status == ChatRequestListStatus.success) {
-                    return ChatRequestList(context);
-                  } else {
-                    return ChatRequestList(context);
-                  }
-                }),
-          );
-        });
+      return Scaffold(
+        appBar: CustomAppBar(
+          'Nachrichtenanfragen',
+          hasBackButton: true,
+        ),
+        body: BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
+            builder: (context, state) {
+          if (state.status == ChatRequestListStatus.initial) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.status == ChatRequestListStatus.success) {
+            return ChatRequestList(context);
+          } else {
+            return ChatRequestList(context);
+          }
+        }),
+      );
+    });
   }
 
   Widget ChatRequestList(BuildContext context) {
@@ -91,9 +89,9 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
               context,
               MaterialPageRoute(
                   builder: (context) => ChatPage(
-                    userChat: userInformation,
-                    userId: userInformation.user.id!,
-                  )));
+                        userChat: userInformation,
+                        userId: userInformation.user.id!,
+                      )));
         },
         child: CustomChatListItemUser(userInformation: userInformation),
       ),

@@ -23,7 +23,8 @@ class LocationInputPage extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return ActivityLocationCubit(context.read<ActivityRepository>())..loadData();
+          return ActivityLocationCubit(context.read<ActivityRepository>())
+            ..loadData();
         },
         child: LocationInputContent(isInFlowContext: isInFlowContext),
       ),

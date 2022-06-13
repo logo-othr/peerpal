@@ -12,35 +12,39 @@ import 'package:rxdart/rxdart.dart';
 part 'chat_request_list_event.dart';
 part 'chat_request_list_state.dart';
 
-class ChatRequestListBloc extends Bloc<ChatRequestListEvent, ChatRequestListState> {
+class ChatRequestListBloc
+    extends Bloc<ChatRequestListEvent, ChatRequestListState> {
   GetChatsForUser _getChatsForUser;
   GetChatRequestForUser _getChatRequestForUser;
   StreamController<List<Chat>> _chatStreamController = new BehaviorSubject();
-  StreamController<List<UserChat>> _userFriendRequestStreamController = new BehaviorSubject();
-  ChatRequestListBloc(this._getChatsForUser, this._getChatRequestForUser) : super(ChatRequestListState());
+  StreamController<List<UserChat>> _userFriendRequestStreamController =
+      new BehaviorSubject();
+
+  ChatRequestListBloc(this._getChatsForUser, this._getChatRequestForUser)
+      : super(ChatRequestListState());
 
   @override
   Future<void> close() {
     // ToDo: Check for memory leaks
-   // _chatStreamController.close();
-   // _userFriendRequestStreamController.close();
+    // _chatStreamController.close();
+    // _userFriendRequestStreamController.close();
     return super.close();
   }
 
   @override
-  Stream<ChatRequestListState> mapEventToState(ChatRequestListEvent event) async* {
+  Stream<ChatRequestListState> mapEventToState(
+      ChatRequestListEvent event) async* {
     if (event is ChatRequestListLoaded) {
       Stream<List<Chat>> chatStream = _getChatsForUser();
       _chatStreamController.addStream(chatStream);
 
-      Stream<List<UserChat>> chatRequestStream = _getChatRequestForUser(_chatStreamController.stream);
+      Stream<List<UserChat>> chatRequestStream =
+          _getChatRequestForUser(_chatStreamController.stream);
       _userFriendRequestStreamController.addStream(chatRequestStream);
 
       yield state.copyWith(
           status: ChatRequestListStatus.success,
-          chatRequests: _userFriendRequestStreamController.stream
-      );
+          chatRequests: _userFriendRequestStreamController.stream);
     }
-
   }
 }

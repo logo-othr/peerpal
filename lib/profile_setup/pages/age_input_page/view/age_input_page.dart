@@ -23,7 +23,8 @@ class AgeInputPage extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return AgeInputCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
+          return AgeInputCubit(
+              context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
         },
         child: AgeInputContent(isInFlowContext: isInFlowContext),
       ),

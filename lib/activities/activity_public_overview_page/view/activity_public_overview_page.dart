@@ -8,9 +8,9 @@ import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 
-
 class ActivityPublicOverviewPage extends StatelessWidget {
   Activity activity;
+
   ActivityPublicOverviewPage({required this.activity});
 
   @override
@@ -19,8 +19,10 @@ class ActivityPublicOverviewPage extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return ActivityPublicOverviewCubit(context.read<ActivityRepository>(),
-              context.read<AppUserRepository>(), context.read<AuthenticationRepository>())
+          return ActivityPublicOverviewCubit(
+              context.read<ActivityRepository>(),
+              context.read<AppUserRepository>(),
+              context.read<AuthenticationRepository>())
             ..loadData(activity);
         },
         child: ActivityPublicOverviewContent(),

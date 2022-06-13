@@ -9,7 +9,6 @@ import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class DiscoverInterestsOverviewPage extends StatelessWidget {
-
   static MaterialPage<void> page() {
     return MaterialPage<void>(child: DiscoverInterestsOverviewPage());
   }
@@ -21,7 +20,9 @@ class DiscoverInterestsOverviewPage extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar("Überblick", hasBackButton: false),
         body: BlocProvider.value(
-          value: DiscoverInterestsOverviewCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())..loadData(),
+          value: DiscoverInterestsOverviewCubit(
+              context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+            ..loadData(),
           child: DiscoverInterestsOverviewContent(),
         ),
       ),

@@ -19,5 +19,4 @@ class ProfileOverviewLoaded extends ProfileOverviewState {
 
   @override
   List<Object?> get props => [appUserInformation];
-
 }

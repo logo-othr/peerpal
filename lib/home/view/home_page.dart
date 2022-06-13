@@ -3,17 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
+import 'package:peerpal/discover/discover_tab_bloc.dart';
+import 'package:peerpal/discover/discover_tab_view.dart';
 import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/settings/settings_page.dart';
-import 'package:peerpal/discover/discover_tab_bloc.dart';
-import 'package:peerpal/discover/discover_tab_view.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
@@ -26,8 +26,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-      HomeCubit(context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())..loadFlowState(),
+      create: (_) => HomeCubit(
+          context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+        ..loadFlowState(),
       child: const HomeView(),
     );
   }
@@ -64,22 +65,21 @@ class HomeView extends StatelessWidget {
             return Container(
               child: Container(
                 child: Scaffold(
-                    appBar: CustomAppBar("PeerPAL", hasBackButton: false,),
-                    body:  Center(
+                    appBar: CustomAppBar(
+                      "PeerPAL",
+                      hasBackButton: false,
+                    ),
+                    body: Center(
                         child: Padding(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                             child: Container(
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      const SizedBox(height: 300),
-                                      CustomPeerPALHeading1("Laden..."),
-                                      CircularProgressIndicator(),]
-                                )
-                            )
-                        )
-                    )
-                ),
+                                  const SizedBox(height: 300),
+                                  CustomPeerPALHeading1("Laden..."),
+                                  CircularProgressIndicator(),
+                                ]))))),
               ),
             );
           }),
@@ -108,7 +108,9 @@ class MyTabView extends StatelessWidget {
       child: Container(child: ChatListPage()),
     ),
     Center(
-      child: Container(child: SettingsPage(),),
+      child: Container(
+        child: SettingsPage(),
+      ),
     ),
   ];
 
@@ -125,8 +127,9 @@ class MyTabView extends StatelessWidget {
           body: MultiBlocProvider(
             providers: [
               BlocProvider<DiscoverTabBloc>(
-                create: (context) =>
-                DiscoverTabBloc(context.read<AppUserRepository>(), context.read<AuthenticationRepository>())
+                create: (context) => DiscoverTabBloc(
+                    context.read<AppUserRepository>(),
+                    context.read<AuthenticationRepository>())
                   ..add(UsersLoaded()),
               ),
               BlocProvider<ChatListBloc>(

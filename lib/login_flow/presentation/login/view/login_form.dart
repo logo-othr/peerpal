@@ -170,9 +170,8 @@ class _LoginButton extends StatelessWidget {
             : CustomPeerPALButton(
                 onPressed: state.formValidationStatus.isValidated
                     ? () => {
-                  context.read<LoginCubit>().login(),
-
-                }
+                          context.read<LoginCubit>().login(),
+                        }
                     : null,
                 text: 'Login');
       },

@@ -4,15 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/chat_answer_button.dart';
 import 'package:peerpal/widgets/chat_emoji_button.dart';
 
 class ChatButtons extends StatefulWidget {
-
   final TextEditingController textEditingController;
   final String? appUserPhoneNumber;
-
 
   ChatButtons(this.appUserPhoneNumber, {required this.textEditingController});
 
@@ -21,9 +18,7 @@ class ChatButtons extends StatefulWidget {
 }
 
 class _ChatButtonsState extends State<ChatButtons> {
-
   late StreamSubscription<bool> keyboardSubscription;
-
 
   @override
   void initState() {
@@ -31,12 +26,14 @@ class _ChatButtonsState extends State<ChatButtons> {
 
     var keyboardVisibilityController = KeyboardVisibilityController();
     // Query
-    print('Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
+    print(
+        'Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
 
     // Subscribe
-    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
       print('Keyboard visibility update. Is visible: $visible');
-      if(visible) {
+      if (visible) {
         setState(() {
           isAnswerKeyboardVisible = false;
           isEmojiKeyboardVisible = false;
@@ -77,69 +74,68 @@ class _ChatButtonsState extends State<ChatButtons> {
         isAnswerKeyboardVisible
             ? Container()
             : AnimatedContainer(
-            curve: Curves.fastOutSlowIn,
-            height: isEmojiKeyboardVisible ? 210 : 45,
-            width: isEmojiKeyboardVisible ? 320 : 45,
-            duration: const Duration(milliseconds: 0),
-            margin: isEmojiKeyboardVisible
-                ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
-                : const EdgeInsets.fromLTRB(0, 5, 5, 5),
-            decoration: BoxDecoration(
-              color: isEmojiKeyboardVisible ? Colors.white : primaryColor,
-              border: Border.all(width: 2, color: primaryColor),
-              borderRadius: isEmojiKeyboardVisible ?  borderRadius
-                  .subtract(const BorderRadius.only(bottomRight: radius)) :BorderRadius.circular(25),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-                setState(() {
-                  isEmojiKeyboardVisible = true;
-                });
-              },
-              child: isEmojiKeyboardVisible
-                  ? ChatEmojiKeyboard(
-                onCancel:
-                onCancelEmojiKeyboard, textEditingController: widget.textEditingController,
-              )
-                  : const Icon(
-                Icons.emoji_emotions_outlined,
-                size: 35,
-                color: Colors.white,
-              ),
-            )),
+                curve: Curves.fastOutSlowIn,
+                height: isEmojiKeyboardVisible ? 210 : 45,
+                width: isEmojiKeyboardVisible ? 320 : 45,
+                duration: const Duration(milliseconds: 0),
+                margin: isEmojiKeyboardVisible
+                    ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
+                    : const EdgeInsets.fromLTRB(0, 5, 5, 5),
+                decoration: BoxDecoration(
+                  color: isEmojiKeyboardVisible ? Colors.white : primaryColor,
+                  border: Border.all(width: 2, color: primaryColor),
+                  borderRadius: isEmojiKeyboardVisible
+                      ? borderRadius.subtract(
+                          const BorderRadius.only(bottomRight: radius))
+                      : BorderRadius.circular(25),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    setState(() {
+                      isEmojiKeyboardVisible = true;
+                    });
+                  },
+                  child: isEmojiKeyboardVisible
+                      ? ChatEmojiKeyboard(
+                          onCancel: onCancelEmojiKeyboard,
+                          textEditingController: widget.textEditingController,
+                        )
+                      : const Icon(
+                          Icons.emoji_emotions_outlined,
+                          size: 35,
+                          color: Colors.white,
+                        ),
+                )),
         isEmojiKeyboardVisible
             ? Container()
             : AnimatedContainer(
-            curve: Curves.fastOutSlowIn,
-            height: isAnswerKeyboardVisible ? 250 : 45,
-            width: isAnswerKeyboardVisible ? 300 : 170,
-            duration: const Duration(milliseconds: 0),
-            margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: borderRadius
-                  .subtract(const BorderRadius.only(bottomRight: radius)),
-            ),
-            child: GestureDetector(
-                onTap: () {
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  setState(() {
-                    isAnswerKeyboardVisible = true;
-                  });
-                },
-                child: isAnswerKeyboardVisible
-                    ? ChatAnswerKeyboard(widget.appUserPhoneNumber,
-                    onCancel:
-                    onCancelAnswerKeyboard, textEditingController: widget.textEditingController)
-                    : const Center(
-                    child: Text(
-                      'Antwort wählen',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20
-                      ),
-                    )))),
+                curve: Curves.fastOutSlowIn,
+                height: isAnswerKeyboardVisible ? 250 : 45,
+                width: isAnswerKeyboardVisible ? 300 : 170,
+                duration: const Duration(milliseconds: 0),
+                margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: borderRadius
+                      .subtract(const BorderRadius.only(bottomRight: radius)),
+                ),
+                child: GestureDetector(
+                    onTap: () {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      setState(() {
+                        isAnswerKeyboardVisible = true;
+                      });
+                    },
+                    child: isAnswerKeyboardVisible
+                        ? ChatAnswerKeyboard(widget.appUserPhoneNumber,
+                            onCancel: onCancelAnswerKeyboard,
+                            textEditingController: widget.textEditingController)
+                        : const Center(
+                            child: Text(
+                            'Antwort wählen',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          )))),
       ],
     );
   }

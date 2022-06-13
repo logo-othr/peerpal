@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
-import 'package:provider/provider.dart';
 
 import '../../colors.dart';
-
 
 // ignore: must_be_immutable
 class CustomSingleLocationTable extends StatelessWidget {
@@ -14,10 +12,12 @@ class CustomSingleLocationTable extends StatelessWidget {
   VoidCallback? onPressed;
   final bool isArrowIconVisible;
 
-
-
-  CustomSingleLocationTable({this.heading, this.text, this.subText, this.onPressed, required this.isArrowIconVisible});
-
+  CustomSingleLocationTable(
+      {this.heading,
+      this.text,
+      this.subText,
+      this.onPressed,
+      required this.isArrowIconVisible});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class CustomSingleLocationTable extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-                child:
-                CustomPeerPALHeading3(text: heading!, color: secondaryColor),
+                child: CustomPeerPALHeading3(
+                    text: heading!, color: secondaryColor),
               ),
               Container(
                 height: 55,
@@ -53,20 +53,27 @@ class CustomSingleLocationTable extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child:
-                              CustomPeerPALHeading3(text:text!, color: Colors.black,),
+                              child: CustomPeerPALHeading3(
+                                text: text!,
+                                color: Colors.black,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: CustomPeerPALHeading4(subText!, color: Colors.black,),
+                              child: CustomPeerPALHeading4(
+                                subText!,
+                                color: Colors.black,
+                              ),
                             ),
                           ],
                         ),
-                        isArrowIconVisible? Icon(
-                          Icons.arrow_forward_ios,
-                          size: 15,
-                          color: secondaryColor,
-                        ) : Container(),
+                        isArrowIconVisible
+                            ? Icon(
+                                Icons.arrow_forward_ios,
+                                size: 15,
+                                color: secondaryColor,
+                              )
+                            : Container(),
                       ],
                     ),
                     style: TextButton.styleFrom(

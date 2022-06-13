@@ -4,7 +4,6 @@ import 'package:peerpal/activities/activity_feed/activity_feed_content.dart';
 import 'package:peerpal/activities/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/injection.dart';
 
-
 class ActivityFeedPage extends StatelessWidget {
   const ActivityFeedPage({Key? key}) : super(key: key);
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activities/activity_selection/cubit/activity_selection_cubit.dart';
 import 'package:peerpal/repository/activity_repository.dart';
-//platzhalter
 
+//platzhalter
 
 import 'activity_selection_content.dart';
 
@@ -24,7 +24,8 @@ class ActivitySelectionPage extends StatelessWidget {
       onWillPop: () async => false,
       child: BlocProvider(
         create: (_) {
-          return ActivitySelectionCubit(context.read<ActivityRepository>())..loadData();
+          return ActivitySelectionCubit(context.read<ActivityRepository>())
+            ..loadData();
         },
         child: ActivitySelectionContent(isInFlowContext: isInFlowContext),
       ),

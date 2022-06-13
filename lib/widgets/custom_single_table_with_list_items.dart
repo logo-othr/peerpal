@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
 
 import 'custom_peerpal_heading.dart';
 
@@ -69,7 +68,6 @@ class CustomSingleTableWithListItems extends StatelessWidget {
                                   constraints: new BoxConstraints(
                                     maxWidth: 250,
                                   ),
-
                                   child: RichText(
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,

@@ -8,7 +8,7 @@ class LoginState extends Equatable {
     this.errorMessage = '',
     this.loginCounter = 0,
     this.lastAttempt = 0,
-    this.visible=true,
+    this.visible = true,
   });
 
   final FormzStatus formValidationStatus;
@@ -41,12 +41,12 @@ class LoginState extends Equatable {
 
   @override
   List<Object> get props => [
-    formValidationStatus,
-    email,
-    password,
-    errorMessage,
-    loginCounter,
-    lastAttempt,
-    visible
-  ];
+        formValidationStatus,
+        email,
+        password,
+        errorMessage,
+        loginCounter,
+        lastAttempt,
+        visible
+      ];
 }

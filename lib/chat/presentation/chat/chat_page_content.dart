@@ -13,13 +13,11 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
-import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/single_chat_cancel_friend_request_button.dart';
 import 'package:peerpal/widgets/single_chat_send_friend_request_button.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatPageContent extends StatelessWidget {
   ChatPageContent({
@@ -33,7 +31,7 @@ class ChatPageContent extends StatelessWidget {
   _scrollListener() {
     if (listScrollController.hasClients) {
       if (listScrollController.offset >=
-          listScrollController.position.maxScrollExtent &&
+              listScrollController.position.maxScrollExtent &&
           !listScrollController.position.outOfRange) {}
     }
   }
@@ -43,8 +41,6 @@ class ChatPageContent extends StatelessWidget {
     listScrollController.addListener(_scrollListener);
     _focus.addListener(() {
       print("Focus: ${_focus.hasFocus.toString()}");
-
-
     });
     return Scaffold(
 /*      appBar: CustomAppBar(
@@ -53,7 +49,8 @@ class ChatPageContent extends StatelessWidget {
       ),*/
       // extendBodyBehindAppBar: true,
       body: SafeArea(
-        child: BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
+        child:
+            BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
           if (state is ChatPageInitial) {
             return CircularProgressIndicator();
           } else if (state is ChatPageLoading) {
@@ -72,50 +69,50 @@ class ChatPageContent extends StatelessWidget {
                 friendRequestButton(context, state.chatPartner),
                 buildChatMessages(context, state),
                 (!state.userChat.chat.chatRequestAccepted &&
-                    state.userChat.chat.startedBy != state.appUser.id)
+                        state.userChat.chat.startedBy != state.appUser.id)
                     ? Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
-                  child: _showChatRequestButtons(context),
-                )
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
+                        child: _showChatRequestButtons(context),
+                      )
                     : StreamBuilder<int>(
-                    stream: sl<ChatRepository>()
-                        .messageCountForChat(state.userChat.chat.chatId),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return CustomLoadingIndicator(
-                            text: "Lade Nachrichten..");
-                      } else if (snapshot.data == 0) {
-                        return Container(
-                          width: double.infinity,
-                          height: 500,
-                          alignment: Alignment.center,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Der Chat ist nicht mehr vorhanden."),
-                              SizedBox(
-                                height: 50,
+                        stream: sl<ChatRepository>()
+                            .messageCountForChat(state.userChat.chat.chatId),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return CustomLoadingIndicator(
+                                text: "Lade Nachrichten..");
+                          } else if (snapshot.data == 0) {
+                            return Container(
+                              width: double.infinity,
+                              height: 500,
+                              alignment: Alignment.center,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Der Chat ist nicht mehr vorhanden."),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  CustomPeerPALButton(
+                                    text: "Zurück",
+                                    onPressed: () => Navigator.pop(context),
+                                  )
+                                ],
                               ),
-                              CustomPeerPALButton(
-                                text: "Zurück",
-                                onPressed: () => Navigator.pop(context),
-                              )
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            ChatButtons(state.appUser.phoneNumber,
-
-                                textEditingController: textEditingController),
-                            singleChatTextFormField(state.chatPartner,
-                                state.userChat.chat.chatId, context),
-                          ],
-                        );
-                      }
-                    }),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                ChatButtons(state.appUser.phoneNumber,
+                                    textEditingController:
+                                        textEditingController),
+                                singleChatTextFormField(state.chatPartner,
+                                    state.userChat.chat.chatId, context),
+                              ],
+                            );
+                          }
+                        }),
               ],
             );
           } else if (state is ChatPageChatNotExists) {
@@ -151,7 +148,8 @@ class ChatPageContent extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => UserDetailPage(
-                user.id!, hasMessageButton: false,
+                user.id!,
+                hasMessageButton: false,
               ),
             ),
           );
@@ -210,7 +208,6 @@ class ChatPageContent extends StatelessWidget {
         });
   }
 
-
   Widget singleChatTextFormField(
       PeerPALUser chatPartner, String? chatId, context) {
     return Container(
@@ -235,15 +232,16 @@ class ChatPageContent extends StatelessWidget {
               maxLines: 5,
               focusNode: _focus,
               onSubmitted: (value) {
-                sendChatMessage(chatPartner, chatId,
-                    textEditingController.text, "0", context);
+                sendChatMessage(chatPartner, chatId, textEditingController.text,
+                    "0", context);
               },
               controller: textEditingController,
               textCapitalization: TextCapitalization.sentences,
               autocorrect: true,
               enableSuggestions: true,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 20, top: 30, right: 20),
+                contentPadding:
+                    const EdgeInsets.only(left: 20, top: 30, right: 20),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide(color: primaryColor, width: 3.0),
@@ -255,7 +253,6 @@ class ChatPageContent extends StatelessWidget {
                 filled: true,
                 fillColor: Colors.grey[100],
                 hintText: 'Nachricht',
-
               ),
             ),
           ),
@@ -283,50 +280,50 @@ class ChatPageContent extends StatelessWidget {
     if (content.trim() != '') {
       textEditingController.clear();
       await context.read<ChatPageBloc>().sendChatMessage(
-        chatPartner,
-        chatId,
-        content,
-        type,
-      );
+            chatPartner,
+            chatId,
+            content,
+            type,
+          );
     } else {}
   }
 
   Widget buildChatMessages(BuildContext context, ChatPageChatExists state) {
     return Flexible(
         child: StreamBuilder<List<ChatMessage>>(
-          stream: state.messages,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data!.isEmpty) {
-                return Container(
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: Text("Keine Nachrichten gefunden"));
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.all(10.0),
-                itemBuilder: (context, index) {
-                  ChatMessage message = snapshot.data![index];
-                  var isAppUserMessage = message.userId == state.appUser.id;
-                  var imageUrl = isAppUserMessage
-                      ? state.appUser.imagePath
-                      : state.chatPartner.imagePath;
-                  return buildChatMessage(message, isAppUserMessage, imageUrl!);
-                },
-                itemCount: snapshot.data?.length,
-                reverse: true,
-                controller: listScrollController,
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                ),
-              );
-            }
-          },
-        ));
+      stream: state.messages,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.isEmpty) {
+            return Container(
+                height: 100,
+                alignment: Alignment.center,
+                child: Text("Keine Nachrichten gefunden"));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(10.0),
+            itemBuilder: (context, index) {
+              ChatMessage message = snapshot.data![index];
+              var isAppUserMessage = message.userId == state.appUser.id;
+              var imageUrl = isAppUserMessage
+                  ? state.appUser.imagePath
+                  : state.chatPartner.imagePath;
+              return buildChatMessage(message, isAppUserMessage, imageUrl!);
+            },
+            itemCount: snapshot.data?.length,
+            reverse: true,
+            controller: listScrollController,
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+            ),
+          );
+        }
+      },
+    ));
   }
 
   Widget buildChatMessage(
@@ -335,18 +332,20 @@ class ChatPageContent extends StatelessWidget {
     const borderRadius = BorderRadius.all(radius);
     return Row(
       mainAxisAlignment:
-      isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
+          isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           decoration: BoxDecoration(
-            color: isRightAligned ? primaryColor.shade400: secondaryColor.shade400,
+            color: isRightAligned
+                ? primaryColor.shade400
+                : secondaryColor.shade400,
             borderRadius: isRightAligned
                 ? borderRadius
-                .subtract(const BorderRadius.only(topRight: radius))
+                    .subtract(const BorderRadius.only(topRight: radius))
                 : borderRadius
-                .subtract(const BorderRadius.only(topLeft: radius)),
+                    .subtract(const BorderRadius.only(topLeft: radius)),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,27 +354,31 @@ class ChatPageContent extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 220),
                 child: Text(
                   chatMessage.message,
-                  style: const TextStyle(color: Colors.black,fontSize: 19),
+                  style: const TextStyle(color: Colors.black, fontSize: 19),
                   textAlign: TextAlign.start,
                 ),
               ),
               const SizedBox(width: 15),
-              ClipOval(child:
-              CircleAvatar(backgroundColor: Colors.white,radius: 20,
-                  child:
-                  (imageUrl!.isEmpty || imageUrl == null)
-                      ?  Icon(
-                    Icons.account_circle,
-                    size: 40.0,
-                    color: Colors.grey,
-                  ) :
-                  CachedNetworkImage(imageUrl: imageUrl, errorWidget: (context, object, stackTrace) {
-                    return const Icon(
-                      Icons.account_circle,
-                      size: 40.0,
-                      color: Colors.grey,
-                    );
-                  },))),
+              ClipOval(
+                  child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 20,
+                      child: (imageUrl!.isEmpty || imageUrl == null)
+                          ? Icon(
+                              Icons.account_circle,
+                              size: 40.0,
+                              color: Colors.grey,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              errorWidget: (context, object, stackTrace) {
+                                return const Icon(
+                                  Icons.account_circle,
+                                  size: 40.0,
+                                  color: Colors.grey,
+                                );
+                              },
+                            ))),
             ],
           ),
         ),
@@ -384,10 +387,8 @@ class ChatPageContent extends StatelessWidget {
   }
 
   Widget _showChatRequestButtons(BuildContext context) {
-
     // ToDo: dispatch event instead of calling the repository manually
-    ChatPageBloc bloc = context
-        .read<ChatPageBloc>();
+    ChatPageBloc bloc = context.read<ChatPageBloc>();
     ChatPageChatExists currentState = bloc.state as ChatPageChatExists;
     return Container(
       child: Column(
@@ -395,15 +396,22 @@ class ChatPageContent extends StatelessWidget {
           CustomPeerPALButton(
               text: "Annehmen",
               onPressed: () {
-                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, true,  currentState.userChat.chat.chatId);
+                context.read<ChatRepository>().sendChatRequestResponse(
+                    currentUserId,
+                    currentState.chatPartner.id!,
+                    true,
+                    currentState.userChat.chat.chatId);
                 Navigator.pop(context);
               }),
           SizedBox(height: 8),
           CustomPeerPALButton(
               text: "Ablehnen",
               onPressed: () {
-
-                context.read<ChatRepository>().sendChatRequestResponse(currentUserId, currentState.chatPartner.id!, false, currentState.userChat.chat.chatId);
+                context.read<ChatRepository>().sendChatRequestResponse(
+                    currentUserId,
+                    currentState.chatPartner.id!,
+                    false,
+                    currentState.userChat.chat.chatId);
                 // context.read<ChatListBloc>().add(ChatListLoaded());
                 Navigator.pop(context);
               }),
