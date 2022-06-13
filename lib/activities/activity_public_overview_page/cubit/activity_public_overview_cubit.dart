@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 

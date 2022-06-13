@@ -3,16 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/profile_setup/pages/name_input_page/models/username_model.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 
 part 'name_input_state.dart';
 
 class NameInputCubit extends Cubit<NameInputState> {
-  NameInputCubit(this._appUserRepository, this._authenticationRepository, this._getAuthenticatedUser) : super(const NameInputState());
+  NameInputCubit(this._appUserRepository, this._getAuthenticatedUser) : super(const NameInputState());
 
   final AppUserRepository _appUserRepository;
-  final AuthenticationRepository _authenticationRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
 
   void nameChanged(String dirtyName) {

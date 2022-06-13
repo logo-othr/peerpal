@@ -7,7 +7,7 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/pages/profile_overview/cubit/profile_overview_cubit.dart';
 import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/licenses_page.dart';

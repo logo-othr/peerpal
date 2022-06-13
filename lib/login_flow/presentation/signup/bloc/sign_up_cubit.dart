@@ -1,11 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:peerpal/login_flow/sign_up/models/confirmed_password_model.dart';
-import 'package:peerpal/login_flow/sign_up/models/email_model.dart';
-import 'package:peerpal/login_flow/sign_up/models/password_model.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/login_flow/domain/domain.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 
 part 'sign_up_state.dart';
 

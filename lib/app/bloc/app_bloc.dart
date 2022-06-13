@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/models/auth_user.dart';
 
 part 'app_event.dart';

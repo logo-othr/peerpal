@@ -10,9 +10,9 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
-import 'package:peerpal/repository/models/activity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
+
 
 import 'app/app.dart';
 

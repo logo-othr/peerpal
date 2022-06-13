@@ -9,9 +9,8 @@ import 'package:peerpal/activities/activity_request_list/activity_request_list_p
 import 'package:peerpal/activities/activity_wizard_flow.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/activity_repository.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/strings.dart';

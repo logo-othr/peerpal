@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:peerpal/login_flow/sign_up/models/email_model.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/login_flow/domain/domain.dart';
+import 'package:peerpal/login_flow/persistence/persistence.dart';
+
 
 part 'login_state.dart';
+
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationRepository) : super(const LoginState());

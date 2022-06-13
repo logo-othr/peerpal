@@ -11,7 +11,7 @@ import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/authentication_repository.dart';
+import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/memory_cache.dart';
