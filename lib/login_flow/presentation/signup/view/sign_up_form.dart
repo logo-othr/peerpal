@@ -81,32 +81,11 @@ class _PasswordInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) =>
-          previous.password != current.password ||
-          previous.visible != current.visible,
+      buildWhen: (previous, current) => changedPasswordField(previous, current),
       builder: (context, state) {
         String? errorText = "";
         var errorState = state.password.error;
-        switch (errorState) {
-          case PasswordError.invalid:
-            errorText = "Ungültiges Passwort";
-            break;
-          case PasswordError.veryWeak:
-            errorText = "Das Passwort ist deutlich zu schwach.";
-            break;
-          case PasswordError.weak:
-            errorText = "Das Passwort ist zu schwach.";
-            break;
-          case PasswordError.toShort:
-            errorText = "Das Passwort muss mindestens 8 Zeichen haben.";
-            break;
-          case PasswordError.toLong:
-            errorText = "Das Passwort darf nicht mehr als 62 Zeichen haben.";
-            break;
-          default:
-            errorText = null;
-            break;
-        }
+        errorText = errorMessage(errorState, errorText);
         return new TextField(
           style: TextStyle(fontSize: 22),
           onChanged: (password) =>
@@ -130,6 +109,34 @@ class _PasswordInputField extends StatelessWidget {
       },
     );
   }
+
+  String? errorMessage(PasswordError? errorState, String? errorText) {
+    switch (errorState) {
+      case PasswordError.invalid:
+        errorText = "Ungültiges Passwort";
+        break;
+      case PasswordError.veryWeak:
+        errorText = "Das Passwort ist deutlich zu schwach.";
+        break;
+      case PasswordError.weak:
+        errorText = "Das Passwort ist zu schwach.";
+        break;
+      case PasswordError.toShort:
+        errorText = "Das Passwort muss mindestens 8 Zeichen haben.";
+        break;
+      case PasswordError.toLong:
+        errorText = "Das Passwort darf nicht mehr als 62 Zeichen haben.";
+        break;
+      default:
+        errorText = null;
+        break;
+    }
+    return errorText;
+  }
+
+  bool changedPasswordField(SignupState previous, SignupState current) =>
+      previous.password != current.password ||
+      previous.visible != current.visible;
 }
 
 class _ConfirmPasswordInputField extends StatelessWidget {
@@ -137,9 +144,7 @@ class _ConfirmPasswordInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) =>
-          previous.password != current.password ||
-          previous.confirmedPassword != current.confirmedPassword ||
-          previous.confirmVisible != current.confirmVisible,
+          changedOrConfirmedPasswordField(previous, current),
       builder: (context, state) {
         return TextField(
           style: TextStyle(fontSize: 22),
@@ -167,6 +172,13 @@ class _ConfirmPasswordInputField extends StatelessWidget {
         );
       },
     );
+  }
+
+  bool changedOrConfirmedPasswordField(
+      SignupState previous, SignupState current) {
+    return previous.password != current.password ||
+        previous.confirmedPassword != current.confirmedPassword ||
+        previous.confirmVisible != current.confirmVisible;
   }
 }
 
