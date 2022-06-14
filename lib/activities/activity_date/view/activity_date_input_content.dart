@@ -107,14 +107,14 @@ class _DatePickerState extends State<_DatePicker> {
                     DatePicker.showDatePicker(context,
                         showTitleActions: true,
                         minTime: DateTime.now(), onChanged: (date) {
-                          print('change $date');
-                        }, onConfirm: (date) {
-                          String formattedDate =
+                      print('change $date');
+                    }, onConfirm: (date) {
+                      String formattedDate =
                           DateFormat('dd.MM.yyyy').format(date);
-                          dateController.text = formattedDate;
-                          context
-                              .read<DateInputCubit>()
-                              .dataChanged(formattedDate, state.time);
+                      dateController.text = formattedDate;
+                      context
+                          .read<DateInputCubit>()
+                          .dataChanged(formattedDate, state.time);
                         }, currentTime: DateTime.now(), locale: LocaleType.de)
                   },
                   icon: Icon(Icons.edit)),
@@ -159,31 +159,8 @@ class _TimePickerState extends State<_TimePicker> {
           decoration: InputDecoration(
             suffixIcon: IconButton(
                 onPressed: () => {
-                  DatePicker.showPicker(context, showTitleActions: true,
-                      onChanged: (date) {
-                        print('change $date');
-                      }, onConfirm: (date) {
-                        String formattedTime = DateFormat('HH:mm').format(date);
-                        var array = formattedTime.split(":");
-                        if (array[1] == "01") {
-                          array[1] = "15";
-                        }
-                        if (array[1] == "02") {
-                          array[1] = "30";
-                        }
-                        if (array[1] == "03") {
-                          array[1] = "45";
-                        }
-                        formattedTime = '${array[0]}:${array[1]}';
-                        context
-                            .read<DateInputCubit>()
-                            .dataChanged(state.date, formattedTime);
-                        timeController.text = '$formattedTime Uhr';
-                      },
-                      pickerModel:
-                      CustomPicker(currentTime: DateTime.now()),
-                      locale: LocaleType.de)
-                },
+                      _datePicker(state, context),
+                    },
                 icon: Icon(Icons.edit)),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -201,5 +178,28 @@ class _TimePickerState extends State<_TimePicker> {
         );
       },
     );
+  }
+
+  void _datePicker(state, context) {
+    DatePicker.showPicker(context, showTitleActions: true, onChanged: (date) {
+      print('change $date');
+    }, onConfirm: (date) {
+      String formattedTime = DateFormat('HH:mm').format(date);
+      var array = formattedTime.split(":");
+      if (array[1] == "01") {
+        array[1] = "15";
+      }
+      if (array[1] == "02") {
+        array[1] = "30";
+      }
+      if (array[1] == "03") {
+        array[1] = "45";
+      }
+      formattedTime = '${array[0]}:${array[1]}';
+      context.read<DateInputCubit>().dataChanged(state.date, formattedTime);
+      timeController.text = '$formattedTime Uhr';
+    },
+        pickerModel: CustomPicker(currentTime: DateTime.now()),
+        locale: LocaleType.de);
   }
 }
