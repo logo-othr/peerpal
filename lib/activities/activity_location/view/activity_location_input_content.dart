@@ -7,6 +7,7 @@ import 'package:peerpal/colors.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/custom_location_item.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_peerpal_text.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
@@ -47,30 +48,12 @@ class LocationInputContent extends StatelessWidget {
                       _LocationSearchBar(
                         searchBarController: searchBarController,
                       ),
-                      context
-                                  .read<ActivityLocationCubit>()
-                                  .state
-                                  .filteredLocations
-                                  .isEmpty &&
-                              context
-                                  .read<ActivityLocationCubit>()
-                                  .state
-                                  .selectedLocations
-                                  .isEmpty
+                      _emptyLocationInput(context)
                           ? SizedBox(
                               height: MediaQuery.of(context).size.height / 6,
                             )
                           : Container(),
-                      context
-                                  .read<ActivityLocationCubit>()
-                                  .state
-                                  .filteredLocations
-                                  .isEmpty &&
-                              context
-                                  .read<ActivityLocationCubit>()
-                                  .state
-                                  .selectedLocations
-                                  .isEmpty
+                      _emptyLocationInput(context)
                           ? Column(
                               children: [
                                 Icon(Icons.location_on,
@@ -84,17 +67,7 @@ class LocationInputContent extends StatelessWidget {
                               ],
                             )
                           : Container(),
-                      context
-                                  .read<ActivityLocationCubit>()
-                                  .state
-                                  .filteredLocations
-                                  .isEmpty ||
-                              context
-                                      .read<ActivityLocationCubit>()
-                                      .state
-                                      .selectedLocations
-                                      .length >
-                                  0
+                      _selectedOrEmptyLoc(context)
                           ? _LocationResultBox(
                               streetController: streetController,
                               streetNumberController: streetNumberController,
@@ -143,6 +116,24 @@ class LocationInputContent extends StatelessWidget {
       Navigator.pop(context);
     }
   }
+
+  bool _emptyLocationInput(context) {
+    return context
+            .read<ActivityLocationCubit>()
+            .state
+            .filteredLocations
+            .isEmpty &&
+        context.read<ActivityLocationCubit>().state.selectedLocations.isEmpty;
+  }
+}
+
+bool _selectedOrEmptyLoc(context) {
+  return context
+          .read<ActivityLocationCubit>()
+          .state
+          .filteredLocations
+          .isEmpty ||
+      context.read<ActivityLocationCubit>().state.selectedLocations.length > 0;
 }
 
 class _LocationResultBox extends StatelessWidget {
@@ -253,10 +244,9 @@ class _LocationListItem extends StatefulWidget {
 class _LocationListItemState extends State<_LocationListItem> {
   @override
   void initState() {
-    if (widget.location.street != null && widget.location.street!.isNotEmpty)
+    if (_isStreetNotEmpty())
       widget.streetController.text = widget.location.street!;
-    if (widget.location.streetNumber != null &&
-        widget.location.streetNumber!.isNotEmpty)
+    if (_isStreetNumberNotEmpty())
       widget.streetNumberController.text = widget.location.streetNumber!;
 
     super.initState();
@@ -355,6 +345,15 @@ class _LocationListItemState extends State<_LocationListItem> {
       },
     );
   }
+
+  bool _isStreetNotEmpty() {
+    return widget.location.street != null && widget.location.street!.isNotEmpty;
+  }
+
+  bool _isStreetNumberNotEmpty() {
+    return widget.location.streetNumber != null &&
+        widget.location.streetNumber!.isNotEmpty;
+  }
 }
 
 class _LocationSearchListItem extends StatelessWidget {
@@ -386,26 +385,11 @@ class _LocationSearchListItem extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: secondaryColor))),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomPeerPALHeading3(text: location.place),
-                        const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                  child: LocationItem(
+                iconBehavior: Icons.add,
+                location: location,
+                iconColor: Colors.black,
+              )),
             ],
           ),
         );
