@@ -8,6 +8,7 @@ import 'package:peerpal/discover_setup/pages/discover_location/cubit/discover_lo
 import 'package:peerpal/repository/models/location.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/custom_location_item.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
@@ -34,9 +35,7 @@ class DiscoverLocationContent extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(
-                    height: 40,
-                  ),
+                  const SizedBox(height: 40),
                   CustomPeerPALHeading1("Ich suche Freunde in"),
                   _LocationSearchBar(
                     searchBarController: searchBarController,
@@ -235,31 +234,13 @@ class _LocationListItem extends StatelessWidget {
                   size: 30,
                 ),
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                            bottom:
-                                BorderSide(width: 1, color: secondaryColor))),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomPeerPALHeading3(
-                            text: location.place,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          Icon(
-                            Icons.cancel_outlined,
-                            color: Colors.black,
-                            size: 20,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: LocationItem(
+                      iconBehavior: Icons.cancel_outlined,
+                      iconColor: Colors.black,
+                      iconSize: 20,
+                      location: location,
+                      headingFontSize: 18,
+                      headingFontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -273,7 +254,6 @@ class _LocationListItem extends StatelessWidget {
 class _LocationSearchListItem extends StatelessWidget {
   const _LocationSearchListItem(
       {required this.location, required this.searchBarController});
-
   final TextEditingController searchBarController;
 
   final Location location;
@@ -324,24 +304,10 @@ class _LocationSearchListItem extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          bottom: BorderSide(width: 1, color: secondaryColor))),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomPeerPALHeading3(text: location.place),
-                        const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        )
-                      ],
-                    ),
-                  ),
+                child: LocationItem(
+                  iconBehavior: Icons.add,
+                  iconColor: Colors.black,
+                  location: location,
                 ),
               ),
             ],
