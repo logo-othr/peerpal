@@ -83,26 +83,9 @@ class _ActivityPublicOverviewContentState
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
-                            child: Container(
-                                child: CircleAvatar(
-                                  radius: 35,
-                                  child: Icon(
-                                    ActivityIconData
-                                        .icons[state.activity.code]!,
-                                    size: 50,
-                                    color: Colors.black,
-                                  ),
-                                  backgroundColor: Colors.white,
-                                ),
-                                decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: new Border.all(
-                                    color: primaryColor,
-                                    width: 2.0,
-                                  ),
-                                )),
+                          AvatarUI(
+                            avatarIcon:
+                                ActivityIconData.icons[state.activity.code]!,
                           ),
                           CustomPeerPALHeading3(
                               fontSize: 20,
@@ -205,9 +188,10 @@ class _ActivityPublicOverviewContentState
                                       .read<ActivityPublicOverviewCubit>()
                                       .leaveActivity();
 
-                                  Scaffold.of(context).showSnackBar(new SnackBar(
-                                      content: new Text(
-                                          "Du hast die Aktivität verlassen.")));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      new SnackBar(
+                                          content: new Text(
+                                              "Du hast die Aktivität verlassen.")));
                                 },
                                 text: "Aktivität verlassen",
                                 color: Colors.red,
@@ -224,9 +208,10 @@ class _ActivityPublicOverviewContentState
                                   context
                                       .read<ActivityPublicOverviewCubit>()
                                       .joinActivity();
-                                  Scaffold.of(context).showSnackBar(new SnackBar(
-                                      content: new Text(
-                                          "Du bist der Aktivität beigetreten.")));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      new SnackBar(
+                                          content: new Text(
+                                              "Du bist der Aktivität beigetreten.")));
                                 },
                                 text: "Aktivität beitreten",
                               ),
@@ -239,6 +224,36 @@ class _ActivityPublicOverviewContentState
           },
         ),
       ),
+    );
+  }
+}
+
+class AvatarUI extends StatelessWidget {
+  final IconData avatarIcon;
+
+  const AvatarUI({Key? key, required this.avatarIcon}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+      child: Container(
+          child: CircleAvatar(
+            radius: 35,
+            child: Icon(
+              avatarIcon,
+              size: 50,
+              color: Colors.black,
+            ),
+            backgroundColor: Colors.white,
+          ),
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            border: new Border.all(
+              color: primaryColor,
+              width: 2.0,
+            ),
+          )),
     );
   }
 }
