@@ -146,7 +146,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         builder:
             (BuildContext context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
           if (snapshot.hasData && snapshot.data!.length > 0) {
-            return _buidUserList(snapshot.data!);
+            return _buildUserList(snapshot.data!);
           }
           if (snapshot.hasData && snapshot.data!.length == 0) {
             return _noUsersFound();
@@ -211,7 +211,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     );
   }
 
-  Widget _buidUserList(List<PeerPALUser> users) {
+  Widget _buildUserList(List<PeerPALUser> users) {
     return Column(
       children: [
         _buildUserListHeader(),
