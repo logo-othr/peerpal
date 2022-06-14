@@ -33,40 +33,15 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    activityEmojiButtons = Emojis.activityEmojis
-        .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
-        .toList();
+    activityEmojiButtons = getEmoji(Emojis.activityEmojis);
 
-    eatAndDrinkEmojis = Emojis.eatAndDrinkEmojis
-        .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
-        .toList();
+    eatAndDrinkEmojis = getEmoji(Emojis.eatAndDrinkEmojis);
 
-    year = Emojis.year
-        .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
-        .toList();
+    year = getEmoji(Emojis.year);
 
-    gestures = Emojis.gestures
-        .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
-        .toList();
+    gestures = getEmoji(Emojis.gestures);
 
-    smileyAndEmotionsEmojis = Emojis.smileyAndEmotionsEmojis
-        .map((emojiData) => EmojiButton(
-            onPressed: () => addStringToTextController(
-                widget.textEditingController, emojiData.code),
-            emojiCode: emojiData.code))
-        .toList();
+    smileyAndEmotionsEmojis = getEmoji(Emojis.smileyAndEmotionsEmojis);
 
     return DefaultTabController(
       initialIndex: 0,
@@ -123,6 +98,15 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
         ],
       ),
     );
+  }
+
+  List<EmojiButton> getEmoji(List emoji) {
+    return emoji
+        .map((emojiData) => EmojiButton(
+            onPressed: () => addStringToTextController(
+                widget.textEditingController, emojiData.code),
+            emojiCode: emojiData.code))
+        .toList();
   }
 
   Widget customEmojiHeaderBar(onCancel) {
