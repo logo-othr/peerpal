@@ -97,8 +97,7 @@ class FriendsOverviewContent extends StatelessWidget {
                 (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CustomLoadingIndicator(text: "Daten werden geladen...");
-              } else if (snapshot.connectionState == ConnectionState.active ||
-                  snapshot.connectionState == ConnectionState.done) {
+              } else if (connectionIsActiveOrDone(snapshot)) {
                 if (snapshot.hasError) {
                   return CustomCenteredInfoText(
                       text:
@@ -129,6 +128,11 @@ class FriendsOverviewContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool connectionIsActiveOrDone(AsyncSnapshot<List<dynamic>> snapshot) {
+    return snapshot.connectionState == ConnectionState.active ||
+        snapshot.connectionState == ConnectionState.done;
   }
 
   Widget buildFriend(BuildContext context, PeerPALUser userInformation) {
