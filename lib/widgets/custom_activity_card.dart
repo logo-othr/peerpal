@@ -158,46 +158,20 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           ],
                         ),
                         SizedBox(height: 5),
-                        Row(
-                          children: [
-                            CustomPeerPALHeading3(
-                              text: "Datum: ",
-                              fontWeight: FontWeight.bold,
-                            ),
-                            CustomPeerPALHeading3(
-                                text: (DateFormat('dd.MM.yyyy kk:mm').format(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        widget.activity.date!))),
-                                color: Colors.black)
-                          ],
-                        ),
+                        _ActivityDescription(
+                            headlineText: "Datum: ",
+                            length: (DateFormat('dd.MM.yyyy kk:mm').format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    widget.activity.date!)))),
                         SizedBox(height: 5),
-                        Row(
-                          children: [
-                            CustomPeerPALHeading3(
-                              text: "Ort: ",
-                              fontWeight: FontWeight.bold,
-                            ),
-                            CustomPeerPALHeading3(
-                              text: widget.activity.location?.place ?? '',
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
+                        _ActivityDescription(
+                            headlineText: "Ort: ",
+                            length: widget.activity.location?.place),
                         SizedBox(height: 5),
-                        Row(
-                          children: [
-                            CustomPeerPALHeading3(
-                              text: "Teilnehmer: ",
-                              fontWeight: FontWeight.bold,
-                            ),
-                            CustomPeerPALHeading3(
-                              text: widget.activity.attendeeIds?.length
-                                      .toString() ??
-                                  '0',
-                              color: Colors.black,
-                            ),
-                          ],
+                        _ActivityDescription(
+                          headlineText: "Teilnehmer",
+                          length:
+                              widget.activity.attendeeIds?.length.toString(),
                         ),
                         /* Row(
                           children: [
@@ -251,6 +225,33 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
               ),
             ],
           )),
+    );
+  }
+}
+
+class _ActivityDescription extends StatelessWidget {
+  const _ActivityDescription({
+    Key? key,
+    required this.headlineText,
+    required this.length,
+  }) : super(key: key);
+
+  final String headlineText;
+  final String? length;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        CustomPeerPALHeading3(
+          text: headlineText,
+          fontWeight: FontWeight.bold,
+        ),
+        CustomPeerPALHeading3(
+          text: length ?? '0',
+          color: Colors.black,
+        ),
+      ],
     );
   }
 }
