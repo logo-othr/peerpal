@@ -137,18 +137,7 @@ class UserDetailContent extends StatelessWidget {
                                       .join(', '),
                                   isArrowIconVisible: true,
                                   onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CustomActivityDialog(
-                                              isOwnCreatedActivity: false,
-                                              activities: state
-                                                  .user.discoverActivitiesCodes!
-                                                  .map((e) => ActivityRepository
-                                                      .getActivityNameFromCode(
-                                                          e))
-                                                  .toList());
-                                        });
+                                    _showActivityDialog(context, state);
                                   },
                                 ),
                                 CustomSingleTable(
@@ -215,6 +204,18 @@ class UserDetailContent extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future _showActivityDialog(state, context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomActivityDialog(
+              isOwnCreatedActivity: false,
+              activities: state.user.discoverActivitiesCodes!
+                  .map((e) => ActivityRepository.getActivityNameFromCode(e))
+                  .toList());
+        });
   }
 
   Widget friendRequestButton(BuildContext context, PeerPALUser chatPartner) {
