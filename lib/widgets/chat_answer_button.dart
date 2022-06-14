@@ -40,6 +40,7 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
+                //todo: use item builder
                 children: [
                   if (widget.appUserPhoneNumber != "")
                     customSendPhoneNumberListTile(
@@ -172,7 +173,8 @@ Widget customSendPhoneNumberListTile(
                   dialogHeight: 300,
                   actionButtonText: 'Ja',
                   dialogText:
-                      "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\nwirklich senden?",
+                      "Möchten Sie Ihre\nTelefonnummer:\n\n${appUserPhoneNumber}\n\n"
+                      "wirklich senden?",
                   onPressed: () => {
                         addStringToTextController(
                             textEditingController, '${appUserPhoneNumber}'),
