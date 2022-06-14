@@ -93,15 +93,8 @@ class _ChatListContentState extends State<ChatListContent> {
             stream: context.read<ChatListBloc>().state.chats,
             builder:
                 (BuildContext context, AsyncSnapshot<List<UserChat>> snapshot) {
-                  print("-------------- SteamBuilder Chat Build ---------- ");
-              print(snapshot.connectionState);
-              if (snapshot.hasData) print("chat snapshot.hasData");
-              if (snapshot.hasData && snapshot.data!.isEmpty)
-                print("chat snapshot.hasData && snapshot.data!.isEmpty");
-              if (snapshot.hasData)
-                print("chat length: ${snapshot.data!.length}");
-              print("-------------- SteamBuilder Chat Build /ENDE ---------- ");
-              // ToDo: stream<int> message count
+              debugChatStreamText(snapshot);
+              // ToDo: stream<int> message count for debugChatStreamText
 
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(
@@ -147,4 +140,14 @@ class _ChatListContentState extends State<ChatListContent> {
       ),
     );
   }
+}
+
+void debugChatStreamText(AsyncSnapshot snapshot) {
+  print("-------------- SteamBuilder Chat Build ---------- ");
+  print(snapshot.connectionState);
+  if (snapshot.hasData) print("chat snapshot.hasData");
+  if (snapshot.hasData && snapshot.data!.isEmpty)
+    print("chat snapshot.hasData && snapshot.data!.isEmpty");
+  if (snapshot.hasData) print("chat length: ${snapshot.data!.length}");
+  print("-------------- SteamBuilder Chat Build /ENDE ---------- ");
 }
