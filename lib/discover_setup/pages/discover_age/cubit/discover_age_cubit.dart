@@ -3,15 +3,23 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 
 part 'discover_age_state.dart';
 
 class DiscoverAgeCubit extends Cubit<DiscoverAgeState> {
   DiscoverAgeCubit(this._appUserRepository, this._getAuthenticatedUser)
-      : super(DiscoverAgeInitial(10, 100));
+      : super(DiscoverAgeInitial(1, 120));
 
   final AppUserRepository _appUserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
+
+  Future<void> loadData() async {
+    PeerPALUser authenticatedUser = await _getAuthenticatedUser();
+    int discoverFromAge = authenticatedUser.discoverFromAge ?? 1;
+    int discoverToAge = authenticatedUser.discoverToAge ?? 120;
+    emit(DiscoverAgeInitial(discoverFromAge, discoverToAge));
+  }
 
   void ageChanged(int selectedFromAge, int selectedToAge) {
     emit(DiscoverAgeInitial(selectedFromAge, selectedToAge));
@@ -28,5 +36,19 @@ class DiscoverAgeCubit extends Cubit<DiscoverAgeState> {
     await _appUserRepository.updateUserInformation(updatedUserInformation);
 
     emit(DiscoverAgePosted(selectedFromAge, selectedToAge));
+  }
+
+  Future<int> getInitialFromAge() async {
+    PeerPALUser authenticatedUser = await _getAuthenticatedUser();
+    int discoverFromAge = authenticatedUser.discoverFromAge ?? 1;
+    emit(DiscoverAgeInitial(discoverFromAge, state.selectedToAge));
+    return discoverFromAge;
+  }
+
+  Future<int> getInitialToAge() async {
+    PeerPALUser authenticatedUser = await _getAuthenticatedUser();
+    int discoverToAge = authenticatedUser.discoverToAge ?? 120;
+    emit(DiscoverAgeInitial(state.selctedFromAge, discoverToAge));
+    return discoverToAge;
   }
 }

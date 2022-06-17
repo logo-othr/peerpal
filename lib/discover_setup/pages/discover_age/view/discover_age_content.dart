@@ -8,18 +8,39 @@ import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 
-class DiscoverAgeContent extends StatelessWidget {
+class DiscoverAgeContent extends StatefulWidget {
   final bool isInFlowContext;
 
   DiscoverAgeContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
-  var fromController = FixedExtentScrollController();
-  var toController = FixedExtentScrollController();
+  @override
+  State<DiscoverAgeContent> createState() => _DiscoverAgeContentState();
+}
+
+class _DiscoverAgeContentState extends State<DiscoverAgeContent> {
+  FixedExtentScrollController? fromController = FixedExtentScrollController();
+
+  FixedExtentScrollController? toController = FixedExtentScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) async => fromController?.jumpToItem(
+        await context.read<DiscoverAgeCubit>().getInitialFromAge(),
+      ),
+    );
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) async => toController?.jumpToItem(
+        await context.read<DiscoverAgeCubit>().getInitialToAge(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    var hasBackButton = (isInFlowContext) ? false : true;
+    var hasBackButton = (widget.isInFlowContext) ? false : true;
     return Scaffold(
         appBar: CustomAppBar(
           'Alter',
@@ -27,7 +48,7 @@ class DiscoverAgeContent extends StatelessWidget {
         ),
         body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
             builder: (context, state) {
-          context.read<DiscoverAgeCubit>();
+          var state = context.read<DiscoverAgeCubit>().state;
           return Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
@@ -53,7 +74,7 @@ class DiscoverAgeContent extends StatelessWidget {
                   (state is DiscoverAgePosting)
                       ? const CircularProgressIndicator()
                       : CompletePageButton(
-                          isSaveButton: isInFlowContext,
+                          isSaveButton: widget.isInFlowContext,
                           onPressed: () async {
                             _update(state, context);
                           }),
@@ -65,7 +86,7 @@ class DiscoverAgeContent extends StatelessWidget {
   }
 
   Future<void> _update(DiscoverAgeState state, BuildContext context) async {
-    if (isInFlowContext) {
+    if (widget.isInFlowContext) {
       await context.read<DiscoverAgeCubit>().postData();
       context.flow<PeerPALUser>().complete((s) => s.copyWith(
           discoverFromAge: state.selctedFromAge,
