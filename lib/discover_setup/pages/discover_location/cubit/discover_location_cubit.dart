@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/repository/models/peerpal_user.dart';
 
 part 'discover_location_state.dart';
 
@@ -15,8 +16,11 @@ class DiscoverLocationCubit extends Cubit<DiscoverLocationState> {
 
   Future<void> loadData() async {
     var locations = await _appUserRepository.loadLocations();
-    emit(DiscoverLocationLoaded(locations, <Location>[].cast<Location>(),
-        <Location>[].cast<Location>()));
+    PeerPALUser authenticatedUser = await _getAuthenticatedUser();
+    List<Location> selectedLocations =
+        authenticatedUser.discoverLocations ?? <Location>[].cast<Location>();
+    emit(DiscoverLocationLoaded(
+        locations, selectedLocations, <Location>[].cast<Location>()));
   }
 
   void searchQueryChanged(String searchQuery) {
