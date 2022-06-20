@@ -34,8 +34,8 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
         userStream: _userStreamController.stream,
       );
     } else if (event is SearchUser) {
-      List<PeerPALUser> searchResults =
-          await _appUsersRepository.findUserByName(event.searchQuery);
+      List<PeerPALUser> searchResults = await _appUsersRepository
+          .findUserByName(event.searchQuery.toString().trim());
       yield state.copyWith(
         searchResults: searchResults,
         status: state.status,

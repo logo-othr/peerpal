@@ -39,8 +39,8 @@ class NameInputCubit extends Cubit<NameInputState> {
     }
   }
 
-  Future<void> updateNameAtServer(userName) async {
-    await _appUserRepository.updateNameAtServer(userName);
+  Future<void> updateNameAtServer(String userName) async {
+    await _appUserRepository.updateNameAtServer(userName.trim());
   }
 
   Future<String?> currentName() async {
