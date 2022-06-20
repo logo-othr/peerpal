@@ -2,84 +2,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
+import 'package:peerpal/push_notification.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 
-final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
-void configLocalNotification() {
-  final AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings('@drawable/peerpal_logo');
-
-  final IOSInitializationSettings initializationSettingsIOS =
-      const IOSInitializationSettings();
-
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-}
-
-void showNotification(RemoteNotification remoteNotification) async {
-  const NotificationDetails platformChannelSpecifics =
-      const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'app_notification',
-            'app_notification_channel',
-            'Channel for all app notifications',
-            playSound: true,
-            priority: Priority.high,
-            importance: Importance.max,
-          ),
-          iOS: IOSNotificationDetails());
-
-  print(remoteNotification);
-
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    remoteNotification.title,
-    remoteNotification.body,
-    platformChannelSpecifics,
-    payload: 'Notification Payload',
-  );
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message ${message.data}");
-  print('onResume: $message');
-  if (message.notification != null) {
-    //showNotification(message.notification!);
-  }
-  return;
-}
-
-Future<void> _firebaseMessagingInAppHandler(RemoteMessage message) async {
-  print("Handling in App message ${message.data}");
-  print('onMessage: $message');
-  if (message.notification != null) {
-    showNotification(message.notification!);
-  }
-  return;
-}
-
-Future<void> _firebaseMessagingOnOpenAppHandler(RemoteMessage message) async {
-  print("Handling on open App message ${message.data}");
-  print('onLaunch: $message');
-  if (message.notification != null) {
-    showNotification(message.notification!);
-  }
-  return;
-}
 
 Future<void> main() async {
   Bloc.observer = AppBlocObserver();
@@ -87,11 +21,13 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   firebaseMessaging.requestPermission();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen(_firebaseMessagingInAppHandler);
+  FirebaseMessaging.onBackgroundMessage(
+      PushNotificationHelper.firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage
+      .listen(PushNotificationHelper.firebaseMessagingInAppHandler);
   FirebaseMessaging.onMessageOpenedApp
-      .listen(_firebaseMessagingOnOpenAppHandler);
-  configLocalNotification();
+      .listen(PushNotificationHelper.firebaseMessagingOnOpenAppHandler);
+  PushNotificationHelper.configLocalNotification();
   await init();
 
   final authenticationRepository = sl<AuthenticationRepository>();
