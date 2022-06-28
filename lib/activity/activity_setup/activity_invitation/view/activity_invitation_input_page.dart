@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/activity_setup/activity_invitation/cubit/activity_invitation_cubit.dart';
-import 'package:peerpal/repository/activity_repository.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 
 import 'activity_invitation_input_content.dart';

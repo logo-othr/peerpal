@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/repository/activity_repository.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/activity.dart';

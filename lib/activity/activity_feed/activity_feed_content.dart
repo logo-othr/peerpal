@@ -7,10 +7,10 @@ import 'package:peerpal/activity/activity_setup/activity_overview_page/view/acti
 import 'package:peerpal/activity/activity_setup/activity_public_overview_page/view/activity_public_overview_page.dart';
 import 'package:peerpal/activity/activity_setup/activity_request_list/activity_request_list_page.dart';
 import 'package:peerpal/activity/activity_setup/activity_wizard_flow.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/strings.dart';

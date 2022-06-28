@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/repository/models/peerpal_user.dart';

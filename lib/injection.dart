@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:peerpal/activity/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/activity_setup/activity_joined_list/bloc/activity_joined_list_bloc.dart';
 import 'package:peerpal/activity/activity_setup/activity_request_list/bloc/activity_request_list_bloc.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user.dart';
@@ -12,7 +13,6 @@ import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_li
 import 'package:peerpal/firebase_notification_service.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/notification_service.dart';
-import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';

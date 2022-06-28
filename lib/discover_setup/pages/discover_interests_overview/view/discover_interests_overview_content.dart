@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_activities_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/view/discover_age_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/view/discover_communication_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/cubit/discover_interests_overview_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_location/view/discover_location_page.dart';
-import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
