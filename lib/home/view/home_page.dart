@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/activity_feed/activity_feed_page.dart';
+import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
 import 'package:peerpal/discover/discover_tab_bloc.dart';
