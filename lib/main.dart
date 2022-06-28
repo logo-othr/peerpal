@@ -6,29 +6,32 @@ import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-import 'package:peerpal/push_notification.dart';
+import 'package:peerpal/notification_service.dart';
 import 'package:peerpal/repository/activity_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 
-
+Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message ${message.data}");
+  print('onResume: $message');
+  if (message.notification != null) {
+    RemoteNotification remoteNotification = message.notification!;
+    sl<NotificationService>().showNotification(
+        0, remoteNotification.title ?? "", remoteNotification.body ?? "");
+  }
+  return;
+}
 
 Future<void> main() async {
   Bloc.observer = AppBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  firebaseMessaging.requestPermission();
-  FirebaseMessaging.onBackgroundMessage(
-      PushNotificationHelper.firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage
-      .listen(PushNotificationHelper.firebaseMessagingInAppHandler);
-  FirebaseMessaging.onMessageOpenedApp
-      .listen(PushNotificationHelper.firebaseMessagingOnOpenAppHandler);
-  PushNotificationHelper.configLocalNotification();
   await init();
+  sl<NotificationService>().startRemoteNotificationBackgroundHandler(
+      _remoteNotificationBackgroundHandler);
+  //PushNotificationService.configLocalNotification(); // migrated
 
   final authenticationRepository = sl<AuthenticationRepository>();
   await authenticationRepository.user.first;

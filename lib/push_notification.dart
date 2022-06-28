@@ -1,11 +1,11 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+/*import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-class PushNotificationHelper {
+class PushNotificationService {
   static void configLocalNotification() {
     final AndroidInitializationSettings initializationSettingsAndroid =
         const AndroidInitializationSettings('@drawable/peerpal_logo');
@@ -34,8 +34,6 @@ class PushNotificationHelper {
             ),
             iOS: IOSNotificationDetails());
 
-    print(remoteNotification);
-
     await flutterLocalNotificationsPlugin.show(
       0,
       remoteNotification.title,
@@ -45,33 +43,4 @@ class PushNotificationHelper {
     );
   }
 
-  static Future<void> firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    print("Handling a background message ${message.data}");
-    print('onResume: $message');
-    if (message.notification != null) {
-      //showNotification(message.notification!);
-    }
-    return;
-  }
-
-  static Future<void> firebaseMessagingInAppHandler(
-      RemoteMessage message) async {
-    print("Handling in App message ${message.data}");
-    print('onMessage: $message');
-    if (message.notification != null) {
-      showNotification(message.notification!);
-    }
-    return;
-  }
-
-  static Future<void> firebaseMessagingOnOpenAppHandler(
-      RemoteMessage message) async {
-    print("Handling on open App message ${message.data}");
-    print('onLaunch: $message');
-    if (message.notification != null) {
-      showNotification(message.notification!);
-    }
-    return;
-  }
-}
+*/
