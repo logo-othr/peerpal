@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activities/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activities/activity_joined_list/activity_joined_list_page.dart';
 import 'package:peerpal/activities/activity_overview_page/view/activity_overview_input_page.dart';
 import 'package:peerpal/activities/activity_public_overview_page/view/activity_public_overview_page.dart';
 import 'package:peerpal/activities/activity_request_list/activity_request_list_page.dart';
 import 'package:peerpal/activities/activity_wizard_flow.dart';
+import 'package:peerpal/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
