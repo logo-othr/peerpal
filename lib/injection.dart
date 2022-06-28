@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:peerpal/activities/activity_joined_list/bloc/activity_joined_list_bloc.dart';
-import 'package:peerpal/activities/activity_request_list/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity_feed/bloc/activity_feed_bloc.dart';
+import 'package:peerpal/activity_setup/activity_joined_list/bloc/activity_joined_list_bloc.dart';
+import 'package:peerpal/activity_setup/activity_request_list/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user.dart';
