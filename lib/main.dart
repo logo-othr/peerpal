@@ -10,6 +10,7 @@ import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/notification_service.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/standalone.dart' as tz;
 
 import 'app/app.dart';
 
@@ -29,6 +30,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await init();
+  await tz.initializeTimeZone();
+  var germanTimeZone = tz.getLocation('Europe/Berlin');
+  tz.setLocalLocation(germanTimeZone);
+
   sl<NotificationService>().startRemoteNotificationBackgroundHandler(
       _remoteNotificationBackgroundHandler);
   //PushNotificationService.configLocalNotification(); // migrated
