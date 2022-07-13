@@ -20,7 +20,7 @@ Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
   if (message.notification != null) {
     RemoteNotification remoteNotification = message.notification!;
     sl<NotificationService>().showNotification(
-        0, remoteNotification.title ?? "", remoteNotification.body ?? "");
+        remoteNotification.title ?? "", remoteNotification.body ?? "");
   }
   return;
 }

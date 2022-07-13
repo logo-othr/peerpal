@@ -7,6 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 class ActivityReminderRepository {
   final SharedPreferences _prefs;
   final NotificationService _notificationService;
+  final String _ACTIVITY_REMINDER_PREFIX = 'ACT_REM_';
 
   ActivityReminderRepository({required prefs, required notificationService})
       : _prefs = prefs,
@@ -17,9 +18,29 @@ class ActivityReminderRepository {
     TZDateTime scheduledDateTime = TZDateTime.fromMillisecondsSinceEpoch(
         tz.local, int.parse(activity.timestamp!));
 
-    int notificationId = await _notificationService.scheduleNotification(
-        activity.name!, 'Erinnerung an die Aktivität.', scheduledDateTime);
+    bool reminderForActivityExists =
+        await _reminderForActivityExists(activity.id!);
+    if (!reminderForActivityExists) {
+      int notificationReminderId =
+          await _notificationService.scheduleNotification(activity.name!,
+              'Erinnerung an die Aktivität.', scheduledDateTime);
+      _saveReminderIdForActivityId(activity.id!, notificationReminderId);
+    } else
+      print(
+          "Activity reminder for activity id ${activity.id!} is already scheduled");
   }
 
-  cancelReminderForActivity(String activityId) {}
+  void cancelReminderForActivity(String activityId) async {} // ToDo: Implement.
+
+  Future<bool> _reminderForActivityExists(String activityId) async {
+    int? notificationReminderId =
+        await _prefs.getInt("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    return (notificationReminderId != null);
+  }
+
+  Future<void> _saveReminderIdForActivityId(
+      String activityId, int reminderId) async {
+    await _prefs.setInt(
+        "${_ACTIVITY_REMINDER_PREFIX}${activityId}", reminderId);
+  }
 }
