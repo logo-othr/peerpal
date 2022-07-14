@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
@@ -10,12 +11,13 @@ part 'activity_public_overview_state.dart';
 
 class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
   ActivityPublicOverviewCubit(this._activityRepository, this._appUserRepository,
-      this._authenticationRepository)
+      this._authenticationRepository, this._activityReminderRepository)
       : super(ActivityPublicOverviewInitial());
 
   final ActivityRepository _activityRepository;
   final AppUserRepository _appUserRepository;
   final AuthenticationRepository _authenticationRepository;
+  final ActivityReminderRepository _activityReminderRepository;
 
   Future<void> loadData(Activity activity) async {
     bool isAttendee = false;
@@ -42,6 +44,7 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
         activity, activityCreator, attendees, isAttendee));
   }
 
+  // ToDo: move business code into usecase
   Future<void> joinActivity() async {
     List<String> attendees;
     Activity? activity;
@@ -54,11 +57,13 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
     Activity updatedActivity = (activity ?? state.activity);
 
     await _activityRepository.joinActivity(state.activity);
+    await _activityReminderRepository.setReminderForActivity(state.activity);
 
     emit(ActivityPublicOverviewLoaded(
         updatedActivity, state.activityCreator, state.attendees, true));
   }
 
+  // ToDo: move business code into usecase
   Future<void> leaveActivity() async {
     List<String> attendees;
     Activity? activity;
@@ -73,5 +78,6 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
     await _activityRepository.leaveActivity(state.activity);
     emit(ActivityPublicOverviewLoaded(
         updatedActivity, state.activityCreator, state.attendees, false));
+    // ToDo: Cancel activity reminder
   }
 }
