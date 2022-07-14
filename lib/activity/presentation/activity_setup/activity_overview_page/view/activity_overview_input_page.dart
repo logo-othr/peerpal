@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_overview_page/cubit/activity_overview_cubit.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
@@ -27,8 +28,10 @@ class OverviewInputPage extends StatelessWidget {
       onWillPop: () async => true,
       child: BlocProvider(
         create: (_) {
-          return OverviewInputCubit(context.read<ActivityRepository>(),
-              context.read<AppUserRepository>())
+          return OverviewInputCubit(
+              context.read<ActivityRepository>(),
+              context.read<AppUserRepository>(),
+              context.read<ActivityReminderRepository>())
             ..loadData(activityToChange: activity);
         },
         child: OverviewInputContent(isInFlowContext: isInFlowContext),
