@@ -14,10 +14,10 @@ class ActivityReminderRepository {
         _notificationService = notificationService;
 
 // ToDo: Nullcheck activity member
-  void setReminderForActivity(Activity activity) async {
-    TZDateTime scheduledDateTime = TZDateTime.fromMillisecondsSinceEpoch(
-        tz.local, int.parse(activity.timestamp!));
-
+  Future<void> setReminderForActivity(Activity activity) async {
+    TZDateTime scheduledDateTime =
+        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+    scheduledDateTime = scheduledDateTime.subtract(new Duration(minutes: 15));
     bool reminderForActivityExists =
         await _reminderForActivityExists(activity.id!);
     if (!reminderForActivityExists) {
