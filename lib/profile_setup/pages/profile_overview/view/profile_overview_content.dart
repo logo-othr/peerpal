@@ -38,7 +38,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                 ),
                 new FutureBuilder(
                   future: context.read<ProfileOverviewCubit>().profilePicture(),
-                  initialData: state.appUserInformation.imagePath!,
+                  initialData: state.appUserInformation.imagePath ?? null,
                   builder: (BuildContext context,
                           AsyncSnapshot<String?> text) =>
                       Container(
@@ -132,7 +132,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                       children: [
                         CustomSingleTable(
                             heading: "Name",
-                            text: state.appUserInformation.name!,
+                            text: state.appUserInformation.name ?? "",
                             isArrowIconVisible: true,
                             onPressed: () async => {
                                   await Navigator.push(
@@ -140,8 +140,9 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                     MaterialPageRoute(
                                         builder: (context) => NameInputPage(
                                             isInFlowContext: false,
-                                            pastName: state
-                                                .appUserInformation.name!)),
+                                            pastName:
+                                                state.appUserInformation.name ??
+                                                    "")),
                                   ).then((value) => context
                                       .read<ProfileOverviewCubit>()
                                       .loadData()),
