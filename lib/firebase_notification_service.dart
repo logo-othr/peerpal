@@ -1,15 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/notification_service.dart';
+import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart';
 
 class FirebaseNotificationService implements NotificationService {
+  final String REGISTER_DEVICE_TOKEN_ERROR =
+      "An error occurred while registering the device token. ";
+  final String REMOVE_DEVICE_TOKEN_ERROR =
+      "An error occurred while removing the device token. ";
+  final String _ACTIVITY_NOTIFICATION_ID_COUNTER =
+      'ACTIVITY_NOTIFICATION_ID_COUNTER';
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  final String _ACTIVITY_NOTIFICATION_ID_COUNTER =
-      'ACTIVITY_NOTIFICATION_ID_COUNTER';
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   bool _isServiceInitialized = false;
 
@@ -23,6 +32,36 @@ class FirebaseNotificationService implements NotificationService {
     return nextNotificationId;
   }
 
+  Future<void> _unregisterFCMDeviceToken() async {
+    var currentUserId = _firebaseAuth.currentUser!.uid;
+    logger.i("Removing the device token...");
+    FirebaseFirestore.instance
+        .collection(UserDatabaseContract.privateUsers)
+        .doc(currentUserId)
+        .update({UserDatabaseContract.deviceToken: null}).onError((error,
+                stackTrace) =>
+            logger.e("${REMOVE_DEVICE_TOKEN_ERROR}. Error: ${error.toString()} "
+                "Stacktrace: ${stackTrace.toString()}"));
+  }
+
+  Future<void> _registerFCMDeviceToken() async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    logger.i("Registering the device token....");
+    await FirebaseMessaging.instance.getToken().then((token) {
+      logger.i('device token: $token');
+      FirebaseFirestore.instance
+          .collection(UserDatabaseContract.privateUsers)
+          .doc(currentUserId)
+          .update({UserDatabaseContract.deviceToken: token}).onError(
+              (error, stackTrace) => logger.e(
+                  "${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
+                  "Stacktrace: ${stackTrace.toString()}"));
+    }).catchError((error) {
+      logger.e(
+          "${REGISTER_DEVICE_TOKEN_ERROR}. Error: ${error.message.toString()}");
+    });
+  }
+
   @override
   Future<void> startRemoteNotificationBackgroundHandler(
       firebaseMessagingBackgroundHandler) async {
@@ -32,6 +71,15 @@ class FirebaseNotificationService implements NotificationService {
     FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp
         .listen(firebaseMessagingBackgroundHandler);
+    await _registerFCMDeviceToken();
+  }
+
+  @override
+  Future<void> stopRemoteNotificationBackgroundHandler() async {
+    FirebaseMessaging.onBackgroundMessage((msg) async {});
+    FirebaseMessaging.onMessage.listen((msg) async {});
+    FirebaseMessaging.onMessageOpenedApp.listen((msg) async {});
+    await _unregisterFCMDeviceToken();
   }
 
   @override
@@ -51,8 +99,7 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   @override
-  Future<int> scheduleNotification(
-      String title, String body, TZDateTime scheduledDateTime) async {
+  Future<int> scheduleNotification(String title, String body, TZDateTime scheduledDateTime) async {
     await _ensureInitialized();
     int notificationId = await _nextNotificationId();
     await _flutterLocalNotificationsPlugin.zonedSchedule(
@@ -62,7 +109,7 @@ class FirebaseNotificationService implements NotificationService {
       scheduledDateTime,
       _platformSpecificNotificationDetails(),
       uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+      UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
 
@@ -85,9 +132,9 @@ class FirebaseNotificationService implements NotificationService {
   Future<void> _ensureInitialized() async {
     if (_isServiceInitialized) return;
     final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: _createAndroidNotificationSettings(),
-            iOS: _createIOSNotificationSettings());
+    InitializationSettings(
+        android: _createAndroidNotificationSettings(),
+        iOS: _createIOSNotificationSettings());
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
     _isServiceInitialized = true;
   }

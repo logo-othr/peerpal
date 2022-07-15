@@ -135,12 +135,11 @@ class AuthenticationRepository {
       throw LoginException();
     }
 
-    await registerFCMDeviceToken();
+    // await registerFCMDeviceToken(); // disabled because we want to register the device token only after the profile and discover setup ToDo: Test.
   }
 
   Future<void> logout() async {
     try {
-      await unregisterFCMDeviceToken();
       await Future.wait([
         _firebaseAuth.signOut(),
       ]);
@@ -150,29 +149,5 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> unregisterFCMDeviceToken() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
-    print("delete device push token");
-    FirebaseFirestore.instance
-        .collection('privateUserData')
-        .doc(currentUserId)
-        .update({'pushToken': null});
-  }
-
-  Future<void> registerFCMDeviceToken() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-
-    await FirebaseMessaging.instance.getToken().then((token) {
-      print("user-id: $currentUserId");
-      print('pushToken: $token');
-      FirebaseFirestore.instance
-          .collection('privateUserData')
-          .doc(currentUserId)
-          .update({'pushToken': token});
-    }).catchError((err) {
-      print(err.message.toString());
-      print("Error while creating push noticiation");
-    });
-  }
 }
