@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:peerpal/repository/cache.dart';
 import 'package:peerpal/repository/models/auth_user.dart';
 
@@ -50,27 +48,6 @@ class AuthenticationRepository {
         : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
-  Future<void> deleteDeviceTokenFromServer() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    print('deleteDeviceTokenFromServer');
-    FirebaseFirestore.instance
-        .collection('deleteDeviceTokenFromServer')
-        .doc()
-        .set({'userId': currentUserId});
-  }
-
-  Future<void> updateDeviceTokenAtServer() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseMessaging.instance.getToken().then((token) {
-      FirebaseFirestore.instance
-          .collection('updateDeviceTokenAtServer')
-          .doc()
-          .set({'userId': currentUserId, 'deviceToken': token});
-    }).catchError((err) {
-      print(err.message.toString());
-      print("Error while updating deviceToken");
-    });
-  }
 
   Future<void> signUp({required String email, required String password}) async {
     try {

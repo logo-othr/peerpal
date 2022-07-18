@@ -32,29 +32,31 @@ class FirebaseNotificationService implements NotificationService {
     return nextNotificationId;
   }
 
-  Future<void> _unregisterFCMDeviceToken() async {
+  @override
+  Future<void> unregisterDeviceToken() async {
     var currentUserId = _firebaseAuth.currentUser!.uid;
     logger.i("Removing the device token...");
     FirebaseFirestore.instance
-        .collection(UserDatabaseContract.privateUsers)
-        .doc(currentUserId)
-        .update({UserDatabaseContract.deviceToken: null}).onError((error,
+        .collection(UserDatabaseContract.serverDeleteDeviceTokenQueue)
+        .doc()
+        .set({UserDatabaseContract.userId: currentUserId}).onError((error,
                 stackTrace) =>
             logger.e("${REMOVE_DEVICE_TOKEN_ERROR}. Error: ${error.toString()} "
                 "Stacktrace: ${stackTrace.toString()}"));
   }
 
-  Future<void> _registerFCMDeviceToken() async {
+  @override
+  Future<void> registerDeviceToken() async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    logger.i("Registering the device token....");
     await FirebaseMessaging.instance.getToken().then((token) {
-      logger.i('device token: $token');
       FirebaseFirestore.instance
-          .collection(UserDatabaseContract.privateUsers)
-          .doc(currentUserId)
-          .update({UserDatabaseContract.deviceToken: token}).onError(
-              (error, stackTrace) => logger.e(
-                  "${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
+          .collection(UserDatabaseContract.serverUpdateDeviceTokenQueue)
+          .doc()
+          .set({
+        UserDatabaseContract.userId: currentUserId,
+        UserDatabaseContract.deviceToken: token
+      }).onError((error, stackTrace) => logger
+              .e("${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
                   "Stacktrace: ${stackTrace.toString()}"));
     }).catchError((error) {
       logger.e(
@@ -71,7 +73,6 @@ class FirebaseNotificationService implements NotificationService {
     FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp
         .listen(firebaseMessagingBackgroundHandler);
-    await _registerFCMDeviceToken();
   }
 
   @override
@@ -79,7 +80,6 @@ class FirebaseNotificationService implements NotificationService {
     FirebaseMessaging.onBackgroundMessage((msg) async {});
     FirebaseMessaging.onMessage.listen((msg) async {});
     FirebaseMessaging.onMessageOpenedApp.listen((msg) async {});
-    await _unregisterFCMDeviceToken();
   }
 
   @override
