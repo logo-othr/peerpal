@@ -2,6 +2,7 @@ class UserDatabaseContract {
   static const publicUsers = 'publicUserData';
   static const privateUsers = 'privateUserData';
   static const uid = 'id';
+  static const userId = 'userId';
   static const userAge = 'age';
   static const userName = 'name';
   static const userPhoneNumber = 'phone_number';
@@ -17,4 +18,7 @@ class UserDatabaseContract {
   static const friendsCollection = 'friends';
   static const chatMessages = 'messages';
   static const chatTimestamp = 'lastUpdated';
+  static const deviceToken = 'pushToken';
+  static const serverDeleteDeviceTokenQueue = 'deleteDeviceTokenFromServer';
+  static const serverUpdateDeviceTokenQueue = 'updateDeviceTokenAtServer';
 }
