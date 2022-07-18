@@ -5,6 +5,7 @@ import 'package:peerpal/colors.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
+import 'package:peerpal/notification_service.dart';
 import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
@@ -14,6 +15,7 @@ import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
 import 'package:peerpal/widgets/custom_table_row.dart';
 import 'package:provider/src/provider.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -73,8 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               CustomTableRow(
                 text: "Interessen",
-                onPressed: () async =>
-                {
+                onPressed: () async => {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -147,16 +148,21 @@ class _SettingsPageState extends State<SettingsPage> {
                             dialogHeight: 250,
                             actionButtonText: 'Ausloggen',
                             dialogText: "Möchten Sie sich wirklich ausloggen?",
-                            onPressed: () => {
-                                  context
-                                      .read<AppBloc>()
-                                      .add(AppLogoutRequested()),
-                                  //ToDo: deleteDeviceTokenFromServer() is called twice when the user logs in and when the user logs out.
-                                  context
-                                      .read<AuthenticationRepository>()
-                                      .deleteDeviceTokenFromServer(),
-                                });
+                            onPressed: () {
+                              context.read<AppBloc>().add(AppLogoutRequested());
+                              //ToDo: Move into a UseCase.
+                              sl<NotificationService>()
+                                  .stopRemoteNotificationBackgroundHandler();
+                              sl<NotificationService>().unregisterDeviceToken();
+                            });
                       }),
+                },
+              ),
+              CustomTableRow(
+                text: "Push-Notification-Test",
+                onPressed: () async => {
+                  sl<NotificationService>().scheduleNotification("test", "test",
+                      tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)))
                 },
               ),
               Column(
