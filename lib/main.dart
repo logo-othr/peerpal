@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
@@ -15,17 +14,6 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'app/app.dart';
-
-Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message ${message.data}");
-  print('onResume: $message');
-  if (message.notification != null) {
-    RemoteNotification remoteNotification = message.notification!;
-    sl<NotificationService>().showNotification(
-        remoteNotification.title ?? "", remoteNotification.body ?? "");
-  }
-  return;
-}
 
 Future<void> main() async {
   Bloc.observer = AppBlocObserver();

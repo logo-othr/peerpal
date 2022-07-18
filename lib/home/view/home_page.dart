@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
@@ -10,6 +11,7 @@ import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
+import 'package:peerpal/notification_service.dart';
 import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
@@ -35,6 +37,19 @@ class HomePage extends StatelessWidget {
 }
 
 class HomeView extends StatelessWidget {
+  // ToDo: Move the method into a UseCase.
+  Future<void> _remoteNotificationBackgroundHandler(
+      RemoteMessage message) async {
+    print("Handling a background message ${message.data}");
+    print('onResume: $message');
+    if (message.notification != null) {
+      RemoteNotification remoteNotification = message.notification!;
+      sl<NotificationService>().showNotification(
+          remoteNotification.title ?? "", remoteNotification.body ?? "");
+    }
+    return;
+  }
+
   const HomeView({Key? key}) : super(key: key);
 
   @override
@@ -59,7 +74,11 @@ class HomeView extends StatelessWidget {
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
             if (state is HomeUserInformationFlowCompleted) {
-              context.read<AuthenticationRepository>().registerFCMDeviceToken();
+              // ToDo: Move into usecase and future builder
+              sl<NotificationService>().registerDeviceToken();
+              sl<NotificationService>()
+                  .startRemoteNotificationBackgroundHandler(
+                      _remoteNotificationBackgroundHandler);
               return MyTabView();
             }
             return Container(
@@ -76,10 +95,10 @@ class HomeView extends StatelessWidget {
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                  const SizedBox(height: 300),
-                                  CustomPeerPALHeading1("Laden..."),
-                                  CircularProgressIndicator(),
-                                ]))))),
+                                      const SizedBox(height: 300),
+                                      CustomPeerPALHeading1("Laden..."),
+                                      CircularProgressIndicator(),
+                                    ]))))),
               ),
             );
           }),
