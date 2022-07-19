@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/view/activity_public_overview_page.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/activity.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';

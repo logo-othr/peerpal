@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
-import 'package:peerpal/repository/models/activity.dart';
+import 'package:peerpal/activity/domain/models/activity.dart';
 
 part 'activity_date_state.dart';
 

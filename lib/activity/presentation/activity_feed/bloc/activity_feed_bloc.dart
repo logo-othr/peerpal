@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/repository/models/activity.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_feed_event.dart';

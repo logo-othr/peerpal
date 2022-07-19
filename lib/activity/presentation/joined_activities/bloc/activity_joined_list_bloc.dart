@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/repository/models/activity.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_joined_list_event.dart';
