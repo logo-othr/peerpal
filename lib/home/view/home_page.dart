@@ -36,20 +36,18 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class HomeView extends StatelessWidget {
-  // ToDo: Move the method into a UseCase.
-  Future<void> _remoteNotificationBackgroundHandler(
-      RemoteMessage message) async {
-    print("Handling a background message ${message.data}");
-    print('onResume: $message');
-    if (message.notification != null) {
-      RemoteNotification remoteNotification = message.notification!;
-      sl<NotificationService>().showNotification(
-          remoteNotification.title ?? "", remoteNotification.body ?? "");
-    }
-    return;
+Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message ${message.data}");
+  print('onResume: $message');
+  if (message.notification != null) {
+    RemoteNotification remoteNotification = message.notification!;
+    sl<NotificationService>().showNotification(
+        remoteNotification.title ?? "", remoteNotification.body ?? "");
   }
+  return;
+}
 
+class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
@@ -74,11 +72,6 @@ class HomeView extends StatelessWidget {
           bloc: BlocProvider.of<HomeCubit>(context),
           builder: (context, state) {
             if (state is HomeUserInformationFlowCompleted) {
-              // ToDo: Move into usecase and future builder
-              sl<NotificationService>().registerDeviceToken();
-              sl<NotificationService>()
-                  .startRemoteNotificationBackgroundHandler(
-                      _remoteNotificationBackgroundHandler);
               return MyTabView();
             }
             return Container(
@@ -95,10 +88,10 @@ class HomeView extends StatelessWidget {
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      const SizedBox(height: 300),
-                                      CustomPeerPALHeading1("Laden..."),
-                                      CircularProgressIndicator(),
-                                    ]))))),
+                                  const SizedBox(height: 300),
+                                  CustomPeerPALHeading1("Laden..."),
+                                  CircularProgressIndicator(),
+                                ]))))),
               ),
             );
           }),
@@ -106,11 +99,25 @@ class HomeView extends StatelessWidget {
   }
 }
 
-class MyTabView extends StatelessWidget {
+class MyTabView extends StatefulWidget {
   MyTabView({Key? key}) : super(key: key);
 
   static MaterialPage<void> page() {
     return MaterialPage<void>(child: MyTabView());
+  }
+
+  @override
+  State<MyTabView> createState() => _MyTabViewState();
+}
+
+class _MyTabViewState extends State<MyTabView> {
+  @override
+  void initState() {
+    super.initState();
+
+    sl<NotificationService>().registerDeviceToken();
+    sl<NotificationService>().startRemoteNotificationBackgroundHandler(
+        _remoteNotificationBackgroundHandler);
   }
 
   final tabs = [
