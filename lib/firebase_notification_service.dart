@@ -21,6 +21,7 @@ class FirebaseNotificationService implements NotificationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   bool _isServiceInitialized = false;
+  bool _isRemoteMessageHandlerStarted = false;
 
   Future<int> _nextNotificationId() async {
     final SharedPreferences _preferences =
@@ -67,12 +68,16 @@ class FirebaseNotificationService implements NotificationService {
   @override
   Future<void> startRemoteNotificationBackgroundHandler(
       firebaseMessagingBackgroundHandler) async {
-    _firebaseMessaging
-        .requestPermission(); // ToDo: Handle return value and errors
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessageOpenedApp
-        .listen(firebaseMessagingBackgroundHandler);
+    if (!_isRemoteMessageHandlerStarted) {
+      _firebaseMessaging
+          .requestPermission(); // ToDo: Handle return value and errors
+      FirebaseMessaging.onBackgroundMessage(
+          firebaseMessagingBackgroundHandler); // ToDo: Firebase shows the notification whether it is shown via local notification or not. Investigate. https://stackoverflow.com/questions/70921767/notification-show-twice-on-flutter/71461142#71461142
+      FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
+      //  FirebaseMessaging.onMessageOpenedApp
+      //      .listen(firebaseMessagingBackgroundHandler);
+      _isRemoteMessageHandlerStarted = true;
+    }
   }
 
   @override
@@ -80,6 +85,7 @@ class FirebaseNotificationService implements NotificationService {
     FirebaseMessaging.onBackgroundMessage((msg) async {});
     FirebaseMessaging.onMessage.listen((msg) async {});
     FirebaseMessaging.onMessageOpenedApp.listen((msg) async {});
+    _isRemoteMessageHandlerStarted = false;
   }
 
   @override
@@ -99,7 +105,8 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   @override
-  Future<int> scheduleNotification(String title, String body, TZDateTime scheduledDateTime) async {
+  Future<int> scheduleNotification(
+      String title, String body, TZDateTime scheduledDateTime) async {
     await _ensureInitialized();
     int notificationId = await _nextNotificationId();
     await _flutterLocalNotificationsPlugin.zonedSchedule(
@@ -109,7 +116,7 @@ class FirebaseNotificationService implements NotificationService {
       scheduledDateTime,
       _platformSpecificNotificationDetails(),
       uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
 
@@ -132,9 +139,9 @@ class FirebaseNotificationService implements NotificationService {
   Future<void> _ensureInitialized() async {
     if (_isServiceInitialized) return;
     final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: _createAndroidNotificationSettings(),
-        iOS: _createIOSNotificationSettings());
+        InitializationSettings(
+            android: _createAndroidNotificationSettings(),
+            iOS: _createIOSNotificationSettings());
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
     _isServiceInitialized = true;
   }
