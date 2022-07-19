@@ -21,13 +21,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await init();
   tz.initializeTimeZones();
-  var germanTimeZone = tz.getLocation('Europe/Berlin');
-  tz.setLocalLocation(germanTimeZone);
-
+  tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
   final authenticationRepository = sl<AuthenticationRepository>();
   await authenticationRepository.user.first;
-
-  //await DebugHelper.createExampleUsers(appUserRepository: authenticationRepository, emailBase:  'pptestmailbase234', password: 'Abc12345678*');
   runApp(App());
 }
 
