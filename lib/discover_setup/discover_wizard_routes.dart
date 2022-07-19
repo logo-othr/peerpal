@@ -3,7 +3,7 @@ import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_a
 import 'package:peerpal/discover_setup/pages/discover_age/view/discover_age_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/view/discover_communication_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_location/view/discover_location_page.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
 List<Page> onGenerateDiscoverWizardPages(
     PeerPALUser userInformation, List<Page<dynamic>> pages) {

@@ -2,7 +2,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/cubit/discover_age_cubit.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';

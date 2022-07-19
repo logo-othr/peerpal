@@ -6,7 +6,7 @@ import 'package:peerpal/colors.dart';
 import 'package:peerpal/friends/custom_friend_list_item_user.dart';
 import 'package:peerpal/friends/friend_request_page/view/friend_requests_page.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_centered_info_text.dart';

@@ -7,8 +7,8 @@ import 'package:peerpal/chat/data/dtos/chat_message_dto.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 
 class ChatRepositoryFirebase implements ChatRepository {
   /* StreamSubscription<QuerySnapshot<Map<String, dynamic>>> streamSubscription;

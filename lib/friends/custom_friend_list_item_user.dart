@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 // ignore: must_be_immutable

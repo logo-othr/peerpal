@@ -7,7 +7,7 @@ import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/strings.dart';
 import 'package:peerpal/widgets/custom_activity_invite_friends_list_item.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
 class UserChat implements Equatable {
   UserChat({required this.chat, required this.user});

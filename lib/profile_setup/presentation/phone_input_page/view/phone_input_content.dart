@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/colors.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/domain/phone_input_page/models/phonenum_model.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/phone_input_page/cubit/phone_input_cubit.dart';
-import 'package:peerpal/repository/models/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
