@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_date/cubit/activity_date_cubit.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/activity_icon_data..dart';
+import 'package:peerpal/data/activity_icon_data..dart';
 import 'package:peerpal/widgets/custom_activity_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';

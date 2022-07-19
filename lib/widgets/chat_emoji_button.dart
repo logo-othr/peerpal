@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/repository/emojis.dart';
+import 'package:peerpal/data/emojis.dart';
 import 'package:peerpal/widgets/emoji_button.dart';
 
 import '../colors.dart';

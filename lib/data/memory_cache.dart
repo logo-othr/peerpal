@@ -1,4 +1,4 @@
-import 'package:peerpal/repository/cache.dart';
+import 'package:peerpal/data/cache.dart';
 
 class MemoryCache implements Cache {
   MemoryCache() : _memoryCache = <String, Object>{};

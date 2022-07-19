@@ -1,4 +1,4 @@
-import 'package:peerpal/repository/emoji_data.dart';
+import 'package:peerpal/data/emoji_data.dart';
 
 class Emojis {
   static const List<EmojiData> activityEmojis = const [

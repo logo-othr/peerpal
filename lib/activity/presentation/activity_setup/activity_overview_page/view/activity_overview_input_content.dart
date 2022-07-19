@@ -9,7 +9,7 @@ import 'package:peerpal/activity/presentation/activity_setup/activity_date/view/
 import 'package:peerpal/activity/presentation/activity_setup/activity_invitation/view/activity_invitation_input_page.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_location/view/activity_location_input_page.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_overview_page/cubit/activity_overview_cubit.dart';
-import 'package:peerpal/repository/activity_icon_data..dart';
+import 'package:peerpal/data/activity_icon_data..dart';
 import 'package:peerpal/widgets/custom_activity_overview_header_card.dart';
 import 'package:peerpal/widgets/custom_activity_participations_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
