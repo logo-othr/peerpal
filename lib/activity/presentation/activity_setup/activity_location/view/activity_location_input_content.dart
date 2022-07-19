@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_location/cubit/activity_location_cubit.dart';
 import 'package:peerpal/colors.dart';
-import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/data/location.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_peerpal_text.dart';

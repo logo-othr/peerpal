@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
-import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/data/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {

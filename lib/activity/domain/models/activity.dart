@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:peerpal/repository/models/location.dart';
+import 'package:peerpal/data/location.dart';
 
 part 'activity.g.dart';
 
