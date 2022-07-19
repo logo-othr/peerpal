@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/get_user_usecase.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 
 part 'age_input_state.dart';
 

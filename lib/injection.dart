@@ -15,8 +15,8 @@ import 'package:peerpal/data/memory_cache.dart';
 import 'package:peerpal/firebase_notification_service.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/notification_service.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/get_user_usecase.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;

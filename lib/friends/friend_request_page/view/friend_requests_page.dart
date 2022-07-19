@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/friends/friend_request_page/cubit/friend_requests_cubit.dart';
 import 'package:peerpal/friends/friend_request_page/view/friend_requests_content.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 
 class FriendRequestsPage extends StatelessWidget {
   const FriendRequestsPage({Key? key}) : super(key: key);

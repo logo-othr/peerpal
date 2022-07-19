@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/presentation/name_input_page/cubit/name_input_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/name_input_page/view/name_input_content.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class NameInputPage extends StatelessWidget {

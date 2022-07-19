@@ -4,8 +4,8 @@ import 'package:peerpal/activity/data/repository/activity_reminder_repository.da
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
 
 part 'activity_public_overview_state.dart';
 

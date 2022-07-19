@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_content.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 
 class UserDetailPage extends StatelessWidget {
   final String userId;

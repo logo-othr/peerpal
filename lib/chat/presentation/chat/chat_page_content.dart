@@ -10,8 +10,8 @@ import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart
 import 'package:peerpal/chat/single_chat_header_widget.dart';
 import 'package:peerpal/colors.dart';
 import 'package:peerpal/injection.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';

@@ -11,8 +11,8 @@ import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page_content.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/get_user_usecase.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 
 class ChatPage extends StatelessWidget {
   final String userId;

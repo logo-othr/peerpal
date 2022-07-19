@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/cubit/discover_communication_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/view/discover_communication_content.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
-import 'package:peerpal/repository/get_user_usecase.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 
 class DiscoverCommunicationPage extends StatelessWidget {
   final bool isInFlowContext;

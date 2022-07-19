@@ -7,7 +7,7 @@ import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/cubit/activity_public_overview_cubit.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/view/activity_public_overview_content.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
-import 'package:peerpal/repository/app_user_repository.dart';
+import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 
 class ActivityPublicOverviewPage extends StatelessWidget {
   Activity activity;

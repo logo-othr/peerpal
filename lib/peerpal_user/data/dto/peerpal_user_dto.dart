@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:peerpal/data/location.dart';
-import 'package:peerpal/peerpal_user/data/private_user_information_dto.dart';
-import 'package:peerpal/peerpal_user/data/public_user_information_dto.dart';
+import 'package:peerpal/peerpal_user/data/dto/private_user_information_dto.dart';
+import 'package:peerpal/peerpal_user/data/dto/public_user_information_dto.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/repository/models/enum/communication_type.dart';
 
