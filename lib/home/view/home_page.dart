@@ -12,7 +12,7 @@ import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/notification_service.dart';
-import 'package:peerpal/profile_setup/pages/profile_wiazrd_flow.dart';
+import 'package:peerpal/profile_setup/presentation/profile_wiazrd_flow.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/settings/settings_page.dart';

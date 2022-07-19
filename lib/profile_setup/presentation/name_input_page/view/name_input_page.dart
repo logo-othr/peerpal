@@ -2,25 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/profile_setup/pages/phone_input_page/cubit/phone_input_cubit.dart';
-import 'package:peerpal/profile_setup/pages/phone_input_page/view/phone_input_content.dart';
+import 'package:peerpal/profile_setup/presentation/name_input_page/cubit/name_input_cubit.dart';
+import 'package:peerpal/profile_setup/presentation/name_input_page/view/name_input_content.dart';
 import 'package:peerpal/repository/app_user_repository.dart';
 import 'package:peerpal/repository/get_user_usecase.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
-class PhoneInputPage extends StatelessWidget {
+class NameInputPage extends StatelessWidget {
   final bool isInFlowContext;
-  final String pastPhone;
+  final String pastName;
 
-  PhoneInputPage({required this.isInFlowContext, required this.pastPhone});
+  NameInputPage({required this.isInFlowContext, this.pastName = ''});
 
-  static MaterialPage<void> page(
-      {required bool isInFlowContext, required String pastPhone}) {
+  static MaterialPage<void> page({required bool isInFlowContext}) {
     return MaterialPage<void>(
-        child: PhoneInputPage(
-      isInFlowContext: isInFlowContext,
-      pastPhone: pastPhone,
-    ));
+        child: NameInputPage(isInFlowContext: isInFlowContext));
   }
 
   @override
@@ -29,17 +25,17 @@ class PhoneInputPage extends StatelessWidget {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: CustomAppBar(
-          "PeerPAL",
+          'PeerPAL',
           hasBackButton: true,
         ),
         body: BlocProvider(
           create: (_) {
-            return PhoneInputCubit(
+            return NameInputCubit(
                 context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
           },
-          child: PhoneInputContent(
+          child: NameInputContent(
             isInFlowContext: isInFlowContext,
-            pastPhone: pastPhone,
+            pastName: pastName,
           ),
         ),
       ),

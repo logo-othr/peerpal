@@ -6,7 +6,7 @@ import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/di
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/notification_service.dart';
-import 'package:peerpal/profile_setup/pages/profile_overview/view/profile_overview_page.dart';
+import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/strings.dart';
