@@ -38,10 +38,10 @@ class App extends StatelessWidget {
           value: sl<AuthenticationRepository>(),
         ),
         RepositoryProvider.value(
-          value: sl<AuthenticationRepository>(), // ToDo: use SL
+          value: sl<AuthenticationRepository>(),
         ),
         RepositoryProvider.value(
-          value: sl<ActivityReminderRepository>(), // ToDo: use SL
+          value: sl<ActivityReminderRepository>(),
         )
       ],
       child: BlocProvider(
