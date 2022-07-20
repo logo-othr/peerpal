@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
+import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
@@ -120,4 +121,11 @@ Future<void> setupDependencies() async {
           notificationService: sl(),
           remoteNotificationBackgroundHandler:
               _remoteNotificationBackgroundHandler));
+
+  // ============== Activity ====================
+
+  sl.registerLazySingleton<ActivityRepository>(() => ActivityRepository(sl()));
+
+  sl.registerLazySingleton<ActivityReminderRepository>(
+      () => ActivityReminderRepository(prefs: sl(), notificationService: sl()));
 }

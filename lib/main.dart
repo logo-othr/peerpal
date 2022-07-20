@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/setup.dart';
-import 'package:peerpal/tabview/domain/notification_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 
@@ -41,12 +38,10 @@ class App extends StatelessWidget {
           value: sl<AuthenticationRepository>(),
         ),
         RepositoryProvider.value(
-          value: ActivityRepository(sl<SharedPreferences>()), // ToDo: use SL
+          value: sl<AuthenticationRepository>(), // ToDo: use SL
         ),
         RepositoryProvider.value(
-          value: ActivityReminderRepository(
-              prefs: sl<SharedPreferences>(),
-              notificationService: sl<NotificationService>()), // ToDo: use SL
+          value: sl<ActivityReminderRepository>(), // ToDo: use SL
         )
       ],
       child: BlocProvider(
