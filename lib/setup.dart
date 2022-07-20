@@ -100,10 +100,6 @@ Future<void> setupDependencies() async {
 
   // =============== Repository ===============
 
-  sl.registerLazySingleton<ActivityRepository>(
-        () => ActivityRepository(sharedPreferences),
-  );
-
   sl.registerLazySingleton<AuthenticationRepository>(
     () => AuthenticationRepository(cache: sl()),
   );
@@ -126,6 +122,8 @@ Future<void> setupDependencies() async {
 
   sl.registerLazySingleton<ActivityRepository>(() => ActivityRepository(sl()));
 
-  sl.registerLazySingleton<ActivityReminderRepository>(
-      () => ActivityReminderRepository(prefs: sl(), notificationService: sl()));
+  sl.registerLazySingleton<ActivityReminderRepository>(() =>
+      ActivityReminderRepository(
+          prefs: sl<SharedPreferences>(),
+          notificationService: sl<NotificationService>()));
 }
