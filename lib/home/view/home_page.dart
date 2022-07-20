@@ -20,6 +20,17 @@ import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
+Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message ${message.data}");
+  print('onResume: $message');
+  if (message.notification != null) {
+    RemoteNotification remoteNotification = message.notification!;
+    sl<NotificationService>().showNotification(
+        remoteNotification.title ?? "", remoteNotification.body ?? "");
+  }
+  return;
+}
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -34,17 +45,6 @@ class HomePage extends StatelessWidget {
       child: const HomeView(),
     );
   }
-}
-
-Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message ${message.data}");
-  print('onResume: $message');
-  if (message.notification != null) {
-    RemoteNotification remoteNotification = message.notification!;
-    sl<NotificationService>().showNotification(
-        remoteNotification.title ?? "", remoteNotification.body ?? "");
-  }
-  return;
 }
 
 class HomeView extends StatelessWidget {
