@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/colors.dart';
+import 'package:peerpal/data/resources/colors.dart';
 
 class BottomIndicator extends StatelessWidget {
   const BottomIndicator({Key? key}) : super(key: key);

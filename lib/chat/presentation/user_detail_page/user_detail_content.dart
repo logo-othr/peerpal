@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc.dart';
-import 'package:peerpal/colors.dart';
+import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/injection.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';

@@ -4,7 +4,7 @@ import 'package:peerpal/chat/custom_chat_list_item_user.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
-import 'package:peerpal/colors.dart';
+import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 
 class ChatRequestListContent extends StatefulWidget {

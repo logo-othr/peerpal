@@ -2,10 +2,10 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_selection/cubit/activity_selection_cubit.dart';
-import 'package:peerpal/data/activity_icon_data..dart';
-import 'package:peerpal/strings.dart';
+import 'package:peerpal/data/resources/strings.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
 

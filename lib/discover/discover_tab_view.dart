@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
-import 'package:peerpal/colors.dart';
+import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';

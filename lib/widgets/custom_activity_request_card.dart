@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_peerpal_request_button.dart';
 
-import '../../colors.dart';
+import '../data/resources/colors.dart';
 
 // ignore: must_be_immutable
 class CustomActivityRequestCard extends StatelessWidget {

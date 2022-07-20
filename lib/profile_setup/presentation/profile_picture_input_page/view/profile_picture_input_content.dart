@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/colors.dart';
+import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/cubit/profile_picture_cubit.dart';

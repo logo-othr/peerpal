@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
-import '../colors.dart';
+import '../data/resources/colors.dart';
 
 class CustomActivityInviteFriendsListItem extends StatelessWidget {
   PeerPALUser peerPALUser;

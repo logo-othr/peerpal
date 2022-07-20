@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../data/resources/colors.dart';
 import 'custom_peerpal_heading.dart';
 
 class CustomActivityDialogItem extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-import '../../colors.dart';
+import '../data/resources/colors.dart';
 
 class CustomActivityOverviewHeaderCard extends StatelessWidget {
   CustomActivityOverviewHeaderCard(

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
-import 'package:peerpal/colors.dart';
+import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/friends/friend_request_page/cubit/friend_requests_cubit.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
