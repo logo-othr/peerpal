@@ -1,5 +1,5 @@
 import 'package:peerpal/activity/domain/models/activity.dart';
-import 'package:peerpal/notification_service.dart';
+import 'package:peerpal/tabview/domain/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/src/date_time.dart';
 import 'package:timezone/timezone.dart' as tz;
