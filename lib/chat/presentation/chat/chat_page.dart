@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_for_users.dart';
@@ -10,7 +11,6 @@ import 'package:peerpal/chat/domain/usecases/send_chat_request_response.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page_content.dart';
 import 'package:peerpal/injection.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 

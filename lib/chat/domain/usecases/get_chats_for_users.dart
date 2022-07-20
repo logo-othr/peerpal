@@ -1,6 +1,6 @@
+import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 
 class GetChatsForUser {
   final ChatRepository chatRepository;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:peerpal/authentication/presentation/presentation.dart';
 import 'package:peerpal/data/resources/colors.dart';
-import 'package:peerpal/login_flow/presentation/presentation.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 

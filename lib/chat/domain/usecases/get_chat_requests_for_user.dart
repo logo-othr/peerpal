@@ -1,7 +1,7 @@
+import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
@@ -23,7 +23,7 @@ class GetChatRequestForUser {
           List<String> userIds = chat.uids;
           userIds.remove(appUserId);
           PeerPALUser peerPALUser =
-              await appUserRepository.getUserInformation(userIds.first);
+          await appUserRepository.getUserInformation(userIds.first);
           UserChat userChat = UserChat(chat: chat, user: peerPALUser);
           userChats.add(userChat);
         }
