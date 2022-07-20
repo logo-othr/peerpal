@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_location/cubit/discover_location_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_location/view/discover_location_content.dart';
-import 'package:peerpal/injection.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
+import 'package:peerpal/setup.dart';
 
 class DiscoverLocationPage extends StatelessWidget {
   final bool isInFlowContext;

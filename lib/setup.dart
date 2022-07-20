@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
@@ -20,6 +21,8 @@ import 'package:peerpal/tabview/data/firebase_notification_service.dart';
 import 'package:peerpal/tabview/domain/notification_service.dart';
 import 'package:peerpal/tabview/domain/usecase/start_remote_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message ${message.data}");
@@ -34,7 +37,21 @@ Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
 
 final sl = GetIt.instance;
 
-Future<void> init() async {
+Future<void> setupAuthentication() async {
+  final authenticationRepository = sl<AuthenticationRepository>();
+  await authenticationRepository.user.first;
+}
+
+Future<void> setupFirebase() async {
+  await Firebase.initializeApp();
+}
+
+void setupTimeZones() {
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
+}
+
+Future<void> setupDependencies() async {
   // =============== DataSource ===============
   // SharedPreferences
   var sharedPreferences = await SharedPreferences.getInstance();

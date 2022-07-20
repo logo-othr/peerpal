@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/cubit/discover_activities_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_activities_content.dart';
-import 'package:peerpal/injection.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
+import 'package:peerpal/setup.dart';
 
 class DiscoverActivitiesPage extends StatelessWidget {
   final bool isInFlowContext;

@@ -8,9 +8,9 @@ import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/discover/discover_tab_view.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
-import 'package:peerpal/injection.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/settings/settings_page.dart';
+import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
 

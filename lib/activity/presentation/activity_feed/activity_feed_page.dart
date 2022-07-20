@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_content.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
-import 'package:peerpal/injection.dart';
+import 'package:peerpal/setup.dart';
 
 class ActivityFeedPage extends StatelessWidget {
   const ActivityFeedPage({Key? key}) : super(key: key);

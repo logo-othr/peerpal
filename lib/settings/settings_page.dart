@@ -5,10 +5,10 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
-import 'package:peerpal/injection.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
+import 'package:peerpal/setup.dart';
 import 'package:peerpal/tabview/domain/notification_service.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';

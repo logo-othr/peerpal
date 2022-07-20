@@ -7,8 +7,8 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
-import 'package:peerpal/injection.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_invite_friends_list_item.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';

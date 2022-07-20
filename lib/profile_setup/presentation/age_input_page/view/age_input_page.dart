@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/injection.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/view/age_input_content.dart';
+import 'package:peerpal/setup.dart';
 
 class AgeInputPage extends StatelessWidget {
   final bool isInFlowContext;
