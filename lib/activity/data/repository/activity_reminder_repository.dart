@@ -14,10 +14,23 @@ class ActivityReminderRepository {
         _notificationService = notificationService;
 
 // ToDo: Nullcheck activity member
-  Future<void> setReminderForActivity(Activity activity) async {
-    TZDateTime scheduledDateTime =
+  Future<void> setRemindersForActivity(Activity activity) async {
+    TZDateTime firstReminderDateTime =
         TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    scheduledDateTime = scheduledDateTime.subtract(new Duration(minutes: 15));
+    firstReminderDateTime =
+        firstReminderDateTime.subtract(new Duration(minutes: 15));
+    TZDateTime secondReminderDateTime =
+        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+    secondReminderDateTime =
+        secondReminderDateTime.subtract(new Duration(hours: 3));
+    await _setReminderForActivity(activity, firstReminderDateTime,
+        "In 15 Minuten startet deine Aktivität.");
+    await _setReminderForActivity(activity, secondReminderDateTime,
+        "In 3 Stunden startet deine Aktivität.");
+  }
+
+  Future<void> _setReminderForActivity(
+      Activity activity, TZDateTime scheduledDateTime, String message) async {
     bool reminderForActivityExists =
         await _reminderForActivityExists(activity.id!);
     if (!reminderForActivityExists) {
@@ -33,14 +46,22 @@ class ActivityReminderRepository {
   void cancelReminderForActivity(String activityId) async {} // ToDo: Implement.
 
   Future<bool> _reminderForActivityExists(String activityId) async {
-    int? notificationReminderId =
-        await _prefs.getInt("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
-    return (notificationReminderId != null);
+    List<String>? notificationReminderIds =
+        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    if (notificationReminderIds == null) return false;
+
+    return (notificationReminderIds.contains(activityId));
   }
 
   Future<void> _saveReminderIdForActivityId(
       String activityId, int reminderId) async {
-    await _prefs.setInt(
-        "${_ACTIVITY_REMINDER_PREFIX}${activityId}", reminderId);
+    String reminderIdStr = reminderId.toString();
+    List<String>? nullableReminderIdListForActivity =
+        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    List<String> reminderIdListForActivity =
+        nullableReminderIdListForActivity ?? <String>[];
+    reminderIdListForActivity.add(reminderIdStr);
+    await _prefs.setStringList(
+        "${_ACTIVITY_REMINDER_PREFIX}${activityId}", reminderIdListForActivity);
   }
 }

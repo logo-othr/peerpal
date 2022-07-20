@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
+import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/app/bloc_observer.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
@@ -42,6 +43,9 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider.value(
           value: sl<ActivityReminderRepository>(),
+        ),
+        RepositoryProvider.value(
+          value: sl<ActivityRepository>(),
         )
       ],
       child: BlocProvider(
