@@ -48,12 +48,30 @@ class LocationInputContent extends StatelessWidget {
                       _LocationSearchBar(
                         searchBarController: searchBarController,
                       ),
-                      _emptyLocationInput(context)
+                      context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .filteredLocations
+                                  .isEmpty &&
+                              context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .selectedLocations
+                                  .isEmpty
                           ? SizedBox(
                               height: MediaQuery.of(context).size.height / 6,
                             )
                           : Container(),
-                      _emptyLocationInput(context)
+                      context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .filteredLocations
+                                  .isEmpty &&
+                              context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .selectedLocations
+                                  .isEmpty
                           ? Column(
                               children: [
                                 Icon(Icons.location_on,
@@ -67,7 +85,17 @@ class LocationInputContent extends StatelessWidget {
                               ],
                             )
                           : Container(),
-                      _selectedOrEmptyLoc(context)
+                      context
+                                  .read<ActivityLocationCubit>()
+                                  .state
+                                  .filteredLocations
+                                  .isEmpty ||
+                              context
+                                      .read<ActivityLocationCubit>()
+                                      .state
+                                      .selectedLocations
+                                      .length >
+                                  0
                           ? _LocationResultBox(
                               streetController: streetController,
                               streetNumberController: streetNumberController,
