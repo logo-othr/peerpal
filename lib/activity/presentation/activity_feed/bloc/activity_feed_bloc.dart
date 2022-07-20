@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/setup.dart';
@@ -31,6 +32,7 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
     return super.close();
   }
 
+  //ToDo: Pass repos via parameters instead of using the service locator
   @override
   Stream<ActivityFeedState> mapEventToState(ActivityFeedEvent event) async* {
     if (event is LoadActivityFeed) {
@@ -49,6 +51,12 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
       Stream<List<Activity>> activityJoinedList = sl<ActivityRepository>()
           .getPrivateJoinedActivitiesForUser(currentUserId);
       _activityJoinedListController.addStream(activityJoinedList);
+
+      _activityJoinedListController.stream.listen((List<Activity> activities) {
+        for (Activity a in activities) {
+          sl<ActivityReminderRepository>().setRemindersForActivity(a);
+        }
+      });
 
       yield state.copyWith(
         status: ActivityFeedStatus.success,

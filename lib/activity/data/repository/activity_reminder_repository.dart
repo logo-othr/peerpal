@@ -1,4 +1,5 @@
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/tabview/domain/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/src/date_time.dart';
@@ -23,10 +24,16 @@ class ActivityReminderRepository {
         TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
     secondReminderDateTime =
         secondReminderDateTime.subtract(new Duration(hours: 3));
-    await _setReminderForActivity(activity, firstReminderDateTime,
-        "In 15 Minuten startet deine Aktivität.");
-    await _setReminderForActivity(activity, secondReminderDateTime,
-        "In 3 Stunden startet deine Aktivität.");
+    TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);
+
+    if (firstReminderDateTime.isAfter(now)) {
+      await _setReminderForActivity(activity, firstReminderDateTime,
+          "In 15 Minuten startet deine Aktivität.");
+    }
+    if (secondReminderDateTime.isAfter(now)) {
+      await _setReminderForActivity(activity, secondReminderDateTime,
+          "In 3 Stunden startet deine Aktivität.");
+    }
   }
 
   Future<void> _setReminderForActivity(
@@ -39,7 +46,7 @@ class ActivityReminderRepository {
               'Erinnerung an die Aktivität.', scheduledDateTime);
       _saveReminderIdForActivityId(activity.id!, notificationReminderId);
     } else
-      print(
+      logger.i(
           "Activity reminder for activity id ${activity.id!} is already scheduled");
   }
 
@@ -48,9 +55,10 @@ class ActivityReminderRepository {
   Future<bool> _reminderForActivityExists(String activityId) async {
     List<String>? notificationReminderIds =
         await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
-    if (notificationReminderIds == null) return false;
-
-    return (notificationReminderIds.contains(activityId));
+    return (notificationReminderIds != null);
+    //  if (notificationReminderIds == null) return false;
+//bool doesReminderExists = notificationReminderIds.contains(activityId);
+//    return (doesReminderExists);
   }
 
   Future<void> _saveReminderIdForActivityId(

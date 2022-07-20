@@ -100,7 +100,7 @@ class FirebaseNotificationService implements NotificationService {
       _platformSpecificNotificationDetails(),
       payload: payload,
     );
-    print("Show notification nr. $notificationId");
+    logger.i("Show notification nr. $notificationId");
     return notificationId;
   }
 
@@ -120,7 +120,8 @@ class FirebaseNotificationService implements NotificationService {
       androidAllowWhileIdle: true,
     );
 
-    print("Scheduled notification nr. $notificationId for $scheduledDateTime");
+    logger
+        .i("Scheduled notification nr. $notificationId for $scheduledDateTime");
     return notificationId;
   }
 
