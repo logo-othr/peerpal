@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
@@ -12,19 +11,8 @@ import 'package:peerpal/injection.dart';
 import 'package:peerpal/login_flow/persistence/authentication_repository.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/settings/settings_page.dart';
-import 'package:peerpal/tabview/domain/notification_service.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
-Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message ${message.data}");
-  print('onResume: $message');
-  if (message.notification != null) {
-    RemoteNotification remoteNotification = message.notification!;
-    sl<NotificationService>().showNotification(
-        remoteNotification.title ?? "", remoteNotification.body ?? "");
-  }
-  return;
-}
 
 class MyTabView extends StatefulWidget {
   MyTabView({Key? key}) : super(key: key);
@@ -41,10 +29,6 @@ class _MyTabViewState extends State<MyTabView> {
   @override
   void initState() {
     super.initState();
-
-    sl<NotificationService>().registerDeviceToken();
-    sl<NotificationService>().startRemoteNotificationBackgroundHandler(
-        _remoteNotificationBackgroundHandler);
   }
 
   final tabs = [

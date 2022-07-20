@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
@@ -17,7 +18,19 @@ import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 import 'package:peerpal/tabview/data/firebase_notification_service.dart';
 import 'package:peerpal/tabview/domain/notification_service.dart';
+import 'package:peerpal/tabview/domain/usecase/start_remote_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message ${message.data}");
+  print('onResume: $message');
+  if (message.notification != null) {
+    RemoteNotification remoteNotification = message.notification!;
+    sl<NotificationService>().showNotification(
+        remoteNotification.title ?? "", remoteNotification.body ?? "");
+  }
+  return;
+}
 
 final sl = GetIt.instance;
 
@@ -34,10 +47,10 @@ Future<void> init() async {
   // =============== Chat ===============
   // Bloc
   sl.registerFactory(
-    () => ChatListBloc(sl(), sl(), sl()),
+        () => ChatListBloc(sl(), sl(), sl()),
   );
   sl.registerFactory(
-    () => ChatRequestListBloc(sl(), sl()),
+        () => ChatRequestListBloc(sl(), sl()),
   );
   sl.registerFactory(
         () => ActivityFeedBloc(),
@@ -70,7 +83,7 @@ Future<void> init() async {
   // =============== Repository ===============
 
   sl.registerLazySingleton<ActivityRepository>(
-    () => ActivityRepository(sharedPreferences),
+        () => ActivityRepository(sharedPreferences),
   );
 
   sl.registerLazySingleton<AuthenticationRepository>(
@@ -79,7 +92,15 @@ Future<void> init() async {
 
   // =============== Notification ===============
 
+  // Service
   sl.registerLazySingleton<NotificationService>(
     () => FirebaseNotificationService(),
   );
+
+  // UseCase
+  sl.registerLazySingleton<StartRemoteNotifications>(() =>
+      StartRemoteNotifications(
+          notificationService: sl(),
+          remoteNotificationBackgroundHandler:
+              _remoteNotificationBackgroundHandler));
 }
