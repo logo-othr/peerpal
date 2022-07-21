@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover/discover_tab_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
@@ -12,6 +13,7 @@ import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/discover_user_list_item.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 import 'package:provider/src/provider.dart';
 
 class DiscoverTabView extends StatefulWidget {
@@ -73,10 +75,10 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: CustomAppBar(
-          'Entdecken',
-          hasBackButton: false,
-        ),
+        appBar: CustomAppBar('Entdecken',
+            hasBackButton: false,
+            actionButtonWidget:
+                CustomSupportVideoDialog(link: SupportVideoLinks.DISCOVER_TAB)),
         body: BlocBuilder<DiscoverTabBloc, DiscoverTabState>(
           builder: (context, state) {
             switch (state.status) {
