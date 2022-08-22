@@ -48,6 +48,20 @@ class AuthenticationRepository {
         : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
   }
 
+  Future<bool> resetPassword({required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      print("password reset email sent");
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        // ToDo: throw exception
+        return false;
+      }
+    }
+    return false;
+  }
 
   Future<void> signUp({required String email, required String password}) async {
     try {
