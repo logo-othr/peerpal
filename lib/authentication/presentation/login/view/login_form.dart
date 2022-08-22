@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:peerpal/authentication/presentation/passwort_reset/view/passwort_reset_page.dart';
 import 'package:peerpal/authentication/presentation/presentation.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -38,8 +39,8 @@ class LoginForm extends StatelessWidget {
                 _EmailInputField(),
                 const SizedBox(height: 8.0),
                 _PasswordInputField(),
-                /* const SizedBox(height: 8.0),
-                _PasswordForgetTextButton(),*/
+                const SizedBox(height: 8.0),
+                _PasswordForgetTextButton(),
                 const SizedBox(height: 20.0),
                 _LoginButton(),
                 const SizedBox(height: 15.0),
@@ -93,7 +94,8 @@ class _PasswordForgetTextButton extends StatelessWidget {
       child: Align(
           alignment: Alignment.centerRight,
           child: GestureDetector(
-              onTap: () {},
+              onTap: () =>
+                  Navigator.of(context).push<void>(PasswordResetPage.route()),
               child: CustomPeerPALHeading4(
                 'Passwort vergessen?',
                 color: primaryColor,
