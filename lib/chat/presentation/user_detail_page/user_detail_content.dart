@@ -7,7 +7,7 @@ import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
+import 'package:peerpal/peerpal_user/enum/communication_type.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';

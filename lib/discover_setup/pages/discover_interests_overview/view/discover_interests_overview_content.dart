@@ -7,7 +7,7 @@ import 'package:peerpal/discover_setup/pages/discover_age/view/discover_age_page
 import 'package:peerpal/discover_setup/pages/discover_communication/view/discover_communication_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/cubit/discover_interests_overview_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_location/view/discover_location_page.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
+import 'package:peerpal/peerpal_user/enum/communication_type.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';

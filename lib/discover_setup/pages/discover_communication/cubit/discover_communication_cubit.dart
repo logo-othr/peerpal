@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
+import 'package:peerpal/peerpal_user/enum/communication_type.dart';
 
 part 'discover_communication_state.dart';
 

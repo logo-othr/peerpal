@@ -12,8 +12,8 @@ import 'package:peerpal/peerpal_user/data/dto/peerpal_user_dto.dart';
 import 'package:peerpal/peerpal_user/data/dto/private_user_information_dto.dart';
 import 'package:peerpal/peerpal_user/data/dto/public_user_information_dto.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/peerpal_user/enum/communication_type.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
-import 'package:peerpal/repository/models/enum/communication_type.dart';
 
 class AppUserRepository {
   AppUserRepository({
