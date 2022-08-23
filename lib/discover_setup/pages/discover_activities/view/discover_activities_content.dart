@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
+import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/data/resources/strings.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/cubit/discover_activities_cubit.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
@@ -57,94 +58,13 @@ class DiscoverActivitiesContent extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    /*        Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: CupertinoSearchTextField(
-                       // enabled: (state is DiscoverActivitiesLoaded ||
-                      //      state is DiscoverActivitiesSelected),
-                        enabled: false,
-                        controller: searchBarController,
-                      ),
-                    ),*/
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: GridView.count(
-                            childAspectRatio: (itemWidth / itemHeight),
-                            primary: true,
-                            crossAxisCount: 3,
-                            children: state.activities
-                                .map(
-                                  (activity) => (activity.name
-                                          .toString()
-                                          .toLowerCase()
-                                          .startsWith(
-                                              state.searchQuery.toLowerCase()))
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            if (state.selectedActivities
-                                                        .length >=
-                                                    10 &&
-                                                !state.selectedActivities
-                                                    .contains(activity)) {
-                                              ScaffoldMessenger.of(context)
-                                                ..hideCurrentSnackBar()
-                                                ..showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        ("Es können maximal 10 Interessen ausgewählt werden."))));
-                                            } else {
-                                              context
-                                                  .read<
-                                                      DiscoverActivitiesCubit>()
-                                                  .toggleData(activity);
-                                            }
-                                          },
-                                          child: CustomCircleListItem(
-                                              label: activity.name.toString(),
-                                              icon: ActivityIconData
-                                                  .icons[activity.code],
-                                              active: state.selectedActivities
-                                                  .contains(activity)))
-                                      : Container(),
-                                )
-                                .toList()),
+                        child: _activityItems(
+                            itemWidth, itemHeight, state, context),
                       ),
                     ),
-                    /*     Expanded(
-                      child: SingleChildScrollView(
-                        child:    Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: Wrap(
-                                      alignment: WrapAlignment.start,
-                                    children: state.activities.map((activity) => (activity.name.toString().toLowerCase().startsWith(state.searchQuery.toLowerCase()))
-                                          ? GestureDetector(
-                                          onTap: () {
-                                            context
-                                                .read<
-                                                DiscoverActivitiesCubit>()
-                                                .toggleData(activity);
-                                          },
-                                          child: CustomCircleListItem(
-                                              label:
-                                              activity.name.toString(),
-                                              icon: ActivityIconData
-                                                  .icons[activity.code],
-                                              active: state
-                                                  .selectedActivities
-                                                  .contains(activity)))
-                                          : Container(),
-                                    )
-                                        .toList()
-                                  ))),
-                          ],
-                        ),
-                      ),
-                    ),*/
                     (state is DiscoverActivitiesPosting)
                         ? const CircularProgressIndicator()
                         : Padding(
@@ -163,6 +83,52 @@ class DiscoverActivitiesContent extends StatelessWidget {
     );
   }
 
+  Scrollbar _activityItems(double itemWidth, double itemHeight,
+      DiscoverActivitiesState state, BuildContext context) {
+    return Scrollbar(
+      trackVisibility: true,
+      child: GridView.count(
+          childAspectRatio: (itemWidth / itemHeight),
+          primary: true,
+          crossAxisCount: 3,
+          children: state.activities
+              .map(
+                (activity) => (activity.name
+                        .toString()
+                        .toLowerCase()
+                        .startsWith(state.searchQuery.toLowerCase()))
+                    ? _selectItemBehavior(state, context, activity)
+                    : Container(),
+              )
+              .toList()),
+    );
+  }
+
+  GestureDetector _selectItemBehavior(
+      DiscoverActivitiesState state, BuildContext context, Activity activity) {
+    return GestureDetector(
+        onTap: () {
+          if (_selectionRestriction(state, context, activity)) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  content: Text(
+                      ("Es können maximal 10 Interessen ausgewählt werden."))));
+          } else {
+            context.read<DiscoverActivitiesCubit>().toggleData(activity);
+          }
+        },
+        child: _activitySingleItem(activity, state));
+  }
+
+  CustomCircleListItem _activitySingleItem(
+      Activity activity, DiscoverActivitiesState state) {
+    return CustomCircleListItem(
+        label: activity.name.toString(),
+        icon: ActivityIconData.icons[activity.code],
+        active: state.selectedActivities.contains(activity));
+  }
+
   Future<void> _update(
       DiscoverActivitiesState state, BuildContext context) async {
     if (isInFlowContext) {
@@ -174,5 +140,11 @@ class DiscoverActivitiesContent extends StatelessWidget {
       await context.read<DiscoverActivitiesCubit>().postData();
       Navigator.pop(context);
     }
+  }
+
+  bool _selectionRestriction(
+      DiscoverActivitiesState state, BuildContext context, Activity activity) {
+    return (state.selectedActivities.length >= 10 &&
+        !state.selectedActivities.contains(activity));
   }
 }
