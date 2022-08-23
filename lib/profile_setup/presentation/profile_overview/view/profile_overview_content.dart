@@ -38,7 +38,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                 ),
                 new FutureBuilder(
                   future: context.read<ProfileOverviewCubit>().profilePicture(),
-                  initialData: state.appUserInformation.imagePath ?? null,
+                  initialData: state.appUserInformation.imagePath!,
                   builder: (BuildContext context,
                           AsyncSnapshot<String?> text) =>
                       Container(
@@ -63,56 +63,14 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                           width: 4.0,
                                         ),
                                       ),
-                                      child: CircleAvatar(
-                                        radius: 70,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child: (text.data == null ||
-                                                  text.data!.isEmpty)
-                                              ? Icon(
-                                                  Icons.account_circle,
-                                                  size: 140.0,
-                                                  color: Colors.grey,
-                                                )
-                                              : CachedNetworkImage(
-                                                  imageUrl: text.data!,
-                                                  height: 140,
-                                                  width: 140,
-                                                  fit: BoxFit.cover,
-                                                  errorWidget: (context, object,
-                                                      stackTrace) {
-                                                    return const Icon(
-                                                      Icons.account_circle,
-                                                      size: 140.0,
-                                                      color: Colors.grey,
-                                                    );
-                                                  },
-                                                ),
-                                        ),
-                                      )),
+                                      child: _AvatarBox(link: text.data)),
                                 ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   child: TextButton(
-                                      onPressed: () async => {
-                                            await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ProfilePictureInputPage(
-                                                          isInFlowContext:
-                                                              false)),
-                                            ),
-                                            setState(
-                                              () {
-                                                context
-                                                    .read<
-                                                        ProfileOverviewCubit>()
-                                                    .loadData();
-                                              },
-                                            )
-                                          },
+                                      onPressed: () async =>
+                                          await _setProfilPick(context),
                                       style: TextButton.styleFrom(
                                         minimumSize: const Size(50, 15),
                                         backgroundColor: Colors.transparent,
@@ -130,66 +88,18 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        CustomSingleTable(
-                            heading: "Name",
-                            text: state.appUserInformation.name ?? "",
-                            isArrowIconVisible: true,
-                            onPressed: () async => {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => NameInputPage(
-                                            isInFlowContext: false,
-                                            pastName:
-                                                state.appUserInformation.name ??
-                                                    "")),
-                                  ).then((value) => context
-                                      .read<ProfileOverviewCubit>()
-                                      .loadData()),
-                                }),
-                        CustomSingleTable(
-                            heading: 'ALTER',
-                            text: state.appUserInformation.age.toString(),
-                            isArrowIconVisible: true,
-                            onPressed: () async => {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AgeInputPage(
-                                            isInFlowContext: false)),
-                                  ).then((value) => context
-                                      .read<ProfileOverviewCubit>()
-                                      .loadData())
-                                }),
-                        CustomSingleTable(
-                            heading: 'TELEFONNUMMER',
-                            text:
-                                state.appUserInformation.phoneNumber.toString(),
-                            isArrowIconVisible: true,
-                            onPressed: () async => {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PhoneInputPage(
-                                            isInFlowContext: false,
-                                            pastPhone: state
-                                                .appUserInformation.phoneNumber
-                                                .toString())),
-                                  ).then((value) => context
-                                      .read<ProfileOverviewCubit>()
-                                      .loadData()),
-                                }),
+                        _ChangeName(name: state.appUserInformation.name!),
+                        _ChangeAge(
+                            age: state.appUserInformation.age.toString()),
+                        _ChangePhonenumber(
+                            phonenumber: state.appUserInformation.phoneNumber
+                                .toString()),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
-                Container(
-                    color: Colors.transparent,
-                    child: CustomPeerPALButton(
-                      text: 'Fertig',
-                      onPressed: () => Navigator.pop(context),
-                    ))
+                _FinishButton()
               ],
             ),
           ),
@@ -198,5 +108,144 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
         return CircularProgressIndicator();
       }
     });
+  }
+
+  Future<Set<void>> _setProfilPick(BuildContext context) async {
+    return {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ProfilePictureInputPage(isInFlowContext: false)),
+      ),
+      setState(
+        () {
+          context.read<ProfileOverviewCubit>().loadData();
+        },
+      )
+    };
+  }
+}
+
+class _AvatarBox extends StatelessWidget {
+  const _AvatarBox({Key? key, required this.link}) : super(key: key);
+  final String? link;
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 70,
+      backgroundColor: Colors.white,
+      child: ClipOval(
+        child: (link == null || link!.isEmpty)
+            ? Icon(
+                Icons.account_circle,
+                size: 140.0,
+                color: Colors.grey,
+              )
+            : CachedNetworkImage(
+                imageUrl: link!,
+                height: 140,
+                width: 140,
+                fit: BoxFit.cover,
+                errorWidget: (context, object, stackTrace) {
+                  return const Icon(
+                    Icons.account_circle,
+                    size: 140.0,
+                    color: Colors.grey,
+                  );
+                },
+              ),
+      ),
+    );
+  }
+}
+
+class _FinishButton extends StatelessWidget {
+  const _FinishButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.transparent,
+        child: CustomPeerPALButton(
+          text: 'Fertig',
+          onPressed: () => Navigator.pop(context),
+        ));
+  }
+}
+
+class _ChangePhonenumber extends StatelessWidget {
+  const _ChangePhonenumber({
+    Key? key,
+    required this.phonenumber,
+  }) : super(key: key);
+
+  final String phonenumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomSingleTable(
+        heading: 'TELEFONNUMMER',
+        text: phonenumber,
+        isArrowIconVisible: true,
+        onPressed: () async => {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PhoneInputPage(
+                        isInFlowContext: false, pastPhone: phonenumber)),
+              ).then(
+                  (value) => context.read<ProfileOverviewCubit>().loadData()),
+            });
+  }
+}
+
+class _ChangeAge extends StatelessWidget {
+  const _ChangeAge({
+    Key? key,
+    required this.age,
+  }) : super(key: key);
+
+  final String age;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomSingleTable(
+        heading: 'ALTER',
+        text: age,
+        isArrowIconVisible: true,
+        onPressed: () async => {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AgeInputPage(isInFlowContext: false)),
+              ).then((value) => context.read<ProfileOverviewCubit>().loadData())
+            });
+  }
+}
+
+class _ChangeName extends StatelessWidget {
+  const _ChangeName({Key? key, required this.name}) : super(key: key);
+
+  final String? name;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomSingleTable(
+        heading: "Name",
+        text: name!,
+        isArrowIconVisible: true,
+        onPressed: () async => {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        NameInputPage(isInFlowContext: false, pastName: name!)),
+              ).then(
+                  (value) => context.read<ProfileOverviewCubit>().loadData()),
+            });
   }
 }
