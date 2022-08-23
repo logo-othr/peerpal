@@ -57,24 +57,38 @@ class DateInputContent extends StatelessWidget {
                   ],
                 ),
                 Spacer(),
-                CustomPeerPALButton(
-                    text: "Weiter",
-                    onPressed: () async {
-                      var cubit = context.read<DateInputCubit>();
-                      if (isInFlowContext) {
-                        var activity = await cubit.postData();
-                        context.flow<Activity>().update((s) => activity);
-                      } else {
-                        await cubit.postData();
-                        Navigator.pop(context);
-                      }
-                    }),
+                _Next(isInFlowContext: isInFlowContext),
               ],
             ),
           );
         },
       ),
     );
+  }
+}
+
+class _Next extends StatelessWidget {
+  const _Next({
+    Key? key,
+    required this.isInFlowContext,
+  }) : super(key: key);
+
+  final bool isInFlowContext;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPeerPALButton(
+        text: "Weiter",
+        onPressed: () async {
+          var cubit = context.read<DateInputCubit>();
+          if (isInFlowContext) {
+            var activity = await cubit.postData();
+            context.flow<Activity>().update((s) => activity);
+          } else {
+            await cubit.postData();
+            Navigator.pop(context);
+          }
+        });
   }
 }
 
@@ -155,50 +169,53 @@ class _TimePickerState extends State<_TimePicker> {
           controller: timeController,
           style: TextStyle(fontSize: 22),
           maxLines: 1,
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-                onPressed: () => {
-                      DatePicker.showPicker(context, showTitleActions: true,
-                          onChanged: (date) {
-                        print('change $date');
-                      }, onConfirm: (date) {
-                        String formattedTime = DateFormat('HH:mm').format(date);
-                        var array = formattedTime.split(":");
-                        if (array[1] == "01") {
-                          array[1] = "15";
-                        }
-                        if (array[1] == "02") {
-                          array[1] = "30";
-                        }
-                        if (array[1] == "03") {
-                          array[1] = "45";
-                        }
-                        formattedTime = '${array[0]}:${array[1]}';
-                        context
-                            .read<DateInputCubit>()
-                            .dataChanged(state.date, formattedTime);
-                        timeController.text = '$formattedTime Uhr';
-                      },
-                          pickerModel:
-                              CustomPicker(currentTime: DateTime.now()),
-                          locale: LocaleType.de)
-                    },
-                icon: Icon(Icons.edit)),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                color: primaryColor,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: primaryColor,
-                  width: 3,
-                )),
-          ),
+          decoration: _format(context, state),
         );
       },
+    );
+  }
+
+  InputDecoration _format(BuildContext context, DateInputState state) {
+    return InputDecoration(
+      suffixIcon: IconButton(
+          onPressed: () => {
+                DatePicker.showPicker(context, showTitleActions: true,
+                    onChanged: (date) {
+                  print('change $date');
+                }, onConfirm: (date) {
+                  String formattedTime = DateFormat('HH:mm').format(date);
+                  var array = formattedTime.split(":");
+                  if (array[1] == "01") {
+                    array[1] = "15";
+                  }
+                  if (array[1] == "02") {
+                    array[1] = "30";
+                  }
+                  if (array[1] == "03") {
+                    array[1] = "45";
+                  }
+                  formattedTime = '${array[0]}:${array[1]}';
+                  context
+                      .read<DateInputCubit>()
+                      .dataChanged(state.date, formattedTime);
+                  timeController.text = '$formattedTime Uhr';
+                },
+                    pickerModel: CustomPicker(currentTime: DateTime.now()),
+                    locale: LocaleType.de),
+              },
+          icon: Icon(Icons.edit)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: primaryColor,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: primaryColor,
+            width: 3,
+          )),
     );
   }
 }
