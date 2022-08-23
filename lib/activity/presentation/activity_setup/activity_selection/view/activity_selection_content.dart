@@ -43,22 +43,11 @@ class ActivitySelectionContent extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              /*       Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          top: BorderSide(width: 1, color: secondaryColor),
-                          bottom: BorderSide(width: 1, color: secondaryColor))),
-                  child: CustomCupertinoSearchBar(
-                    searchBarController: searchFieldController,
-                    enabled: false,
-                  )),*/
-
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                   child: Scrollbar(
-                    isAlwaysShown: true,
+                    trackVisibility: true,
                     child: GridView.count(
                         childAspectRatio: (itemWidth / itemHeight),
                         primary: true,
@@ -66,30 +55,7 @@ class ActivitySelectionContent extends StatelessWidget {
                         children: state.activities.map((activity) {
                           return GestureDetector(
                               onTap: () async {
-                                var cubit =
-                                    context.read<ActivitySelectionCubit>();
-                                if (isInFlowContext) {
-                                  var updatedActivity =
-                                      (await cubit.getCurrentActivity())
-                                          .copyWith(
-                                              code: activity.code,
-                                              name: activity.name);
-                                  await cubit.postData(
-                                      updatedActivity); // ToDo: Update data in shared prefs
-                                  context.flow<Activity>().update((s) =>
-                                      s.copyWith(
-                                          code: activity.code,
-                                          name: activity.name));
-                                } else {
-                                  var currentActivity =
-                                      await cubit.getCurrentActivity();
-                                  var updatedActivity =
-                                      currentActivity.copyWith(
-                                          code: activity.code,
-                                          name: activity.name);
-                                  await cubit.postData(updatedActivity);
-                                  Navigator.pop(context);
-                                }
+                                _itemBehavior(context, activity);
                               },
                               child: CustomCircleListItem(
                                   label: activity.name.toString(),
@@ -104,5 +70,25 @@ class ActivitySelectionContent extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future<void> _itemBehavior(BuildContext context, Activity activity) async {
+    {
+      var cubit = context.read<ActivitySelectionCubit>();
+      if (isInFlowContext) {
+        var updatedActivity = (await cubit.getCurrentActivity())
+            .copyWith(code: activity.code, name: activity.name);
+        await cubit
+            .postData(updatedActivity); // ToDo: Update data in shared prefs
+        context.flow<Activity>().update(
+            (s) => s.copyWith(code: activity.code, name: activity.name));
+      } else {
+        var currentActivity = await cubit.getCurrentActivity();
+        var updatedActivity =
+            currentActivity.copyWith(code: activity.code, name: activity.name);
+        await cubit.postData(updatedActivity);
+        Navigator.pop(context);
+      }
+    }
   }
 }
