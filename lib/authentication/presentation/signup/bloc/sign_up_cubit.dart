@@ -7,9 +7,9 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 part 'sign_up_state.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit(this._appUserRepository) : super(const SignupState());
+  SignupCubit(this._authenticationRepository) : super(const SignupState());
 
-  final AuthenticationRepository _appUserRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   void changeEmail(String changedEmail) {
     final email = EmailModel.dirty(changedEmail);
@@ -60,7 +60,7 @@ class SignupCubit extends Cubit<SignupState> {
     emit(
         state.copyWith(formValidationStatus: FormzStatus.submissionInProgress));
     try {
-      await _appUserRepository.signUp(
+      await _authenticationRepository.signUp(
         email: state.email.value,
         password: state.password.value,
       );
