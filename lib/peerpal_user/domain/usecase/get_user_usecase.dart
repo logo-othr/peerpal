@@ -12,6 +12,8 @@ class GetAuthenticatedUser {
     String currentUserId = authRepository.currentUser.id;
     PeerPALUser currentUser =
         await userRepository.getCurrentUserInformation(currentUserId);
+    if (currentUser.id == null)
+      currentUser = currentUser.copyWith(id: currentUserId);
     return currentUser;
   }
 }
