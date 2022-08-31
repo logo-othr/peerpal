@@ -25,7 +25,7 @@ class _ImprintPageState extends State<ImprintPage> {
               SizedBox(height: 20),
               CustomPeerPALHeading3(
                 text: "Herausgeber",
-                color: primaryColor,
+                color: PeerPALAppColor.primaryColor,
               ),
               SizedBox(height: 20),
               Text(

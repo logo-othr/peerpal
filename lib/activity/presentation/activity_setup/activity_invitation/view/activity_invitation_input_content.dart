@@ -131,8 +131,10 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                top: BorderSide(width: 1, color: secondaryColor),
-                bottom: BorderSide(width: 1, color: secondaryColor))),
+                top:
+                    BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: Column(
           children: [
             CustomCupertinoSearchBar(
@@ -204,7 +206,8 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
-                    bottom: BorderSide(width: 1, color: secondaryColor))),
+                    bottom: BorderSide(
+                        width: 1, color: PeerPALAppColor.secondaryColor))),
             child: BlocBuilder<InvitationInputCubit, ActivityInvitationState>(
                 builder: (context, state) {
               var cubit = context.read<InvitationInputCubit>();

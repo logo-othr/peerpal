@@ -83,8 +83,8 @@ class FriendsOverviewContent extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
-                    top: BorderSide(width: 1, color: secondaryColor),
-                    bottom: BorderSide(width: 1, color: secondaryColor))),
+                    top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                    bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
             child: CustomCupertinoSearchBar(
               enabled: false,
               heading: null,
@@ -144,7 +144,8 @@ class FriendsOverviewContent extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
-                    bottom: BorderSide(width: 1, color: secondaryColor))),
+                    bottom: BorderSide(
+                        width: 1, color: PeerPALAppColor.secondaryColor))),
             child: BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
                 builder: (context, state) {
               return TextButton(

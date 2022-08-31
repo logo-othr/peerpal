@@ -201,13 +201,13 @@ class _PhoneTextfield extends StatelessWidget {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25),
         borderSide: BorderSide(
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
         ),
       ),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
-            color: primaryColor,
+            color: PeerPALAppColor.primaryColor,
             width: 3,
           )),
     );

@@ -145,14 +145,14 @@ class _EmptyAvatar extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: primaryColor,
+            color: PeerPALAppColor.primaryColor,
             width: 4.0,
           ),
         ),
         child: Icon(
           Icons.camera_alt_outlined,
           size: 110,
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
         ));
   }
 }
@@ -170,7 +170,7 @@ class _LoadingAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
           width: 4.0,
         ),
       ),
@@ -197,7 +197,7 @@ class _ImageContainerWithLink extends StatelessWidget {
         ),
         shape: BoxShape.circle,
         border: Border.all(
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
           width: 4.0,
         ),
       ),
@@ -218,7 +218,7 @@ class _EmptyImageContainer extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: primaryColor,
+            color: PeerPALAppColor.primaryColor,
             width: 4.0,
           ),
         ),

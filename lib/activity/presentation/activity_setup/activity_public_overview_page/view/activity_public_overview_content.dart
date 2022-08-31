@@ -77,8 +77,9 @@ class _ActivityPublicOverviewContentState
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                              bottom:
-                                  BorderSide(width: 1, color: secondaryColor))),
+                              bottom: BorderSide(
+                                  width: 1,
+                                  color: PeerPALAppColor.secondaryColor))),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -250,7 +251,7 @@ class AvatarUI extends StatelessWidget {
           decoration: new BoxDecoration(
             shape: BoxShape.circle,
             border: new Border.all(
-              color: primaryColor,
+              color: PeerPALAppColor.primaryColor,
               width: 2.0,
             ),
           )),

@@ -25,8 +25,9 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
         height: 100,
         decoration: BoxDecoration(
             color: Colors.white,
-            border:
-                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+            border: Border(
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +46,7 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
                   decoration: new BoxDecoration(
                     shape: BoxShape.circle,
                     border: new Border.all(
-                      color: primaryColor,
+                      color: PeerPALAppColor.primaryColor,
                       width: 2.0,
                     ),
                   )),
@@ -57,7 +58,8 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
                     text: heading),
               ),
               //CustomPeerPALHeading2(heading),
-              VerticalDivider(thickness: 1, color: secondaryColor),
+              VerticalDivider(
+                  thickness: 1, color: PeerPALAppColor.secondaryColor),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -74,8 +76,8 @@ class CustomActivityOverviewHeaderCard extends StatelessWidget {
                         onInactive();
                       }
                     },
-                    activeTrackColor: secondaryColor,
-                    activeColor: primaryColor,
+                    activeTrackColor: PeerPALAppColor.secondaryColor,
+                    activeColor: PeerPALAppColor.primaryColor,
                   ),
                 ],
               ),

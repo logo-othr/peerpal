@@ -2,9 +2,9 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/app.dart';
+import 'package:peerpal/app/view/peerpal_theme_data.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/authentication/routes.dart';
-import 'package:peerpal/data/resources/colors.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -35,25 +35,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          primarySwatch: primaryColor,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          inputDecorationTheme: InputDecorationTheme(
-            contentPadding: const EdgeInsets.fromLTRB(30, 20, 0, 20),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                color: primaryColor,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: primaryColor,
-                  width: 3,
-                )),
-          )),
+      theme: PeerPALThemeData().materialTheme,
       home: FlowBuilder<AppStatus>(
         state: context.select((AppBloc bloc) => bloc.state.status),
         onGeneratePages: onGenerateAppViewPages,

@@ -31,8 +31,9 @@ class DiscoverUserListItem extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
-                //top: BorderSide(width: 1, color: secondaryColor),
-                  bottom: BorderSide(width: 1, color: secondaryColor))),
+                  //top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                  bottom: BorderSide(
+                      width: 1, color: PeerPALAppColor.secondaryColor))),
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 13, 0, 13),
             child: Row(
@@ -106,7 +107,7 @@ class DiscoverUserListItem extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: CustomPeerPALHeading3(
               text: header!,
-              color: primaryColor,
+              color: PeerPALAppColor.primaryColor,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             )),
@@ -119,7 +120,7 @@ class DiscoverUserListItem extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
       child: Icon(
         Icons.arrow_forward_ios,
-        color: secondaryColor,
+        color: PeerPALAppColor.secondaryColor,
         size: 20,
       ),
     );
@@ -153,7 +154,7 @@ class DiscoverUserListItem extends StatelessWidget {
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
               border: new Border.all(
-                color: primaryColor,
+                color: PeerPALAppColor.primaryColor,
                 width: 4,
               ),
             )));

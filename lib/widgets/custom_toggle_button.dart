@@ -26,7 +26,8 @@ class CustomToggleButton extends StatelessWidget {
         onPressed: onPressed,
         style: TextButton.styleFrom(
           minimumSize: Size(width!, height!),
-          backgroundColor: active ? Colors.green : secondaryColor,
+          backgroundColor:
+              active ? Colors.green : PeerPALAppColor.secondaryColor,
           padding: EdgeInsets.all(0),
         ),
         child: CustomPeerPALText(

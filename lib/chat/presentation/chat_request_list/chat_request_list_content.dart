@@ -82,7 +82,9 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+          border: Border(
+              bottom:
+                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
       child: TextButton(
         onPressed: () {
           Navigator.push(

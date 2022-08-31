@@ -58,7 +58,8 @@ class FriendRequestsContent extends StatelessWidget {
         } else {
           return Center(
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(PeerPALAppColor.primaryColor),
             ),
           );
         }

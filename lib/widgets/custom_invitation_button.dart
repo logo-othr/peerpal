@@ -29,8 +29,10 @@ class CustomInvitationButton extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
-                  top: BorderSide(width: 1, color: secondaryColor),
-                  bottom: BorderSide(width: 1, color: secondaryColor))),
+                  top: BorderSide(
+                      width: 1, color: PeerPALAppColor.secondaryColor),
+                  bottom: BorderSide(
+                      width: 1, color: PeerPALAppColor.secondaryColor))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -38,7 +40,7 @@ class CustomInvitationButton extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: Icon(
                   icon,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                   size: small ? 22 : 30,
                 ),
               ),
@@ -47,9 +49,10 @@ class CustomInvitationButton extends StatelessWidget {
                       text: text,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: primaryColor,
+                      color: PeerPALAppColor.primaryColor,
                     )
-                  : CustomPeerPALHeading2(text, color: primaryColor),
+                  : CustomPeerPALHeading2(text,
+                      color: PeerPALAppColor.primaryColor),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                 child: Container(
@@ -82,7 +85,7 @@ class CustomInvitationButton extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: CustomPeerPALHeading3(
-                          text: header!, color: secondaryColor),
+                          text: header!, color: PeerPALAppColor.secondaryColor),
                     ),
                   ),
                 ),

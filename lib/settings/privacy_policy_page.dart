@@ -21,7 +21,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           child: Container(
         child: CustomPeerPALHeading2(
           "Datenschutzerklärung",
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
         ),
       )),
     );

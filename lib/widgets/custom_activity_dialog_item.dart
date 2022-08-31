@@ -31,7 +31,7 @@ class _CustomActivityDialogItemState extends State<CustomActivityDialogItem> {
               child: CustomPeerPALHeading3(
                   text: widget.name,
                   fontWeight: FontWeight.bold,
-                  color: primaryColor),
+                  color: PeerPALAppColor.primaryColor),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),

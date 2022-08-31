@@ -37,7 +37,7 @@ class CustomFriendListItemUser extends StatelessWidget {
                         height: 60,
                         child: Center(
                           child: CircularProgressIndicator(
-                            color: primaryColor,
+                            color: PeerPALAppColor.primaryColor,
                           ),
                         ),
                       ),
@@ -56,7 +56,7 @@ class CustomFriendListItemUser extends StatelessWidget {
             children: [
               CustomPeerPALHeading3(
                   text: userInformation.name!,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
               SizedBox(height: 5),
@@ -68,7 +68,7 @@ class CustomFriendListItemUser extends StatelessWidget {
         Spacer(),
         Icon(
           Icons.arrow_forward_ios,
-          color: secondaryColor,
+          color: PeerPALAppColor.secondaryColor,
           size: 20,
         )
       ],

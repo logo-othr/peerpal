@@ -59,7 +59,7 @@ class _CustomActivityParticipationsDialogState
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(width: 2, color: primaryColor),
+          border: Border.all(width: 2, color: PeerPALAppColor.primaryColor),
           borderRadius: BorderRadius.circular(10)),
       height: 300,
       child: Column(
@@ -70,7 +70,8 @@ class _CustomActivityParticipationsDialogState
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(
-                      bottom: BorderSide(width: 1, color: primaryColor))),
+                      bottom: BorderSide(
+                          width: 1, color: PeerPALAppColor.primaryColor))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

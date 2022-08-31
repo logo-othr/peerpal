@@ -38,7 +38,7 @@ class _CustomDialogState extends State<CustomDialog> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(width: 2, color: primaryColor),
+          border: Border.all(width: 2, color: PeerPALAppColor.primaryColor),
           borderRadius: BorderRadius.circular(10)),
       height: widget.dialogHeight,
       child: Column(

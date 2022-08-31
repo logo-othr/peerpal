@@ -60,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       child:
                           Image(image: AssetImage('assets/peerpal_logo.png')))),
               SizedBox(height: 10),
-              Divider(thickness: 1, color: primaryColor),
+              Divider(thickness: 1, color: PeerPALAppColor.primaryColor),
               SizedBox(height: 10),
               CustomTableHeader(heading: "PERSÖNLICHE DATEN"),
               CustomTableRow(

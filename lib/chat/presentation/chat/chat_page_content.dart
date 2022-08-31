@@ -165,7 +165,7 @@ class ChatPageContent extends StatelessWidget {
         color: Colors.white,
         border: Border(
           top: BorderSide(
-            color: secondaryColor,
+            color: PeerPALAppColor.secondaryColor,
             width: 1.0,
           ),
         ),
@@ -194,11 +194,13 @@ class ChatPageContent extends StatelessWidget {
                     const EdgeInsets.only(left: 20, top: 30, right: 20),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: primaryColor, width: 3.0),
+                  borderSide: BorderSide(
+                      color: PeerPALAppColor.primaryColor, width: 3.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: primaryColor, width: 3.0),
+                  borderSide: BorderSide(
+                      color: PeerPALAppColor.primaryColor, width: 3.0),
                 ),
                 filled: true,
                 fillColor: Colors.grey[100],
@@ -215,7 +217,7 @@ class ChatPageContent extends StatelessWidget {
                 icon: const Icon(Icons.send, size: 35),
                 onPressed: () => sendChatMessage(chatPartner, chatId,
                     textEditingController.text, "0", context),
-                color: primaryColor,
+                color: PeerPALAppColor.primaryColor,
               ),
             ),
           ),
@@ -268,7 +270,8 @@ class ChatPageContent extends StatelessWidget {
         } else {
           return Center(
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(PeerPALAppColor.primaryColor),
             ),
           );
         }
@@ -289,8 +292,8 @@ class ChatPageContent extends StatelessWidget {
           margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           decoration: BoxDecoration(
             color: isRightAligned
-                ? primaryColor.shade400
-                : secondaryColor.shade400,
+                ? PeerPALAppColor.primaryColor.shade400
+                : PeerPALAppColor.secondaryColor.shade400,
             borderRadius: isRightAligned
                 ? borderRadius
                     .subtract(const BorderRadius.only(topRight: radius))

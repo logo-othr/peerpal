@@ -17,8 +17,10 @@ class CustomActivityHeaderCard extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                top: BorderSide(width: 1, color: secondaryColor),
-                bottom: BorderSide(width: 1, color: secondaryColor))),
+                top:
+                    BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -37,7 +39,7 @@ class CustomActivityHeaderCard extends StatelessWidget {
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       border: new Border.all(
-                        color: primaryColor,
+                        color: PeerPALAppColor.primaryColor,
                         width: 2.0,
                       ),
                     )),

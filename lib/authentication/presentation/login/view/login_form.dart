@@ -98,7 +98,7 @@ class _PasswordForgetTextButton extends StatelessWidget {
                   Navigator.of(context).push<void>(PasswordResetPage.route()),
               child: CustomPeerPALHeading4(
                 'Passwort vergessen?',
-                color: primaryColor,
+                color: PeerPALAppColor.primaryColor,
               ))),
     );
   }

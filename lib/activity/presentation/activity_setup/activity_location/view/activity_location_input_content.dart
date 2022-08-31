@@ -74,11 +74,12 @@ class LocationInputContent extends StatelessWidget {
                           ? Column(
                               children: [
                                 Icon(Icons.location_on,
-                                    color: secondaryColor, size: 60),
+                                    color: PeerPALAppColor.secondaryColor,
+                                    size: 60),
                                 SizedBox(height: 20),
                                 CustomPeerPALHeading2(
                                   "Es wurde noch kein\nOrt ausgewählt",
-                                  color: secondaryColor,
+                                  color: PeerPALAppColor.secondaryColor,
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -285,7 +286,7 @@ class _LocationListItemState extends State<_LocationListItem> {
                 padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
                 child: Icon(
                   Icons.place,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                   size: 30,
                 ),
               ),
@@ -296,8 +297,9 @@ class _LocationListItemState extends State<_LocationListItem> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                              bottom:
-                                  BorderSide(width: 1, color: secondaryColor))),
+                              bottom: BorderSide(
+                                  width: 1,
+                                  color: PeerPALAppColor.secondaryColor))),
                       height: 50,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -382,7 +384,7 @@ class _LocationSearchListItem extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.place,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                 ),
               ),
               Expanded(
@@ -390,7 +392,9 @@ class _LocationSearchListItem extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border(
-                          bottom: BorderSide(width: 1, color: secondaryColor))),
+                          bottom: BorderSide(
+                              width: 1,
+                              color: PeerPALAppColor.secondaryColor))),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
                     child: Row(

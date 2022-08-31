@@ -38,11 +38,11 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
             border: Border.all(
                 width: widget.isOwnCreatedActivity ? 2 : 1,
                 color: widget.isOwnCreatedActivity
-                    ? primaryColor
-                    : secondaryColor),
+                    ? PeerPALAppColor.primaryColor
+                    : PeerPALAppColor.secondaryColor),
             boxShadow: [
               BoxShadow(
-                color: secondaryColor,
+                color: PeerPALAppColor.secondaryColor,
                 blurRadius: 2.0,
                 spreadRadius: 0.0,
                 offset: Offset(2.0, 2.0), // shadow direction: bottom right
@@ -60,8 +60,8 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                             bottom: BorderSide(
                                 width: widget.isOwnCreatedActivity ? 2 : 1,
                                 color: widget.isOwnCreatedActivity
-                                    ? primaryColor
-                                    : secondaryColor))),
+                                    ? PeerPALAppColor.primaryColor
+                                    : PeerPALAppColor.secondaryColor))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -83,7 +83,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                 decoration: new BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: new Border.all(
-                                    color: primaryColor,
+                                    color: PeerPALAppColor.primaryColor,
                                     width: 2.0,
                                   ),
                                 )),
@@ -94,7 +94,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           child: Text(
                             widget.activity.name!,
                             style: TextStyle(
-                              color: primaryColor,
+                              color: PeerPALAppColor.primaryColor,
                               fontSize: MediaQuery.of(context).size.width / 20,
                             ),
                             maxLines: 2,
@@ -108,7 +108,7 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                                         const EdgeInsets.fromLTRB(0, 0, 20, 0),
                                     child: Icon(
                                       Icons.edit,
-                                      color: primaryColor,
+                                      color: PeerPALAppColor.primaryColor,
                                       size: 30,
                                     ),
                                   )
@@ -127,8 +127,8 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                           bottom: BorderSide(
                               width: widget.isOwnCreatedActivity ? 2 : 1,
                               color: widget.isOwnCreatedActivity
-                                  ? primaryColor
-                                  : secondaryColor))),
+                                  ? PeerPALAppColor.primaryColor
+                                  : PeerPALAppColor.secondaryColor))),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Column(
@@ -195,13 +195,13 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                       return ListTile(
                           title: _expanded
                               ? CustomPeerPALHeading3(
-                                  text: 'Beschreibung ausblenden',
-                                  color: primaryColor,
+                            text: 'Beschreibung ausblenden',
+                                  color: PeerPALAppColor.primaryColor,
                                   fontWeight: FontWeight.bold,
                                 )
                               : CustomPeerPALHeading3(
-                                  text: 'Beschreibung anzeigen',
-                                  color: primaryColor,
+                            text: 'Beschreibung anzeigen',
+                                  color: PeerPALAppColor.primaryColor,
                                   fontWeight: FontWeight.bold,
                                 ));
                     },

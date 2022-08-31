@@ -107,8 +107,10 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                top: BorderSide(width: 1, color: secondaryColor),
-                bottom: BorderSide(width: 1, color: secondaryColor))),
+                top:
+                    BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: Column(
           children: [
             CustomCupertinoSearchBar(
@@ -168,8 +170,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         height: 90,
         decoration: BoxDecoration(
             color: Colors.grey[100],
-            border:
-                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+            border: Border(
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,8 +261,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             decoration: BoxDecoration(
                 color: Colors.grey[100],
                 border: Border(
-                  //top: BorderSide(width: 1, color: secondaryColor),
-                    bottom: BorderSide(width: 1, color: secondaryColor))),
+                    //top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                    bottom: BorderSide(
+                        width: 1, color: PeerPALAppColor.secondaryColor))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
