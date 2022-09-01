@@ -1,4 +1,4 @@
-import 'package:peerpal/tabview/domain/notification_service.dart';
+import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 
 class StartRemoteNotifications {
   NotificationService _notificationService;
