@@ -3,11 +3,12 @@ import 'package:peerpal/app/app.dart';
 import 'package:peerpal/authentication/presentation/presentation.dart';
 import 'package:peerpal/home/view/home_page.dart';
 
-List<Page> onGenerateAppViewPages(AppStatus state, List<Page<dynamic>> pages) {
+List<Page> onGenerateAuthenticationPages(
+    AppAuthenticationStatus state, List<Page<dynamic>> pages) {
   switch (state) {
-    case AppStatus.authenticated:
+    case AppAuthenticationStatus.authenticated:
       return [HomePage.page()];
-    case AppStatus.unauthenticated:
+    case AppAuthenticationStatus.unauthenticated:
     default:
       return [LoginPage.page()];
   }
