@@ -21,7 +21,9 @@ class CustomActivityRequestCard extends StatelessWidget {
       height: 160,
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+          border: Border(
+              bottom:
+                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -47,7 +49,7 @@ class CustomActivityRequestCard extends StatelessWidget {
                         decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           border: new Border.all(
-                            color: primaryColor,
+                            color: PeerPALAppColor.primaryColor,
                             width: 2.0,
                           ),
                         )),
@@ -58,10 +60,12 @@ class CustomActivityRequestCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomPeerPALHeading2(heading!, color: primaryColor),
+                        CustomPeerPALHeading2(heading!,
+                            color: PeerPALAppColor.primaryColor),
                         SizedBox(height: 5),
                         CustomPeerPALHeading3(
-                            color: primaryColor, text: activity!),
+                            color: PeerPALAppColor.primaryColor,
+                            text: activity!),
                         SizedBox(height: 5),
                         Row(
                           children: [

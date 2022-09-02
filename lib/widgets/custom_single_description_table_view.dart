@@ -34,7 +34,7 @@ class CustomSingleDescriptionTable extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
                 child: CustomPeerPALHeading3(
-                    text: heading!, color: secondaryColor),
+                    text: heading!, color: PeerPALAppColor.secondaryColor),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),

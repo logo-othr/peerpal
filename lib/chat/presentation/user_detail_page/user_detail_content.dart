@@ -46,9 +46,12 @@ class UserDetailContent extends StatelessWidget {
                                 color: Colors.white,
                                 border: Border(
                                     top: BorderSide(
-                                        width: 1, color: secondaryColor),
+                                        width: 1,
+                                        color: PeerPALAppColor.secondaryColor),
                                     bottom: BorderSide(
-                                        width: 1, color: secondaryColor))),
+                                        width: 1,
+                                        color:
+                                            PeerPALAppColor.secondaryColor))),
                             child: Center(
                               child: Column(
                                 children: <Widget>[
@@ -85,7 +88,7 @@ class UserDetailContent extends StatelessWidget {
                                                 fit: BoxFit.cover,
                                                 width: 100.0,
                                                 height: 100.0,
-                                                /*  placeholder:
+                                          /*  placeholder:
                                                   (BuildContext context, url) =>
                                                       SizedBox(
                                                 width: 100,
@@ -93,7 +96,7 @@ class UserDetailContent extends StatelessWidget {
                                                 child: Center(
                                                   child:
                                                       CircularProgressIndicator(
-                                                    color: primaryColor,
+                                                    color: PeerPALAppColor.primaryColor,
                                                   ),
                                                 ),
                                               ),*/
@@ -257,7 +260,7 @@ class UserDetailContent extends StatelessWidget {
                                   .get<AppUserRepository>()
                                   .sendFriendRequestToUser(chatPartner);
                             },
-                            color: primaryColor);
+                            color: PeerPALAppColor.primaryColor);
                       }
                     } else {
                       return Container();

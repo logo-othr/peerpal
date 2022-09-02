@@ -42,9 +42,9 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
         compressFormat: ImageCompressFormat.jpg,
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Passe dein Foto an',
-            toolbarColor: primaryColor,
+            toolbarColor: PeerPALAppColor.primaryColor,
             toolbarWidgetColor: Colors.white,
-            activeControlsWidgetColor: primaryColor,
+            activeControlsWidgetColor: PeerPALAppColor.primaryColor,
             initAspectRatio: CropAspectRatioPreset.original,
             hideBottomControls: true,
             showCropGrid: false,
@@ -77,9 +77,9 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
         compressFormat: ImageCompressFormat.jpg,
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Passe dein Foto zurecht',
-            toolbarColor: primaryColor,
+            toolbarColor: PeerPALAppColor.primaryColor,
             toolbarWidgetColor: Colors.white,
-            activeControlsWidgetColor: primaryColor,
+            activeControlsWidgetColor: PeerPALAppColor.primaryColor,
             initAspectRatio: CropAspectRatioPreset.original,
             hideBottomControls: true,
             showCropGrid: false,

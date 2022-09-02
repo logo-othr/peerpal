@@ -57,7 +57,7 @@ class CustomFriendRequestCard extends StatelessWidget {
                               height: 50,
                               child: Center(
                                 child: CircularProgressIndicator(
-                                  color: primaryColor,
+                                  color: PeerPALAppColor.primaryColor,
                                 ),
                               ),
                             ),
@@ -77,7 +77,7 @@ class CustomFriendRequestCard extends StatelessWidget {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: CustomPeerPALHeading3(
-                      color: primaryColor,
+                      color: PeerPALAppColor.primaryColor,
                       text: userInformation.name!,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,

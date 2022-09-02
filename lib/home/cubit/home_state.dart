@@ -42,8 +42,8 @@ class HomeLoaded extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class HomeProfileFlow extends HomeState {
-  const HomeProfileFlow(userInformation) : super(userInformation);
+class ProfileSetupState extends HomeState {
+  const ProfileSetupState(userInformation) : super(userInformation);
 
   @override
   List<Object?> get props => [userInformation];
@@ -53,8 +53,8 @@ class HomeProfileFlow extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class HomeDiscoverFlow extends HomeState {
-  const HomeDiscoverFlow(userInformation) : super(userInformation);
+class DiscoverSetupState extends HomeState {
+  const DiscoverSetupState(userInformation) : super(userInformation);
 
   @override
   List<Object?> get props => [userInformation];
@@ -64,11 +64,10 @@ class HomeDiscoverFlow extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class HomeUserInformationFlowCompleted extends HomeState {
+class SetupCompletedState extends HomeState {
   final int index;
 
-  const HomeUserInformationFlowCompleted(this.index)
-      : super(const PeerPALUser());
+  const SetupCompletedState(this.index) : super(const PeerPALUser());
 
   @override
   List<Object?> get props => [index];

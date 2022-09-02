@@ -17,7 +17,9 @@ class SingleChatCancelFriendRequestButton extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+          border: Border(
+              bottom:
+                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -27,13 +29,13 @@ class SingleChatCancelFriendRequestButton extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 0, 25, 0),
                 child: Icon(
                   Icons.person_add,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                   size: 25,
                 ),
               ),
               CustomPeerPALHeading3(
                 text: buttonText,
-                color: primaryColor,
+                color: PeerPALAppColor.primaryColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),

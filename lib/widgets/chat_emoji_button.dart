@@ -53,7 +53,7 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
           customEmojiHeaderBar(widget.onCancel),
           Divider(
             thickness: 2,
-            color: primaryColor,
+            color: PeerPALAppColor.primaryColor,
           ),
           Expanded(
             child: Container(
@@ -127,7 +127,8 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
                   unselectedLabelColor: Colors.white,
                   labelPadding: EdgeInsets.all(0),
                   indicator: UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 2.0, color: primaryColor)),
+                      borderSide: BorderSide(
+                          width: 2.0, color: PeerPALAppColor.primaryColor)),
                   tabs: [
                     Text(Emojis.activityEmojis.first.code,
                         style: TextStyle(fontSize: 28)),
@@ -156,7 +157,8 @@ class _ChatEmojiKeyboardState extends State<ChatEmojiKeyboard> {
                     children: [
                       Text(
                         'Schließen',
-                        style: TextStyle(color: primaryColor, fontSize: 18),
+                        style: TextStyle(
+                            color: PeerPALAppColor.primaryColor, fontSize: 18),
                       ),
                     ],
                   ),

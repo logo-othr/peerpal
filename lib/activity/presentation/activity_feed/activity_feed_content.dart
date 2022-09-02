@@ -49,7 +49,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
             await Navigator.of(context).push(ActivityWizardFlow.route(
                 activity)); // ToDo: Move to domain layer
           },
-          backgroundColor: primaryColor,
+          backgroundColor: PeerPALAppColor.primaryColor,
           child: Icon(Icons.add),
         ),
         appBar: CustomAppBar(
@@ -131,8 +131,8 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(
-                      top: BorderSide(width: 1, color: secondaryColor),
-                      bottom: BorderSide(width: 1, color: secondaryColor))),
+                      top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                      bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
               child: CustomCupertinoSearchBar(
                 enabled: false,
                   searchBarController: searchFieldController)),*/
@@ -140,8 +140,9 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
           Container(
             decoration: BoxDecoration(
               color: CupertinoColors.systemGrey6,
-              border:
-                  Border(bottom: BorderSide(width: 1, color: secondaryColor)),
+              border: Border(
+                  bottom: BorderSide(
+                      width: 1, color: PeerPALAppColor.secondaryColor)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.4),
@@ -152,23 +153,26 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               ],
             ),
             child:
-            TabBar(indicatorWeight: 3, indicatorColor: primaryColor, tabs: [
-              Tab(
-                  child: Center(
-                child: Text(
-                  "ÖFFENTLICHE AKTIVITÄTEN",
-                  style: TextStyle(
-                      color: primaryColor,
-                      fontSize: MediaQuery.of(context).size.width / 35),
-                ),
-              )),
-              Tab(
-                  child: Center(
+            TabBar(
+                indicatorWeight: 3,
+                indicatorColor: PeerPALAppColor.primaryColor,
+                tabs: [
+                  Tab(
+                      child: Center(
+                    child: Text(
+                      "ÖFFENTLICHE AKTIVITÄTEN",
+                      style: TextStyle(
+                          color: PeerPALAppColor.primaryColor,
+                          fontSize: MediaQuery.of(context).size.width / 35),
+                    ),
+                  )),
+                  Tab(
+                      child: Center(
                 child: Text(
                   "ERSTELLTE AKTIVTÄTEN",
                   style: TextStyle(
-                      color: primaryColor,
-                      fontSize: MediaQuery.of(context).size.width / 35),
+                      color: PeerPALAppColor.primaryColor,
+                          fontSize: MediaQuery.of(context).size.width / 35),
                 ),
               )),
             ]),
@@ -182,8 +186,8 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                            //top: BorderSide(width: 1, color: secondaryColor),
-                              bottom: BorderSide(width: 1, color: secondaryColor))),
+                            //top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                              bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
                       child: CustomCupertinoSearchBar(
                           enabled: false,
                           searchBarController: searchFieldController)),*/
@@ -229,8 +233,8 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border(
-                            //top: BorderSide(width: 1, color: secondaryColor),
-                              bottom: BorderSide(width: 1, color: secondaryColor))),
+                            //top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                              bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
                       child: CustomCupertinoSearchBar(
                           enabled: false,
                           searchBarController: searchFieldController)),*/
@@ -305,7 +309,9 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+          border: Border(
+              bottom:
+                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
       child: isOwnCreatedActivity
           ? TextButton(
               onPressed: () {

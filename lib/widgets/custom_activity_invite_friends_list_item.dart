@@ -27,7 +27,7 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
     if (states.any(interactiveStates.contains)) {
       return Colors.blue;
     }
-    return primaryColor;
+    return PeerPALAppColor.primaryColor;
   }
 
   @override
@@ -36,7 +36,7 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
       fontSize: 18,
       fontWeight: FontWeight.bold,
       fontFamily: 'CustomPeerPalFontFamily',
-      color: primaryColor,
+      color: PeerPALAppColor.primaryColor,
     );
 
     return Padding(
@@ -94,7 +94,7 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         border: new Border.all(
-                          color: primaryColor,
+                          color: PeerPALAppColor.primaryColor,
                           width: 2.0,
                         ),
                       )),

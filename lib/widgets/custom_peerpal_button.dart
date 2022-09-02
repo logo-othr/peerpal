@@ -23,7 +23,7 @@ class CustomPeerPALButton extends StatelessWidget {
         ),
         style: TextButton.styleFrom(
           minimumSize: Size(300, 45),
-          backgroundColor: color == null ? primaryColor : color,
+          backgroundColor: color == null ? PeerPALAppColor.primaryColor : color,
           padding: EdgeInsets.all(0),
         ));
   }

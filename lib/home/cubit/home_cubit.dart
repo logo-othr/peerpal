@@ -18,21 +18,21 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeLoading());
     final home = await _getAuthenticatedUser();
     emit(HomeLoaded(home));
-    loadFlowState();
+    loadCurrentSetupFlowState();
   }
 
-  Future<void> loadFlowState() async {
+  Future<void> loadCurrentSetupFlowState() async {
     PeerPALUser userInformation = await _getAuthenticatedUser();
     if (userInformation.isProfileNotComplete) {
-      emit(HomeProfileFlow(userInformation));
+      emit(ProfileSetupState(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
-      emit(HomeDiscoverFlow(userInformation));
+      emit(DiscoverSetupState(userInformation));
     } else {
-      emit(HomeUserInformationFlowCompleted(0));
+      emit(SetupCompletedState(0));
     }
   }
 
   void indexChanged(int index) {
-    emit(HomeUserInformationFlowCompleted(index));
+    emit(SetupCompletedState(index));
   }
 }

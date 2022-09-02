@@ -56,7 +56,7 @@ class CustomChatListItemUser extends StatelessWidget {
               children: [
                 CustomPeerPALHeading3(
                     text: userInformation.user.name!,
-                    color: primaryColor,
+                    color: PeerPALAppColor.primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
                 SizedBox(height: 5),

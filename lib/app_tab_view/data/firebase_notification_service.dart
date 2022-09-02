@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:peerpal/app_logger.dart';
+import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
-import 'package:peerpal/tabview/domain/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart';
 

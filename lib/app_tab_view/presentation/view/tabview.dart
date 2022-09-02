@@ -14,18 +14,18 @@ import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
 
-class MyTabView extends StatefulWidget {
-  MyTabView({Key? key}) : super(key: key);
+class AppTabView extends StatefulWidget {
+  AppTabView({Key? key}) : super(key: key);
 
   static MaterialPage<void> page() {
-    return MaterialPage<void>(child: MyTabView());
+    return MaterialPage<void>(child: AppTabView());
   }
 
   @override
-  State<MyTabView> createState() => _MyTabViewState();
+  State<AppTabView> createState() => _AppTabViewState();
 }
 
-class _MyTabViewState extends State<MyTabView> {
+class _AppTabViewState extends State<AppTabView> {
   @override
   void initState() {
     super.initState();
@@ -54,7 +54,7 @@ class _MyTabViewState extends State<MyTabView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-      if (state is HomeUserInformationFlowCompleted) {
+      if (state is SetupCompletedState) {
         return Scaffold(
           bottomNavigationBar: CustomTabBar(
               index: state.index,

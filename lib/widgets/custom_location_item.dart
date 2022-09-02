@@ -26,7 +26,9 @@ class LocationItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+          border: Border(
+              bottom:
+                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 20, 8),
         child: Row(

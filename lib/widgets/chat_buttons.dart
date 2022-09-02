@@ -82,8 +82,11 @@ class _ChatButtonsState extends State<ChatButtons> {
                     ? const EdgeInsets.fromLTRB(0, 5, 10, 5)
                     : const EdgeInsets.fromLTRB(0, 5, 5, 5),
                 decoration: BoxDecoration(
-                  color: isEmojiKeyboardVisible ? Colors.white : primaryColor,
-                  border: Border.all(width: 2, color: primaryColor),
+                  color: isEmojiKeyboardVisible
+                      ? Colors.white
+                      : PeerPALAppColor.primaryColor,
+                  border:
+                      Border.all(width: 2, color: PeerPALAppColor.primaryColor),
                   borderRadius: isEmojiKeyboardVisible
                       ? borderRadius.subtract(
                           const BorderRadius.only(bottomRight: radius))
@@ -116,7 +119,7 @@ class _ChatButtonsState extends State<ChatButtons> {
                 duration: const Duration(milliseconds: 0),
                 margin: const EdgeInsets.fromLTRB(0, 5, 10, 5),
                 decoration: BoxDecoration(
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                   borderRadius: borderRadius
                       .subtract(const BorderRadius.only(bottomRight: radius)),
                 ),

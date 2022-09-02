@@ -41,15 +41,17 @@ class CustomSingleCreatorTable extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
                 child: CustomPeerPALHeading3(
-                    text: heading!, color: secondaryColor),
+                    text: heading!, color: PeerPALAppColor.secondaryColor),
               ),
               Container(
                 height: 70,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border(
-                        top: BorderSide(width: 1, color: secondaryColor),
-                        bottom: BorderSide(width: 1, color: secondaryColor))),
+                        top: BorderSide(
+                            width: 1, color: PeerPALAppColor.secondaryColor),
+                        bottom: BorderSide(
+                            width: 1, color: PeerPALAppColor.secondaryColor))),
                 child: TextButton(
                     onPressed: onPressed,
                     child: Row(
@@ -94,9 +96,9 @@ class CustomSingleCreatorTable extends StatelessWidget {
                           child: isOwnCreatedActivity
                               ? Container()
                               : Icon(
-                                  tapIcon,
+                            tapIcon,
                                   size: 30,
-                                  color: primaryColor,
+                                  color: PeerPALAppColor.primaryColor,
                                 ),
                         ),
                       ],

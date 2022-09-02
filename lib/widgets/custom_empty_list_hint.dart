@@ -15,11 +15,11 @@ class CustomEmptyListHint extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: secondaryColor, size: 60),
+        Icon(icon, color: PeerPALAppColor.secondaryColor, size: 60),
         SizedBox(height: 20),
         CustomPeerPALHeading2(
           text!,
-          color: secondaryColor,
+          color: PeerPALAppColor.secondaryColor,
           textAlign: TextAlign.center,
         ),
       ],

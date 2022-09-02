@@ -24,13 +24,14 @@ class CustomTableHeader extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
                 child: CustomPeerPALHeading3(
-                    text: heading!, color: secondaryColor),
+                    text: heading!, color: PeerPALAppColor.secondaryColor),
               ),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     border: Border(
-                        bottom: BorderSide(width: 1, color: secondaryColor))),
+                        bottom: BorderSide(
+                            width: 1, color: PeerPALAppColor.secondaryColor))),
               ),
             ],
           ),

@@ -21,7 +21,7 @@ class _LicensesPageState extends State<LicensesPage> {
           child: Container(
         child: CustomPeerPALHeading2(
           "Lizenzen",
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
         ),
       )),
     );

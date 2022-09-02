@@ -37,15 +37,17 @@ class CustomSingleParticipantsTable extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
                 child: CustomPeerPALHeading3(
-                    text: heading!, color: secondaryColor),
+                    text: heading!, color: PeerPALAppColor.secondaryColor),
               ),
               Container(
                 height: 40,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border(
-                        top: BorderSide(width: 1, color: secondaryColor),
-                        bottom: BorderSide(width: 1, color: secondaryColor))),
+                        top: BorderSide(
+                            width: 1, color: PeerPALAppColor.secondaryColor),
+                        bottom: BorderSide(
+                            width: 1, color: PeerPALAppColor.secondaryColor))),
                 child: TextButton(
                     onPressed: onPressed,
                     child: Row(
@@ -70,9 +72,9 @@ class CustomSingleParticipantsTable extends StatelessWidget {
                         ),
                         isArrowIconVisible
                             ? Icon(
-                                Icons.arrow_forward_ios,
+                          Icons.arrow_forward_ios,
                                 size: 15,
-                                color: secondaryColor,
+                                color: PeerPALAppColor.secondaryColor,
                               )
                             : Container(),
                       ],

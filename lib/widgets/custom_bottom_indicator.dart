@@ -9,7 +9,7 @@ class BottomIndicator extends StatelessWidget {
     return Center(
       child: SizedBox(
         child: RefreshProgressIndicator(
-          backgroundColor: primaryColor,
+          backgroundColor: PeerPALAppColor.primaryColor,
           color: Colors.white,
         ),
       ),

@@ -17,7 +17,7 @@ class CustomCircleListItem extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: active ? Colors.green : primaryColor,
+                color: active ? Colors.green : PeerPALAppColor.primaryColor,
                 width: 2.0,
               ),
             ),
@@ -36,7 +36,7 @@ class CustomCircleListItem extends StatelessWidget {
               child: Container(
             width: 100,
             child: CustomPeerPALHeading4(label,
-                color: active ? Colors.green : primaryColor,
+                color: active ? Colors.green : PeerPALAppColor.primaryColor,
                 alignment: TextAlign.center),
           )),
         ),

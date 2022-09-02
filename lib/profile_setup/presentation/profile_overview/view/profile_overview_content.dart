@@ -46,9 +46,11 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                               color: Colors.white,
                               border: Border(
                                   top: BorderSide(
-                                      width: 1, color: secondaryColor),
+                                      width: 1,
+                                      color: PeerPALAppColor.secondaryColor),
                                   bottom: BorderSide(
-                                      width: 1, color: secondaryColor))),
+                                      width: 1,
+                                      color: PeerPALAppColor.secondaryColor))),
                           child: Center(
                             child: Column(
                               children: <Widget>[
@@ -59,7 +61,7 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: primaryColor,
+                                          color: PeerPALAppColor.primaryColor,
                                           width: 4.0,
                                         ),
                                       ),
@@ -78,7 +80,8 @@ class _ProfileOverviewContentState extends State<ProfileOverviewContent> {
                                       ),
                                       child: CustomPeerPALHeading3(
                                           text: 'Profilbild ändern',
-                                          color: secondaryColor)),
+                                          color:
+                                              PeerPALAppColor.secondaryColor)),
                                 )
                               ],
                             ),

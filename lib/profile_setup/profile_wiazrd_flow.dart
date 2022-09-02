@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/home/routes/routes.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
-class ProfileWizardFlow extends StatelessWidget {
+class ProfileSetupFlow extends StatelessWidget {
   final PeerPALUser flowState;
 
-  const ProfileWizardFlow(this.flowState);
+  const ProfileSetupFlow(this.flowState);
 
   static Route<PeerPALUser> route(PeerPALUser flowSate) {
-    return MaterialPageRoute(builder: (_) => ProfileWizardFlow(flowSate));
+    return MaterialPageRoute(builder: (_) => ProfileSetupFlow(flowSate));
   }
 
   @override

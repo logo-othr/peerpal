@@ -134,15 +134,15 @@ class _DatePickerState extends State<_DatePicker> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: primaryColor,
-                ),
+                  color: PeerPALAppColor.primaryColor,
+            ),
               ),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
-                    color: primaryColor,
-                    width: 3,
-                  )),
+                    color: PeerPALAppColor.primaryColor,
+                width: 3,
+              )),
             ),
           );
         });
@@ -207,13 +207,13 @@ class _TimePickerState extends State<_TimePicker> {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
-          color: primaryColor,
+          color: PeerPALAppColor.primaryColor,
         ),
       ),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
-            color: primaryColor,
+            color: PeerPALAppColor.primaryColor,
             width: 3,
           )),
     );

@@ -67,11 +67,12 @@ class DiscoverLocationContent extends StatelessWidget {
                       ? Column(
                           children: [
                             Icon(Icons.location_on,
-                                color: secondaryColor, size: 60),
+                                color: PeerPALAppColor.secondaryColor,
+                                size: 60),
                             SizedBox(height: 20),
                             CustomPeerPALHeading2(
                               "Es wurde noch kein\nOrt ausgewählt",
-                              color: secondaryColor,
+                              color: PeerPALAppColor.secondaryColor,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -230,7 +231,7 @@ class _LocationListItem extends StatelessWidget {
               children: [
                 Icon(
                   Icons.place,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                   size: 30,
                 ),
                 Expanded(
@@ -300,7 +301,7 @@ class _LocationSearchListItem extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.place,
-                  color: primaryColor,
+                  color: PeerPALAppColor.primaryColor,
                 ),
               ),
               Expanded(
