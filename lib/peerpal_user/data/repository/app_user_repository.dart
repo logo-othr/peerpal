@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/data/cache.dart';
 import 'package:peerpal/data/location.dart';
+import 'package:peerpal/pagination.dart';
 import 'package:peerpal/peerpal_user/data/dto/peerpal_user_dto.dart';
 import 'package:peerpal/peerpal_user/data/dto/private_user_information_dto.dart';
 import 'package:peerpal/peerpal_user/data/dto/public_user_information_dto.dart';
@@ -138,6 +139,29 @@ class AppUserRepository {
     return peerPALUserDTO;
   }
 
+  Query<Map<String, dynamic>> _buildGetMatchingUsersPaginationQuery(
+      {required CollectionReference<Map<String, dynamic>> collection,
+      required PeerPALUser currentUser}) {
+    var query = collection
+        .where(UserDatabaseContract.userAge,
+            isGreaterThanOrEqualTo: currentUser.discoverFromAge)
+        .where(UserDatabaseContract.userAge,
+            isLessThanOrEqualTo: currentUser.discoverToAge);
+
+    if (currentUser.discoverLocations != null &&
+        currentUser.discoverLocations!.isNotEmpty)
+      query = query.where(UserDatabaseContract.discoverLocations,
+          arrayContainsAny:
+              currentUser.discoverLocations!.map((e) => e.place).toList());
+
+    query = query
+        .orderBy(UserDatabaseContract.userAge)
+        .orderBy(UserDatabaseContract.userName)
+        .orderBy(UserDatabaseContract.uid);
+
+    return query;
+  }
+
   Query<Map<String, dynamic>> _buildGetMatchingUsersQuery(
       {required PeerPALUser? lastUser,
       required int limit,
@@ -189,6 +213,38 @@ class AppUserRepository {
 
     query = query.limit(limit);
     return query;
+  }
+
+  Future<PaginatedStream<PeerPALUser>> getMatchingUsersPaginatedStream(
+      String authenticatedUserId,
+      {int limit = 4}) async {
+    PaginatedStream<PeerPALUser>? _userStream;
+
+    var currentPeerPALUser =
+        await getCurrentUserInformation(authenticatedUserId);
+
+    var publicUserCollection =
+        await _firestore.collection(UserDatabaseContract.publicUsers);
+
+    var query = _buildGetMatchingUsersPaginationQuery(
+        collection: publicUserCollection, currentUser: currentPeerPALUser);
+
+    _userStream = PaginatedStream<PeerPALUser>(
+      query: query,
+      docSnapshotToT: convertDocumentSnapshotToObject,
+      initLoadingNumber: limit,
+    );
+    _userStream!.fetchInitialData();
+    return _userStream;
+  }
+
+  Object? convertDocumentSnapshotToObject(DocumentSnapshot document) {
+    var documentData = document.data() as Map<String, dynamic>;
+    var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
+    var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
+    var publicUser = peerPALUserDTO.toDomainObject();
+    if (publicUser.id != _firebaseAuth.currentUser?.uid) return publicUser;
+    return null;
   }
 
   // ToDo: Remove limit

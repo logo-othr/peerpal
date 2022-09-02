@@ -44,6 +44,15 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     }
   }
 
+  ScrollController _controller = ScrollController();
+
+  void scrollFetch() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      _discoverTabBloc.fetchUser();
+    }
+  }
+
   void onSearchFieldTextChange() {
     if (searchFieldController.text.length > 0) {
       setState(() {
@@ -61,6 +70,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     super.initState();
     _discoverTabBloc = context.read<DiscoverTabBloc>();
     _focusNode.addListener(onSearchFieldFocusChange);
+    _controller.addListener(() {
+      scrollFetch();
+    });
     searchFieldController.addListener(onSearchFieldTextChange);
   }
 
@@ -107,8 +119,10 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                top: BorderSide(width: 1, color: secondaryColor),
-                bottom: BorderSide(width: 1, color: secondaryColor))),
+                top:
+                    BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: Column(
           children: [
             CustomCupertinoSearchBar(
@@ -168,8 +182,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         height: 90,
         decoration: BoxDecoration(
             color: Colors.grey[100],
-            border:
-                Border(bottom: BorderSide(width: 1, color: secondaryColor))),
+            border: Border(
+                bottom: BorderSide(
+                    width: 1, color: PeerPALAppColor.secondaryColor))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -225,6 +240,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                 return _buildUser(users[index]);
               },
               itemCount: users.length,
+              controller: _controller,
             ),
           ),
         ),
@@ -258,8 +274,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             decoration: BoxDecoration(
                 color: Colors.grey[100],
                 border: Border(
-                  //top: BorderSide(width: 1, color: secondaryColor),
-                    bottom: BorderSide(width: 1, color: secondaryColor))),
+                    //top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+                    bottom: BorderSide(
+                        width: 1, color: PeerPALAppColor.secondaryColor))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

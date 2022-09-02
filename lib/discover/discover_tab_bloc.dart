@@ -3,20 +3,20 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
+import 'package:peerpal/pagination.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'discover_tab_event.dart';
 part 'discover_tab_state.dart';
 
-const limit = 10;
 
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
   final AuthenticationRepository _authenticationRepository;
-  StreamController<List<PeerPALUser>> _userStreamController =
-      new BehaviorSubject();
+  PaginatedStream<PeerPALUser>? _userStream;
+
+  // StreamController<List<PeerPALUser>> _userStreamController = new BehaviorSubject();
 
   DiscoverTabBloc(this._appUsersRepository, this._authenticationRepository)
       : super(DiscoverTabState());
@@ -24,15 +24,33 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   @override
   Stream<DiscoverTabState> mapEventToState(DiscoverTabEvent event) async* {
     if (event is UsersLoaded) {
-      Stream<List<PeerPALUser>> userStream = _appUsersRepository
+      var currentUser = await _appUsersRepository
+          .getCurrentUserInformation(_authenticationRepository.currentUser.id);
+      try {
+        // Paginated
+        _userStream = await _appUsersRepository.getMatchingUsersPaginatedStream(
+            _authenticationRepository.currentUser.id);
+        yield state.copyWith(
+          searchResults: state.searchResults,
+          status: DiscoverTabStatus.success,
+          userStream: _userStream!.dataStream,
+        );
+        // Original
+        /*
+        Stream<List<PeerPALUser>> userStream = _appUsersRepository
           .getMatchingUsersStream(_authenticationRepository.currentUser.id,
               limit: limit);
       _userStreamController.addStream(userStream);
-      yield state.copyWith(
+
+           yield state.copyWith(
         searchResults: state.searchResults,
         status: DiscoverTabStatus.success,
         userStream: _userStreamController.stream,
       );
+       */
+      } catch (e) {
+        print(e);
+      }
     } else if (event is SearchUser) {
       List<PeerPALUser> searchResults = await _appUsersRepository
           .findUserByName(event.searchQuery.toString().trim());
@@ -78,4 +96,8 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
       return state.copyWith(status: DiscoverTabStatus.error);
     }
   }*/
+
+  void fetchUser() {
+    _userStream?.fetchNextDataRow();
+  }
 }
