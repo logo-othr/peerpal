@@ -14,7 +14,6 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/discover_user_list_item.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
-import 'package:provider/src/provider.dart';
 
 class DiscoverTabView extends StatefulWidget {
   @override

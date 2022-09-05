@@ -10,13 +10,10 @@ import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 part 'discover_tab_event.dart';
 part 'discover_tab_state.dart';
 
-
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
   final AuthenticationRepository _authenticationRepository;
   PaginatedStream<PeerPALUser>? _userStream;
-
-  // StreamController<List<PeerPALUser>> _userStreamController = new BehaviorSubject();
 
   DiscoverTabBloc(this._appUsersRepository, this._authenticationRepository)
       : super(DiscoverTabState());
@@ -24,10 +21,7 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   @override
   Stream<DiscoverTabState> mapEventToState(DiscoverTabEvent event) async* {
     if (event is UsersLoaded) {
-      var currentUser = await _appUsersRepository
-          .getCurrentUserInformation(_authenticationRepository.currentUser.id);
       try {
-        // Paginated
         _userStream = await _appUsersRepository.getMatchingUsersPaginatedStream(
             _authenticationRepository.currentUser.id);
         yield state.copyWith(
@@ -35,19 +29,6 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
           status: DiscoverTabStatus.success,
           userStream: _userStream!.dataStream,
         );
-        // Original
-        /*
-        Stream<List<PeerPALUser>> userStream = _appUsersRepository
-          .getMatchingUsersStream(_authenticationRepository.currentUser.id,
-              limit: limit);
-      _userStreamController.addStream(userStream);
-
-           yield state.copyWith(
-        searchResults: state.searchResults,
-        status: DiscoverTabStatus.success,
-        userStream: _userStreamController.stream,
-      );
-       */
       } catch (e) {
         print(e);
       }
@@ -61,41 +42,6 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
       );
     }
   }
-
-/*Future<DiscoverTabState> lazyLoadUserList(DiscoverTabState state) async {
-    if (state.hasNoMoreUsers) return state;
-    try {
-      if (state.status == DiscoverTabStatus.initial) {
-        final List<PeerPALUser> users =
-            await _appUsersRepository.getMatchingUsers(limit: limit);
-
-        var userList = await _removeCurrentUser(users);
-        return state.copyWith(
-          status: DiscoverTabStatus.success,
-          users: userList,
-          hasNoMoreUsers: false,
-        );
-      }
-
-      final PeerPALUser lastUser = state.users.last;
-      final List<PeerPALUser> users = await _appUsersRepository
-          .getMatchingUsers(last: lastUser, limit: limit);
-      final List<PeerPALUser> updatedUserList = List.of(state.users)
-        ..addAll(users);
-
-      var userList = await _removeCurrentUser(updatedUserList);
-
-      return users.isEmpty
-          ? state.copyWith(hasNoMoreUsers: true)
-          : state.copyWith(
-              status: DiscoverTabStatus.success,
-              users: userList,
-              hasNoMoreUsers: false,
-            );
-    } on Exception {
-      return state.copyWith(status: DiscoverTabStatus.error);
-    }
-  }*/
 
   void fetchUser() {
     _userStream?.fetchNextDataRow();
