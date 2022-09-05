@@ -5,7 +5,7 @@ abstract class DiscoverTabEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class UsersLoaded extends DiscoverTabEvent {}
+class LoadUsers extends DiscoverTabEvent {}
 
 class ReloadUsers extends DiscoverTabEvent {}
 
