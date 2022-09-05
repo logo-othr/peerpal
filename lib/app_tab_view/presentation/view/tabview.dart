@@ -66,7 +66,7 @@ class _AppTabViewState extends State<AppTabView> {
                 create: (context) => DiscoverTabBloc(
                     context.read<AppUserRepository>(),
                     context.read<AuthenticationRepository>())
-                  ..add(UsersLoaded()),
+                  ..add(LoadUsers()),
               ),
               BlocProvider<ChatListBloc>(
                 create: (context) => sl<ChatListBloc>()..add(ChatListLoaded()),
