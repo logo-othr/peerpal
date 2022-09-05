@@ -20,29 +20,45 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
 
   @override
   Stream<DiscoverTabState> mapEventToState(DiscoverTabEvent event) async* {
-    if (event is UsersLoaded) {
-      try {
-        _userStream = await _appUsersRepository.getMatchingUsersPaginatedStream(
-            _authenticationRepository.currentUser.id);
-        yield state.copyWith(
-          searchResults: state.searchResults,
-          status: DiscoverTabStatus.success,
-          userStream: _userStream!.dataStream,
-        );
-      } catch (e) {
-        print(e);
-      }
+    if (event is LoadUsers) {
+      yield await _handleLoadUsersEvent();
     } else if (event is SearchUser) {
-      List<PeerPALUser> searchResults = await _appUsersRepository
-          .findUserByName(event.searchQuery.toString().trim());
-      yield state.copyWith(
-        searchResults: searchResults,
-        status: state.status,
-        userStream: state.userStream,
-      );
+      yield await _handleSearchUserEvent(event: event);
     }
   }
 
+  Future<DiscoverTabState> _handleLoadUsersEvent() async {
+    _userStream = await _appUsersRepository.getMatchingUsersPaginatedStream(
+        _authenticationRepository.currentUser.id);
+    return state.copyWith(
+      searchResults: state.searchResults,
+      status: DiscoverTabStatus.success,
+      userStream: _userStream!.dataStream,
+    );
+  }
+
+  Future<DiscoverTabState> _handleSearchUserEvent(
+      {required SearchUser event}) async {
+    List<PeerPALUser> usersFound =
+        await _searchUser(username: _sanitizeUsername(event.searchQuery));
+    return state.copyWith(
+      searchResults: usersFound,
+      status: state.status,
+      userStream: state.userStream,
+    );
+  }
+
+  // ToDo: usecase
+  String _sanitizeUsername(String userName) {
+    return userName.toString().trim();
+  }
+
+  // ToDo: usecase
+  Future<List<PeerPALUser>> _searchUser({required String username}) async {
+    return await _appUsersRepository.findUserByName(username);
+  }
+
+  // event?
   void fetchUser() {
     _userStream?.fetchNextDataRow();
   }

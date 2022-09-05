@@ -21,64 +21,30 @@ class DiscoverTabView extends StatefulWidget {
 }
 
 class _DiscoverTabViewState extends State<DiscoverTabView> {
-  final searchFieldController = TextEditingController();
+  final _searchFieldController = TextEditingController();
   late DiscoverTabBloc _discoverTabBloc;
-  bool isSearchEmpty = true;
-  bool isSearchFocused = false;
+  bool _isSearchEmpty = true;
+  bool _isSearchFocused = false;
   final _focusNode = FocusNode();
-
   final String _loadUsersErrorMessage =
       'Die Nutzer konnten nicht geladen werden.';
   final String _loadingMessage = "Versuche die Daten zu laden...";
-
-  void onSearchFieldFocusChange() {
-    if (_focusNode.hasFocus) {
-      setState(() {
-        isSearchFocused = true;
-      });
-    } else {
-      setState(() {
-        isSearchFocused = false;
-      });
-    }
-  }
-
-  ScrollController _controller = ScrollController();
-
-  void scrollFetch() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      _discoverTabBloc.fetchUser();
-    }
-  }
-
-  void onSearchFieldTextChange() {
-    if (searchFieldController.text.length > 0) {
-      setState(() {
-        isSearchEmpty = false;
-      });
-    } else {
-      setState(() {
-        isSearchEmpty = true;
-      });
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     _discoverTabBloc = context.read<DiscoverTabBloc>();
-    _focusNode.addListener(onSearchFieldFocusChange);
+    _focusNode.addListener(_onSearchFieldFocusChange);
     _controller.addListener(() {
-      scrollFetch();
+      _scrollFetch();
     });
-    searchFieldController.addListener(onSearchFieldTextChange);
+    _searchFieldController.addListener(_onSearchFieldTextChange);
   }
 
   @override
   void dispose() {
     super.dispose();
-    searchFieldController.dispose();
+    _searchFieldController.dispose();
   }
 
   @override
@@ -99,7 +65,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                 return Column(
                   children: [
                     _buildSearchBar(),
-                    isSearchEmpty
+                    _isSearchEmpty
                         ? buildDiscoverStream()
                         : _buildSearchResult(),
                   ],
@@ -128,8 +94,8 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
                 focusNode: _focusNode,
                 enabled: true,
                 heading: 'Personensuche',
-                searchBarController: this.searchFieldController),
-            isSearchEmpty ? Container() : _buildSearchButton(),
+                searchBarController: this._searchFieldController),
+            _isSearchEmpty ? Container() : _buildSearchButton(),
           ],
         ));
   }
@@ -205,7 +171,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         text: "Suchen",
         onPressed: () async => {
           _discoverTabBloc
-              .add(SearchUser(searchFieldController.text.toString()))
+              .add(SearchUser(_searchFieldController.text.toString()))
         },
       ),
     );
@@ -243,7 +209,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             ),
           ),
         ),
-        isSearchFocused ? Container() : _buildChangeDiscoverCriteriaButton()
+        _isSearchFocused ? Container() : _buildChangeDiscoverCriteriaButton()
       ],
     );
   }
@@ -273,7 +239,6 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             decoration: BoxDecoration(
                 color: Colors.grey[100],
                 border: Border(
-                    //top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
                     bottom: BorderSide(
                         width: 1, color: PeerPALAppColor.secondaryColor))),
             child: Column(
@@ -292,5 +257,38 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         const Center(child: Text('Es konnten keine Nutzer gefunden werden')),
       ],
     );
+  }
+
+  void _onSearchFieldFocusChange() {
+    if (_focusNode.hasFocus) {
+      setState(() {
+        _isSearchFocused = true;
+      });
+    } else {
+      setState(() {
+        _isSearchFocused = false;
+      });
+    }
+  }
+
+  ScrollController _controller = ScrollController();
+
+  void _scrollFetch() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      _discoverTabBloc.fetchUser();
+    }
+  }
+
+  void _onSearchFieldTextChange() {
+    if (_searchFieldController.text.length > 0) {
+      setState(() {
+        _isSearchEmpty = false;
+      });
+    } else {
+      setState(() {
+        _isSearchEmpty = true;
+      });
+    }
   }
 }
