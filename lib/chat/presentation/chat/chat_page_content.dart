@@ -43,11 +43,6 @@ class ChatPageContent extends StatelessWidget {
       print("Focus: ${_focus.hasFocus.toString()}");
     });
     return Scaffold(
-/*      appBar: CustomAppBar(
-        'Chat',
-        hasBackButton: true,
-      ),*/
-      // extendBodyBehindAppBar: true,
       body: SafeArea(
         child:
             BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
@@ -56,7 +51,6 @@ class ChatPageContent extends StatelessWidget {
           } else if (state is ChatPageLoading) {
             return Column(
               children: [
-                // ToDo: verify that state cast is correctly used
                 chatHeader(context, state.chatPartner),
                 _FriendRequestButton(chatPartner: state.chatPartner),
               ],
@@ -64,16 +58,12 @@ class ChatPageContent extends StatelessWidget {
           } else if (state is ChatPageChatExists) {
             return Column(
               children: [
-                // ToDo: verify that state cast is correctly used
                 chatHeader(context, state.chatPartner),
                 _FriendRequestButton(chatPartner: state.chatPartner),
                 buildChatMessages(context, state),
                 (!state.userChat.chat.chatRequestAccepted &&
                         state.userChat.chat.startedBy != state.appUser.id)
-                    ? Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
-                        child: _showChatRequestButtons(context),
-                      )
+                    ? _ChatRequestAcceptDenyButtons(context)
                     : StreamBuilder<int>(
                         stream: sl<ChatRepository>()
                             .messageCountForChat(state.userChat.chat.chatId),
@@ -156,7 +146,6 @@ class ChatPageContent extends StatelessWidget {
         },
         child: SingleChatHeader(name: user.name, urlAvatar: user.imagePath));
   }
-
 
   Widget singleChatTextFormField(
       PeerPALUser chatPartner, String? chatId, context) {
@@ -339,36 +328,39 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _showChatRequestButtons(BuildContext context) {
+  Widget _ChatRequestAcceptDenyButtons(BuildContext context) {
     // ToDo: dispatch event instead of calling the repository manually
     ChatPageBloc bloc = context.read<ChatPageBloc>();
     ChatPageChatExists currentState = bloc.state as ChatPageChatExists;
-    return Container(
-      child: Column(
-        children: [
-          CustomPeerPALButton(
-              text: "Annehmen",
-              onPressed: () {
-                context.read<ChatRepository>().sendChatRequestResponse(
-                    currentUserId,
-                    currentState.chatPartner.id!,
-                    true,
-                    currentState.userChat.chat.chatId);
-                Navigator.pop(context);
-              }),
-          SizedBox(height: 8),
-          CustomPeerPALButton(
-              text: "Ablehnen",
-              onPressed: () {
-                context.read<ChatRepository>().sendChatRequestResponse(
-                    currentUserId,
-                    currentState.chatPartner.id!,
-                    false,
-                    currentState.userChat.chat.chatId);
-                // context.read<ChatListBloc>().add(ChatListLoaded());
-                Navigator.pop(context);
-              }),
-        ],
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
+      child: Container(
+        child: Column(
+          children: [
+            CustomPeerPALButton(
+                text: "Annehmen",
+                onPressed: () {
+                  context.read<ChatRepository>().sendChatRequestResponse(
+                      currentUserId,
+                      currentState.chatPartner.id!,
+                      true,
+                      currentState.userChat.chat.chatId);
+                  Navigator.pop(context);
+                }),
+            SizedBox(height: 8),
+            CustomPeerPALButton(
+                text: "Ablehnen",
+                onPressed: () {
+                  context.read<ChatRepository>().sendChatRequestResponse(
+                      currentUserId,
+                      currentState.chatPartner.id!,
+                      false,
+                      currentState.userChat.chat.chatId);
+                  // context.read<ChatListBloc>().add(ChatListLoaded());
+                  Navigator.pop(context);
+                }),
+          ],
+        ),
       ),
     );
   }

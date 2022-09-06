@@ -21,9 +21,6 @@ class ChatPage extends StatelessWidget {
   const ChatPage({required this.userId, this.userChat, Key? key})
       : super(key: key);
 
-  /* static MaterialPage<void> page(UserChat userChat) {
-    return MaterialPage<void>(child: ChatPage(userId));
-  }*/
 
   @override
   Widget build(BuildContext context) {

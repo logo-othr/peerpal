@@ -57,54 +57,56 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   Stream<ChatPageState> mapEventToState(ChatPageEvent event) async* {
     try {
       if (event is LoadChatPage) {
-        PeerPALUser chatPartner =
-            await appUserRepository.getUserInformation(chatPartnerId);
-        yield ChatPageLoading(chatPartner: chatPartner);
-        if (event.userChat == null) {
-          // ToDo: Use streamcontroller
-          yield ChatPageChatNotExists(
-              chatPartner: chatPartner, appUser: await getAuthenticatedUser());
-          Stream<List<Chat>> chatStream = getChatsForUser();
-          Stream<List<UserChat>> userChatStream =
-              getUserChatForChat(chatStream, false);
-
-          await for (List<UserChat> chats in userChatStream) {
-            UserChat? currentChat = null;
-            for (UserChat chat in chats) {
-              if (chat.user.id == chatPartnerId) currentChat = chat;
-            }
-            if (currentChat != null) {
-              Stream<List<ChatMessage>> _chatMessageStream =
-                  getMessagesForChat(currentChat);
-              // _chatMessageStreamController.addStream(_chatMessageStream);
-
-              yield ChatPageChatExists(
-                  chatPartner: chatPartner,
-                  messages: _chatMessageStream,
-                  // _chatMessageStreamController.stream,
-                  userId: this.chatPartnerId,
-                  userChat: currentChat,
-                  appUser: await getAuthenticatedUser());
-            }
-          }
-        } else {
-          Stream<List<ChatMessage>> _chatMessageStream =
-              getMessagesForChat(event.userChat!);
-          _chatMessageStreamController.addStream(_chatMessageStream);
-
-          yield ChatPageChatExists(
-              chatPartner: chatPartner,
-              messages: _chatMessageStreamController.stream,
-              userId: this.chatPartnerId,
-              userChat: event.userChat!,
-              appUser: await getAuthenticatedUser());
-        }
+        yield* handleLoadChatPageEvent(event);
       } else if (event is SendChatRequestResponseButtonPressed) {
         await sendChatRequestResponse(authenticationRepository.currentUser.id,
             chatPartnerId, event.response, event.chatId);
       }
     } on Exception {
       yield ChatPageError(message: "Fehler beim laden des Chats");
+    }
+  }
+
+  Stream<ChatPageState> handleLoadChatPageEvent(LoadChatPage event) async* {
+    PeerPALUser chatPartner =
+        await appUserRepository.getUserInformation(chatPartnerId);
+    yield ChatPageLoading(chatPartner: chatPartner);
+    if (event.userChat == null) {
+      // ToDo: Use streamcontroller
+      yield ChatPageChatNotExists(
+          chatPartner: chatPartner, appUser: await getAuthenticatedUser());
+      Stream<List<Chat>> chatStream = getChatsForUser();
+      Stream<List<UserChat>> userChatStream =
+          getUserChatForChat(chatStream, false);
+
+      await for (List<UserChat> chats in userChatStream) {
+        UserChat? currentChat = null;
+        for (UserChat chat in chats) {
+          if (chat.user.id == chatPartnerId) currentChat = chat;
+        }
+        if (currentChat != null) {
+          Stream<List<ChatMessage>> _chatMessageStream =
+              getMessagesForChat(currentChat);
+
+          yield ChatPageChatExists(
+              chatPartner: chatPartner,
+              messages: _chatMessageStream,
+              userId: this.chatPartnerId,
+              userChat: currentChat,
+              appUser: await getAuthenticatedUser());
+        }
+      }
+    } else {
+      Stream<List<ChatMessage>> _chatMessageStream =
+          getMessagesForChat(event.userChat!);
+      _chatMessageStreamController.addStream(_chatMessageStream);
+
+      yield ChatPageChatExists(
+          chatPartner: chatPartner,
+          messages: _chatMessageStreamController.stream,
+          userId: this.chatPartnerId,
+          userChat: event.userChat!,
+          appUser: await getAuthenticatedUser());
     }
   }
 
