@@ -105,7 +105,7 @@ class ChatPageContent extends StatelessWidget {
                         }),
               ],
             );
-          } else if (state is ChatPageChatNotExists) {
+          } else if (state is ChatDoesNotExistWaitingForFirstMessage) {
             return Column(
               children: [
                 // ToDo: verify that state cast is correctly used
