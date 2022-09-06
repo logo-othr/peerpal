@@ -55,7 +55,7 @@ class ChatPageContent extends StatelessWidget {
                 _FriendRequestButton(chatPartner: state.chatPartner),
               ],
             );
-          } else if (state is ChatPageChatExists) {
+          } else if (state is ChatLoaded) {
             return Column(
               children: [
                 chatHeader(context, state.chatPartner),
@@ -105,7 +105,7 @@ class ChatPageContent extends StatelessWidget {
                         }),
               ],
             );
-          } else if (state is ChatDoesNotExistWaitingForFirstMessage) {
+          } else if (state is WaitingForChatOrFirstMessage) {
             return Column(
               children: [
                 // ToDo: verify that state cast is correctly used
@@ -229,7 +229,7 @@ class ChatPageContent extends StatelessWidget {
     } else {}
   }
 
-  Widget buildChatMessages(BuildContext context, ChatPageChatExists state) {
+  Widget buildChatMessages(BuildContext context, ChatLoaded state) {
     return Flexible(
         child: StreamBuilder<List<ChatMessage>>(
       stream: state.messages,
@@ -331,7 +331,7 @@ class ChatPageContent extends StatelessWidget {
   Widget _ChatRequestAcceptDenyButtons(BuildContext context) {
     // ToDo: dispatch event instead of calling the repository manually
     ChatPageBloc bloc = context.read<ChatPageBloc>();
-    ChatPageChatExists currentState = bloc.state as ChatPageChatExists;
+    ChatLoaded currentState = bloc.state as ChatLoaded;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
       child: Container(

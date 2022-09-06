@@ -21,7 +21,7 @@ class ChatPageLoading extends ChatPageState {
   List<Object?> get props => [chatPartner];
 }
 
-class ChatPageChatExists extends ChatPageState {
+class ChatLoaded extends ChatPageState {
   final PeerPALUser chatPartner; // ToDo: Remove chatPartner?
   final Stream<List<ChatMessage>> messages;
   final String userId;
@@ -31,7 +31,7 @@ class ChatPageChatExists extends ChatPageState {
   @override
   List<Object?> get props => [chatPartner, messages, userId, userChat, appUser];
 
-  ChatPageChatExists(
+  ChatLoaded(
       {required this.chatPartner,
       required this.messages,
       required this.userId,
@@ -39,14 +39,14 @@ class ChatPageChatExists extends ChatPageState {
       required this.appUser});
 }
 
-class ChatDoesNotExistWaitingForFirstMessage extends ChatPageState {
+class WaitingForChatOrFirstMessage extends ChatPageState {
   final PeerPALUser chatPartner;
   final PeerPALUser appUser;
 
   @override
   List<Object?> get props => [chatPartner, appUser];
 
-  ChatDoesNotExistWaitingForFirstMessage(
+  WaitingForChatOrFirstMessage(
       {required this.chatPartner, required this.appUser});
 }
 
