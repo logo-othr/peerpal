@@ -52,14 +52,19 @@ class ChatPageContent extends StatelessWidget {
             return Column(
               children: [
                 _chatHeaderBar(context, state.chatPartner),
-                _FriendRequestButton(chatPartner: state.chatPartner),
+                _FriendRequestButton(
+                  chatPartner: state.chatPartner,
+                  appUserRepository: sl<AppUserRepository>(),
+                ),
               ],
             );
           } else if (state is ChatLoaded) {
             return Column(
               children: [
                 _chatHeaderBar(context, state.chatPartner),
-                _FriendRequestButton(chatPartner: state.chatPartner),
+                _FriendRequestButton(
+                    chatPartner: state.chatPartner,
+                    appUserRepository: sl<AppUserRepository>()),
                 buildChatMessages(context, state),
                 (!state.userChat.chat.chatRequestAccepted &&
                         state.userChat.chat.startedBy != state.appUser.id)
@@ -110,7 +115,9 @@ class ChatPageContent extends StatelessWidget {
               children: [
                 // ToDo: verify that state cast is correctly used
                 _chatHeaderBar(context, state.chatPartner),
-                _FriendRequestButton(chatPartner: state.chatPartner),
+                _FriendRequestButton(
+                    chatPartner: state.chatPartner,
+                    appUserRepository: sl<AppUserRepository>()),
                 Spacer(),
                 ChatButtons(state.appUser.phoneNumber,
                     textEditingController: textEditingController),
@@ -370,58 +377,82 @@ class ChatPageContent extends StatelessWidget {
 
 class _FriendRequestButton extends StatelessWidget {
   final PeerPALUser chatPartner;
+  final AppUserRepository _appUserRepository;
 
-  const _FriendRequestButton({Key? key, required this.chatPartner})
-      : super(key: key);
+  const _FriendRequestButton(
+      {Key? key,
+      required this.chatPartner,
+      required AppUserRepository appUserRepository})
+      : this._appUserRepository = appUserRepository,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<PeerPALUser>>(
-        stream: sl.get<AppUserRepository>().getFriendList(),
-        // ToDo: move to correct layer
-        builder: (context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!
-                .map((e) => e.id)
-                .toList()
-                .contains(chatPartner.id)) {
+        stream: _appUserRepository.getFriendList(),
+        builder:
+            (context, AsyncSnapshot<List<PeerPALUser>> friendListSnapshot) {
+          if (!friendListSnapshot.hasData)
+            return Container();
+          else {
+            if (_chatPartnerIsAFriend(friendListSnapshot, chatPartner)) {
               return Container();
             } else {
-              return StreamBuilder<List<PeerPALUser>>(
-                  stream: sl
-                      .get<AppUserRepository>()
-                      .getSentFriendRequestsFromUser(),
-                  builder:
-                      (context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!
-                          .map((e) => e.id)
-                          .toList()
-                          .contains(chatPartner.id)) {
-                        return SingleChatCancelFriendRequestButton(
-                            buttonText: "Anfrage gesendet",
-                            onPressed: () {
-                              sl
-                                  .get<AppUserRepository>()
-                                  .canceledFriendRequest(chatPartner);
-                            });
-                      } else {
-                        return SingleChatSendFriendRequestButton(
-                            buttonText: "Anfrage senden",
-                            onPressed: () {
-                              sl
-                                  .get<AppUserRepository>()
-                                  .sendFriendRequestToUser(chatPartner);
-                            });
-                      }
-                    } else {
-                      return Container();
-                    }
-                  });
+              return _friendRequestButton();
+            }
+          }
+        });
+  }
+
+  Widget _friendRequestButton() {
+    return StreamBuilder<List<PeerPALUser>>(
+        stream: _appUserRepository.getSentFriendRequestsFromUser(),
+        builder: (context,
+            AsyncSnapshot<List<PeerPALUser>> sentFriendRequestsSnapshot) {
+          if (sentFriendRequestsSnapshot.hasData) {
+            if (_friendRequestPending(
+                sentFriendRequestsSnapshot, chatPartner)) {
+              return _cancelFriendRequestButton();
+            } else {
+              return _sendFriendRequestButton();
             }
           } else {
             return Container();
           }
+        });
+  }
+
+  bool _chatPartnerIsAFriend(
+      AsyncSnapshot<List<PeerPALUser>> friendListSnapshot,
+      PeerPALUser chatPartner) {
+    return friendListSnapshot.data!
+        .map((e) => e.id)
+        .toList()
+        .contains(chatPartner.id);
+  }
+
+  bool _friendRequestPending(
+      AsyncSnapshot<List<PeerPALUser>> friendRequestsSnapshot,
+      PeerPALUser chatPartner) {
+    return friendRequestsSnapshot.data!
+        .map((e) => e.id)
+        .toList()
+        .contains(chatPartner.id);
+  }
+
+  Widget _sendFriendRequestButton() {
+    return SendFriendRequestButton(
+        buttonText: "Anfrage senden",
+        onPressed: () {
+          _appUserRepository.sendFriendRequestToUser(chatPartner);
+        });
+  }
+
+  Widget _cancelFriendRequestButton() {
+    return CancelFriendRequestButton(
+        buttonText: "Anfrage gesendet",
+        onPressed: () {
+          _appUserRepository.canceledFriendRequest(chatPartner);
         });
   }
 }

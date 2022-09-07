@@ -4,9 +4,8 @@ import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 // ignore: must_be_immutable
-class SingleChatSendFriendRequestButton extends StatelessWidget {
-  SingleChatSendFriendRequestButton(
-      {required this.buttonText, required this.onPressed});
+class SendFriendRequestButton extends StatelessWidget {
+  SendFriendRequestButton({required this.buttonText, required this.onPressed});
 
   String buttonText;
   VoidCallback onPressed;
