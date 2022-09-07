@@ -21,31 +21,40 @@ part 'chat_page_event.dart';
 part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
-  GetChatsForUser getChatsForUser;
-  GetMessagesForChat getMessagesForChat;
-  GetUserChatForChat getUserChatForChat;
-  SendChatRequestResponse sendChatRequestResponse;
-  GetAuthenticatedUser getAuthenticatedUser;
-  SendChatMessage sendMessage;
-  String chatPartnerId;
-  AppUserRepository appUserRepository;
-  AuthenticationRepository authenticationRepository;
+  GetChatsForUser _getChatsForUser;
+  GetMessagesForChat _getMessagesForChat;
+  GetUserChatForChat _getUserChatForChat;
+  SendChatRequestResponse _sendChatRequestResponse;
+  GetAuthenticatedUser _getAuthenticatedUser;
+  SendChatMessage _sendMessage;
+  String _chatPartnerId;
+  AppUserRepository _appUserRepository;
+  AuthenticationRepository _authenticationRepository;
   StreamController<List<ChatMessage>> _chatMessageStream =
       new BehaviorSubject();
   StreamController<List<ChatMessage>> _chatMessageStreamController =
       new BehaviorSubject();
 
   ChatPageBloc(
-      {required this.getMessagesForChat,
-      required this.getChatsForUser,
-      required this.getUserChatForChat,
-      required this.sendMessage,
-      required this.sendChatRequestResponse,
-      required this.getAuthenticatedUser,
-      required this.appUserRepository,
-      required this.authenticationRepository,
-      required this.chatPartnerId})
-      : super(ChatPageInitial());
+      {required getMessagesForChat,
+      required getChatsForUser,
+      required getUserChatForChat,
+      required sendMessage,
+      required sendChatRequestResponse,
+      required getAuthenticatedUser,
+      required appUserRepository,
+      required authenticationRepository,
+      required chatPartnerId})
+      : this._getMessagesForChat = getMessagesForChat,
+        this._getChatsForUser = getChatsForUser,
+        this._getUserChatForChat = getUserChatForChat,
+        this._sendMessage = sendMessage,
+        this._sendChatRequestResponse = sendChatRequestResponse,
+        this._getAuthenticatedUser = getAuthenticatedUser,
+        this._appUserRepository = appUserRepository,
+        this._authenticationRepository = authenticationRepository,
+        this._chatPartnerId = chatPartnerId,
+        super(ChatPageInitial());
 
   @override
   Future<void> close() {
@@ -57,66 +66,14 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   Stream<ChatPageState> mapEventToState(ChatPageEvent event) async* {
     try {
       if (event is LoadChatPage) {
-        yield* handleLoadChatPageEvent(event);
+        yield* _handleLoadChatPageEvent(event);
       } else if (event is SendChatRequestResponseButtonPressed) {
-        await sendChatRequestResponse(authenticationRepository.currentUser.id,
-            chatPartnerId, event.response, event.chatId);
+        await _sendChatRequestResponse(_authenticationRepository.currentUser.id,
+            _chatPartnerId, event.response, event.chatId);
       }
     } on Exception {
       yield ChatPageError(message: "Fehler beim laden des Chats");
     }
-  }
-
-  Stream<ChatPageState> handleLoadChatPageEvent(LoadChatPage event) async* {
-    PeerPALUser chatPartner =
-        await appUserRepository.getUserInformation(chatPartnerId);
-    yield ChatPageLoading(chatPartner: chatPartner);
-    if (_chatIsLoaded(event.userChat)) {
-      yield ChatLoaded(
-          chatPartner: chatPartner,
-          messages: _loadChatMessages(event.userChat!),
-          userId: this.chatPartnerId,
-          userChat: event.userChat!,
-          appUser: await getAuthenticatedUser());
-    } else {
-      yield WaitingForChatOrFirstMessage(
-          chatPartner: chatPartner, appUser: await getAuthenticatedUser());
-      yield* _yieldChatLoadedStateWhenChatIsLoaded(chatPartner);
-    }
-  }
-
-  Stream<List<ChatMessage>> _loadChatMessages(UserChat userChat) {
-    Stream<List<ChatMessage>> _chatMessageStream = getMessagesForChat(userChat);
-    _chatMessageStreamController.addStream(_chatMessageStream);
-    return _chatMessageStreamController.stream;
-  }
-
-  Stream<ChatLoaded> _yieldChatLoadedStateWhenChatIsLoaded(
-      PeerPALUser chatPartner) async* {
-    Stream<List<Chat>> chatStream =
-        getChatsForUser(); // ToDo: Use streamcontroller
-    Stream<List<UserChat>> userChatStream =
-        getUserChatForChat(chatStream, false);
-    await for (List<UserChat> chats in userChatStream) {
-      UserChat? currentChat = null;
-      for (UserChat chat in chats) {
-        if (chat.user.id == chatPartnerId) currentChat = chat;
-      }
-      if (currentChat != null) {
-        Stream<List<ChatMessage>> _chatMessageStream =
-            getMessagesForChat(currentChat);
-        yield ChatLoaded(
-            chatPartner: chatPartner,
-            messages: _chatMessageStream,
-            userId: this.chatPartnerId,
-            userChat: currentChat,
-            appUser: await getAuthenticatedUser());
-      }
-    }
-  }
-
-  bool _chatIsLoaded(UserChat? userChat) {
-    return userChat != null;
   }
 
   Future<void> sendChatMessage(
@@ -125,11 +82,64 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     String content,
     String type,
   ) async {
-    await sendMessage(
+    await _sendMessage(
       userInformation,
       chatId,
       content,
       type,
     );
+  }
+
+  Stream<ChatPageState> _handleLoadChatPageEvent(LoadChatPage event) async* {
+    PeerPALUser chatPartner =
+        await _appUserRepository.getUserInformation(_chatPartnerId);
+    yield ChatPageLoading(chatPartner: chatPartner);
+    if (_chatIsLoaded(event.userChat)) {
+      yield ChatLoaded(
+          chatPartner: chatPartner,
+          messages: _loadChatMessages(event.userChat!),
+          userId: this._chatPartnerId,
+          userChat: event.userChat!,
+          appUser: await _getAuthenticatedUser());
+    } else {
+      yield WaitingForChatOrFirstMessage(
+          chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
+      yield* _yieldChatLoadedStateWhenChatIsLoaded(chatPartner);
+    }
+  }
+
+  Stream<List<ChatMessage>> _loadChatMessages(UserChat userChat) {
+    Stream<List<ChatMessage>> _chatMessageStream =
+        _getMessagesForChat(userChat);
+    _chatMessageStreamController.addStream(_chatMessageStream);
+    return _chatMessageStreamController.stream;
+  }
+
+  Stream<ChatLoaded> _yieldChatLoadedStateWhenChatIsLoaded(
+      PeerPALUser chatPartner) async* {
+    Stream<List<Chat>> chatStream =
+        _getChatsForUser(); // ToDo: Use streamcontroller
+    Stream<List<UserChat>> userChatStream =
+        _getUserChatForChat(chatStream, false);
+    await for (List<UserChat> chats in userChatStream) {
+      UserChat? currentChat = null;
+      for (UserChat chat in chats) {
+        if (chat.user.id == _chatPartnerId) currentChat = chat;
+      }
+      if (currentChat != null) {
+        Stream<List<ChatMessage>> _chatMessageStream =
+            _getMessagesForChat(currentChat);
+        yield ChatLoaded(
+            chatPartner: chatPartner,
+            messages: _chatMessageStream,
+            userId: this._chatPartnerId,
+            userChat: currentChat,
+            appUser: await _getAuthenticatedUser());
+      }
+    }
+  }
+
+  bool _chatIsLoaded(UserChat? userChat) {
+    return userChat != null;
   }
 }
