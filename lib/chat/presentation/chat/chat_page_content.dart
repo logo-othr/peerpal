@@ -392,14 +392,11 @@ class _FriendRequestButton extends StatelessWidget {
         stream: _appUserRepository.getFriendList(),
         builder:
             (context, AsyncSnapshot<List<PeerPALUser>> friendListSnapshot) {
-          if (!friendListSnapshot.hasData)
+          if (!friendListSnapshot.hasData ||
+              _chatPartnerIsAFriend(friendListSnapshot, chatPartner)) {
             return Container();
-          else {
-            if (_chatPartnerIsAFriend(friendListSnapshot, chatPartner)) {
-              return Container();
-            } else {
-              return _friendRequestButton();
-            }
+          } else {
+            return _friendRequestButton();
           }
         });
   }
