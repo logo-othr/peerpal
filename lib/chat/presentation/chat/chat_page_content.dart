@@ -24,9 +24,9 @@ class ChatPageContent extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   final TextEditingController textEditingController = TextEditingController();
-  FocusNode _focus = FocusNode();
+  final FocusNode _focus = FocusNode();
   final ScrollController listScrollController = ScrollController();
-  var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
   _scrollListener() {
     if (listScrollController.hasClients) {
@@ -51,14 +51,14 @@ class ChatPageContent extends StatelessWidget {
           } else if (state is ChatPageLoading) {
             return Column(
               children: [
-                chatHeader(context, state.chatPartner),
+                _chatHeaderBar(context, state.chatPartner),
                 _FriendRequestButton(chatPartner: state.chatPartner),
               ],
             );
           } else if (state is ChatLoaded) {
             return Column(
               children: [
-                chatHeader(context, state.chatPartner),
+                _chatHeaderBar(context, state.chatPartner),
                 _FriendRequestButton(chatPartner: state.chatPartner),
                 buildChatMessages(context, state),
                 (!state.userChat.chat.chatRequestAccepted &&
@@ -109,7 +109,7 @@ class ChatPageContent extends StatelessWidget {
             return Column(
               children: [
                 // ToDo: verify that state cast is correctly used
-                chatHeader(context, state.chatPartner),
+                _chatHeaderBar(context, state.chatPartner),
                 _FriendRequestButton(chatPartner: state.chatPartner),
                 Spacer(),
                 ChatButtons(state.appUser.phoneNumber,
@@ -131,20 +131,22 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget chatHeader(BuildContext context, PeerPALUser user) {
-    return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserDetailPage(
-                user.id!,
-                hasMessageButton: false,
-              ),
+  Widget _chatHeaderBar(BuildContext context, PeerPALUser user) {
+    return ChatHeaderBar(
+      name: user.name,
+      urlAvatar: user.imagePath,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserDetailPage(
+              user.id!,
+              hasMessageButton: false,
             ),
-          );
-        },
-        child: SingleChatHeader(name: user.name, urlAvatar: user.imagePath));
+          ),
+        );
+      },
+    );
   }
 
   Widget singleChatTextFormField(
