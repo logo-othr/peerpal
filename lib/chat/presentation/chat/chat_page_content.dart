@@ -28,6 +28,31 @@ class ChatPageContent extends StatelessWidget {
   final ScrollController listScrollController = ScrollController();
   final currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
+  @override
+  Widget build(BuildContext context) {
+    _setupListener();
+    return Scaffold(
+      body: SafeArea(
+        child:
+            BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
+          if (state is ChatPageInitial) {
+            return CircularProgressIndicator();
+          } else if (state is ChatPageLoading) {
+            return _chatLoading(context, state);
+          } else if (state is ChatLoaded) {
+            return _chatLoaded(context, state);
+          } else if (state is WaitingForChatOrFirstMessage) {
+            return _waitingForChatOrFristMessage(context, state);
+          } else if (state is ChatPageError) {
+            return _chatPageError(state);
+          } else {
+            return CircularProgressIndicator();
+          }
+        }),
+      ),
+    );
+  }
+
   _scrollListener() {
     if (listScrollController.hasClients) {
       if (listScrollController.offset >=
@@ -36,105 +61,99 @@ class ChatPageContent extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _setupListener() {
     listScrollController.addListener(_scrollListener);
     _focus.addListener(() {
       print("Focus: ${_focus.hasFocus.toString()}");
     });
-    return Scaffold(
-      body: SafeArea(
-        child:
-            BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
-          if (state is ChatPageInitial) {
-            return CircularProgressIndicator();
-          } else if (state is ChatPageLoading) {
-            return Column(
-              children: [
-                _chatHeaderBar(context, state.chatPartner),
-                _FriendRequestButton(
-                  chatPartner: state.chatPartner,
-                  appUserRepository: sl<AppUserRepository>(),
-                ),
-              ],
-            );
-          } else if (state is ChatLoaded) {
-            return Column(
-              children: [
-                _chatHeaderBar(context, state.chatPartner),
-                _FriendRequestButton(
-                    chatPartner: state.chatPartner,
-                    appUserRepository: sl<AppUserRepository>()),
-                buildChatMessages(context, state),
-                (!state.userChat.chat.chatRequestAccepted &&
-                        state.userChat.chat.startedBy != state.appUser.id)
-                    ? _ChatRequestAcceptDenyButtons(context)
-                    : StreamBuilder<int>(
-                        stream: sl<ChatRepository>()
-                            .messageCountForChat(state.userChat.chat.chatId),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return CustomLoadingIndicator(
-                                text: "Lade Nachrichten..");
-                          } else if (snapshot.data == 0) {
-                            return Container(
-                              width: double.infinity,
-                              height: 500,
-                              alignment: Alignment.center,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Der Chat ist nicht mehr vorhanden."),
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  CustomPeerPALButton(
-                                    text: "Zurück",
-                                    onPressed: () => Navigator.pop(context),
-                                  )
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Column(
-                              children: [
-                                ChatButtons(state.appUser.phoneNumber,
-                                    textEditingController:
-                                        textEditingController),
-                                singleChatTextFormField(state.chatPartner,
-                                    state.userChat.chat.chatId, context),
-                              ],
-                            );
-                          }
-                        }),
-              ],
-            );
-          } else if (state is WaitingForChatOrFirstMessage) {
-            return Column(
-              children: [
-                // ToDo: verify that state cast is correctly used
-                _chatHeaderBar(context, state.chatPartner),
-                _FriendRequestButton(
-                    chatPartner: state.chatPartner,
-                    appUserRepository: sl<AppUserRepository>()),
-                Spacer(),
-                ChatButtons(state.appUser.phoneNumber,
-                    textEditingController: textEditingController),
-                singleChatTextFormField(state.chatPartner, null, context),
-              ],
-            );
-          } else if (state is ChatPageError) {
-            return Container(
-              child: Center(
-                child: Text(state.message),
-              ),
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-        }),
+  }
+
+  Widget _chatPageError(ChatPageError state) {
+    return Container(
+      child: Center(
+        child: Text(state.message),
       ),
+    );
+  }
+
+  Widget _waitingForChatOrFristMessage(
+      BuildContext context, WaitingForChatOrFirstMessage state) {
+    return Column(
+      children: [
+        // ToDo: verify that state cast is correctly used
+        _chatHeaderBar(context, state.chatPartner),
+        _FriendRequestButton(
+            chatPartner: state.chatPartner,
+            appUserRepository: sl<AppUserRepository>()),
+        Spacer(),
+        ChatButtons(state.appUser.phoneNumber,
+            textEditingController: textEditingController),
+        messageInputContainer(state.chatPartner, null, context),
+      ],
+    );
+  }
+
+  Widget _chatLoading(BuildContext context, ChatPageLoading state) {
+    return Column(
+      children: [
+        _chatHeaderBar(context, state.chatPartner),
+        _FriendRequestButton(
+          chatPartner: state.chatPartner,
+          appUserRepository: sl<AppUserRepository>(),
+        ),
+      ],
+    );
+  }
+
+  Widget _chatLoaded(BuildContext context, ChatLoaded state) {
+    return Column(
+      children: [
+        _chatHeaderBar(context, state.chatPartner),
+        _FriendRequestButton(
+            chatPartner: state.chatPartner,
+            appUserRepository: sl<AppUserRepository>()),
+        buildChatMessages(context, state),
+        (!state.userChat.chat.chatRequestAccepted &&
+                state.userChat.chat.startedBy != state.appUser.id)
+            ? _ChatRequestAcceptDenyButtons(context)
+            : StreamBuilder<int>(
+                stream: sl<ChatRepository>()
+                    .messageCountForChat(state.userChat.chat.chatId),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CustomLoadingIndicator(text: "Lade Nachrichten..");
+                  } else if (snapshot.data == 0) {
+                    return Container(
+                      width: double.infinity,
+                      height: 500,
+                      alignment: Alignment.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Der Chat ist nicht mehr vorhanden."),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          CustomPeerPALButton(
+                            text: "Zurück",
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        ChatButtons(state.appUser.phoneNumber,
+                            textEditingController: textEditingController),
+                        messageInputContainer(state.chatPartner,
+                            state.userChat.chat.chatId, context),
+                      ],
+                    );
+                  }
+                }),
+      ],
     );
   }
 
@@ -156,18 +175,19 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget singleChatTextFormField(
+  Widget messageInputContainer(
       PeerPALUser chatPartner, String? chatId, context) {
-    return Container(
-      decoration: BoxDecoration(
+    BoxDecoration messageInputContainerDecoration = BoxDecoration(
         color: Colors.white,
         border: Border(
           top: BorderSide(
             color: PeerPALAppColor.secondaryColor,
             width: 1.0,
           ),
-        ),
-      ),
+        ));
+
+    return Container(
+      decoration: messageInputContainerDecoration,
       padding: const EdgeInsets.all(15),
       child: Row(
         children: <Widget>[
