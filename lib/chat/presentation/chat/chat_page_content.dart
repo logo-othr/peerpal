@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
@@ -22,12 +22,14 @@ import 'package:provider/provider.dart';
 
 class ChatPageContent extends StatelessWidget {
   ChatPageContent({
+    required AuthenticationRepository authenticationRepository,
     Key? key,
-  }) : super(key: key);
-  final TextEditingController textEditingController = TextEditingController();
+  })  : _authenticationRepository = authenticationRepository,
+        super(key: key);
+  final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focus = FocusNode();
-  final ScrollController listScrollController = ScrollController();
-  final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final ScrollController _listScrollController = ScrollController();
+  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +57,15 @@ class ChatPageContent extends StatelessWidget {
   }
 
   _scrollListener() {
-    if (listScrollController.hasClients) {
-      if (listScrollController.offset >=
-              listScrollController.position.maxScrollExtent &&
-          !listScrollController.position.outOfRange) {}
+    if (_listScrollController.hasClients) {
+      if (_listScrollController.offset >=
+              _listScrollController.position.maxScrollExtent &&
+          !_listScrollController.position.outOfRange) {}
     }
   }
 
   void _setupListener() {
-    listScrollController.addListener(_scrollListener);
+    _listScrollController.addListener(_scrollListener);
     _focus.addListener(() {
       print("Focus: ${_focus.hasFocus.toString()}");
     });
@@ -87,12 +89,12 @@ class ChatPageContent extends StatelessWidget {
             appUserRepository: sl<AppUserRepository>()),
         Spacer(),
         ChatButtons(state.appUser.phoneNumber,
-            textEditingController: textEditingController),
+            textEditingController: _textEditingController),
         ChatMessageInputField(
-          textEditingController: textEditingController,
+          textEditingController: _textEditingController,
           focus: _focus,
           sendTextMessage: () => sendChatMessage(state.chatPartner, null,
-              textEditingController.text, "0", context),
+              _textEditingController.text, "0", context),
         ),
       ],
     );
@@ -120,20 +122,20 @@ class ChatPageContent extends StatelessWidget {
         _messages(context, state),
         _ChatBottomBar(
           appUser: state.appUser,
-          chatMessageController: textEditingController,
+          chatMessageController: _textEditingController,
           chatPartner: state.chatPartner,
           chatMessageInputField: ChatMessageInputField(
-            textEditingController: textEditingController,
+            textEditingController: _textEditingController,
             focus: _focus,
             sendTextMessage: () => sendChatMessage(
                 state.chatPartner,
                 state.userChat.chat.chatId,
-                textEditingController.text,
+                _textEditingController.text,
                 "0",
                 context),
           ),
           userChat: state.userChat,
-          currentUserId: currentUserId,
+          currentUserId: _authenticationRepository.currentUser.id,
         ),
       ],
     );
@@ -161,7 +163,7 @@ class ChatPageContent extends StatelessWidget {
       String content, String type, BuildContext context) async {
     // type: 0 = text, 1 = image,
     if (content.trim() != '') {
-      textEditingController.clear();
+      _textEditingController.clear();
       await context.read<ChatPageBloc>().sendChatMessage(
             chatPartner,
             chatId,
@@ -196,7 +198,7 @@ class ChatPageContent extends StatelessWidget {
             },
             itemCount: snapshot.data?.length,
             reverse: true,
-            controller: listScrollController,
+            controller: _listScrollController,
           );
         } else {
           return Center(
