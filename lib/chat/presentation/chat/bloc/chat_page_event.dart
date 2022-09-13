@@ -23,7 +23,7 @@ class SendMessageEvent extends ChatPageEvent {
   final PeerPALUser chatPartner;
   final String chatId;
   final String message;
-  final int type;
+  final String type;
 
   SendMessageEvent(
       {required this.chatPartner,
