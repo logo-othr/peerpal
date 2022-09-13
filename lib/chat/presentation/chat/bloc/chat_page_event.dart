@@ -6,15 +6,28 @@ abstract class ChatPageEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadChatPage extends ChatPageEvent {
+class LoadChatPageEvent extends ChatPageEvent {
   final UserChat? userChat;
 
-  LoadChatPage(this.userChat);
+  LoadChatPageEvent(this.userChat);
 }
 
-class SendChatRequestResponseButtonPressed extends ChatPageEvent {
+class SendChatRequestResponseButtonPressedEvent extends ChatPageEvent {
   final bool response;
   final String chatId;
 
-  SendChatRequestResponseButtonPressed(this.response, this.chatId);
+  SendChatRequestResponseButtonPressedEvent(this.response, this.chatId);
+}
+
+class SendMessageEvent extends ChatPageEvent {
+  final PeerPALUser chatPartner;
+  final String chatId;
+  final String message;
+  final int type;
+
+  SendMessageEvent(
+      {required this.chatPartner,
+      required this.chatId,
+      required this.message,
+      required this.type});
 }
