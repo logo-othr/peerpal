@@ -22,14 +22,11 @@ import 'package:provider/provider.dart';
 
 class ChatPageContent extends StatelessWidget {
   ChatPageContent({
-    required AuthenticationRepository authenticationRepository,
     Key? key,
-  })  : _authenticationRepository = authenticationRepository,
-        super(key: key);
+  }) : super(key: key);
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focus = FocusNode();
   final ScrollController _listScrollController = ScrollController();
-  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +132,7 @@ class ChatPageContent extends StatelessWidget {
                 context),
           ),
           userChat: state.userChat,
-          currentUserId: _authenticationRepository.currentUser.id,
+          currentUserId: sl<AuthenticationRepository>().currentUser.id,
         ),
       ],
     );
