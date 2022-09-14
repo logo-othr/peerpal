@@ -92,6 +92,7 @@ class ChatPageContent extends StatelessWidget {
           focus: _focus,
           sendTextMessage: () => sendChatMessage(state.chatPartner, null,
               _textEditingController.text, "0", context),
+          sendImage: () => {},
         ),
       ],
     );
@@ -122,6 +123,7 @@ class ChatPageContent extends StatelessWidget {
           chatMessageController: _textEditingController,
           chatPartner: state.chatPartner,
           chatMessageInputField: ChatMessageInputField(
+            sendImage: () => {},
             textEditingController: _textEditingController,
             focus: _focus,
             sendTextMessage: () => sendChatMessage(
