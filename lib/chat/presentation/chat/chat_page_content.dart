@@ -1,15 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
+import 'package:peerpal/chat/presentation/chat/view/message_list.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
-import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
@@ -26,7 +24,6 @@ class ChatPageContent extends StatelessWidget {
   }) : super(key: key);
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focus = FocusNode();
-  final ScrollController _listScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class ChatPageContent extends StatelessWidget {
             return CircularProgressIndicator();
           } else if (state is ChatPageLoading) {
             return _chatLoading(context, state);
-          } else if (state is ChatLoaded) {
+          } else if (state is ChatLoadedState) {
             return _chatLoaded(context, state);
           } else if (state is WaitingForChatOrFirstMessage) {
             return _waitingForChatOrFirstMessage(context, state);
@@ -53,16 +50,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  _scrollListener() {
-    if (_listScrollController.hasClients) {
-      if (_listScrollController.offset >=
-              _listScrollController.position.maxScrollExtent &&
-          !_listScrollController.position.outOfRange) {}
-    }
-  }
-
   void _setupListener() {
-    _listScrollController.addListener(_scrollListener);
     _focus.addListener(() {
       print("Focus: ${_focus.hasFocus.toString()}");
     });
@@ -110,14 +98,14 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _chatLoaded(BuildContext context, ChatLoaded state) {
+  Widget _chatLoaded(BuildContext context, ChatLoadedState state) {
     return Column(
       children: [
         _chatHeaderBar(context, state.chatPartner),
         _FriendRequestButton(
             chatPartner: state.chatPartner,
             appUserRepository: sl<AppUserRepository>()),
-        _messages(context, state),
+        MessageList(state: state),
         _ChatBottomBar(
           appUser: state.appUser,
           chatMessageController: _textEditingController,
@@ -168,102 +156,6 @@ class ChatPageContent extends StatelessWidget {
         message: content,
         type: type,
       ));
-  }
-
-  Widget _messages(BuildContext context, ChatLoaded state) {
-    return Flexible(
-        child: StreamBuilder<List<ChatMessage>>(
-      stream: state.messages,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.isEmpty) {
-            return Container(
-                height: 100,
-                alignment: Alignment.center,
-                child: Text("Keine Nachrichten gefunden"));
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(10.0),
-            itemBuilder: (context, index) {
-              ChatMessage message = snapshot.data![index];
-              var isAppUserMessage = (message.userId == state.appUser.id);
-              var imageUrl = isAppUserMessage
-                  ? state.appUser.imagePath
-                  : state.chatPartner.imagePath;
-              return buildChatMessage(message, isAppUserMessage, imageUrl!);
-            },
-            itemCount: snapshot.data?.length,
-            reverse: true,
-            controller: _listScrollController,
-          );
-        } else {
-          return Center(
-            child: CustomLoadingIndicator(text: "Lade Daten..."),
-          );
-        }
-      },
-    ));
-  }
-
-  Widget buildChatMessage(
-      ChatMessage chatMessage, bool isRightAligned, String imageUrl) {
-    const radius = Radius.circular(12);
-    const borderRadius = BorderRadius.all(radius);
-    return Row(
-      mainAxisAlignment:
-          isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-          decoration: BoxDecoration(
-            color: isRightAligned
-                ? PeerPALAppColor.primaryColor.shade400
-                : PeerPALAppColor.secondaryColor.shade400,
-            borderRadius: isRightAligned
-                ? borderRadius
-                    .subtract(const BorderRadius.only(topRight: radius))
-                : borderRadius
-                    .subtract(const BorderRadius.only(topLeft: radius)),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                constraints: const BoxConstraints(maxWidth: 220),
-                child: Text(
-                  chatMessage.message,
-                  style: const TextStyle(color: Colors.black, fontSize: 19),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              const SizedBox(width: 15),
-              ClipOval(
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 20,
-                      child: (imageUrl.isEmpty)
-                          ? Icon(
-                              Icons.account_circle,
-                              size: 40.0,
-                              color: Colors.grey,
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              errorWidget: (context, object, stackTrace) {
-                                return const Icon(
-                                  Icons.account_circle,
-                                  size: 40.0,
-                                  color: Colors.grey,
-                                );
-                              },
-                            ))),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }
 
@@ -356,7 +248,7 @@ class _ChatBottomBarState extends State<_ChatBottomBar> {
   Widget _chatRequestReplyButtons(BuildContext context, String currentUserId) {
     // ToDo: dispatch event?
     ChatPageBloc bloc = context.read<ChatPageBloc>();
-    ChatLoaded currentState = bloc.state as ChatLoaded;
+    ChatLoadedState currentState = bloc.state as ChatLoadedState;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
       child: Container(

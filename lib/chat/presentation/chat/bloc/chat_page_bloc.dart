@@ -96,7 +96,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         await _appUserRepository.getUserInformation(_chatPartnerId);
     yield ChatPageLoading(chatPartner: chatPartner);
     if (_chatIsLoaded(event.userChat)) {
-      yield ChatLoaded(
+      yield ChatLoadedState(
           chatPartner: chatPartner,
           messages: _loadChatMessages(event.userChat!),
           userId: this._chatPartnerId,
@@ -116,12 +116,12 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     return _chatMessageStreamController.stream;
   }
 
-  Stream<ChatLoaded> _yieldChatLoadedStateWhenChatIsLoaded(
+  Stream<ChatLoadedState> _yieldChatLoadedStateWhenChatIsLoaded(
       PeerPALUser chatPartner) async* {
     Stream<List<Chat>> chatStream =
-        _getChatsForUser(); // ToDo: Use streamcontroller
+    _getChatsForUser(); // ToDo: Use streamcontroller
     Stream<List<UserChat>> userChatStream =
-        _getUserChatForChat(chatStream, false);
+    _getUserChatForChat(chatStream, false);
     await for (List<UserChat> chats in userChatStream) {
       UserChat? currentChat = null;
       for (UserChat chat in chats) {
@@ -130,7 +130,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       if (currentChat != null) {
         Stream<List<ChatMessage>> _chatMessageStream =
             _getMessagesForChat(currentChat);
-        yield ChatLoaded(
+        yield ChatLoadedState(
             chatPartner: chatPartner,
             messages: _chatMessageStream,
             userId: this._chatPartnerId,
