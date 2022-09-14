@@ -21,7 +21,7 @@ class SendChatRequestResponseButtonPressedEvent extends ChatPageEvent {
 
 class SendMessageEvent extends ChatPageEvent {
   final PeerPALUser chatPartner;
-  final String chatId;
+  final String? chatId;
   final String message;
   final String type;
 
