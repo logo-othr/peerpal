@@ -65,32 +65,33 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   @override
   Stream<ChatPageState> mapEventToState(ChatPageEvent event) async* {
     try {
-      if (event is LoadChatPage) {
+      if (event is LoadChatPageEvent) {
         yield* _handleLoadChatPageEvent(event);
-      } else if (event is SendChatRequestResponseButtonPressed) {
+      } else if (event is SendChatRequestResponseButtonPressedEvent) {
         await _sendChatRequestResponse(_authenticationRepository.currentUser.id,
             _chatPartnerId, event.response, event.chatId);
+      } else if (event is SendMessageEvent) {
+        await _handleSendMessageEvent(event);
       }
     } on Exception {
-      yield ChatPageError(message: "Fehler beim laden des Chats");
+      yield ChatPageError(
+          message: "Es ist ein unbekannter Fehler aufgetreten.");
     }
   }
 
-  Future<void> sendChatMessage(
-    PeerPALUser userInformation,
-    String? chatId,
-    String content,
-    String type,
-  ) async {
-    await _sendMessage(
-      userInformation,
-      chatId,
-      content,
-      type,
-    );
+  Future<void> _handleSendMessageEvent(SendMessageEvent event) async {
+    if (event.message.trim() != '') {
+      await _sendMessage(
+        event.chatPartner,
+        event.chatId,
+        event.message,
+        event.type,
+      );
+    }
   }
 
-  Stream<ChatPageState> _handleLoadChatPageEvent(LoadChatPage event) async* {
+  Stream<ChatPageState> _handleLoadChatPageEvent(
+      LoadChatPageEvent event) async* {
     PeerPALUser chatPartner =
         await _appUserRepository.getUserInformation(_chatPartnerId);
     yield ChatPageLoading(chatPartner: chatPartner);

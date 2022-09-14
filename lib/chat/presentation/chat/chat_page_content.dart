@@ -29,7 +29,6 @@ class ChatPageContent extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focus = FocusNode();
   final ScrollController _listScrollController = ScrollController();
-  final AuthenticationRepository _authenticationRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +158,18 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Future<void> sendChatMessage(PeerPALUser chatPartner, String? chatId,
+  Future<void> sendChatMessage(PeerPALUser chatPartner, String chatId,
       String content, String type, BuildContext context) async {
+    _textEditingController.clear();
+    context.read<ChatPageBloc>()
+      ..add(SendMessageEvent(
+        chatPartner: chatPartner,
+        chatId: chatId,
+        message: content,
+        type: type,
+      ));
     // type: 0 = text, 1 = image,
-    if (content.trim() != '') {
+    /*  if (content.trim() != '') {
       _textEditingController.clear();
       await context.read<ChatPageBloc>().sendChatMessage(
             chatPartner,
@@ -170,7 +177,7 @@ class ChatPageContent extends StatelessWidget {
             content,
             type,
           );
-    } else {}
+    } else {}*/
   }
 
   Widget _messages(BuildContext context, ChatLoaded state) {

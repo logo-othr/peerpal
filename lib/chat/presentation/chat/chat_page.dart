@@ -39,7 +39,7 @@ class ChatPage extends StatelessWidget {
           sendChatRequestResponse:
               SendChatRequestResponse(context.read<ChatRepository>()),
           chatPartnerId: userId,
-        )..add(LoadChatPage(userChat)),
+        )..add(LoadChatPageEvent(userChat)),
         child: ChatPageContent(),
       ),
     );
