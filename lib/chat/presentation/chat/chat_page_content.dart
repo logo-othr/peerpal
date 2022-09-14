@@ -187,7 +187,7 @@ class ChatPageContent extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             itemBuilder: (context, index) {
               ChatMessage message = snapshot.data![index];
-              var isAppUserMessage = message.userId == state.appUser.id;
+              var isAppUserMessage = (message.userId == state.appUser.id);
               var imageUrl = isAppUserMessage
                   ? state.appUser.imagePath
                   : state.chatPartner.imagePath;
@@ -199,10 +199,7 @@ class ChatPageContent extends StatelessWidget {
           );
         } else {
           return Center(
-            child: CircularProgressIndicator(
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(PeerPALAppColor.primaryColor),
-            ),
+            child: CustomLoadingIndicator(text: "Lade Daten..."),
           );
         }
       },

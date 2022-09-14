@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peerpal/data/resources/colors.dart';
 
 class CustomLoadingIndicator extends StatelessWidget {
   const CustomLoadingIndicator({Key? key, required this.text})
@@ -11,7 +12,13 @@ class CustomLoadingIndicator extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(width: 30, height: 30, child: CircularProgressIndicator()),
+          Container(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(PeerPALAppColor.primaryColor),
+              )),
           SizedBox(height: 20),
           Text(text)
         ],
