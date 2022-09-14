@@ -42,7 +42,7 @@ class ChatPageContent extends StatelessWidget {
           } else if (state is ChatLoaded) {
             return _chatLoaded(context, state);
           } else if (state is WaitingForChatOrFirstMessage) {
-            return _waitingForChatOrFristMessage(context, state);
+            return _waitingForChatOrFirstMessage(context, state);
           } else if (state is ChatPageError) {
             return _chatPageError(state);
           } else {
@@ -76,7 +76,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _waitingForChatOrFristMessage(
+  Widget _waitingForChatOrFirstMessage(
       BuildContext context, WaitingForChatOrFirstMessage state) {
     return Column(
       children: [
