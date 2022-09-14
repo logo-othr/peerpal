@@ -168,16 +168,6 @@ class ChatPageContent extends StatelessWidget {
         message: content,
         type: type,
       ));
-    // type: 0 = text, 1 = image,
-    /*  if (content.trim() != '') {
-      _textEditingController.clear();
-      await context.read<ChatPageBloc>().sendChatMessage(
-            chatPartner,
-            chatId,
-            content,
-            type,
-          );
-    } else {}*/
   }
 
   Widget _messages(BuildContext context, ChatLoaded state) {
