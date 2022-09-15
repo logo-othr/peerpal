@@ -35,13 +35,13 @@ class ChatPageContent extends StatelessWidget {
           if (state is ChatPageInitial) {
             return CircularProgressIndicator();
           } else if (state is ChatPageLoading) {
-            return _chatLoading(context, state);
+            return _chatContentLoading(context, state);
           } else if (state is ChatLoadedState) {
-            return _chatLoaded(context, state);
+            return _chatContentLoaded(context, state);
           } else if (state is WaitingForChatOrFirstMessage) {
-            return _waitingForChatOrFirstMessage(context, state);
+            return _chatContentWaitingForChatOrFirstMessage(context, state);
           } else if (state is ChatPageError) {
-            return _chatPageError(state);
+            return _chatContentError(state);
           } else {
             return CircularProgressIndicator();
           }
@@ -56,7 +56,7 @@ class ChatPageContent extends StatelessWidget {
     });
   }
 
-  Widget _chatPageError(ChatPageError state) {
+  Widget _chatContentError(ChatPageError state) {
     return Container(
       child: Center(
         child: Text(state.message),
@@ -64,7 +64,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _waitingForChatOrFirstMessage(
+  Widget _chatContentWaitingForChatOrFirstMessage(
       BuildContext context, WaitingForChatOrFirstMessage state) {
     return Column(
       children: [
@@ -78,7 +78,7 @@ class ChatPageContent extends StatelessWidget {
         ChatMessageInputField(
           textEditingController: _textEditingController,
           focus: _focus,
-          sendTextMessage: () => sendChatMessage(state.chatPartner, null,
+          sendTextMessage: () => _sendChatMessage(state.chatPartner, null,
               _textEditingController.text, "0", context),
           sendImage: () => {},
         ),
@@ -86,7 +86,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _chatLoading(BuildContext context, ChatPageLoading state) {
+  Widget _chatContentLoading(BuildContext context, ChatPageLoading state) {
     return Column(
       children: [
         _chatHeaderBar(context, state.chatPartner),
@@ -98,7 +98,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _chatLoaded(BuildContext context, ChatLoadedState state) {
+  Widget _chatContentLoaded(BuildContext context, ChatLoadedState state) {
     return Column(
       children: [
         _chatHeaderBar(context, state.chatPartner),
@@ -114,7 +114,7 @@ class ChatPageContent extends StatelessWidget {
             sendImage: () => {},
             textEditingController: _textEditingController,
             focus: _focus,
-            sendTextMessage: () => sendChatMessage(
+            sendTextMessage: () => _sendChatMessage(
                 state.chatPartner,
                 state.userChat.chat.chatId,
                 _textEditingController.text,
@@ -146,7 +146,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Future<void> sendChatMessage(PeerPALUser chatPartner, String? chatId,
+  Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
       String content, String type, BuildContext context) async {
     _textEditingController.clear();
     context.read<ChatPageBloc>()
