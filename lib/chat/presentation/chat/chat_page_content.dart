@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
-import 'package:peerpal/chat/presentation/chat/view/chat_bottom_bar.dart';
+import 'package:peerpal/chat/presentation/chat/view/chat_loaded_content.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
-import 'package:peerpal/chat/presentation/chat/view/message_list.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
@@ -33,7 +31,11 @@ class ChatPageContent extends StatelessWidget {
           } else if (state is ChatPageLoading) {
             return _chatContentLoading(context, state);
           } else if (state is ChatLoadedState) {
-            return _chatContentLoaded(context, state);
+            return ChatLoadedContent(
+              state: state,
+              focus: _focus,
+              textEditingController: _textEditingController,
+            );
           } else if (state is WaitingForChatOrFirstMessage) {
             return _chatContentWaitingForChatOrFirstMessage(context, state);
           } else if (state is ChatPageError) {
@@ -94,36 +96,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _chatContentLoaded(BuildContext context, ChatLoadedState state) {
-    return Column(
-      children: [
-        _chatHeaderBar(context, state.chatPartner),
-        FriendRequestButton(
-            chatPartner: state.chatPartner,
-            appUserRepository: sl<AppUserRepository>()),
-        MessageList(state: state),
-        ChatBottomBar(
-          appUser: state.appUser,
-          chatMessageController: _textEditingController,
-          chatPartner: state.chatPartner,
-          chatMessageInputField: ChatMessageInputField(
-            sendImage: () => {},
-            textEditingController: _textEditingController,
-            focus: _focus,
-            sendTextMessage: () => _sendChatMessage(
-                state.chatPartner,
-                state.userChat.chat.chatId,
-                _textEditingController.text,
-                "0",
-                context),
-          ),
-          userChat: state.userChat,
-          currentUserId: sl<AuthenticationRepository>().currentUser.id,
-        ),
-      ],
-    );
-  }
-
+  // ToDo: DRY
   Widget _chatHeaderBar(BuildContext context, PeerPALUser user) {
     return ChatHeaderBar(
       name: user.name,
@@ -142,6 +115,7 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
+  // ToDo: DRY
   Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
       String content, String type, BuildContext context) async {
     _textEditingController.clear();
@@ -154,5 +128,4 @@ class ChatPageContent extends StatelessWidget {
       ));
   }
 }
-
 
