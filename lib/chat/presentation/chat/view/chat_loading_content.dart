@@ -16,22 +16,18 @@ class ChatLoadingContent extends StatelessWidget {
   })  : this._state = state,
         super(key: key);
 
-  Widget _chatHeaderBar(BuildContext context, PeerPALUser user) {
+  Widget _chatHeaderBar(BuildContext context, PeerPALUser chatPartner) {
     return ChatHeaderBar(
-      name: user.name,
-      urlAvatar: user.imagePath,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserDetailPage(
-              user.id!,
-              hasMessageButton: false,
-            ),
-          ),
-        );
-      },
-    );
+        chatPartner: chatPartner,
+        onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserDetailPage(
+                  chatPartner.id!,
+                  hasMessageButton: false,
+                ),
+              ),
+            ));
   }
 
   @override

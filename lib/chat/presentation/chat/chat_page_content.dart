@@ -19,7 +19,7 @@ class ChatPageContent extends StatelessWidget {
       body: SafeArea(
         child:
             BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
-              if (state is ChatPageInitial) {
+          if (state is ChatPageInitial) {
             return CircularProgressIndicator();
           } else if (state is ChatLoadingState) {
             return ChatLoadingContent(state: state);
@@ -58,5 +58,4 @@ class ChatPageContent extends StatelessWidget {
       ),
     );
   }
-
 }

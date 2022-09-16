@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
 class ChatHeaderBar extends StatelessWidget {
-  final String? name;
-  final String? urlAvatar;
+  final PeerPALUser chatPartner;
+
   final VoidCallback? onPressed;
 
   const ChatHeaderBar({
-    required this.name,
-    required this.urlAvatar,
+    required this.chatPartner,
     required this.onPressed,
     Key? key,
   }) : super(key: key);
@@ -45,14 +45,15 @@ class ChatHeaderBar extends StatelessWidget {
                   child: CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 22,
-                      child: (urlAvatar == null || urlAvatar!.isEmpty)
+                      child: (chatPartner.imagePath == null ||
+                              chatPartner.imagePath!.isEmpty)
                           ? Icon(
                               Icons.account_circle,
                               size: 40.0,
                               color: Colors.grey,
                             )
                           : CachedNetworkImage(
-                              imageUrl: urlAvatar!,
+                              imageUrl: chatPartner.imagePath!,
                               errorWidget: (context, object, stackTrace) {
                                 return const Icon(
                                   Icons.account_circle,
@@ -70,7 +71,7 @@ class ChatHeaderBar extends StatelessWidget {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: name!,
+                          text: chatPartner.name!,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

@@ -25,38 +25,6 @@ class WaitingForChatOrFirstMessageContent extends StatelessWidget {
         this._focus = focusNode,
         super(key: key);
 
-  // ToDo: DRY
-  Widget _chatHeaderBar(BuildContext context, PeerPALUser user) {
-    return ChatHeaderBar(
-      name: user.name,
-      urlAvatar: user.imagePath,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserDetailPage(
-              user.id!,
-              hasMessageButton: false,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // ToDo: DRY
-  Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
-      String content, String type, BuildContext context) async {
-    _textEditingController.clear();
-    context.read<ChatPageBloc>()
-      ..add(SendMessageEvent(
-        chatPartner: chatPartner,
-        chatId: chatId,
-        message: content,
-        type: type,
-      ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -77,5 +45,31 @@ class WaitingForChatOrFirstMessageContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _chatHeaderBar(BuildContext context, PeerPALUser chatPartner) {
+    return ChatHeaderBar(
+        chatPartner: chatPartner,
+        onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserDetailPage(
+                  chatPartner.id!,
+                  hasMessageButton: false,
+                ),
+              ),
+            ));
+  }
+
+  Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
+      String content, String type, BuildContext context) async {
+    _textEditingController.clear();
+    context.read<ChatPageBloc>()
+      ..add(SendMessageEvent(
+        chatPartner: chatPartner,
+        chatId: chatId,
+        message: content,
+        type: type,
+      ));
   }
 }
