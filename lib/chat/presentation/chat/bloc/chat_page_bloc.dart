@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
+import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
@@ -80,11 +81,11 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   }
 
   Future<void> _handleSendMessageEvent(SendMessageEvent event) async {
-    if (event.message.trim() != '') {
+    if (event.payload.trim() != '') {
       await _sendMessage(
         event.chatPartner,
         event.chatId,
-        event.message,
+        event.payload,
         event.type,
       );
     }

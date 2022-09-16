@@ -1,3 +1,4 @@
+import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
@@ -10,7 +11,7 @@ class SendChatMessage {
     PeerPALUser chatPartner,
     String? chatId,
     String content,
-    String type,
+    MessageType type,
   ) async {
     return chatRepository.sendChatMessage(chatPartner, chatId, content, type);
   }

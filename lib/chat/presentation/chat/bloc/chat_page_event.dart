@@ -22,12 +22,12 @@ class SendChatRequestResponseButtonPressedEvent extends ChatPageEvent {
 class SendMessageEvent extends ChatPageEvent {
   final PeerPALUser chatPartner;
   final String? chatId;
-  final String message;
-  final String type;
+  final String payload;
+  final MessageType type;
 
   SendMessageEvent(
       {required this.chatPartner,
       required this.chatId,
-      required this.message,
+      required this.payload,
       required this.type});
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
@@ -39,9 +40,10 @@ class WaitingForChatOrFirstMessageContent extends StatelessWidget {
         ChatMessageInputField(
           textEditingController: _textEditingController,
           focus: _focus,
-          sendTextMessage: () => _sendChatMessage(_state.chatPartner, null,
-              _textEditingController.text, "0", context),
-          sendImage: () => {},
+          sendTextMessage: () => _sendChatMessage(
+              _state.chatPartner, null, _textEditingController.text, context),
+          sendImageMessage: () => _sendImageMessage(
+              _state.chatPartner, null, _textEditingController.text, context),
         ),
       ],
     );
@@ -61,15 +63,27 @@ class WaitingForChatOrFirstMessageContent extends StatelessWidget {
             ));
   }
 
-  Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
-      String content, String type, BuildContext context) async {
+  Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
+      String content, BuildContext context) async {
     _textEditingController.clear();
     context.read<ChatPageBloc>()
       ..add(SendMessageEvent(
         chatPartner: chatPartner,
         chatId: chatId,
-        message: content,
-        type: type,
+        payload: content,
+        type: MessageType.image,
+      ));
+  }
+
+  Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
+      String content, BuildContext context) async {
+    _textEditingController.clear();
+    context.read<ChatPageBloc>()
+      ..add(SendMessageEvent(
+        chatPartner: chatPartner,
+        chatId: chatId,
+        payload: content,
+        type: MessageType.text,
       ));
   }
 }

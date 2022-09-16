@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
+import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_bottom_bar.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
@@ -41,15 +42,27 @@ class ChatLoadedContent extends StatelessWidget {
             ));
   }
 
-  Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
-      String content, String type, BuildContext context) async {
+  Future<void> _sendTextMessage(PeerPALUser chatPartner, String? chatId,
+      String content, BuildContext context) async {
     _textEditingController.clear();
     context.read<ChatPageBloc>()
       ..add(SendMessageEvent(
         chatPartner: chatPartner,
         chatId: chatId,
-        message: content,
-        type: type,
+        payload: content,
+        type: MessageType.text,
+      ));
+  }
+
+  Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
+      String content, BuildContext context) async {
+    _textEditingController.clear();
+    context.read<ChatPageBloc>()
+      ..add(SendMessageEvent(
+        chatPartner: chatPartner,
+        chatId: chatId,
+        payload: content,
+        type: MessageType.image,
       ));
   }
 
@@ -67,14 +80,17 @@ class ChatLoadedContent extends StatelessWidget {
           chatMessageController: _textEditingController,
           chatPartner: _state.chatPartner,
           chatMessageInputField: ChatMessageInputField(
-            sendImage: () => {},
-            textEditingController: _textEditingController,
-            focus: _focus,
-            sendTextMessage: () => _sendChatMessage(
+            sendImageMessage: () => _sendImageMessage(
                 _state.chatPartner,
                 _state.userChat.chat.chatId,
                 _textEditingController.text,
-                "0",
+                context),
+            textEditingController: _textEditingController,
+            focus: _focus,
+            sendTextMessage: () => _sendTextMessage(
+                _state.chatPartner,
+                _state.userChat.chat.chatId,
+                _textEditingController.text,
                 context),
           ),
           userChat: _state.userChat,

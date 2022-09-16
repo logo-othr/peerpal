@@ -61,7 +61,7 @@ class FirebaseNotificationService implements NotificationService {
                   "Stacktrace: ${stackTrace.toString()}"));
     }).catchError((error) {
       logger.e(
-          "${REGISTER_DEVICE_TOKEN_ERROR}. Error: ${error.message.toString()}");
+          "${REGISTER_DEVICE_TOKEN_ERROR}. Error: ${error.payload.toString()}");
     });
   }
 

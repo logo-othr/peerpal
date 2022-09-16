@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peerpal/chat/data/dtos/chat_dto.dart';
 import 'package:peerpal/chat/data/dtos/chat_message_dto.dart';
+import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
@@ -50,7 +51,7 @@ class ChatRepositoryFirebase implements ChatRepository {
   }
 
   Future<void> sendChatMessage(PeerPALUser userInformation, String? chatId,
-      String message, String type) async {
+      String message, MessageType type) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
     await FirebaseFirestore.instance.collection('chatNotifications').doc().set({
@@ -58,7 +59,7 @@ class ChatRepositoryFirebase implements ChatRepository {
       'message': message,
       'fromId': currentUserId,
       'toId': userInformation.id,
-      'type': type,
+      'type': type.toUIString,
       'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
     });
   }
