@@ -12,10 +12,10 @@ class ChatPageInitial extends ChatPageState {
   List<Object?> get props => [];
 }
 
-class ChatPageLoading extends ChatPageState {
+class ChatLoadingState extends ChatPageState {
   final PeerPALUser chatPartner;
 
-  ChatPageLoading({required this.chatPartner});
+  ChatLoadingState({required this.chatPartner});
 
   @override
   List<Object?> get props => [chatPartner];

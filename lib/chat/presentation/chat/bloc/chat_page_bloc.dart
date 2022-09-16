@@ -94,7 +94,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       LoadChatPageEvent event) async* {
     PeerPALUser chatPartner =
         await _appUserRepository.getUserInformation(_chatPartnerId);
-    yield ChatPageLoading(chatPartner: chatPartner);
+    yield ChatLoadingState(chatPartner: chatPartner);
     if (_chatIsLoaded(event.userChat)) {
       yield ChatLoadedState(
           chatPartner: chatPartner,

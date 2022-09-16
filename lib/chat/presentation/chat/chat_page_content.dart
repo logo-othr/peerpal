@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_loaded_content.dart';
+import 'package:peerpal/chat/presentation/chat/view/chat_loading_content.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
@@ -10,7 +11,6 @@ import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
-import 'package:provider/provider.dart';
 
 class ChatPageContent extends StatelessWidget {
   ChatPageContent({
@@ -26,10 +26,10 @@ class ChatPageContent extends StatelessWidget {
       body: SafeArea(
         child:
             BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
-          if (state is ChatPageInitial) {
+              if (state is ChatPageInitial) {
             return CircularProgressIndicator();
-          } else if (state is ChatPageLoading) {
-            return _chatContentLoading(context, state);
+          } else if (state is ChatLoadingState) {
+            return ChatLoadingContent(state: state);
           } else if (state is ChatLoadedState) {
             return ChatLoadedContent(
               state: state,
@@ -84,18 +84,6 @@ class ChatPageContent extends StatelessWidget {
     );
   }
 
-  Widget _chatContentLoading(BuildContext context, ChatPageLoading state) {
-    return Column(
-      children: [
-        _chatHeaderBar(context, state.chatPartner),
-        FriendRequestButton(
-          chatPartner: state.chatPartner,
-          appUserRepository: sl<AppUserRepository>(),
-        ),
-      ],
-    );
-  }
-
   // ToDo: DRY
   Widget _chatHeaderBar(BuildContext context, PeerPALUser user) {
     return ChatHeaderBar(
@@ -128,4 +116,3 @@ class ChatPageContent extends StatelessWidget {
       ));
   }
 }
-
