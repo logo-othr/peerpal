@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_loaded_content.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_loading_content.dart';
-import 'package:peerpal/chat/presentation/chat/view/waiting_for_chat_or_first_message_content.dart';
+import 'package:peerpal/chat/presentation/chat/view/chat_waiting_for_chat_or_first_message_content.dart';
 
 class ChatPageContent extends StatelessWidget {
   ChatPageContent({
