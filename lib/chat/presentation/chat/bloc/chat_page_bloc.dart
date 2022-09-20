@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
@@ -73,6 +74,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
             _chatPartnerId, event.response, event.chatId);
       } else if (event is SendMessageEvent) {
         await _handleSendMessageEvent(event);
+      } else if (event is UploadImageEvent) {
+        yield* _handleUploadImageEvent(event);
       }
     } on Exception {
       yield ChatPageError(
@@ -88,6 +91,25 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         event.payload,
         event.type,
       );
+    }
+  }
+
+  Stream<ChatPageState> _handleUploadImageEvent(UploadImageEvent event) async* {
+    ChatPageState currentState = state;
+    PeerPALUser chatPartner =
+        await _appUserRepository.getUserInformation(_chatPartnerId);
+    yield ChatLoadingState(chatPartner: chatPartner);
+    if (_chatIsLoaded(event.userChat)) {
+      yield ChatLoadedState(
+          chatPartner: chatPartner,
+          messages: _loadChatMessages(event.userChat!),
+          userId: this._chatPartnerId,
+          userChat: event.userChat!,
+          appUser: await _getAuthenticatedUser());
+    } else {
+      yield WaitingForChatOrFirstMessage(
+          chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
+      yield* _yieldChatLoadedStateWhenChatIsLoaded(chatPartner);
     }
   }
 

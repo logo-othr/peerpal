@@ -50,6 +50,13 @@ class WaitingForChatOrFirstMessage extends ChatPageState {
       {required this.chatPartner, required this.appUser});
 }
 
+class UploadImageState extends ChatPageState {
+  @override
+  List<Object?> get props => [];
+
+  UploadImageState();
+}
+
 class ChatPageError extends ChatPageState {
   final String message;
 

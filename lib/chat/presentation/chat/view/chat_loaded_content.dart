@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
+import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_bottom_bar.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
@@ -12,17 +17,17 @@ import 'package:peerpal/chat/single_chat_header_widget.dart';
 import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatLoadedContent extends StatelessWidget {
   final ChatLoadedState _state;
   final TextEditingController _textEditingController;
   final FocusNode _focus;
 
-  const ChatLoadedContent(
-      {Key? key,
-      required ChatLoadedState state,
-      required TextEditingController textEditingController,
-      required FocusNode focus})
+  const ChatLoadedContent({Key? key,
+    required ChatLoadedState state,
+    required TextEditingController textEditingController,
+    required FocusNode focus})
       : this._state = state,
         this._textEditingController = textEditingController,
         this._focus = focus,
@@ -32,14 +37,14 @@ class ChatLoadedContent extends StatelessWidget {
     return ChatHeaderBar(
         chatPartner: chatPartner,
         onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => UserDetailPage(
-                  chatPartner.id!,
-                  hasMessageButton: false,
-                ),
-              ),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserDetailPage(
+              chatPartner.id!,
+              hasMessageButton: false,
+            ),
+          ),
+        ));
   }
 
   Future<void> _sendTextMessage(PeerPALUser chatPartner, String? chatId,
@@ -54,16 +59,53 @@ class ChatLoadedContent extends StatelessWidget {
       ));
   }
 
+  Future<XFile> pickPictureFromGallery() async {
+    var profilePicture = (await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 1280,
+      maxWidth: 720,
+      imageQuality: 65,
+    ))!;
+    return profilePicture;
+  }
+
   Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
       String content, BuildContext context) async {
-    _textEditingController.clear();
+    var image = await pickPictureFromGallery();
+    String url = await postPicture(image, _state.userChat);
     context.read<ChatPageBloc>()
       ..add(SendMessageEvent(
         chatPartner: chatPartner,
         chatId: chatId,
-        payload: content,
+        payload: url,
         type: MessageType.image,
       ));
+  }
+
+  Future<String> postPicture(XFile? chatImage, UserChat? userChat) async {
+    var uid = Uuid();
+
+    firebase_storage.UploadTask uploadTask;
+    var ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('User-Chat-Image')
+        .child(userChat!.chat.chatId)
+        .child(DateTime.now().millisecondsSinceEpoch.toString())
+        .child('${uid.v4()}.jpg');
+
+    final metadata = firebase_storage.SettableMetadata(
+        contentType: 'image/jpeg',
+        customMetadata: {'file-path': chatImage!.path});
+
+    uploadTask = ref.putFile(File(chatImage.path), metadata);
+
+    var returnURL = '';
+    await Future.value(uploadTask);
+    await ref.getDownloadURL().then((fileURL) {
+      returnURL = fileURL;
+    });
+    print(returnURL);
+    return returnURL;
   }
 
   @override
