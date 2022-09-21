@@ -19,6 +19,12 @@ class SendChatRequestResponseButtonPressedEvent extends ChatPageEvent {
   SendChatRequestResponseButtonPressedEvent(this.response, this.chatId);
 }
 
+class UserChatsUpdatedEvent extends ChatPageEvent {
+  final List<UserChat> chats;
+
+  UserChatsUpdatedEvent(this.chats);
+}
+
 class SendMessageEvent extends ChatPageEvent {
   final PeerPALUser chatPartner;
   final String? chatId;
