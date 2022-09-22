@@ -15,7 +15,7 @@ class FriendRequestsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: BlocProvider(
         create: (_) {
           return FriendRequestsCubit(context.read<AppUserRepository>())
