@@ -93,7 +93,7 @@ class ActivityRepository {
   Future<void> postActivity(Activity activity) async {
     //ToDo: use toJson / toMap
     await FirebaseFirestore.instance
-        .collection('activities')
+        .collection('newActivity')
         .doc(activity.id)
         .set(activity.toJson());
   }
