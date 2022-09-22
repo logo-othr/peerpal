@@ -18,7 +18,7 @@ class UserDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: BlocProvider<UserDetailBloc>(
         create: (context) =>
             UserDetailBloc(userId, context.read<AppUserRepository>())
