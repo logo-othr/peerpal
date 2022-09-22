@@ -20,7 +20,7 @@ class DiscoverActivitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: BlocProvider.value(
         value: DiscoverActivitiesCubit(context.read<AppUserRepository>(),
             context.read<ActivityRepository>(), sl<GetAuthenticatedUser>())
