@@ -11,12 +11,12 @@ import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 
-class WaitingForChatOrFirstMessageContent extends StatelessWidget {
+class WaitingForFirstMessage extends StatelessWidget {
   final WaitingForChatOrFirstMessage _state;
   final TextEditingController _textEditingController;
   final FocusNode _focus;
 
-  const WaitingForChatOrFirstMessageContent({
+  const WaitingForFirstMessage({
     Key? key,
     required WaitingForChatOrFirstMessage state,
     required TextEditingController textEditingController,
@@ -35,16 +35,21 @@ class WaitingForChatOrFirstMessageContent extends StatelessWidget {
             chatPartner: _state.chatPartner,
             appUserRepository: sl<AppUserRepository>()),
         Spacer(),
+        Center(
+            child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Text(
+              "Schreibe eine Nachricht, um ${_state.chatPartner.name} eine Chat-Anfrage zu schicken"),
+        )),
+        Spacer(),
         ChatButtons(_state.appUser.phoneNumber,
             textEditingController: _textEditingController),
         ChatMessageInputField(
-          textEditingController: _textEditingController,
-          focus: _focus,
-          sendTextMessage: () => _sendChatMessage(
-              _state.chatPartner, null, _textEditingController.text, context),
-          sendImageMessage: () => _sendImageMessage(
-              _state.chatPartner, null, _textEditingController.text, context),
-        ),
+            textEditingController: _textEditingController,
+            focus: _focus,
+            sendTextMessage: () => _sendChatMessage(
+                _state.chatPartner, null, _textEditingController.text, context),
+            sendImageMessage: null),
       ],
     );
   }
@@ -61,18 +66,6 @@ class WaitingForChatOrFirstMessageContent extends StatelessWidget {
                 ),
               ),
             ));
-  }
-
-  Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
-      String content, BuildContext context) async {
-    _textEditingController.clear();
-    context.read<ChatPageBloc>()
-      ..add(SendMessageEvent(
-        chatPartner: chatPartner,
-        chatId: chatId,
-        payload: content,
-        type: MessageType.image,
-      ));
   }
 
   Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
