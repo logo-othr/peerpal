@@ -19,7 +19,7 @@ class DiscoverCommunicationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: BlocProvider.value(
         value: DiscoverCommunicationCubit(
             context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
