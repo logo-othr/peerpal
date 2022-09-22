@@ -19,15 +19,16 @@ import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:uuid/uuid.dart';
 
-class ChatLoadedContent extends StatelessWidget {
+class ChatLoaded extends StatelessWidget {
   final ChatLoadedState _state;
   final TextEditingController _textEditingController;
   final FocusNode _focus;
 
-  const ChatLoadedContent({Key? key,
-    required ChatLoadedState state,
-    required TextEditingController textEditingController,
-    required FocusNode focus})
+  const ChatLoaded(
+      {Key? key,
+      required ChatLoadedState state,
+      required TextEditingController textEditingController,
+      required FocusNode focus})
       : this._state = state,
         this._textEditingController = textEditingController,
         this._focus = focus,
