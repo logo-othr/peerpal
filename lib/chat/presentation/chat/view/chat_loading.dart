@@ -7,10 +7,10 @@ import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 
-class ChatLoadingContent extends StatelessWidget {
+class ChatLoading extends StatelessWidget {
   final ChatLoadingState _state;
 
-  const ChatLoadingContent({
+  const ChatLoading({
     Key? key,
     required ChatLoadingState state,
   })  : this._state = state,
