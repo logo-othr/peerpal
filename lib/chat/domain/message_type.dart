@@ -1,6 +1,6 @@
 enum MessageType { text, image }
 
-extension CommunicationTypeExtension on MessageType {
+extension MessageTypeExtension on MessageType {
   String get toUIString {
     switch (this) {
       case MessageType.text:

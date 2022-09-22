@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
@@ -92,27 +93,7 @@ class _MessageListState extends State<MessageList> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (chatMessage.type == MessageType.text)
-                Container(
-                  constraints: const BoxConstraints(maxWidth: 220),
-                  child: Text(
-                    chatMessage.message,
-                    style: const TextStyle(color: Colors.black, fontSize: 19),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              if (chatMessage.type == MessageType.image)
-                Container(
-                  constraints:
-                      const BoxConstraints(maxWidth: 220, maxHeight: 300),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      image: CachedNetworkImageProvider(chatMessage.message),
-                    ),
-                    shape: BoxShape.rectangle,
-                  ),
-                ),
+              _message(chatMessage),
               const SizedBox(width: 15),
               ClipOval(
                   child: CircleAvatar(
@@ -139,5 +120,33 @@ class _MessageListState extends State<MessageList> {
         ),
       ],
     );
+  }
+
+  Widget _message(ChatMessage chatMessage) {
+    if (EnumToString.fromString(MessageType.values, chatMessage.type) ==
+        MessageType.text) {
+      return Container(
+        constraints: const BoxConstraints(maxWidth: 220),
+        child: Text(
+          chatMessage.message,
+          style: const TextStyle(color: Colors.black, fontSize: 19),
+          textAlign: TextAlign.start,
+        ),
+      );
+    } else if (EnumToString.fromString(MessageType.values, chatMessage.type) ==
+        MessageType.image) {
+      return Container(
+        constraints: const BoxConstraints(maxWidth: 220, maxHeight: 300),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.fitHeight,
+            image: CachedNetworkImageProvider(chatMessage.message),
+          ),
+          shape: BoxShape.rectangle,
+        ),
+      );
+    } else {
+      return Text("Fehler beim laden der Nachricht.");
+    }
   }
 }
