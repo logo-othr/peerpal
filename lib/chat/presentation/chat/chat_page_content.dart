@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
-import 'package:peerpal/chat/presentation/chat/view/chat_loaded_content.dart';
-import 'package:peerpal/chat/presentation/chat/view/chat_loading_content.dart';
-import 'package:peerpal/chat/presentation/chat/view/chat_waiting_for_chat_or_first_message_content.dart';
+import 'package:peerpal/chat/presentation/chat/view/chat_loaded.dart';
+import 'package:peerpal/chat/presentation/chat/view/chat_loading.dart';
+import 'package:peerpal/chat/presentation/chat/view/chat_waiting_for_first_message.dart';
 
 class ChatPageContent extends StatelessWidget {
   ChatPageContent({
@@ -22,15 +22,15 @@ class ChatPageContent extends StatelessWidget {
           if (state is ChatPageInitial) {
             return CircularProgressIndicator();
           } else if (state is ChatLoadingState) {
-            return ChatLoadingContent(state: state);
+            return ChatLoading(state: state);
           } else if (state is ChatLoadedState) {
-            return ChatLoadedContent(
+            return ChatLoaded(
               state: state,
               focus: _focus,
               textEditingController: _textEditingController,
             );
           } else if (state is WaitingForChatOrFirstMessage) {
-            return WaitingForChatOrFirstMessageContent(
+            return WaitingForFirstMessage(
               state: state,
               focusNode: _focus,
               textEditingController: _textEditingController,

@@ -5,13 +5,13 @@ class ChatMessageInputField extends StatefulWidget {
   final TextEditingController textEditingController;
   final FocusNode focus;
   final VoidCallback sendTextMessage;
-  final VoidCallback sendImageMessage;
+  final VoidCallback? sendImageMessage;
 
   const ChatMessageInputField(
       {required this.textEditingController,
       required this.focus,
       required this.sendTextMessage,
-      required this.sendImageMessage,
+      this.sendImageMessage,
       Key? key})
       : super(key: key);
 
@@ -71,17 +71,19 @@ class _ChatMessageInputFieldState extends State<ChatMessageInputField> {
             ),
           ),
           const SizedBox(width: 10),
-          Material(
-            color: Colors.white,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: IconButton(
-                icon: const Icon(Icons.add_photo_alternate, size: 35),
-                onPressed: () => widget.sendImageMessage(),
-                color: PeerPALAppColor.primaryColor,
-              ),
-            ),
-          ),
+          widget.sendImageMessage != null
+              ? Material(
+                  color: Colors.white,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.add_photo_alternate, size: 35),
+                      onPressed: () => widget.sendImageMessage!(),
+                      color: PeerPALAppColor.primaryColor,
+                    ),
+                  ),
+                )
+              : Container(),
           Material(
             color: Colors.white,
             child: Container(
