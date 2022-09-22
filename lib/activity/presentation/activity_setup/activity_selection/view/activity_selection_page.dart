@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_selection/cubit/activity_selection_cubit.dart';
 
-//platzhalter
-
 import 'activity_selection_content.dart';
 
 class ActivitySelectionPage extends StatelessWidget {
