@@ -12,7 +12,7 @@ import 'package:peerpal/activity/presentation/joined_activities/activity_joined_
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
-import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';

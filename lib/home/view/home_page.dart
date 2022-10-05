@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app_tab_view/presentation/view/tabview.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
-import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/profile_wiazrd_flow.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';

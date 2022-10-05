@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
-import 'package:peerpal/peerpal_user/domain/usecase/get_user_usecase.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/domain/phone_input_page/models/phonenum_model.dart';
 
 part 'phone_input_state.dart';

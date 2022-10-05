@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 import 'package:peerpal/pagination.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 
 part 'discover_tab_event.dart';
 part 'discover_tab_state.dart';

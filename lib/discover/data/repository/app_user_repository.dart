@@ -8,12 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/data/cache.dart';
 import 'package:peerpal/data/location.dart';
+import 'package:peerpal/discover/data/dto/peerpal_user_dto.dart';
+import 'package:peerpal/discover/data/dto/private_user_information_dto.dart';
+import 'package:peerpal/discover/data/dto/public_user_information_dto.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
 import 'package:peerpal/pagination.dart';
-import 'package:peerpal/peerpal_user/data/dto/peerpal_user_dto.dart';
-import 'package:peerpal/peerpal_user/data/dto/private_user_information_dto.dart';
-import 'package:peerpal/peerpal_user/data/dto/public_user_information_dto.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
-import 'package:peerpal/peerpal_user/enum/communication_type.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 
 class AppUserRepository {

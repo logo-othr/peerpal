@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 import 'package:peerpal/widgets/single_chat_cancel_friend_request_button.dart';
 import 'package:peerpal/widgets/single_chat_send_friend_request_button.dart';
 

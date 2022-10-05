@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 
 part 'activity_overview_state.dart';
 

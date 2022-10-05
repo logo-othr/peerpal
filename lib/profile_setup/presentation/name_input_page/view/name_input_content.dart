@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/domain/name_input_page/models/username_model.dart';
 import 'package:peerpal/profile_setup/presentation/name_input_page/cubit/name_input_cubit.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';

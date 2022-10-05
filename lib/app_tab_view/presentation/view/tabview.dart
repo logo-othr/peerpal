@@ -4,11 +4,11 @@ import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.d
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover/presentation/bloc/discover_tab_bloc.dart';
 import 'package:peerpal/discover/presentation/view/discover_tab_view.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
 import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';

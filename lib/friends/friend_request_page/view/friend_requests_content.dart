@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 import 'package:peerpal/friends/custom_friend_request_card.dart';
 import 'package:peerpal/friends/friend_request_page/cubit/friend_requests_cubit.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 

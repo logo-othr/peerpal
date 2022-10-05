@@ -1,7 +1,7 @@
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 
 abstract class ChatRepository {
   Stream<List<Chat>> getChatListForUserId(String currentUserId);

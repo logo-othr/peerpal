@@ -6,8 +6,8 @@ import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dar
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/chat/single_chat_header_widget.dart';
-import 'package:peerpal/peerpal_user/data/repository/app_user_repository.dart';
-import 'package:peerpal/peerpal_user/domain/peerpal_user.dart';
+import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 
