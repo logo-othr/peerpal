@@ -1,6 +1,6 @@
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/discover/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 class SendChatMessage {
   final ChatRepository chatRepository;

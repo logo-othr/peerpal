@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_invitation/cubit/activity_invitation_cubit.dart';
-import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 
 import 'activity_invitation_input_content.dart';
 

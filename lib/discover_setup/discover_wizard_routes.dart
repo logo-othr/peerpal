@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/discover/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_activities_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/view/discover_age_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/view/discover_communication_page.dart';

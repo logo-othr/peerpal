@@ -1,6 +1,6 @@
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/discover/data/repository/app_user_repository.dart';
-import 'package:peerpal/discover/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 class GetAuthenticatedUser {
   final AppUserRepository userRepository;

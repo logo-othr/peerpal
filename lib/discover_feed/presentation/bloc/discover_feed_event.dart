@@ -1,4 +1,4 @@
-part of 'discover_tab_bloc.dart';
+part of 'discover_feed_bloc.dart';
 
 abstract class DiscoverTabEvent extends Equatable {
   @override

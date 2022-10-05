@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/presentation/phone_input_page/cubit/phone_input_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/phone_input_page/view/phone_input_content.dart';

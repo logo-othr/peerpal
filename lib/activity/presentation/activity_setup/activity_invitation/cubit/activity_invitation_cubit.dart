@@ -5,8 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
-import 'package:peerpal/discover/data/repository/app_user_repository.dart';
-import 'package:peerpal/discover/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_invitation_state.dart';

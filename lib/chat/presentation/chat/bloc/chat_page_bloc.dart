@@ -14,12 +14,13 @@ import 'package:peerpal/chat/domain/usecases/get_messages_for_chat.dart';
 import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_request_response.dart';
-import 'package:peerpal/discover/data/repository/app_user_repository.dart';
-import 'package:peerpal/discover/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_page_event.dart';
+
 part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {

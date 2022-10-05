@@ -1,4 +1,4 @@
-part of 'discover_tab_bloc.dart';
+part of 'discover_feed_bloc.dart';
 
 enum DiscoverTabStatus { initial, success, error }
 
