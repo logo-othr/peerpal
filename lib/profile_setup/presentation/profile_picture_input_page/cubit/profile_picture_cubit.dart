@@ -76,7 +76,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
         compressQuality: 100,
         compressFormat: ImageCompressFormat.jpg,
         androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Passe dein Foto zurecht',
+            toolbarTitle: 'Passe dein Foto an',
             toolbarColor: PeerPALAppColor.primaryColor,
             toolbarWidgetColor: Colors.white,
             activeControlsWidgetColor: PeerPALAppColor.primaryColor,
