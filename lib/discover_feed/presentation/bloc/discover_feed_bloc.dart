@@ -5,16 +5,15 @@ import 'package:equatable/equatable.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
-import 'package:peerpal/pagination.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'discover_feed_event.dart';
-
 part 'discover_feed_state.dart';
 
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
   final AuthenticationRepository _authenticationRepository;
-  PaginatedStream<PeerPALUser>? _userStream;
+  BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   DiscoverTabBloc(this._appUsersRepository, this._authenticationRepository)
       : super(DiscoverTabState());
@@ -34,7 +33,7 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
     return state.copyWith(
       searchResults: state.searchResults,
       status: DiscoverTabStatus.success,
-      userStream: _userStream!.dataStream,
+      userStream: _userStream!.stream,
     );
   }
 
@@ -60,7 +59,7 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   }
 
   // event?
-  void fetchUser() {
+/*void fetchUser() {
     _userStream?.fetchNextDataRow();
-  }
+  }*/
 }

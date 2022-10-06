@@ -35,9 +35,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     super.initState();
     _discoverTabBloc = context.read<DiscoverTabBloc>();
     _focusNode.addListener(_onSearchFieldFocusChange);
-    _controller.addListener(() {
+    /*_controller.addListener(() {
       _scrollFetch();
-    });
+    });*/
     _searchFieldController.addListener(_onSearchFieldTextChange);
   }
 
@@ -273,12 +273,12 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
 
   ScrollController _controller = ScrollController();
 
-  void _scrollFetch() {
+  /* void _scrollFetch() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
       _discoverTabBloc.fetchUser();
     }
-  }
+  }*/
 
   void _onSearchFieldTextChange() {
     if (_searchFieldController.text.length > 0) {
