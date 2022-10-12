@@ -5,6 +5,7 @@ import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/settings/imprint_page.dart';
@@ -80,8 +81,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => DiscoverInterestsOverviewPage()),
-                  ) /*.then((value) =>
-                      context.read<DiscoverTabBloc>().add(ReloadUsers()))*/
+                  ).then((value) =>
+                      context.read<DiscoverTabBloc>().add(LoadUsers()))
                 },
               ),
               CustomTableHeader(heading: "RECHTLICHES"),

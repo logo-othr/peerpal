@@ -13,7 +13,6 @@ import 'package:peerpal/discover_feed/data/dto/private_user_information_dto.dart
 import 'package:peerpal/discover_feed/data/dto/public_user_information_dto.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
-import 'package:peerpal/pagination.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -140,64 +139,11 @@ class AppUserRepository {
     return peerPALUserDTO;
   }
 
-  Query<Map<String, dynamic>> _buildGetMatchingUsersQuery(
-      {required PeerPALUser? lastUser,
-      required int limit,
-      required CollectionReference<Map<String, dynamic>> collection,
-      required PeerPALUser currentUser}) {
-    var query = collection
-        .where(UserDatabaseContract.userAge,
-            isGreaterThanOrEqualTo: currentUser.discoverFromAge)
-        .where(UserDatabaseContract.userAge,
-            isLessThanOrEqualTo: currentUser.discoverToAge);
 
-    if (currentUser.discoverLocations != null &&
-        currentUser.discoverLocations!.isNotEmpty)
-      query = query.where(UserDatabaseContract.discoverLocations,
-          arrayContainsAny:
-              currentUser.discoverLocations!.map((e) => e.place).toList());
-
-/*
- PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(currentUser);
-    query = query.where('combined_location_activities',
-        arrayContainsAny:
-        userDTO.publicUserInformation?.combined_location_activities);
- */
-
-    //['Köln', 'Berlin', 'Mainz', 'Regensburg']); //
-    /* if(currentUser.discoverActivitiesCodes != null && currentUser.discoverActivitiesCodes!.isNotEmpty && currentUser.discoverActivitiesCodes!.length <= 10) {
-      query = query.where(UserDatabaseContract.discoverActivities,
-          arrayContainsAny:
-          currentUser.discoverActivitiesCodes);
-    }*/
-
-    /*  query = query.where(UserDatabaseContract.phonePreference,
-        isEqualTo: /*currentUser.discoverCommunicationPreferences!
-            .contains(CommunicationType.phone)*/
-            true);
-
-    query = query.where(UserDatabaseContract.chatPreference,
-        isEqualTo: /*currentUser.discoverCommunicationPreferences!
-            .contains(CommunicationType.chat)*/
-            true);*/
-
-    query = query
-        .orderBy(UserDatabaseContract.userAge)
-        .orderBy(UserDatabaseContract.userName)
-        .orderBy(UserDatabaseContract.uid);
-
-    if (lastUser != null)
-      query = query.startAfter([lastUser.age, lastUser.name, lastUser.id]);
-
-    query = query.limit(limit);
-    return query;
-  }
 
   Future<BehaviorSubject<List<PeerPALUser>>> getMatchingUsersPaginatedStream(
       String authenticatedUserId,
       {int limit = 4}) async {
-    PaginatedStream2<PeerPALUser, PeerPALUser>? _userStream;
-
     var currentPeerPALUser =
         await getCurrentUserInformation(authenticatedUserId);
 
@@ -214,6 +160,12 @@ class AppUserRepository {
         .orderBy(UserDatabaseContract.userName)
         .orderBy(UserDatabaseContract.uid);
 
+    Stream<QuerySnapshot<Map<String, dynamic>>> locationStream =
+        locationQuery.snapshots();
+    BehaviorSubject<QuerySnapshot<Map<String, dynamic>>>
+        locationStreamController = new BehaviorSubject();
+    locationStreamController.addStream(locationStream);
+
     Query<Map<String, dynamic>> activitiesQuery = publicUserCollection.where(
         UserDatabaseContract.discoverActivities,
         arrayContainsAny:
@@ -224,61 +176,47 @@ class AppUserRepository {
         .orderBy(UserDatabaseContract.userName)
         .orderBy(UserDatabaseContract.uid);
 
-    BehaviorSubject<List<PeerPALUser>> listController = new BehaviorSubject();
-    List<DocumentSnapshot> locationDocuments = (await locationQuery.get()).docs;
-    List<DocumentSnapshot> activityDocuments =
-        (await activitiesQuery.get()).docs;
+    Stream<QuerySnapshot<Map<String, dynamic>>> activityStream =
+        activitiesQuery.snapshots();
+    BehaviorSubject<QuerySnapshot<Map<String, dynamic>>>
+        activityStreamController = new BehaviorSubject();
+    activityStreamController.addStream(activityStream);
 
-    List<PeerPALUser> userMatchedByLocation = [];
-    List<PeerPALUser> userMatchedByActivity = [];
-
-    locationDocuments.forEach((documentSnapshot) {
-      if (convertDocumentSnapshotToPeerPALUser(documentSnapshot) != null) {
-        PeerPALUser? user =
-            convertDocumentSnapshotToPeerPALUser(documentSnapshot);
-        if (user != null) userMatchedByLocation.add(user);
+    Stream<List<PeerPALUser>> combinedFilteredUserStream = Rx.combineLatest2(
+        locationStreamController.stream, activityStreamController.stream,
+        (QuerySnapshot<Map<String, dynamic>> matchedByLocationDocuments,
+            QuerySnapshot<Map<String, dynamic>> matchedByActivityDocuments) {
+      List<PeerPALUser> matchedByLocationUserList = [];
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in matchedByLocationDocuments.docs) {
+        if (convertDocumentSnapshotToPeerPALUser(document) != null)
+          matchedByLocationUserList
+              .add(convertDocumentSnapshotToPeerPALUser(document)!);
       }
+
+      List<PeerPALUser> matchedByActivityUserList = [];
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in matchedByActivityDocuments.docs) {
+        if (convertDocumentSnapshotToPeerPALUser(document) != null)
+          matchedByActivityUserList
+              .add(convertDocumentSnapshotToPeerPALUser(document)!);
+      }
+
+      List<PeerPALUser> unfilteredMatchedUsers = []
+        ..addAll(matchedByLocationUserList)
+        ..addAll(matchedByActivityUserList);
+
+      final temp = Set<String>();
+      List<PeerPALUser> uniqueList =
+          unfilteredMatchedUsers.where((str) => temp.add(str.id!)).toList();
+      uniqueList.shuffle();
+      return uniqueList;
     });
 
-    activityDocuments.forEach((documentSnapshot) {
-      if (convertDocumentSnapshotToObject(documentSnapshot) != null) {
-        PeerPALUser? user =
-            convertDocumentSnapshotToPeerPALUser(documentSnapshot);
-        if (user != null) userMatchedByActivity.add(user);
-      }
-    });
-
-    List<PeerPALUser> unfilteredMatchedUsers = []
-      ..addAll(userMatchedByLocation)
-      ..addAll(userMatchedByActivity);
-
-    final temp = Set<String>();
-    List<PeerPALUser> uniqueList =
-        unfilteredMatchedUsers.where((str) => temp.add(str.id!)).toList();
-    uniqueList.shuffle();
-
-    listController.sink.add(uniqueList);
-
-    return listController;
-  }
-
-  Query<Map<String, dynamic>> _buildGetMatchingUsersPaginationQuery(
-      {required CollectionReference<Map<String, dynamic>> collection,
-      required PeerPALUser currentUser}) {
-    //if (currentUser.discoverLocations != null &&
-    //   currentUser.discoverLocations!.isNotEmpty) {
-    // ToDo: Nullcheck, exception handling
-    Query<Map<String, dynamic>> locationQuery = collection.where(
-        UserDatabaseContract.discoverLocations,
-        arrayContainsAny:
-            currentUser.discoverLocations!.map((e) => e.place).toList());
-
-    locationQuery = locationQuery
-        .orderBy(UserDatabaseContract.userAge)
-        .orderBy(UserDatabaseContract.userName)
-        .orderBy(UserDatabaseContract.uid);
-
-    return locationQuery;
+    BehaviorSubject<List<PeerPALUser>> combinedFilteredUserStreamController =
+        BehaviorSubject();
+    combinedFilteredUserStreamController.addStream(combinedFilteredUserStream);
+    return combinedFilteredUserStreamController;
   }
 
   PeerPALUser? convertDocumentSnapshotToPeerPALUser(DocumentSnapshot document) {
@@ -288,81 +226,6 @@ class AppUserRepository {
     PeerPALUser publicUser = peerPALUserDTO.toDomainObject();
     if (publicUser.id != _firebaseAuth.currentUser?.uid) return publicUser;
     return null;
-  }
-
-  Object? convertDocumentSnapshotToObject(DocumentSnapshot document) {
-    var documentData = document.data() as Map<String, dynamic>;
-    var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
-    var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
-    var publicUser = peerPALUserDTO.toDomainObject();
-    if (publicUser.id != _firebaseAuth.currentUser?.uid) return publicUser;
-    return null;
-  }
-
-  // ToDo: Remove limit
-  Stream<List<PeerPALUser>> getMatchingUsersStream(String authenticatedUserId,
-      {int limit = 100}) async* {
-    var currentPeerPALUser =
-        await getCurrentUserInformation(authenticatedUserId);
-
-    var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
-
-    var query = _buildGetMatchingUsersQuery(
-        lastUser: null,
-        limit: limit,
-        collection: publicUserCollection,
-        currentUser: currentPeerPALUser);
-
-    var snapshots = await query.snapshots();
-    List<PeerPALUser> userList = <PeerPALUser>[];
-    await for (QuerySnapshot querySnapshot in snapshots) {
-      userList.clear();
-      querySnapshot.docs.forEach((document) {
-        var documentData = document.data() as Map<String, dynamic>;
-        var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
-        var peerPALUserDTO =
-            PeerPALUserDTO(publicUserInformation: publicUserDTO);
-        var publicUser = peerPALUserDTO.toDomainObject();
-        if (publicUser.id != authenticatedUserId) userList.add(publicUser);
-      });
-      yield userList;
-    }
-  }
-
-  Future<List<PeerPALUser>> getMatchingUsers(String authenticatedUserId,
-      {PeerPALUser? last = null, required int limit}) async {
-    var currentPeerPALUser =
-        await getCurrentUserInformation(authenticatedUserId);
-    if (currentPeerPALUser.discoverLocations != null &&
-        currentPeerPALUser.discoverLocations!.isEmpty) return [];
-
-    var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
-
-    var query = _buildGetMatchingUsersQuery(
-        lastUser: last,
-        limit: limit,
-        collection: publicUserCollection,
-        currentUser: currentPeerPALUser);
-
-    var snapshots = await query.get();
-
-    final matchedUserDocuments =
-        snapshots.docs.map((doc) => doc.data()).toList();
-
-    var publicUsers = matchedUserDocuments
-        .map((e) => PublicUserInformationDTO.fromJson(e))
-        .toList();
-
-    var peerPALUserDTOs = publicUsers
-        .map((e) => PeerPALUserDTO(publicUserInformation: e))
-        .toList();
-
-    // ToDo: filter for activities
-
-    var peerPALUsers = peerPALUserDTOs.map((e) => e.toDomainObject()).toList();
-    return peerPALUsers;
   }
 
   Future<PeerPALUser> getCurrentUserInformation(String uid) async {

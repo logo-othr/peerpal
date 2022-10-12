@@ -187,7 +187,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             context,
             MaterialPageRoute(
                 builder: (context) => DiscoverInterestsOverviewPage()),
-          ),
+          ).then((value) => context.read<DiscoverTabBloc>().add(LoadUsers()))
         },
       ),
     );
