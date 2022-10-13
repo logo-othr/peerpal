@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
 import 'package:peerpal/app_tab_view/presentation/view/tabview.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
@@ -19,8 +20,10 @@ class SetupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => HomeCubit(
-          context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
-        ..loadCurrentSetupFlowState(),
+        context.read<AppUserRepository>(),
+        sl<GetAuthenticatedUser>(),
+        sl<StartRemoteNotifications>(),
+      )..loadCurrentSetupFlowState(),
       child: const SetupPageContent(),
     );
   }

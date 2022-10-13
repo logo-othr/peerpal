@@ -114,7 +114,7 @@ Future<void> setupDependencies() async {
   // UseCase
   sl.registerLazySingleton<StartRemoteNotifications>(() =>
       StartRemoteNotifications(
-          notificationService: sl(),
+          notificationService: sl<NotificationService>(),
           remoteNotificationBackgroundHandler:
               _remoteNotificationBackgroundHandler));
 
