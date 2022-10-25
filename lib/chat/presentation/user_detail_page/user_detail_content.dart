@@ -132,7 +132,7 @@ class UserDetailContent extends StatelessWidget {
                             child: Column(
                               children: [
                                 CustomSingleTable(
-                                  heading: 'AKTIVITÄTEN',
+                                  heading: 'INTERESSEN',
                                   text: state.user.discoverActivitiesCodes!
                                       .map((e) => ActivityRepository
                                           .getActivityNameFromCode(e))
@@ -140,7 +140,7 @@ class UserDetailContent extends StatelessWidget {
                                       .join(', '),
                                   isArrowIconVisible: true,
                                   onPressed: () {
-                                    _showActivityDialog(context, state);
+                                    _showActivityDialog(state, context);
                                   },
                                 ),
                                 CustomSingleTable(
@@ -209,15 +209,18 @@ class UserDetailContent extends StatelessWidget {
     );
   }
 
-  Future _showActivityDialog(state, context) {
+  Future _showActivityDialog(UserDetailState state, BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
+          List<String> activityNames = state.user.discoverActivitiesCodes!
+              .map((e) => ActivityRepository.getActivityNameFromCode(e))
+              .toList();
+
           return CustomActivityDialog(
-              isOwnCreatedActivity: false,
-              activities: state.user.discoverActivitiesCodes!
-                  .map((e) => ActivityRepository.getActivityNameFromCode(e))
-                  .toList());
+            isOwnCreatedActivity: false,
+            activities: activityNames,
+          );
         });
   }
 

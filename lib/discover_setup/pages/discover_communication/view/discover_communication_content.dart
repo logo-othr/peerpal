@@ -37,14 +37,30 @@ class DiscoverCommunicationContent extends StatelessWidget {
                   ),
                   CustomPeerPALHeading1("Bevorzugte Kommunikationsart"),
                   Spacer(),
-                  _CommunicationType(types: state.communicationTypes),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      for (CommunicationType communicationType
+                          in state.communicationTypes)
+                        _CommunicationTypeButton(
+                          communicationType: communicationType,
+                          onPressed: () => context
+                              .read<DiscoverCommunicationCubit>()
+                              .toggleCommunicationType(communicationType),
+                          isActive: state.selectedCommunicationTypes
+                              .contains(communicationType),
+                        ),
+                    ],
+                  ),
                   Spacer(),
                   (state is DiscoverCommunicationPosting)
                       ? const CircularProgressIndicator()
                       : CompletePageButton(
                           isSaveButton: isInFlowContext,
                           onPressed: () async {
-                            _saveAndClosePage(state, context);
+                            _update(state, context);
                           }),
                 ],
               ),
@@ -53,7 +69,7 @@ class DiscoverCommunicationContent extends StatelessWidget {
         }));
   }
 
-  Future<void> _saveAndClosePage(
+  Future<void> _update(
       DiscoverCommunicationState state, BuildContext context) async {
     if (isInFlowContext) {
       await context.read<DiscoverCommunicationCubit>().postData();
@@ -63,30 +79,6 @@ class DiscoverCommunicationContent extends StatelessWidget {
       await context.read<DiscoverCommunicationCubit>().postData();
       Navigator.pop(context);
     }
-  }
-}
-
-class _CommunicationType extends StatelessWidget {
-  const _CommunicationType({Key? key, required this.types}) : super(key: key);
-  final List<CommunicationType> types;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        for (CommunicationType communicationType in types)
-          _CommunicationTypeButton(
-            communicationType: communicationType,
-            onPressed: () => context
-                .read<DiscoverCommunicationCubit>()
-                .toggleCommunicationType(communicationType),
-            isActive: types.contains(communicationType),
-          ),
-      ],
-    );
   }
 }
 
