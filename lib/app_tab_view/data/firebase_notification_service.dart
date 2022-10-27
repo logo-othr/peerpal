@@ -22,6 +22,7 @@ class FirebaseNotificationService implements NotificationService {
 
   bool _isServiceInitialized = false;
   bool _isRemoteMessageHandlerStarted = false;
+  bool weeklyRemindersActive = false;
 
   Future<int> _nextNotificationId() async {
     final SharedPreferences _preferences =
@@ -102,6 +103,70 @@ class FirebaseNotificationService implements NotificationService {
     );
     logger.i("Show notification nr. $notificationId");
     return notificationId;
+  }
+
+  // Source: flutter local notification documentation
+  // ToDo: test.
+  TZDateTime _nextInstanceOfMondayTenAM() {
+    TZDateTime scheduledDate = _nextInstanceOfTenAM();
+    while (scheduledDate.weekday != DateTime.monday) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  // Source: flutter local notification documentation
+  // ToDo: test.
+  TZDateTime _nextInstanceOfTenAM() {
+    final TZDateTime now = TZDateTime.now(local);
+    TZDateTime scheduledDate =
+        TZDateTime(local, now.year, now.month, now.day, 10);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  @override
+  Future<int> scheduleWeeklyNotification() async {
+// ToDo: Move title and message up
+    if (!weeklyRemindersActive) {
+      await _ensureInitialized();
+      int notificationId = await _nextNotificationId();
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+          notificationId,
+          'Wöchentliche Erinnerung - PeerPAL',
+          'Hey, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!',
+          _nextInstanceOfMondayTenAM(),
+          _platformSpecificNotificationDetails(),
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
+
+      logger.i(
+          "Scheduled weekly notification with id $notificationId for weekly notification");
+      weeklyRemindersActive = true;
+      return notificationId;
+    } else
+      return -1;
+
+    /*await _ensureInitialized();
+  int notificationId = await _nextNotificationId();
+  await _flutterLocalNotificationsPlugin.zonedSchedule(
+      notificationId,
+      'daily scheduled notification title',
+      'daily scheduled notification body',
+      _nextInstanceOfTwelveAM(),
+      _platformSpecificNotificationDetails(),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time);
+
+  logger
+      .i("Scheduled weekly notification with id $notificationId for weekly notification");
+  return notificationId;*/
   }
 
   @override

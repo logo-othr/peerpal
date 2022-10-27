@@ -21,6 +21,8 @@ import 'package:peerpal/data/cache.dart';
 import 'package:peerpal/data/memory_cache.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/home/data/rememberme_notification_repository.dart';
+import 'package:peerpal/home/domain/start_rememberme_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -117,6 +119,19 @@ Future<void> setupDependencies() async {
           notificationService: sl<NotificationService>(),
           remoteNotificationBackgroundHandler:
               _remoteNotificationBackgroundHandler));
+
+  sl.registerLazySingleton<StartRememberMeNotifications>(
+      () => StartRememberMeNotifications(
+            rememberMeNotificationRepository:
+                sl<RememberMeNotificationRepository>(),
+          ));
+
+  // Repository
+
+  sl.registerLazySingleton<RememberMeNotificationRepository>(
+    () => RememberMeNotificationRepository(
+        notificationService: sl<NotificationService>()),
+  );
 
   // ============== Activity ====================
 

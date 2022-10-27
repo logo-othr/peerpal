@@ -14,4 +14,6 @@ abstract class NotificationService {
       String title, String body, TZDateTime scheduledDateTime);
 
   Future<int> showNotification(String title, String body);
+
+  Future<int> scheduleWeeklyNotification();
 }

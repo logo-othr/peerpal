@@ -5,6 +5,7 @@ import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.d
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/home/domain/start_rememberme_notifications.dart';
 
 part 'home_state.dart';
 
@@ -12,9 +13,10 @@ class HomeCubit extends Cubit<HomeState> {
   final AppUserRepository _appuserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
   final StartRemoteNotifications _startRemoteNotifications;
+  final StartRememberMeNotifications _startRememberMeNotifications;
 
   HomeCubit(this._appuserRepository, this._getAuthenticatedUser,
-      this._startRemoteNotifications)
+      this._startRemoteNotifications, this._startRememberMeNotifications)
       : super(HomeInitial());
 
   Future<void> getCurrentUserInformation() async {
@@ -32,6 +34,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(DiscoverSetupState(userInformation));
     } else {
       _startRemoteNotifications();
+      _startRememberMeNotifications();
       emit(SetupCompletedState(0));
     }
   }

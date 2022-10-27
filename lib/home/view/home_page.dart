@@ -6,6 +6,7 @@ import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
+import 'package:peerpal/home/domain/start_rememberme_notifications.dart';
 import 'package:peerpal/profile_setup/profile_wiazrd_flow.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -23,6 +24,7 @@ class SetupPage extends StatelessWidget {
         context.read<AppUserRepository>(),
         sl<GetAuthenticatedUser>(),
         sl<StartRemoteNotifications>(),
+        sl<StartRememberMeNotifications>(),
       )..loadCurrentSetupFlowState(),
       child: const SetupPageContent(),
     );
