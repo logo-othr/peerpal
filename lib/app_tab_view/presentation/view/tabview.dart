@@ -14,7 +14,9 @@ import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
 
 class AppTabView extends StatefulWidget {
-  AppTabView({Key? key}) : super(key: key);
+  final int initialTabIndex;
+
+  const AppTabView({Key? key, this.initialTabIndex = 0}) : super(key: key);
 
   static MaterialPage<void> page() {
     return MaterialPage<void>(child: AppTabView());

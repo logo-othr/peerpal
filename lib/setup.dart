@@ -27,15 +27,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+@pragma('vm:entry-point')
 Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message ${message.data}");
-  print('onResume: $message');
-  if (message.notification != null) {
+  print("background handler called");
+  print(
+      "Handling a background message \n message.data: ${message.data} \n message.messageId: ${message.messageId} \n message.messageType: ${message.messageType} \n message.notification: ${message.notification} \n message.notification.title: ${message.notification?.title}");
+  /*if (message.notification != null) {
     RemoteNotification remoteNotification = message.notification!;
     sl<NotificationService>().showNotification(
         remoteNotification.title ?? "", remoteNotification.body ?? "");
   }
-  return;
+  return;*/
+  //navigatorKey.currentState.
+}
+
+Future<void> _remoteNotificationForegroundHandler(RemoteMessage message) async {
+  print("foreground handler calleed");
+  print(
+      "Handling a foreground message \n message.data: ${message.data} \n message.messageId: ${message.messageId} \n message.messageType: ${message.messageType} \n message.notification: ${message.notification} \n message.notification.title: ${message.notification?.title}");
+  /*if (message.notification != null) {
+    RemoteNotification remoteNotification = message.notification!;
+    sl<NotificationService>().showNotification(
+        remoteNotification.title ?? "", remoteNotification.body ?? "");
+  }
+  return;*/
 }
 
 final sl = GetIt.instance;
@@ -118,7 +133,9 @@ Future<void> setupDependencies() async {
       StartRemoteNotifications(
           notificationService: sl<NotificationService>(),
           remoteNotificationBackgroundHandler:
-              _remoteNotificationBackgroundHandler));
+              _remoteNotificationBackgroundHandler,
+          remoteNotificationForegroundHandler:
+              _remoteNotificationForegroundHandler));
 
   sl.registerLazySingleton<StartRememberMeNotifications>(
       () => StartRememberMeNotifications(

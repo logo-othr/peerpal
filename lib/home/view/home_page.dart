@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
@@ -13,7 +14,9 @@ import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class SetupPage extends StatelessWidget {
-  const SetupPage({Key? key}) : super(key: key);
+  final int initialTabIndex;
+
+  const SetupPage({Key? key, this.initialTabIndex = 0}) : super(key: key);
 
   static Page page() => const MaterialPage<void>(child: SetupPage());
 
@@ -31,8 +34,47 @@ class SetupPage extends StatelessWidget {
   }
 }
 
-class SetupPageContent extends StatelessWidget {
-  const SetupPageContent({Key? key}) : super(key: key);
+class SetupPageContent extends StatefulWidget {
+  final int initialTabIndex;
+
+  const SetupPageContent({Key? key, this.initialTabIndex = 0})
+      : super(key: key);
+
+  @override
+  State<SetupPageContent> createState() => _SetupPageContentState();
+}
+
+class _SetupPageContentState extends State<SetupPageContent> {
+  // notification example from https://firebase.flutter.dev/docs/messaging/notifications/
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) async {
+    // if (message.data['type'] == 'chat') {
+
+    context.read<HomeCubit>().indexChanged(3);
+    // }
+  }
+
+  @override
+  void initState() {
+    setupInteractedMessage();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -68,13 +68,15 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<void> startRemoteNotificationBackgroundHandler(
-      firebaseMessagingBackgroundHandler) async {
+      firebaseMessagingBackgroundHandler,
+      firebaseMessagingForegroundHandler) async {
     if (!_isRemoteMessageHandlerStarted) {
       _firebaseMessaging
           .requestPermission(); // ToDo: Handle return value and errors
       FirebaseMessaging.onBackgroundMessage(
           firebaseMessagingBackgroundHandler); // ToDo: Firebase shows the notification whether it is shown via local notification or not. Investigate. https://stackoverflow.com/questions/70921767/notification-show-twice-on-flutter/71461142#71461142
-      FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onMessage.listen(firebaseMessagingForegroundHandler);
+
       //  FirebaseMessaging.onMessageOpenedApp
       //      .listen(firebaseMessagingBackgroundHandler);
       _isRemoteMessageHandlerStarted = true;

@@ -6,7 +6,7 @@ abstract class NotificationService {
   Future<void> registerDeviceToken();
 
   Future<void> startRemoteNotificationBackgroundHandler(
-      firebaseMessagingBackgroundHandler);
+      firebaseMessagingBackgroundHandler, firebaseMessagingForegroundHandler);
 
   Future<void> stopRemoteNotificationBackgroundHandler();
 
