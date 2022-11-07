@@ -55,19 +55,23 @@ class _SetupPageContentState extends State<SetupPageContent> {
     // If the message also contains a data property with a "type" of "chat",
     // navigate to a chat screen
     if (initialMessage != null) {
-      _handleMessage(initialMessage);
+      _handleMessageFromTerminatedState(initialMessage);
     }
 
     // Also handle any interaction when the app is in the background via a
     // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+    FirebaseMessaging.onMessageOpenedApp
+        .listen(_handleMessageFromBackgroundStreamState);
   }
 
-  void _handleMessage(RemoteMessage message) async {
-    // if (message.data['type'] == 'chat') {
-
+  void _handleMessageFromTerminatedState(RemoteMessage message) async {
     context.read<HomeCubit>().indexChanged(3);
-    // }
+    print("got message from terminated state stream");
+  }
+
+  void _handleMessageFromBackgroundStreamState(RemoteMessage message) async {
+    context.read<HomeCubit>().indexChanged(3);
+    print("got message from background stream");
   }
 
   @override
