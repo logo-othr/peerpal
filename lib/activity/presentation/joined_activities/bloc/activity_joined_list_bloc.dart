@@ -35,7 +35,8 @@ class ActivityJoinedListBloc
           .getPrivateJoinedActivitiesForUser(currentUserId);
       _activityJoinedListStreamController.addStream(activityJoinedListStream);
 
-      activityJoinedListStream.listen((List<Activity> activities) {
+      _activityJoinedListStreamController.stream
+          .listen((List<Activity> activities) {
         activities.map(
             (e) => sl<ActivityReminderRepository>().setRemindersForActivity(e));
       });
