@@ -36,7 +36,7 @@ class _ChatListContentState extends State<ChatListContent> {
           hasBackButton: false,
         ),
         body:
-        BlocBuilder<ChatListBloc, ChatListState>(builder: (context, state) {
+            BlocBuilder<ChatListBloc, ChatListState>(builder: (context, state) {
           if (state.status == ChatListStatus.initial) {
             return const Center(child: CircularProgressIndicator());
           } else if (state.status == ChatListStatus.success) {
@@ -105,10 +105,12 @@ class _ChatListContentState extends State<ChatListContent> {
                   ,
                 );
               } else {
+                context.read<ChatListBloc>()
+                  ..add(ChatListStreamUpdate(snapshot.data!));
                 return Scrollbar(
                   child: ListView.builder(
                     itemBuilder: (context, index) =>
-                        buildChatPartner(context, snapshot.data![index]),
+                        ChatRow(userChat: snapshot.data![index]),
                     itemCount: snapshot.data!.length,
                     controller: listScrollController,
                   ),
@@ -121,7 +123,7 @@ class _ChatListContentState extends State<ChatListContent> {
     );
   }
 
-  Widget buildChatPartner(BuildContext context, UserChat userChat) {
+/* Widget buildChatPartner(BuildContext context, UserChat userChat) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -129,7 +131,9 @@ class _ChatListContentState extends State<ChatListContent> {
               bottom:
                   BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
+          // context.read<ChatListBloc>()..add(ChatClickEvent(userChat));
+          sl<ChatListBloc>()..add(ChatClickEvent(userChat));
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -141,7 +145,7 @@ class _ChatListContentState extends State<ChatListContent> {
         child: CustomChatListItemUser(userInformation: userChat),
       ),
     );
-  }
+  }*/
 }
 
 void debugChatStreamText(AsyncSnapshot snapshot) {
@@ -152,4 +156,54 @@ void debugChatStreamText(AsyncSnapshot snapshot) {
     print("chat snapshot.hasData && snapshot.data!.isEmpty");
   if (snapshot.hasData) print("chat length: ${snapshot.data!.length}");
   print("-------------- SteamBuilder Chat Build /ENDE ---------- ");
+}
+
+class ChatRow extends StatelessWidget {
+  final UserChat userChat;
+
+  const ChatRow({Key? key, required this.userChat}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+              bottom:
+                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
+      child: TextButton(
+        onPressed: () async {
+          // context.read<ChatListBloc>()..add(ChatClickEvent(userChat));
+          context.read<ChatListBloc>()..add(ChatClickEvent(userChat));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ChatPage(
+                        userChat: userChat,
+                        userId: userChat.user.id!,
+                      )));
+        },
+        child: CustomChatListItemUser(
+            userInformation: userChat,
+            redDot: hasRedDot(context, userChat.chat.chatId)),
+      ),
+    );
+  }
+
+  // ToDo: Create map (seen) in state and move logic to bloc/usecase
+  // ToDo: Bug: All messages appear as new when the app is restarted.
+  // ToDo: Sort chats for red dot?
+  bool hasRedDot(BuildContext context, String chatId) {
+    Map<String, String> lastClicked =
+        context.read<ChatListBloc>().state.lastClicked;
+    Map<String, String> lastMessage = context.read<ChatListBloc>().state.redDot;
+    int timestampLastClicked = int.parse(lastClicked[chatId] ?? "0");
+    int timestampLastMessage = int.parse(lastMessage[chatId] ?? "0");
+    bool redDot = false;
+    if (timestampLastClicked < timestampLastMessage) {
+      redDot = true;
+    }
+    ;
+    return redDot;
+  }
 }

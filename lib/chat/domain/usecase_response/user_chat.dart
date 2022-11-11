@@ -6,4 +6,14 @@ class UserChat {
 
   final Chat chat;
   final PeerPALUser user;
+
+  UserChat copyWith({
+    Chat? chat,
+    PeerPALUser? user,
+  }) {
+    return UserChat(
+      chat: chat ?? this.chat,
+      user: user ?? this.user,
+    );
+  }
 }

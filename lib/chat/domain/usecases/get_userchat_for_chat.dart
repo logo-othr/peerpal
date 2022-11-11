@@ -41,7 +41,18 @@ class GetUserChatForChat {
     List<String> userIds = chat.uids;
     userIds.remove(appUserId);
     PeerPALUser peerPALUser =
-    await appUserRepository.getUserInformation(userIds.first);
+        await appUserRepository.getUserInformation(userIds.first);
+
+    /*bool redDot = false;
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    String? timestamp =
+    prefs.getString("${chat.chatId}-last-message-clicked-timestamp");
+    int lastMessageClickedTimestamp = int.parse(timestamp ?? "0");
+    int lastMessageTimestamp = int.parse(chat.lastMessage?.timestamp ?? "0");
+    if (lastMessageClickedTimestamp < lastMessageTimestamp) redDot = true;
+    print("Chat with user ${peerPALUser.name} has a red dot: ${redDot}");*/
+
     UserChat userChat = UserChat(chat: chat, user: peerPALUser);
     return userChat;
   }

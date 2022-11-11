@@ -51,6 +51,44 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
           status: ChatListStatus.success,
           chats: _userChatStreamController.stream,
           chatRequests: _userFriendRequestStreamController.stream);
+    } else if (event is ChatClickEvent) {
+      Map<String, String> lastClicked = {};
+      lastClicked.addAll(state.lastClicked);
+      lastClicked[event.userChat.chat.chatId] =
+          event.userChat.chat.lastMessage?.timestamp ?? "0";
+
+      /* List<UserChat> userChats = await _userChatStreamController.;
+      for (int i = 0; i < userChats.length; i++) {
+        if (userChats[i].chat.chatId == event.userChat.chat.chatId) {
+          userChats[i] = UserChat(
+              chat: event.userChat.chat,
+              user: event.userChat.user,
+              redDot: false);
+        }
+      }
+      _userChatStreamController.sink.add(userChats);*/
+      yield state.copyWith(
+        status: ChatListStatus.chatClicked,
+        lastClicked: lastClicked,
+      );
+    } else if (event is ChatClickedEvent) {
+      /*  List<UserChat> updatedList = [];
+      for(UserChat userChat in event.userChats) {
+        updatedList.add(userChat.copyWith(redDot: false, user: null));
+      }
+      _userChatStreamController.sink.add(updatedList);
+      yield state.copyWith(
+        status: ChatListStatus.success,);*/
+    } else if (event is ChatListStreamUpdate) {
+      Map<String, String> redDot = {};
+      for (UserChat userChat in event.userChats) {
+        redDot[userChat.chat.chatId] =
+            userChat.chat.lastMessage?.timestamp ?? "0";
+      }
+      yield state.copyWith(
+        status: ChatListStatus.streamUpdated,
+        redDot: redDot,
+      );
     }
   }
 }

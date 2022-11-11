@@ -95,7 +95,10 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
                         userId: userInformation.user.id!,
                       )));
         },
-        child: CustomChatListItemUser(userInformation: userInformation),
+        child: CustomChatListItemUser(
+          userInformation: userInformation,
+          redDot: true,
+        ),
       ),
     );
   }

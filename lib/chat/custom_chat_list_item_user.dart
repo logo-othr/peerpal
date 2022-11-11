@@ -10,8 +10,9 @@ import 'domain/usecase_response/user_chat.dart';
 // ignore: must_be_immutable
 class CustomChatListItemUser extends StatelessWidget {
   UserChat userInformation;
+  bool redDot;
 
-  CustomChatListItemUser({required this.userInformation});
+  CustomChatListItemUser({required this.userInformation, required this.redDot});
 
   @override
   Widget build(BuildContext context) {
@@ -60,20 +61,39 @@ class CustomChatListItemUser extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
                 SizedBox(height: 5),
-                RichText(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: userInformation.chat.lastMessage == null
-                            ? "Nachricht konnte nicht geladen werden"
-                            : userInformation.chat.lastMessage!.message
-                                .toString(),
-                        style: textStyle,
+                Row(
+                  children: [
+                    RichText(
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: userInformation.chat.lastMessage == null
+                                ? "Nachricht konnte nicht geladen werden"
+                                : userInformation.chat.lastMessage!.message
+                                    .toString(),
+                            style: textStyle,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    redDot
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 40, 0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
                 ),
                 SizedBox(height: 5),
                 /*CustomPeerPALHeading3(
