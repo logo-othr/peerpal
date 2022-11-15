@@ -8,6 +8,7 @@ part of 'activity.dart';
 
 Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
       id: json['id'] as String?,
+      timestamp: json['timestamp'] as String?,
       name: json['name'] as String?,
       code: json['code'] as String?,
       description: json['description'] as String?,
@@ -24,10 +25,14 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
           ?.map((e) => e as String)
           .toList(),
       public: json['public'] as bool?,
+      isAlreadyEvaluatedFromServer:
+          json['isAlreadyEvaluatedFromServer'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
+Map<String, dynamic> _$ActivityToJson(Activity instance) =>
+    <String, dynamic>{
       'id': instance.id,
+      'timestamp': instance.timestamp,
       'name': instance.name,
       'code': instance.code,
       'description': instance.description,
@@ -38,4 +43,5 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'attendeeIds': instance.attendeeIds,
       'invitationIds': instance.invitationIds,
       'public': instance.public,
+      'isAlreadyEvaluatedFromServer': instance.isAlreadyEvaluatedFromServer,
     };
