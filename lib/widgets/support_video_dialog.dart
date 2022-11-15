@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
+import 'package:peerpal/app/domain/support_videos/support_video.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/setup.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomSupportVideoDialog extends StatelessWidget {
-  final String link;
+  final SupportVideo supportVideo;
 
-  const CustomSupportVideoDialog({Key? key, required this.link})
+  const CustomSupportVideoDialog({Key? key, required this.supportVideo})
       : super(key: key);
 
   @override
@@ -22,7 +26,7 @@ class CustomSupportVideoDialog extends StatelessWidget {
                 dialogText:
                     "Um zum Hilfsvideo zu gelangen, klicken sie auf den folgenden Link.",
                 onPressed: () => {Navigator.pop(context)},
-                link: link,
+                supportVideo: supportVideo,
                 linkText: "Hilfsvideo",
               );
             }),
@@ -38,14 +42,14 @@ class CustomSupportVideoDialog extends StatelessWidget {
 class SupportVideoDialog extends StatefulWidget {
   SupportVideoDialog(
       {required this.onPressed,
-      required this.link,
+      required this.supportVideo,
       required this.dialogText,
       required this.infoText,
       required this.linkText});
 
   VoidCallback? onPressed;
   String dialogText;
-  String link;
+  SupportVideo supportVideo;
   String linkText;
   String infoText;
 
@@ -104,7 +108,20 @@ class _SupportVideoDialog extends State<SupportVideoDialog> {
                               decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () async {
-                              final Uri _url = Uri.parse(widget.link);
+                              // === / ToDo: usecase ===
+                              GetAuthenticatedUser _getAuthenticatedUser =
+                                  sl<GetAuthenticatedUser>();
+                              var authenticatedUser =
+                                  await _getAuthenticatedUser();
+                              sl<AnalyticsRepository>().addVideoClick(
+                                  authenticatedUser.id ?? "",
+                                  DateTime.now()
+                                      .millisecondsSinceEpoch
+                                      .toString(),
+                                  widget.supportVideo);
+                              // =====
+                              final Uri _url =
+                                  Uri.parse(widget.supportVideo.link);
                               if (!await launchUrl(_url))
                                 throw 'Could not open $_url';
                             })

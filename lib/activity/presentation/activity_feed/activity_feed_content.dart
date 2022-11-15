@@ -9,6 +9,7 @@ import 'package:peerpal/activity/presentation/activity_setup/activity_overview_p
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/view/activity_public_overview_page.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_wizard_flow.dart';
 import 'package:peerpal/activity/presentation/joined_activities/activity_joined_list_page.dart';
+import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
@@ -37,7 +38,8 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
             // ToDo: Move into cubit/bloc
             GetAuthenticatedUser _getAuthenticatedUser =
                 sl<GetAuthenticatedUser>();
-            var currentUserName = (await _getAuthenticatedUser()).name;
+            var authenticatedUser = await _getAuthenticatedUser();
+            var currentUserName = (authenticatedUser).name;
             Activity activity = Activity(
               id: (Uuid()).v4().toString(),
               creatorId:
@@ -45,6 +47,10 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               creatorName: currentUserName,
               public: false,
             );
+            sl<AnalyticsRepository>().addAddActivityClick(
+                authenticatedUser.id ?? "",
+                DateTime.now().millisecondsSinceEpoch.toString(),
+                activity.id ?? "");
             context.read<ActivityRepository>().updateLocalActivity(activity);
             await Navigator.of(context).push(ActivityWizardFlow.route(
                 activity)); // ToDo: Move to domain layer
@@ -152,8 +158,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                 ),
               ],
             ),
-            child:
-            TabBar(
+            child: TabBar(
                 indicatorWeight: 3,
                 indicatorColor: PeerPALAppColor.primaryColor,
                 tabs: [
@@ -168,14 +173,14 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                   )),
                   Tab(
                       child: Center(
-                child: Text(
-                  "ERSTELLTE AKTIVTÄTEN",
-                  style: TextStyle(
-                      color: PeerPALAppColor.primaryColor,
+                    child: Text(
+                      "ERSTELLTE AKTIVTÄTEN",
+                      style: TextStyle(
+                          color: PeerPALAppColor.primaryColor,
                           fontSize: MediaQuery.of(context).size.width / 35),
-                ),
-              )),
-            ]),
+                    ),
+                  )),
+                ]),
           ),
           Expanded(
             child: TabBarView(children: [
@@ -329,7 +334,17 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
               ),
             )
           : TextButton(
-              onPressed: () {
+              onPressed: () async {
+                // === / ToDo: usecase ===
+                GetAuthenticatedUser _getAuthenticatedUser =
+                    sl<GetAuthenticatedUser>();
+                var authenticatedUser = await _getAuthenticatedUser();
+                sl<AnalyticsRepository>().addPublicActivityClick(
+                    authenticatedUser.id ?? "",
+                    DateTime.now().millisecondsSinceEpoch.toString(),
+                    activity);
+                // =====
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(

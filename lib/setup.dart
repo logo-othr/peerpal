@@ -6,6 +6,10 @@ import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
+import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_service.dart';
+import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
+import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
+import 'package:peerpal/app/domain/analytics/analytics_service.dart';
 import 'package:peerpal/app_tab_view/data/firebase_notification_service.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
@@ -158,4 +162,10 @@ Future<void> setupDependencies() async {
       ActivityReminderRepository(
           prefs: sl<SharedPreferences>(),
           notificationService: sl<NotificationService>()));
+
+  // ============== Analytics ====================
+  sl.registerLazySingleton<AnalyticsService>(() => FirebaseAnalyticsService());
+
+  sl.registerLazySingleton<AnalyticsRepository>(
+      () => FirebaseAnalyticsRepository(analyticsService: sl()));
 }

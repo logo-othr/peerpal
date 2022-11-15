@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'discover_feed_event.dart';
+
 part 'discover_feed_state.dart';
 
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
@@ -39,6 +43,14 @@ class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
 
   Future<DiscoverTabState> _handleSearchUserEvent(
       {required SearchUser event}) async {
+    // === / ToDo: usecase ===
+    GetAuthenticatedUser _getAuthenticatedUser = sl<GetAuthenticatedUser>();
+    var authenticatedUser = await _getAuthenticatedUser();
+    sl<AnalyticsRepository>().addUserSearch(
+        authenticatedUser.id ?? "",
+        DateTime.now().millisecondsSinceEpoch.toString(),
+        event.searchQuery ?? "");
+    // =====
     List<PeerPALUser> usersFound =
         await _searchUser(username: _sanitizeUsername(event.searchQuery));
     return state.copyWith(

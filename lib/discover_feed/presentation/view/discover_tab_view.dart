@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/support_video_links.dart';
@@ -54,8 +55,9 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
       child: Scaffold(
         appBar: CustomAppBar('Entdecken',
             hasBackButton: false,
-            actionButtonWidget:
-                CustomSupportVideoDialog(link: SupportVideoLinks.DISCOVER_TAB)),
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.discover_tab]!)),
         body: BlocBuilder<DiscoverTabBloc, DiscoverTabState>(
           builder: (context, state) {
             switch (state.status) {
