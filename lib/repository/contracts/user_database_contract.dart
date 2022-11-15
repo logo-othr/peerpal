@@ -21,4 +21,9 @@ class UserDatabaseContract {
   static const deviceToken = 'pushToken';
   static const serverDeleteDeviceTokenQueue = 'deleteDeviceTokenFromServer';
   static const serverUpdateDeviceTokenQueue = 'updateDeviceTokenAtServer';
+  static const analytics_public_activity_click =
+      'analytics_public_activity_click';
+  static const analytics_video_click = 'analytics_video_click';
+  static const analytics_user_search = 'analytics_user_search';
+  static const analytics_add_activity_click = 'analytics_add_activity_click';
 }
