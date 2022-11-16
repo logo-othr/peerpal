@@ -26,7 +26,7 @@ class FirebaseAnalyticsService extends AnalyticsService {
     AnalyticUserSearchDTO analyticUserSearchDTO = AnalyticUserSearchDTO(
         userId: userId, timestamp: timestamp, searchQuery: searchQuery);
     await FirebaseFirestore.instance
-        .collection(UserDatabaseContract.analytics_public_activity_click)
+        .collection(UserDatabaseContract.analytics_user_search)
         .doc()
         .set(analyticUserSearchDTO.toJson());
   }
