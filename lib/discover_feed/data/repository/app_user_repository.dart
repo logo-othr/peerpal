@@ -63,7 +63,7 @@ class AppUserRepository {
           privateUserInformation, SetOptions(merge: true));
   }
 
-  Future<void> updateNameAtServer(userName) async {
+  Future<void> updateServerNameCache(userName) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance
         .collection('updateNameAtServer')

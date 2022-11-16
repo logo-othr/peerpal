@@ -31,6 +31,8 @@ class NameInputCubit extends Cubit<NameInputState> {
       var updatedUserInformation =
           userInformation.copyWith(name: state.username.value);
       await _appUserRepository.updateUserInformation(updatedUserInformation);
+      await _appUserRepository
+          .updateServerNameCache(updatedUserInformation.name); // ToDo: clean up
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(
@@ -40,7 +42,7 @@ class NameInputCubit extends Cubit<NameInputState> {
   }
 
   Future<void> updateNameAtServer(String userName) async {
-    await _appUserRepository.updateNameAtServer(userName.trim());
+    await _appUserRepository.updateServerNameCache(userName.trim());
   }
 
   Future<String?> currentName() async {
