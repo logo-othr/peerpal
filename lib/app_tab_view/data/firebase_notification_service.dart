@@ -22,7 +22,6 @@ class FirebaseNotificationService implements NotificationService {
 
   bool _isServiceInitialized = false;
   bool _isRemoteMessageHandlerStarted = false;
-  bool weeklyRemindersActive = false;
 
   Future<int> _nextNotificationId() async {
     final SharedPreferences _preferences =
@@ -129,17 +128,36 @@ class FirebaseNotificationService implements NotificationService {
     return scheduledDate;
   }
 
+  Future<void> setWeeklyReminderScheduled(bool isScheduled) async {
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool("weekly-reminder", isScheduled);
+  }
+
+  Future<bool> isWeeklyReminderScheduled() async {
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    bool? isWeeklyReminderScheduled = prefs.getBool("weekly-reminder");
+    if (isWeeklyReminderScheduled == null ||
+        isWeeklyReminderScheduled! == false) {
+      return false;
+    } else
+      return true;
+  }
+
   @override
   Future<int> scheduleWeeklyNotification() async {
 // ToDo: Move title and message up
+    bool weeklyRemindersActive = await isWeeklyReminderScheduled();
     if (!weeklyRemindersActive) {
       await _ensureInitialized();
       int notificationId = await _nextNotificationId();
       await _flutterLocalNotificationsPlugin.zonedSchedule(
           notificationId,
           'Wöchentliche Erinnerung - PeerPAL',
-          'Hey, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!',
-          _nextInstanceOfMondayTenAM(),
+          'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!',
+          //_nextInstanceOfMondayTenAM(),
+          _nextInstanceOfTenAM(),
           _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
@@ -148,7 +166,7 @@ class FirebaseNotificationService implements NotificationService {
 
       logger.i(
           "Scheduled weekly notification with id $notificationId for weekly notification");
-      weeklyRemindersActive = true;
+      await setWeeklyReminderScheduled(true);
       return notificationId;
     } else
       return -1;
