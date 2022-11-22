@@ -16,4 +16,6 @@ abstract class NotificationService {
   Future<int> showNotification(String title, String body);
 
   Future<int> scheduleWeeklyNotification();
+
+  Future<void> printPendingNotifications();
 }

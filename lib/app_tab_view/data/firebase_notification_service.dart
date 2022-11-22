@@ -121,11 +121,23 @@ class FirebaseNotificationService implements NotificationService {
   TZDateTime _nextInstanceOfTenAM() {
     final TZDateTime now = TZDateTime.now(local);
     TZDateTime scheduledDate =
-        TZDateTime(local, now.year, now.month, now.day, 10);
+        TZDateTime(local, now.year, now.month, now.day, 10, 00);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
+  }
+
+  @override
+  Future<void> printPendingNotifications() async {
+    print("pending notifications:");
+    final List<PendingNotificationRequest> pendingNotificationRequests =
+        await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    for (PendingNotificationRequest pendingNotificationRequest
+        in pendingNotificationRequests) {
+      print(
+          "PendingNotificationRequest: id: ${pendingNotificationRequest.id}, body: ${pendingNotificationRequest.body} payload: ${pendingNotificationRequest.payload}, title: ${pendingNotificationRequest.title}");
+    }
   }
 
   Future<void> setWeeklyReminderScheduled(bool isScheduled) async {
@@ -138,11 +150,7 @@ class FirebaseNotificationService implements NotificationService {
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
     bool? isWeeklyReminderScheduled = prefs.getBool("weekly-reminder");
-    if (isWeeklyReminderScheduled == null ||
-        isWeeklyReminderScheduled! == false) {
-      return false;
-    } else
-      return true;
+    return isWeeklyReminderScheduled ?? false;
   }
 
   @override
@@ -156,20 +164,24 @@ class FirebaseNotificationService implements NotificationService {
           notificationId,
           'Wöchentliche Erinnerung - PeerPAL',
           'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!',
-          //_nextInstanceOfMondayTenAM(),
-          _nextInstanceOfTenAM(),
+          _nextInstanceOfMondayTenAM(),
           _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
+          payload: _nextInstanceOfTenAM().toString(),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
       logger.i(
           "Scheduled weekly notification with id $notificationId for weekly notification");
       await setWeeklyReminderScheduled(true);
+      await printPendingNotifications();
       return notificationId;
-    } else
+    } else {
+      await printPendingNotifications();
+      print("weekly reminders already active");
       return -1;
+    }
 
     /*await _ensureInitialized();
   int notificationId = await _nextNotificationId();
@@ -202,6 +214,7 @@ class FirebaseNotificationService implements NotificationService {
       _platformSpecificNotificationDetails(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      payload: scheduledDateTime.toString(),
       androidAllowWhileIdle: true,
     );
 
@@ -214,11 +227,11 @@ class FirebaseNotificationService implements NotificationService {
     return const AndroidInitializationSettings('@mipmap/ic_launcher');
   }
 
-  IOSInitializationSettings _createIOSNotificationSettings() {
-    return const IOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
+  DarwinInitializationSettings _createIOSNotificationSettings() {
+    return const DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
     );
   }
 
@@ -234,10 +247,12 @@ class FirebaseNotificationService implements NotificationService {
 
   NotificationDetails _platformSpecificNotificationDetails() {
     return const NotificationDetails(
-      android: AndroidNotificationDetails('app_notification',
-          'app_notification_channel', 'App notification channel',
-          importance: Importance.max, priority: Priority.max),
-      iOS: IOSNotificationDetails(
+      android: AndroidNotificationDetails(
+          'app_notification', 'app_notification_channel',
+          channelDescription: 'App notification channel',
+          importance: Importance.max,
+          priority: Priority.max),
+      iOS: DarwinNotificationDetails(
         sound: 'default.wav',
         presentAlert: true,
         presentBadge: true,

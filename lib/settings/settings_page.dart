@@ -159,13 +159,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       }),
                 },
               ),
-              CustomTableRow(
-                text: "Push-Notification-Test",
-                onPressed: () async => {
-                  sl<NotificationService>().scheduleNotification("test", "test",
-                      tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)))
-                },
-              ),
               Column(
                 children: [
                   CustomTableHeader(heading: "SONSTIGES"),
@@ -178,11 +171,31 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Column(
                 children: [
-                  CustomTableHeader(heading: "User-ID"),
+                  CustomTableHeader(heading: "Entwickler-Einstellungen"),
                   CustomTableRow(
                     text:
-                        "${sl.get<AuthenticationRepository>().currentUser.id}",
+                        "ID: ${sl.get<AuthenticationRepository>().currentUser.id}",
                     isArrowVisible: false,
+                  ),
+                  CustomTableRow(
+                    text: "Push-Notification-Test",
+                    onPressed: () async => {
+                      sl<NotificationService>().scheduleNotification(
+                          "test",
+                          "test",
+                          tz.TZDateTime.now(tz.local).add(Duration(seconds: 5)))
+                    },
+                  ),
+                  CustomTableRow(
+                    text: "print push notification",
+                    onPressed: () async =>
+                        {sl<NotificationService>().printPendingNotifications()},
+                  ),
+                  CustomTableRow(
+                    text: "schedule weekly reminder",
+                    onPressed: () async => {
+                      sl<NotificationService>().scheduleWeeklyNotification()
+                    },
                   ),
                 ],
               ),
