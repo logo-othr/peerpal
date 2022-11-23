@@ -64,6 +64,18 @@ class DiscoverSetupState extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
+class NotificationSetupState extends HomeState {
+  NotificationSetupState(PeerPALUser userInformation) : super(userInformation);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [userInformation];
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => throw UnimplementedError();
+}
+
 class SetupCompletedState extends HomeState {
   final int index;
 
@@ -76,3 +88,4 @@ class SetupCompletedState extends HomeState {
   // TODO: implement stringify
   bool? get stringify => throw UnimplementedError();
 }
+

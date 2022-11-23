@@ -8,6 +8,7 @@ import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/home/domain/start_rememberme_notifications.dart';
+import 'package:peerpal/notification/presentation/notification_page.dart';
 import 'package:peerpal/profile_setup/profile_wiazrd_flow.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -90,6 +91,9 @@ class _SetupPageContentState extends State<SetupPageContent> {
         if (state is DiscoverSetupState) {
           await loadDiscoverSetup(context, state);
         }
+        if (state is NotificationSetupState) {
+          await loadNotificationSetup();
+        }
       },
       child: BlocBuilder<HomeCubit, HomeState>(
           bloc: BlocProvider.of<HomeCubit>(context),
@@ -100,6 +104,15 @@ class _SetupPageContentState extends State<SetupPageContent> {
             return _LoadingIndicator();
           }),
     );
+  }
+
+  Future<void> loadNotificationSetup() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NotificationPage()),
+    );
+
+    await BlocProvider.of<HomeCubit>(context).loadCurrentSetupFlowState();
   }
 
   Future<void> loadProfileSetup(
