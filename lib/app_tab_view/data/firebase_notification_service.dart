@@ -110,7 +110,7 @@ class FirebaseNotificationService implements NotificationService {
   // ToDo: test.
   TZDateTime _nextInstanceOfMondayTenAM() {
     TZDateTime scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.mondayy) {
+    while (scheduledDate.weekday != DateTime.monday) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
