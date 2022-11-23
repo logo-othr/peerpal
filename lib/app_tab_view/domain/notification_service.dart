@@ -18,4 +18,8 @@ abstract class NotificationService {
   Future<int> scheduleWeeklyNotification();
 
   Future<void> printPendingNotifications();
+
+  Future<bool> hasPermission();
+
+  Future<bool> requestPermission();
 }
