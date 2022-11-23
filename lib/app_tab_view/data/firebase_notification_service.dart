@@ -110,7 +110,7 @@ class FirebaseNotificationService implements NotificationService {
   // ToDo: test.
   TZDateTime _nextInstanceOfMondayTenAM() {
     TZDateTime scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.monday) {
+    while (scheduledDate.weekday != DateTime.mondayy) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
@@ -229,10 +229,43 @@ class FirebaseNotificationService implements NotificationService {
 
   DarwinInitializationSettings _createIOSNotificationSettings() {
     return const DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
+  }
+
+  @override
+  Future<bool> hasPermission() async {
+    NotificationSettings currentSettings =
+        await _firebaseMessaging.getNotificationSettings();
+
+    //https://firebase.flutter.dev/docs/messaging/permissions/
+    if (currentSettings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (currentSettings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+    return currentSettings.authorizationStatus ==
+        AuthorizationStatus.authorized;
+  }
+
+  @override
+  Future<bool> requestPermission() async {
+    if (await hasPermission()) {
+      return true;
+    }
+    NotificationSettings newSettings =
+        await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    return newSettings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
   Future<void> _ensureInitialized() async {
