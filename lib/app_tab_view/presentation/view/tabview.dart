@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
+import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
@@ -72,6 +73,10 @@ class _AppTabViewState extends State<AppTabView> {
               ),
               BlocProvider<ChatListBloc>(
                 create: (context) => sl<ChatListBloc>()..add(ChatListLoaded()),
+              ),
+              BlocProvider<ActivityFeedBloc>(
+                create: (context) =>
+                    sl<ActivityFeedBloc>()..add(LoadActivityFeed()),
               ),
             ],
             child: tabs[state.index],
