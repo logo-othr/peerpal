@@ -53,9 +53,8 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
       _activityJoinedListController.addStream(activityJoinedList);
 
       _activityJoinedListController.stream.listen((List<Activity> activities) {
-        for (Activity a in activities) {
-          sl<ActivityReminderRepository>().setRemindersForActivity(a);
-        }
+        sl<ActivityReminderRepository>()
+            .clearAndSetActivityReminders(activities);
       });
 
       yield state.copyWith(
