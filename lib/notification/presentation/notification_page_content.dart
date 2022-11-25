@@ -15,9 +15,34 @@ class _NotificationPageContentState extends State<NotificationPageContent> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-            "Damit wir dich über neue Nachrichten informieren können und an Aktivitäten und diese App erinnern können, benötigen wir deine Zustimmung. Wenn du auf den Button klickst, dann bestätige bitte mit 'Ja'"),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+          child: Text(
+            "Bitte erlauben",
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, height: 1.5, fontSize: 35),
+          ),
+        ),
+        SizedBox(
+          height: 50,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+          child: Text(
+            "Damit wir dich über neue Benachrichtigungen informieren können, benötigen wir deine Erlaubnis. "
+            "Wenn du auf den Button klickst, dann bestätige bitte im nächsten Schritt mit 'Ja', damit du keine Erinnerungen verpasst.",
+            textAlign: TextAlign.justify,
+            style: TextStyle(
+                fontWeight: FontWeight.w600, height: 1.5, fontSize: 22),
+          ),
+        ),
+        SizedBox(
+          height: 50,
+        ),
         ElevatedButton(
             onPressed: () async {
               NotificationService notificationService =
@@ -26,7 +51,13 @@ class _NotificationPageContentState extends State<NotificationPageContent> {
                   (await notificationService.requestPermission());
               if (hasPermission) Navigator.pop(context);
             },
-            child: Text("Benachrichtigungen erlauben"))
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Benachrichtigungen erlauben",
+                style: TextStyle(fontSize: 20),
+              ),
+            ))
       ],
     );
     /*return BlocBuilder<NotificationCubit, NotificationState>(
