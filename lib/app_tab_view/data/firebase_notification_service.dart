@@ -110,7 +110,7 @@ class FirebaseNotificationService implements NotificationService {
   // ToDo: test.
   TZDateTime _nextInstanceOfMondayTenAM() {
     TZDateTime scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.monday) {
+    while (scheduledDate.weekday != DateTime.thursday) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
@@ -121,11 +121,22 @@ class FirebaseNotificationService implements NotificationService {
   TZDateTime _nextInstanceOfTenAM() {
     final TZDateTime now = TZDateTime.now(local);
     TZDateTime scheduledDate =
-        TZDateTime(local, now.year, now.month, now.day, 10, 00);
+        TZDateTime(local, now.year, now.month, now.day, 13, 00);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
+  }
+
+  @override
+  Future<void> cancelAll() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  @override
+  Future<void> cancelNotification(int notificationId) async {
+    await _flutterLocalNotificationsPlugin.cancel(notificationId);
+    print("notification service: canceled notification ${notificationId}");
   }
 
   @override
@@ -160,16 +171,17 @@ class FirebaseNotificationService implements NotificationService {
     if (!weeklyRemindersActive) {
       await _ensureInitialized();
       int notificationId = await _nextNotificationId();
+      var datetime = _nextInstanceOfMondayTenAM();
       await _flutterLocalNotificationsPlugin.zonedSchedule(
           notificationId,
           'Wöchentliche Erinnerung - PeerPAL',
           'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!',
-          _nextInstanceOfMondayTenAM(),
+          datetime,
           _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
-          payload: _nextInstanceOfTenAM().toString(),
+          payload: "weekly reminder: " + datetime.toString(),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
       logger.i(
@@ -182,23 +194,38 @@ class FirebaseNotificationService implements NotificationService {
       print("weekly reminders already active");
       return -1;
     }
+  }
 
-    /*await _ensureInitialized();
-  int notificationId = await _nextNotificationId();
-  await _flutterLocalNotificationsPlugin.zonedSchedule(
-      notificationId,
-      'daily scheduled notification title',
-      'daily scheduled notification body',
-      _nextInstanceOfTwelveAM(),
-      _platformSpecificNotificationDetails(),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time);
+  @override
+  Future<int> scheduleDailyNotification() async {
+// ToDo: Move title and message up
+    bool weeklyRemindersActive = await isWeeklyReminderScheduled();
+    if (!weeklyRemindersActive) {
+      await _ensureInitialized();
+      int notificationId = await _nextNotificationId();
+      var datetime = _nextInstanceOfTenAM();
+      await _flutterLocalNotificationsPlugin.zonedSchedule(
+          notificationId,
+          'TÄGLICHE Erinnerung - PeerPAL',
+          'Hi, wir würden uns freuen, wenn du PeerPAL HEUTE nutzt!',
+          datetime,
+          _platformSpecificNotificationDetails(),
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: "daily reminder: " + datetime.toString(),
+          matchDateTimeComponents: DateTimeComponents.time);
 
-  logger
-      .i("Scheduled weekly notification with id $notificationId for weekly notification");
-  return notificationId;*/
+      logger.i(
+          "Scheduled DAILY notification with id $notificationId for weekly notification");
+      await setWeeklyReminderScheduled(true);
+      await printPendingNotifications();
+      return notificationId;
+    } else {
+      await printPendingNotifications();
+      print("weekly reminders already active");
+      return -1;
+    }
   }
 
   @override
