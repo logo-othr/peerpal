@@ -13,7 +13,7 @@ class RememberMeNotificationRepository {
   Future<void> _scheduleReminders() async {
     int notificationReminderId =
         await _notificationService.scheduleWeeklyNotification();
-    if (notificationReminderId == -1) print(
-        "error: weekly reminder could not be scheduled.")
+    if (notificationReminderId == -1)
+      print("error: weekly reminder could not be scheduled.");
   }
 }
