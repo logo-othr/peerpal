@@ -22,4 +22,12 @@ abstract class NotificationService {
   Future<bool> hasPermission();
 
   Future<bool> requestPermission();
+
+  Future<void> cancelNotification(int notificationId);
+
+  Future<void> cancelAll();
+
+  Future<void> setWeeklyReminderScheduled(bool isScheduled);
+
+  Future<void> scheduleDailyNotification();
 }
