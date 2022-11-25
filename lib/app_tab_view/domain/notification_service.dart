@@ -30,4 +30,6 @@ abstract class NotificationService {
   Future<void> setWeeklyReminderScheduled(bool isScheduled);
 
   Future<void> scheduleDailyNotification();
+
+  Future<bool> hasAskedForPermission();
 }
