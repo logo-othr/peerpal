@@ -36,12 +36,13 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ProfileSetupState(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
       emit(DiscoverSetupState(userInformation));
-    } else if (!(await _hasPermission()) && Platform.isIOS) {
+    } else if (!(await _hasPermission()) &&
+        Platform.isIOS &&
+        !(await sl<NotificationService>().hasAskedForPermission())) {
       print("Is ios: " + Platform.isIOS.toString());
       // ToDo: await _hasPermission() or permissionAlreadyAsked (global?)
-      if (Platform.isIOS) {
-        emit(NotificationSetupState(userInformation));
-      }
+
+      emit(NotificationSetupState(userInformation));
     } else {
       _startRemoteNotifications();
       _startRememberMeNotifications();
