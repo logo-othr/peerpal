@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -34,9 +36,12 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ProfileSetupState(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
       emit(DiscoverSetupState(userInformation));
-    } else if (!(await _hasPermission())) {
+    } else if (!(await _hasPermission()) && Platform.isIOS) {
+      print("Is ios: " + Platform.isIOS.toString());
       // ToDo: await _hasPermission() or permissionAlreadyAsked (global?)
-      emit(NotificationSetupState(userInformation));
+      if (Platform.isIOS) {
+        emit(NotificationSetupState(userInformation));
+      }
     } else {
       _startRemoteNotifications();
       _startRememberMeNotifications();
