@@ -167,6 +167,7 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<int> scheduleWeeklyNotification() async {
+    if ((await hasPermission()) == false) return -1;
 // ToDo: Move title and message up
     bool weeklyRemindersActive = await isWeeklyReminderScheduled();
     if (!weeklyRemindersActive) {
@@ -181,7 +182,7 @@ class FirebaseNotificationService implements NotificationService {
           _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.absoluteTime,
           payload: "weekly reminder: " + datetime.toString(),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
