@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/data/resources/colors.dart';
@@ -228,7 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           await SharedPreferences.getInstance();
 
                       for (String key in prefs.getKeys()) {
-                        print(
+                        logger.i(
                             "key: ${key} value: ${prefs.get(key).toString()}");
                       }
                     },

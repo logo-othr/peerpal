@@ -16,6 +16,8 @@ import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../app_logger.dart';
+
 class AppUserRepository {
   AppUserRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
@@ -119,8 +121,8 @@ class AppUserRepository {
           .doc(uid)
           .get();
     } on Exception catch (e) {
-      print('$e'); // ToDo: Use firebase error codes
-      print(e);
+      logger.i('$e'); // ToDo: Use firebase error codes
+      logger.i(e);
     }
 
     if (publicUserDocument.exists && publicUserDocument.data() != null) {

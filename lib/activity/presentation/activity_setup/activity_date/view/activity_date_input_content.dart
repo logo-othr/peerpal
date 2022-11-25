@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_date/cubit/activity_date_cubit.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_activity_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -120,7 +121,7 @@ class _DatePickerState extends State<_DatePicker> {
                     DatePicker.showDatePicker(context,
                         showTitleActions: true,
                         minTime: DateTime.now(), onChanged: (date) {
-                      print('change $date');
+                          logger.i('change $date');
                     }, onConfirm: (date) {
                       String formattedDate =
                           DateFormat('dd.MM.yyyy').format(date);
@@ -181,7 +182,7 @@ class _TimePickerState extends State<_TimePicker> {
           onPressed: () => {
                 DatePicker.showPicker(context, showTitleActions: true,
                     onChanged: (date) {
-                  print('change $date');
+                      logger.i('change $date');
                 }, onConfirm: (date) {
                   String formattedTime = DateFormat('HH:mm').format(date);
                   var array = formattedTime.split(":");

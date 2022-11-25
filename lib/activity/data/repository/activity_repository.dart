@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/data/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -156,7 +157,7 @@ class ActivityRepository {
 
         /*if(activity.creatorId != currentUserId)*/
         publicActivityList.add(activity);
-        print("PublicActivityStream: $activity");
+        //logger.i("PublicActivityStream: $activity");
       });
       publicActivityList.sort((a, b) => a.date!.compareTo(b.date!));
 
@@ -179,7 +180,7 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
         createdActivityList.add(activity);
-        print("CreatedActivityStream: $activity");
+        logger.i("CreatedActivityStream: $activity");
       });
       createdActivityList.sort((a, b) => a.date!.compareTo(b.date!));
       yield createdActivityList;
@@ -242,7 +243,7 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
         privateRequestActivitiesFromUserList.add(activity);
-        print("PrivateRequestActivitiesFromUserStream: $activity");
+        logger.i("PrivateRequestActivitiesFromUserStream: $activity");
       });
       privateRequestActivitiesFromUserList
           .sort((a, b) => a.date!.compareTo(b.date!));
@@ -267,7 +268,7 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
         publicJoinedActivitiesFromUserList.add(activity);
-        print("PublicJoinedActivitiesFromUserStream: $activity");
+        logger.i("PublicJoinedActivitiesFromUserStream: $activity");
       });
       publicJoinedActivitiesFromUserList
           .sort((a, b) => a.date!.compareTo(b.date!));

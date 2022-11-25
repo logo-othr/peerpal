@@ -136,17 +136,17 @@ class FirebaseNotificationService implements NotificationService {
   @override
   Future<void> cancelNotification(int notificationId) async {
     await _flutterLocalNotificationsPlugin.cancel(notificationId);
-    print("notification service: canceled notification ${notificationId}");
+    logger.i("notification service: canceled notification ${notificationId}");
   }
 
   @override
   Future<void> printPendingNotifications() async {
-    print("pending notifications:");
+    logger.i("pending notifications:");
     final List<PendingNotificationRequest> pendingNotificationRequests =
         await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
     for (PendingNotificationRequest pendingNotificationRequest
         in pendingNotificationRequests) {
-      print(
+      logger.i(
           "PendingNotificationRequest: id: ${pendingNotificationRequest.id}, body: ${pendingNotificationRequest.body} payload: ${pendingNotificationRequest.payload}, title: ${pendingNotificationRequest.title}");
     }
   }
@@ -191,7 +191,7 @@ class FirebaseNotificationService implements NotificationService {
       return notificationId;
     } else {
       await printPendingNotifications();
-      print("weekly reminders already active");
+      logger.i("weekly reminders already active");
       return -1;
     }
   }
@@ -223,7 +223,7 @@ class FirebaseNotificationService implements NotificationService {
       return notificationId;
     } else {
       await printPendingNotifications();
-      print("weekly reminders already active");
+      logger.i("weekly reminders already active");
       return -1;
     }
   }
@@ -269,12 +269,12 @@ class FirebaseNotificationService implements NotificationService {
 
     //https://firebase.flutter.dev/docs/messaging/permissions/
     if (currentSettings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      logger.i('User granted permission');
     } else if (currentSettings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      logger.i('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      logger.i('User declined or has not accepted permission');
     }
     return currentSettings.authorizationStatus ==
         AuthorizationStatus.authorized;

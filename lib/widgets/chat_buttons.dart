@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/chat_answer_button.dart';
 import 'package:peerpal/widgets/chat_emoji_button.dart';
@@ -26,13 +27,13 @@ class _ChatButtonsState extends State<ChatButtons> {
 
     var keyboardVisibilityController = KeyboardVisibilityController();
     // Query
-    print(
+    logger.i(
         'Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
 
     // Subscribe
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
-      print('Keyboard visibility update. Is visible: $visible');
+          logger.i('Keyboard visibility update. Is visible: $visible');
       if (visible) {
         setState(() {
           isAnswerKeyboardVisible = false;

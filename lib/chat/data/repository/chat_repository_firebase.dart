@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/data/dtos/chat_dto.dart';
 import 'package:peerpal/chat/data/dtos/chat_message_dto.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
@@ -35,11 +36,11 @@ class ChatRepositoryFirebase implements ChatRepository {
         .orderBy(UserDatabaseContract.chatTimestamp, descending: true)
         /* .limit(10)*/
         .snapshots();
-    print("Chat-Stream created.");
+    logger.i("Chat-Stream created.");
 
     List<Chat> chatList = <Chat>[];
     await for (QuerySnapshot querySnapshot in chatStream) {
-      print("Chat-Change");
+      logger.i("Chat-Change");
       chatList.clear();
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;

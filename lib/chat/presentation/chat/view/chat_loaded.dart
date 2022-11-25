@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
@@ -105,7 +106,7 @@ class ChatLoaded extends StatelessWidget {
     await ref.getDownloadURL().then((fileURL) {
       returnURL = fileURL;
     });
-    print(returnURL);
+    logger.i(returnURL);
     return returnURL;
   }
 

@@ -76,17 +76,17 @@ class ActivityReminderRepository {
     List<String>? notificationReminderIds =
         await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
     if (notificationReminderIds == null) {
-      print(
+      logger.i(
           "activity reminder repository: There are no reminders for the activity with id ${activityId}");
       return;
     }
-    print(
+    logger.i(
         "activity reminder repository: cancel activity reminders for activity with id ${activityId}");
     for (String notificationReminderId in notificationReminderIds) {
       int id = int.tryParse(notificationReminderId) ?? -1;
       await _notificationService.cancelNotification(id);
     }
-    print("done. canceled all reminders for activity ${activityId}");
+    logger.i("done. canceled all reminders for activity ${activityId}");
   }
 
   Future<bool> _reminderForActivityExists(String activityId) async {

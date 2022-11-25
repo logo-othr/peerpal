@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/domain/models/auth_user.dart';
 import 'package:peerpal/data/cache.dart';
 
@@ -51,11 +52,11 @@ class AuthenticationRepository {
   Future<bool> resetPassword({required String email}) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      print("password reset email sent");
+      logger.i("password reset email sent");
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        logger.i('No user found for that email.');
         // ToDo: throw exception
         return false;
       }

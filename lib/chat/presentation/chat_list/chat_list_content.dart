@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/custom_chat_list_item_user.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page.dart';
@@ -149,13 +150,13 @@ class _ChatListContentState extends State<ChatListContent> {
 }
 
 void debugChatStreamText(AsyncSnapshot snapshot) {
-  print("-------------- SteamBuilder Chat Build ---------- ");
-  print(snapshot.connectionState);
-  if (snapshot.hasData) print("chat snapshot.hasData");
+  logger.i("-------------- SteamBuilder Chat Build ---------- ");
+  logger.i(snapshot.connectionState);
+  if (snapshot.hasData) logger.i("chat snapshot.hasData");
   if (snapshot.hasData && snapshot.data!.isEmpty)
-    print("chat snapshot.hasData && snapshot.data!.isEmpty");
-  if (snapshot.hasData) print("chat length: ${snapshot.data!.length}");
-  print("-------------- SteamBuilder Chat Build /ENDE ---------- ");
+    logger.i("chat snapshot.hasData && snapshot.data!.isEmpty");
+  if (snapshot.hasData) logger.i("chat length: ${snapshot.data!.length}");
+  logger.i("-------------- SteamBuilder Chat Build /ENDE ---------- ");
 }
 
 class ChatRow extends StatelessWidget {

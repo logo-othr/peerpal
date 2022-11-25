@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
 import 'package:peerpal/app_tab_view/presentation/view/tabview.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -67,12 +68,12 @@ class _SetupPageContentState extends State<SetupPageContent> {
 
   void _handleMessageFromTerminatedState(RemoteMessage message) async {
     context.read<HomeCubit>().indexChanged(3);
-    print("got message from terminated state stream");
+    logger.i("got message from terminated state stream");
   }
 
   void _handleMessageFromBackgroundStreamState(RemoteMessage message) async {
     context.read<HomeCubit>().indexChanged(3);
-    print("got message from background stream");
+    logger.i("got message from background stream");
   }
 
   @override

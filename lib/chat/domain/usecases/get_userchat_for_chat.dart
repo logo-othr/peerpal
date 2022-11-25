@@ -51,7 +51,7 @@ class GetUserChatForChat {
     int lastMessageClickedTimestamp = int.parse(timestamp ?? "0");
     int lastMessageTimestamp = int.parse(chat.lastMessage?.timestamp ?? "0");
     if (lastMessageClickedTimestamp < lastMessageTimestamp) redDot = true;
-    print("Chat with user ${peerPALUser.name} has a red dot: ${redDot}");*/
+    logger.i("Chat with user ${peerPALUser.name} has a red dot: ${redDot}");*/
 
     UserChat userChat = UserChat(chat: chat, user: peerPALUser);
     return userChat;

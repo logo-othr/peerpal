@@ -10,6 +10,7 @@ import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_servic
 import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/app/domain/analytics/analytics_service.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/data/firebase_notification_service.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
@@ -33,8 +34,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 @pragma('vm:entry-point')
 Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
-  print("background handler called");
-  print(
+  logger.i("background handler called");
+  logger.i(
       "Handling a background message \n message.data: ${message.data} \n message.messageId: ${message.messageId} \n message.messageType: ${message.messageType} \n message.notification: ${message.notification} \n message.notification.title: ${message.notification?.title}");
   /*if (message.notification != null) {
     RemoteNotification remoteNotification = message.notification!;
@@ -46,8 +47,8 @@ Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _remoteNotificationForegroundHandler(RemoteMessage message) async {
-  print("foreground handler calleed");
-  print(
+  logger.i("foreground handler calleed");
+  logger.i(
       "Handling a foreground message \n message.data: ${message.data} \n message.messageId: ${message.messageId} \n message.messageType: ${message.messageType} \n message.notification: ${message.notification} \n message.notification.title: ${message.notification?.title}");
   /*if (message.notification != null) {
     RemoteNotification remoteNotification = message.notification!;
