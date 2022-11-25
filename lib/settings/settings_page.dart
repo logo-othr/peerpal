@@ -16,6 +16,7 @@ import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
 import 'package:peerpal/widgets/custom_table_row.dart';
 import 'package:provider/src/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class SettingsPage extends StatefulWidget {
@@ -195,6 +196,49 @@ class _SettingsPageState extends State<SettingsPage> {
                     text: "schedule weekly reminder",
                     onPressed: () async => {
                       sl<NotificationService>().scheduleWeeklyNotification()
+                    },
+                  ),
+                  CustomTableRow(
+                    text: "reset pending notifications and set weekly reminder",
+                    onPressed: () async {
+                      sl<NotificationService>().cancelAll();
+                      sl<NotificationService>()
+                          .setWeeklyReminderScheduled(false);
+                      sl<NotificationService>().scheduleWeeklyNotification();
+                    },
+                  ),
+                  CustomTableRow(
+                    text: "reset pending notifications and set daily reminder",
+                    onPressed: () async {
+                      sl<NotificationService>().cancelAll();
+                      sl<NotificationService>()
+                          .setWeeklyReminderScheduled(false);
+                      sl<NotificationService>().scheduleDailyNotification();
+                    },
+                  ),
+                  CustomTableRow(
+                    text: "reset pending notifications",
+                    onPressed: () async =>
+                        {sl<NotificationService>().cancelAll()},
+                  ),
+                  CustomTableRow(
+                    text: "print shared prefs",
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+
+                      for (String key in prefs.getKeys()) {
+                        print(
+                            "key: ${key} value: ${prefs.get(key).toString()}");
+                      }
+                    },
+                  ),
+                  CustomTableRow(
+                    text: "clear shared prefs",
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.clear();
                     },
                   ),
                 ],
