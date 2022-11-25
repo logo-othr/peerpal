@@ -37,8 +37,8 @@ class ActivityJoinedListBloc
 
       _activityJoinedListStreamController.stream
           .listen((List<Activity> activities) {
-        activities.map(
-            (e) => sl<ActivityReminderRepository>().setRemindersForActivity(e));
+        activities.map((e) => sl<ActivityReminderRepository>()
+            .setActivityRemindersIfRemindersNotExist(e));
       });
 
       yield state.copyWith(
