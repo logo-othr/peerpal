@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -37,12 +36,13 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ProfileSetupState(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
       emit(DiscoverSetupState(userInformation));
-    } else if (!(await _hasPermission()) && Platform.isIOS) {
-      logger.i("Is ios: " + Platform.isIOS.toString());
+    } else if (!(await _hasPermission()) &&
+        Platform.isIOS &&
+        !(await sl<NotificationService>().hasAskedForPermission())) {
+      print("Is ios: " + Platform.isIOS.toString());
       // ToDo: await _hasPermission() or permissionAlreadyAsked (global?)
-      if (Platform.isIOS) {
-        emit(NotificationSetupState(userInformation));
-      }
+
+      emit(NotificationSetupState(userInformation));
     } else {
       _startRemoteNotifications();
       _startRememberMeNotifications();

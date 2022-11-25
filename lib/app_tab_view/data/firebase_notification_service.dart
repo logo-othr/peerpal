@@ -15,6 +15,7 @@ class FirebaseNotificationService implements NotificationService {
       "An error occurred while removing the device token. ";
   final String _ACTIVITY_NOTIFICATION_ID_COUNTER =
       'ACTIVITY_NOTIFICATION_ID_COUNTER';
+  final String HAS_ASKED_FOR_PERMISSION = "HAS_ASKED_FOR_PERMISSION";
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -166,6 +167,7 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<int> scheduleWeeklyNotification() async {
+    if ((await hasPermission()) == false) return -1;
 // ToDo: Move title and message up
     bool weeklyRemindersActive = await isWeeklyReminderScheduled();
     if (!weeklyRemindersActive) {
@@ -180,7 +182,7 @@ class FirebaseNotificationService implements NotificationService {
           _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.absoluteTime,
           payload: "weekly reminder: " + datetime.toString(),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
@@ -281,6 +283,13 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   @override
+  Future<bool> hasAskedForPermission() async {
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    return await _preferences.getBool(HAS_ASKED_FOR_PERMISSION) ?? false;
+  }
+
+  @override
   Future<bool> requestPermission() async {
     if (await hasPermission()) {
       return true;
@@ -291,6 +300,9 @@ class FirebaseNotificationService implements NotificationService {
       badge: true,
       sound: true,
     );
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    _preferences.setBool(HAS_ASKED_FOR_PERMISSION, true);
 
     return newSettings.authorizationStatus == AuthorizationStatus.authorized;
   }

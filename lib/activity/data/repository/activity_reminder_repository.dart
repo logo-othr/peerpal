@@ -25,8 +25,11 @@ class ActivityReminderRepository {
 
     if (oldActivityWithReminderList != null) {
       for (String oldActivity in oldActivityWithReminderList) {
-        if (!newActivityWithReminderList.contains(oldActivity))
+        if (!newActivityWithReminderList.contains(oldActivity)) {
           await cancelReminderForActivity(oldActivity);
+          (await _prefs.setStringList(
+              _ACTIVITY_IDS_WITH_REMINDERS_LIST, newActivityWithReminderList));
+        }
       }
     }
 
@@ -38,12 +41,13 @@ class ActivityReminderRepository {
 // ToDo: Nullcheck activity member
   Future<void> setActivityRemindersIfRemindersNotExist(
       Activity activity) async {
+    if (await _notificationService.hasPermission() == false) return;
     TZDateTime firstReminderDateTime =
-        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+    TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
     firstReminderDateTime =
         firstReminderDateTime.subtract(new Duration(minutes: 15));
     TZDateTime secondReminderDateTime =
-        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+    TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
     secondReminderDateTime =
         secondReminderDateTime.subtract(new Duration(hours: 3));
     TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);

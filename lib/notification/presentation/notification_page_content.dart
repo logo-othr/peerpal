@@ -49,7 +49,7 @@ class _NotificationPageContentState extends State<NotificationPageContent> {
                   sl<NotificationService>();
               bool hasPermission =
                   (await notificationService.requestPermission());
-              if (hasPermission) Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
