@@ -57,7 +57,8 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
     Activity updatedActivity = (activity ?? state.activity);
 
     await _activityRepository.joinActivity(state.activity);
-    await _activityReminderRepository.setRemindersForActivity(state.activity);
+    await _activityReminderRepository
+        .setActivityRemindersIfRemindersNotExist(state.activity);
 
     emit(ActivityPublicOverviewLoaded(
         updatedActivity, state.activityCreator, state.attendees, true));
