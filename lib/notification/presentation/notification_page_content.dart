@@ -5,6 +5,8 @@ import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
+bool notificationRequestButtonClicked = false;
+
 class NotificationPageContent extends StatefulWidget {
   @override
   _NotificationPageContentState createState() =>
@@ -50,10 +52,12 @@ class _NotificationPageContentState extends State<NotificationPageContent> {
             CustomPeerPALButton(
                 text: 'Benachrichtigungen erlauben',
                 onPressed: () async {
+                  notificationRequestButtonClicked = true;
                   NotificationService notificationService =
                       sl<NotificationService>();
                   bool hasPermission =
                       (await notificationService.requestPermission());
+
                   Navigator.pop(context);
                 },
                 color: PeerPALAppColor.primaryColor),
