@@ -90,6 +90,7 @@ class ActivityReminderRepository {
       int id = int.tryParse(notificationReminderId) ?? -1;
       await _notificationService.cancelNotification(id);
     }
+    (await _prefs.remove("${_ACTIVITY_REMINDER_PREFIX}${activityId}"));
     logger.i("done. canceled all reminders for activity ${activityId}");
   }
 
