@@ -8,6 +8,7 @@ import 'package:peerpal/chat/presentation/chat_list/chat_list_page.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
 import 'package:peerpal/discover_feed/presentation/view/discover_tab_view.dart';
+import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/settings/settings_page.dart';
@@ -77,6 +78,11 @@ class _AppTabViewState extends State<AppTabView> {
               BlocProvider<ActivityFeedBloc>(
                 create: (context) =>
                     sl<ActivityFeedBloc>()..add(LoadActivityFeed()),
+              ),
+              BlocProvider<FriendsOverviewCubit>(
+                create: (context) =>
+                    FriendsOverviewCubit(context.read<AppUserRepository>())
+                      ..getFriendsFromUser(),
               ),
             ],
             child: tabs[state.index],
