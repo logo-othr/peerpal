@@ -22,9 +22,9 @@ class CustomSupportVideoDialog extends StatelessWidget {
             builder: (BuildContext context) {
               return SupportVideoDialog(
                 infoText:
-                    'Dieser Link wird Sie auf eine externe Seite weiterleiten, auf der sie das Video anschauen können.',
+                    'Dieser Link wird Sie auf eine externe Seite weiterleiten, auf der Sie das Video anschauen können.',
                 dialogText:
-                    "Um zum Hilfsvideo zu gelangen, klicken sie auf den folgenden Link.",
+                    "Um zum Hilfsvideo zu gelangen, klicken Sie auf den folgenden Link.",
                 onPressed: () => {Navigator.pop(context)},
                 supportVideo: supportVideo,
                 linkText: "Hilfsvideo",
