@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
@@ -19,6 +20,7 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   final ChatLoadedState state;
   final ScrollController _listScrollController = ScrollController();
+  String phoneNumberPattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
 
   _MessageListState({required this.state});
 
@@ -33,6 +35,7 @@ class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
     _listScrollController.addListener(_scrollListener);
+
     return Flexible(
         child: StreamBuilder<List<ChatMessage>>(
       stream: widget.state.messages,
@@ -123,15 +126,26 @@ class _MessageListState extends State<MessageList> {
   }
 
   Widget _message(ChatMessage chatMessage) {
+    RegExp regExp = new RegExp(phoneNumberPattern);
+
     if (EnumToString.fromString(MessageType.values, chatMessage.type) ==
         MessageType.text) {
       return Container(
         constraints: const BoxConstraints(maxWidth: 220),
-        child: Text(
-          chatMessage.message,
-          style: const TextStyle(color: Colors.black, fontSize: 19),
-          textAlign: TextAlign.start,
-        ),
+        child: regExp.hasMatch(chatMessage.message)
+            ? TextButton(
+                onPressed: () =>
+                    FlutterPhoneDirectCaller.callNumber(chatMessage.message),
+                child: new Text(
+                  chatMessage.message,
+                  style: const TextStyle(color: Colors.black, fontSize: 19),
+                  textAlign: TextAlign.start,
+                ))
+            : Text(
+                chatMessage.message,
+                style: const TextStyle(color: Colors.black, fontSize: 19),
+                textAlign: TextAlign.start,
+              ),
       );
     } else if (EnumToString.fromString(MessageType.values, chatMessage.type) ==
         MessageType.image) {
