@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/view/activity_public_overview_page.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class ActivityRequestListContent extends StatefulWidget {
   const ActivityRequestListContent({Key? key}) : super(key: key);
@@ -31,10 +34,11 @@ class _ActivityRequestListContentState
     return BlocBuilder<ActivityRequestListBloc, ActivityRequestListState>(
         builder: (context, state) {
       return Scaffold(
-        appBar: CustomAppBar(
-          'Aktivitäten',
-          hasBackButton: true,
-        ),
+        appBar: CustomAppBar('Aktivitäten',
+            hasBackButton: true,
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo: SupportVideos
+                    .links[VideoIdentifier.activity_invitation_tab]!)),
         body: BlocBuilder<ActivityRequestListBloc, ActivityRequestListState>(
             builder: (context, state) {
           if (state.status == ActivityRequestListStatus.initial) {
