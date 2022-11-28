@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
@@ -11,13 +12,27 @@ import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'discover_feed_event.dart';
-
 part 'discover_feed_state.dart';
 
 class DiscoverTabBloc extends Bloc<DiscoverTabEvent, DiscoverTabState> {
   final AppUserRepository _appUsersRepository;
   final AuthenticationRepository _authenticationRepository;
   BehaviorSubject<List<PeerPALUser>>? _userStream;
+
+  @override
+  Future<void> close() async {
+    await closeStreams();
+    return super.close();
+  }
+
+  Future<void> closeStreams() async {
+    logger.w("Close _userStream");
+
+    if (_userStream != null) {
+      //     await _userStream!.stream.drain();
+      await _userStream!.close();
+    }
+  }
 
   DiscoverTabBloc(this._appUsersRepository, this._authenticationRepository)
       : super(DiscoverTabState());

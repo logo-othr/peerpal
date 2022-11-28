@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user.dart';
@@ -28,15 +29,30 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       : super(ChatListState());
 
   @override
-  Future<void> close() {
-    _userChatStreamController.close();
+  Future<void> close() async {
+    await closeStreams();
     return super.close();
   }
+
+  Future<void> closeStreams() async {
+    logger.w("Close _chatStreamController");
+    await _chatStreamController.stream.drain();
+    await _chatStreamController.close();
+    logger.w("Close _userChatStreamController");
+    await _userChatStreamController.stream.drain();
+    await _userChatStreamController.close();
+    logger.w("Close _userFriendRequestStreamController");
+    await _userFriendRequestStreamController.stream.drain();
+    await _userFriendRequestStreamController.close();
+  }
+
+  var chatStreamSubscription;
 
   @override
   Stream<ChatListState> mapEventToState(ChatListEvent event) async* {
     if (event is ChatListLoaded) {
       Stream<List<Chat>> chatStream = _getChatsForUser();
+
       _chatStreamController.addStream(chatStream);
 
       Stream<List<UserChat>> userChatStream =

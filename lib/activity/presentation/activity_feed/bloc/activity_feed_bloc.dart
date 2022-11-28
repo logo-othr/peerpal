@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -28,8 +29,24 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
   ActivityFeedBloc() : super(ActivityFeedState());
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
+    await closeStreams();
     return super.close();
+  }
+
+  Future<void> closeStreams() async {
+    logger.w("Close _publicActivityStreamController");
+    // await _publicActivityStreamController.stream.drain();
+    await _publicActivityStreamController.close();
+    logger.w("Close _createdActivityStreamController");
+    //  await _createdActivityStreamController.stream.drain();
+    await _createdActivityStreamController.close();
+    logger.w("Close _activityRequestListController");
+    //  await _activityRequestListController.stream.drain();
+    await _activityRequestListController.close();
+    logger.w("Close _activityJoinedListController");
+    //  await _activityJoinedListController.stream.drain();
+    await _activityJoinedListController.close();
   }
 
   //ToDo: Pass repos via parameters instead of using the service locator

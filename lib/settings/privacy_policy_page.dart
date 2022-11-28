@@ -18,11 +18,21 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
         hasBackButton: true,
       ),
       body: Center(
-          child: Container(
-        child: CustomPeerPALHeading2(
-          "Datenschutzerklärung",
-          color: PeerPALAppColor.primaryColor,
-        ),
+          child: Column(
+        children: [
+          Container(
+            child: CustomPeerPALHeading2(
+              "Datenschutzerklärung",
+              color: PeerPALAppColor.primaryColor,
+            ),
+          ),
+          SizedBox(height: 50),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+                "Für eine Auskunft über alle personenbezogenen Daten welche wir über Sie erfassen, wenden Sie sich bitte an Ihre Ansprechspartner:innen bei PeerPAL"),
+          ),
+        ],
       )),
     );
   }
