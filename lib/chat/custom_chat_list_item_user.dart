@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+import 'package:peerpal/widgets/custom_peerpal_text.dart';
 
 import 'domain/usecase_response/user_chat.dart';
 
@@ -63,20 +64,44 @@ class CustomChatListItemUser extends StatelessWidget {
                 SizedBox(height: 5),
                 Row(
                   children: [
-                    RichText(
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: userInformation.chat.lastMessage == null
-                                ? "Nachricht konnte nicht geladen werden"
-                                : userInformation.chat.lastMessage!.message
-                                    .toString(),
-                            style: textStyle,
-                          ),
-                        ],
-                      ),
+                    SizedBox(
+                      width: 150,
+                      child: userInformation.chat.lastMessage!.message
+                              .toString()
+                              .contains(
+                                  "https://firebasestorage.googleapis.com/")
+                          ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.photo),
+                                  SizedBox(width: 5),
+                                  CustomPeerPALText(
+                                    text: "Foto",
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                  //Text("Foto", style: TextStyle(color: Colors.black, fontSize: 15, fontFamily: ),)
+                                ],
+                              ))
+                          : RichText(
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: userInformation.chat.lastMessage ==
+                                            null
+                                        ? "Nachricht konnte nicht geladen werden"
+                                        : userInformation
+                                            .chat.lastMessage!.message
+                                            .toString(),
+                                    style: textStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
                     ),
                     Spacer(),
                     redDot
@@ -98,7 +123,7 @@ class CustomChatListItemUser extends StatelessWidget {
                 SizedBox(height: 5),
                 /*CustomPeerPALHeading3(
                     text: userInformation.chat.lastMessage == null ? "Nachricht konnte nicht geladen werden" :  userInformation.chat.lastMessage!.message.toString() , color: Colors.black),*/
-                Text(DateFormat('yyyy-MM-dd - kk:mm').format(
+                Text(DateFormat('dd.MM.yyyy - kk:mm').format(
                     DateTime.fromMillisecondsSinceEpoch(
                         int.parse(userInformation.chat.lastUpdated))))
               ],
