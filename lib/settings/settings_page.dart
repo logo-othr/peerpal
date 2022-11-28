@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
@@ -16,10 +18,10 @@ import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_dialog.dart';
 import 'package:peerpal/widgets/custom_table_header.dart';
 import 'package:peerpal/widgets/custom_table_row.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
-
 class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -46,7 +48,11 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("Einstellungen", hasBackButton: false),
+      appBar: CustomAppBar("Einstellungen",
+          hasBackButton: false,
+          actionButtonWidget: CustomSupportVideoDialog(
+              supportVideo:
+                  SupportVideos.links[VideoIdentifier.settings_tab]!)),
       body: Scrollbar(
         isAlwaysShown: true,
         child: SingleChildScrollView(
