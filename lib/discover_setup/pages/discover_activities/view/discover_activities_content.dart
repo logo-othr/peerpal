@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/cubit/discover_activities_cubit.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class DiscoverActivitiesContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -40,10 +43,11 @@ class DiscoverActivitiesContent extends StatelessWidget {
           searchBarController.removeListener(searchQueryChangedListener);
         }
         return Scaffold(
-            appBar: CustomAppBar(
-              'PeerPAL',
-              hasBackButton: hasBackButton,
-            ),
+            appBar: CustomAppBar('PeerPAL',
+                hasBackButton: hasBackButton,
+                actionButtonWidget: CustomSupportVideoDialog(
+                    supportVideo: SupportVideos
+                        .links[VideoIdentifier.settings_profile_tab]!)),
             body: BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
                 builder: (context, state) {
               return Padding(
