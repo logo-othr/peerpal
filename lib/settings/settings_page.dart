@@ -60,6 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool? notificationPermission;
   bool stream_cleared = false;
   String reset_stream_text = "(8) Tabs zurücksetzen";
+  String logout_text = "Möchten Sie sich wirklich ausloggen?";
 
   @override
   void initState() {
@@ -185,13 +186,26 @@ class _SettingsPageState extends State<SettingsPage> {
                         return CustomDialog(
                             dialogHeight: 250,
                             actionButtonText: 'Ausloggen',
-                            dialogText: "Möchten Sie sich wirklich ausloggen?",
-                            onPressed: () {
+                            dialogText: logout_text,
+                            onPressed: () async {
+                              setState(() {
+                                logout_text = "Bitte warten...";
+                              });
+
+                              try {
+                                sl<NotificationService>()
+                                    .stopRemoteNotificationBackgroundHandler();
+                              } catch (e) {
+                                logger.e(e);
+                              }
+                              try {
+                                sl<NotificationService>()
+                                    .unregisterDeviceToken();
+                              } catch (e) {
+                                logger.e(e);
+                              }
                               context.read<AppBloc>().add(AppLogoutRequested());
-                              //ToDo: Move into a UseCase.
-                              sl<NotificationService>()
-                                  .stopRemoteNotificationBackgroundHandler();
-                              sl<NotificationService>().unregisterDeviceToken();
+                              await Future.delayed(Duration(seconds: 2));
                             });
                       }),
                 },
@@ -482,9 +496,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             if (stream_cleared == false) {
                               setState(() {
                                 stream_cleared = true;
-                              });
-                              setState(() {
-                                reset_stream_text = "(8) Warten...";
                               });
 
                               setState(() {
