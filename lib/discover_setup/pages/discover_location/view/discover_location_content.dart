@@ -3,14 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/data/location.dart';
 import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_location/cubit/discover_location_cubit.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_location_item.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class DiscoverLocationContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -23,10 +26,11 @@ class DiscoverLocationContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(
-          'Standorte',
-          hasBackButton: isInFlowContext,
-        ),
+        appBar: CustomAppBar('Standorte',
+            hasBackButton: isInFlowContext,
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo: SupportVideos
+                    .links[VideoIdentifier.settings_profile_tab]!)),
         body: BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
             builder: (context, state) {
           return Center(
