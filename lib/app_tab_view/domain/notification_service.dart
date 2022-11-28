@@ -17,7 +17,7 @@ abstract class NotificationService {
 
   Future<int> scheduleWeeklyNotification();
 
-  Future<void> printPendingNotifications();
+  Future<String> printPendingNotifications();
 
   Future<bool> hasPermission();
 

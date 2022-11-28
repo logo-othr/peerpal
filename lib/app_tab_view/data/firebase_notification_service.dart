@@ -141,15 +141,20 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   @override
-  Future<void> printPendingNotifications() async {
+  Future<String> printPendingNotifications() async {
     logger.i("pending notifications:");
     final List<PendingNotificationRequest> pendingNotificationRequests =
         await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    String pendingNotifications = "";
     for (PendingNotificationRequest pendingNotificationRequest
         in pendingNotificationRequests) {
       logger.i(
           "PendingNotificationRequest: id: ${pendingNotificationRequest.id}, body: ${pendingNotificationRequest.body} payload: ${pendingNotificationRequest.payload}, title: ${pendingNotificationRequest.title}");
+      pendingNotifications +=
+          "PendingNotificationRequest: id: ${pendingNotificationRequest.id}, body: ${pendingNotificationRequest.body} payload: ${pendingNotificationRequest.payload}, title: ${pendingNotificationRequest.title}" +
+              " /// ";
     }
+    return pendingNotifications;
   }
 
   Future<void> setWeeklyReminderScheduled(bool isScheduled) async {
