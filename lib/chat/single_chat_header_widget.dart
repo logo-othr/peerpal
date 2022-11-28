@@ -1,10 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
-import 'package:peerpal/data/resources/colors.dart';
-import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
-import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class ChatHeaderBar extends StatelessWidget {
   final PeerPALUser chatPartner;
@@ -69,34 +65,21 @@ class ChatHeaderBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 15),
                 Flexible(
-                  child: Expanded(
-                    child: RichText(
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: chatPartner.name!,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'CustomPeerPalFontFamily',
-                              color: Colors.black,
-                            ),
+                  child: RichText(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: chatPartner.name!,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CustomPeerPalFontFamily',
+                            color: Colors.black,
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: CustomSupportVideoDialog(
-                          supportVideo:
-                              SupportVideos.links[VideoIdentifier.chat]!,
-                          iconColor: PeerPALAppColor.primaryColor),
+                        ),
+                      ],
                     ),
                   ),
                 ),
