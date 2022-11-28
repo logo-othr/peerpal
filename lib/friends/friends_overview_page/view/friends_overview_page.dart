@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
-import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_content.dart';
 
 class FriendsOverviewPage extends StatelessWidget {
@@ -16,13 +13,7 @@ class FriendsOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => true,
-      child: BlocProvider(
-        create: (_) {
-          return FriendsOverviewCubit(context.read<AppUserRepository>())
-            ..getFriendsFromUser();
-        },
-        child: FriendsOverviewContent(),
-      ),
+      child: FriendsOverviewContent(),
     );
   }
 }
