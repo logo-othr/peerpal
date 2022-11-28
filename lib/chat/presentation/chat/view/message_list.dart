@@ -133,17 +133,25 @@ class _MessageListState extends State<MessageList> {
       return Container(
         constraints: const BoxConstraints(maxWidth: 220),
         child: regExp.hasMatch(chatMessage.message)
-            ? TextButton(
-                onPressed: () async {
-                  //FlutterPhoneDirectCaller.callNumber(chatMessage.message);
-                  Uri phoneno = Uri.parse('tel:${chatMessage.message}');
-                  await launchUrl(phoneno);
-                },
-                child: new SelectableText(
-                  chatMessage.message,
-                  style: const TextStyle(color: Colors.black, fontSize: 19),
-                  textAlign: TextAlign.start,
-                ))
+            ? Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                        onPressed: () async {
+                          //FlutterPhoneDirectCaller.callNumber(chatMessage.message);
+                          Uri phoneno = Uri.parse('tel:${chatMessage.message}');
+                          await launchUrl(phoneno);
+                        },
+                        icon: Icon(Icons.phone)),
+                    new SelectableText(
+                      chatMessage.message,
+                      style: const TextStyle(color: Colors.black, fontSize: 19),
+                      textAlign: TextAlign.start,
+                    )
+                  ],
+                ),
+              )
             : SelectableText(
                 chatMessage.message,
                 style: const TextStyle(color: Colors.black, fontSize: 19),
