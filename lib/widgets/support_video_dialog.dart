@@ -9,8 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CustomSupportVideoDialog extends StatelessWidget {
   final SupportVideo supportVideo;
+  final Color? iconColor;
 
-  const CustomSupportVideoDialog({Key? key, required this.supportVideo})
+  const CustomSupportVideoDialog(
+      {Key? key, required this.supportVideo, this.iconColor})
       : super(key: key);
 
   @override
@@ -22,9 +24,9 @@ class CustomSupportVideoDialog extends StatelessWidget {
             builder: (BuildContext context) {
               return SupportVideoDialog(
                 infoText:
-                    'Dieser Link wird Sie auf eine externe Seite weiterleiten, auf der Sie das Video anschauen können.',
+                    'Dieser Link wird Sie auf eine externe Seite weiterleiten, auf der sie das Video anschauen können.',
                 dialogText:
-                    "Um zum Hilfsvideo zu gelangen, klicken Sie auf den folgenden Link.",
+                    "Um zum Hilfsvideo zu gelangen, klicken sie auf den folgenden Link.",
                 onPressed: () => {Navigator.pop(context)},
                 supportVideo: supportVideo,
                 linkText: "Hilfsvideo",
@@ -33,7 +35,8 @@ class CustomSupportVideoDialog extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-        child: Icon(Icons.help_center, size: 30),
+        child: Icon(Icons.help_center,
+            size: 30, color: iconColor == null ? Colors.white : iconColor),
       ),
     );
   }
