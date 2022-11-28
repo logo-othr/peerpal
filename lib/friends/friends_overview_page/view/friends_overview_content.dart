@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/friends/custom_friend_list_item_user.dart';
 import 'package:peerpal/friends/friend_request_page/view/friend_requests_page.dart';
@@ -12,6 +14,7 @@ import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_centered_info_text.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 import 'package:provider/provider.dart';
 
 class FriendsOverviewContent extends StatelessWidget {
@@ -33,10 +36,11 @@ class FriendsOverviewContent extends StatelessWidget {
     return BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
         builder: (context, state) {
       return Scaffold(
-        appBar: CustomAppBar(
-          'Freunde',
-          hasBackButton: false,
-        ),
+        appBar: CustomAppBar('Freunde',
+            hasBackButton: false,
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.friends_tab]!)),
         body: BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
             builder: (context, state) {
           if (state is FriendsOverviewLoading) {
