@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_location/cubit/activity_location_cubit.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/data/location.dart';
 import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_peerpal_text.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class LocationInputContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -26,10 +29,11 @@ class LocationInputContent extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: CustomAppBar(
-            'Standorte',
-            hasBackButton: isInFlowContext,
-          ),
+          appBar: CustomAppBar('Standorte',
+              hasBackButton: isInFlowContext,
+              actionButtonWidget: CustomSupportVideoDialog(
+                  supportVideo:
+                      SupportVideos.links[VideoIdentifier.activity_tab]!)),
           body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
               builder: (context, state) {
             return Container(
