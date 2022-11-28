@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessageList extends StatefulWidget {
   final ChatLoadedState state;
@@ -134,14 +134,17 @@ class _MessageListState extends State<MessageList> {
         constraints: const BoxConstraints(maxWidth: 220),
         child: regExp.hasMatch(chatMessage.message)
             ? TextButton(
-                onPressed: () =>
-                    FlutterPhoneDirectCaller.callNumber(chatMessage.message),
-                child: new Text(
+                onPressed: () async {
+                  //FlutterPhoneDirectCaller.callNumber(chatMessage.message);
+                  Uri phoneno = Uri.parse('tel:${chatMessage.message}');
+                  await launchUrl(phoneno);
+                },
+                child: new SelectableText(
                   chatMessage.message,
                   style: const TextStyle(color: Colors.black, fontSize: 19),
                   textAlign: TextAlign.start,
                 ))
-            : Text(
+            : SelectableText(
                 chatMessage.message,
                 style: const TextStyle(color: Colors.black, fontSize: 19),
                 textAlign: TextAlign.start,
