@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_invitation/cubit/activity_invitation_cubit.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_invite_friends_list_item.dart';
@@ -14,6 +16,7 @@ import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class InviteFriendsContent extends StatefulWidget {
   final bool isInFlowContext;
@@ -85,10 +88,11 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: CustomAppBar(
-              "Aktivität planen",
-              hasBackButton: false,
-            ),
+            appBar: CustomAppBar("Aktivität planen",
+                hasBackButton: false,
+                actionButtonWidget: CustomSupportVideoDialog(
+                    supportVideo:
+                        SupportVideos.links[VideoIdentifier.activity_tab]!)),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
               child: Column(
