@@ -35,6 +35,8 @@ class FriendsOverviewCubit extends Cubit<FriendsOverviewState> {
   StreamController<int> friendRequestsSizeController = new BehaviorSubject();
 
   Future<void> getFriendsFromUser() async {
+    friendsController = new BehaviorSubject();
+    friendRequestsSizeController = new BehaviorSubject();
     Stream<List<PeerPALUser>> friends = _appUserRepository.getFriendList();
     friendsController.addStream(friends);
 
