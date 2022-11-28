@@ -35,7 +35,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
             hasBackButton: true,
             actionButtonWidget: CustomSupportVideoDialog(
                 supportVideo:
-                    SupportVideos.links[VideoIdentifier.chat_request_tab]!)),
+                    SupportVideos.links[VideoIdentifier.chat_request]!)),
         body: BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
             builder: (context, state) {
           if (state.status == ChatRequestListStatus.initial) {

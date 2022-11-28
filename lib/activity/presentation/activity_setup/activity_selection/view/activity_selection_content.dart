@@ -39,8 +39,7 @@ class ActivitySelectionContent extends StatelessWidget {
           }
         },
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo:
-                    SupportVideos.links[VideoIdentifier.activity_tab]!)),
+                supportVideo: SupportVideos.links[VideoIdentifier.activity]!)),
         body: Container(
           color: Colors.white,
           child: Column(

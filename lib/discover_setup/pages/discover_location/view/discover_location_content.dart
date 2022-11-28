@@ -29,8 +29,8 @@ class DiscoverLocationContent extends StatelessWidget {
         appBar: CustomAppBar('Standorte',
             hasBackButton: isInFlowContext,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.settings_profile_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body: BlocBuilder<DiscoverLocationCubit, DiscoverLocationState>(
             builder: (context, state) {
           return Center(

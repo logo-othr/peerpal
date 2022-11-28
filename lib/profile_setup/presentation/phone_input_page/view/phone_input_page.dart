@@ -34,8 +34,8 @@ class PhoneInputPage extends StatelessWidget {
         appBar: CustomAppBar("PeerPAL",
             hasBackButton: true,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.settings_profile_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body: BlocProvider(
           create: (_) {
             return PhoneInputCubit(

@@ -47,7 +47,7 @@ class DiscoverActivitiesContent extends StatelessWidget {
                 hasBackButton: hasBackButton,
                 actionButtonWidget: CustomSupportVideoDialog(
                     supportVideo: SupportVideos
-                        .links[VideoIdentifier.settings_profile_tab]!)),
+                        .links[VideoIdentifier.settings_profile]!)),
             body: BlocBuilder<DiscoverActivitiesCubit, DiscoverActivitiesState>(
                 builder: (context, state) {
               return Padding(

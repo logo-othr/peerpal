@@ -23,8 +23,8 @@ class AgeInputContent extends StatelessWidget {
         appBar: CustomAppBar("Alter",
             hasBackButton: _isBackButtonRequired(),
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.settings_profile_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body: BlocBuilder<AgeInputCubit, AgeInputState>(
             buildWhen: (previous, current) =>
                 previous.selectedAge != current.selectedAge,

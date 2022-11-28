@@ -92,7 +92,7 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
                 hasBackButton: false,
                 actionButtonWidget: CustomSupportVideoDialog(
                     supportVideo:
-                        SupportVideos.links[VideoIdentifier.activity_tab]!)),
+                        SupportVideos.links[VideoIdentifier.activity]!)),
             body: Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
               child: Column(

@@ -37,8 +37,8 @@ class _ActivityRequestListContentState
         appBar: CustomAppBar('Aktivitäten',
             hasBackButton: true,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.activity_invitation_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.activity_invitation]!)),
         body: BlocBuilder<ActivityRequestListBloc, ActivityRequestListState>(
             builder: (context, state) {
           if (state.status == ActivityRequestListStatus.initial) {

@@ -24,8 +24,8 @@ class ProfileOverviewPage extends StatelessWidget {
         appBar: CustomAppBar("Überblick",
             hasBackButton: false,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.settings_profile_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body: BlocProvider.value(
           value: ProfileOverviewCubit(
               context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())

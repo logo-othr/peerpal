@@ -39,8 +39,7 @@ class FriendsOverviewContent extends StatelessWidget {
         appBar: CustomAppBar('Freunde',
             hasBackButton: false,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo:
-                    SupportVideos.links[VideoIdentifier.friends_tab]!)),
+                supportVideo: SupportVideos.links[VideoIdentifier.friends]!)),
         body: BlocBuilder<FriendsOverviewCubit, FriendsOverviewState>(
             builder: (context, state) {
           if (state is FriendsOverviewLoading) {

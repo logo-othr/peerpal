@@ -48,8 +48,8 @@ class _DiscoverAgeContentState extends State<DiscoverAgeContent> {
         appBar: CustomAppBar('Alter',
             hasBackButton: hasBackButton,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.settings_profile_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
             builder: (context, state) {
           var state = context.read<DiscoverAgeCubit>().state;

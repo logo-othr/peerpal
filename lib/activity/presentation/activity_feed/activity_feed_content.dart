@@ -64,8 +64,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
         appBar: CustomAppBar('Aktivitäten',
             hasBackButton: false,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo:
-                    SupportVideos.links[VideoIdentifier.activity_tab]!)),
+                supportVideo: SupportVideos.links[VideoIdentifier.activity]!)),
         body: BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
             builder: (context, state) {
           if (state.status == ActivityFeedStatus.initial) {

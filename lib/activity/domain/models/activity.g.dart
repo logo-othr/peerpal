@@ -29,8 +29,7 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
           json['isAlreadyEvaluatedFromServer'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$ActivityToJson(Activity instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'id': instance.id,
       'timestamp': instance.timestamp,
       'name': instance.name,

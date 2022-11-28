@@ -25,8 +25,8 @@ class DiscoverCommunicationContent extends StatelessWidget {
         appBar: CustomAppBar('Kommunikation',
             hasBackButton: hasBackButton,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos
-                    .links[VideoIdentifier.settings_profile_tab]!)),
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body:
             BlocBuilder<DiscoverCommunicationCubit, DiscoverCommunicationState>(
                 builder: (context, state) {

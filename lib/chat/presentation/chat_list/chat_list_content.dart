@@ -38,7 +38,7 @@ class _ChatListContentState extends State<ChatListContent> {
         appBar: CustomAppBar('Chat',
             hasBackButton: false,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos.links[VideoIdentifier.chat_tab]!)),
+                supportVideo: SupportVideos.links[VideoIdentifier.chat]!)),
         body:
             BlocBuilder<ChatListBloc, ChatListState>(builder: (context, state) {
           if (state.status == ChatListStatus.initial) {

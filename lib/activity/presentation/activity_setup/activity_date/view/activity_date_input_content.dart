@@ -28,8 +28,7 @@ class DateInputContent extends StatelessWidget {
       appBar: CustomAppBar("Aktivität planen",
           hasBackButton: true,
           actionButtonWidget: CustomSupportVideoDialog(
-              supportVideo:
-                  SupportVideos.links[VideoIdentifier.activity_tab]!)),
+              supportVideo: SupportVideos.links[VideoIdentifier.activity]!)),
       body: BlocBuilder<DateInputCubit, DateInputState>(
         builder: (context, state) {
           return Padding(

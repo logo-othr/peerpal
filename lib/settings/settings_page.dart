@@ -58,8 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: CustomAppBar("Einstellungen",
           hasBackButton: false,
           actionButtonWidget: CustomSupportVideoDialog(
-              supportVideo:
-                  SupportVideos.links[VideoIdentifier.settings_tab]!)),
+              supportVideo: SupportVideos.links[VideoIdentifier.settings]!)),
       body: Scrollbar(
         isAlwaysShown: true,
         child: SingleChildScrollView(

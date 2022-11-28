@@ -21,7 +21,7 @@ class SignUpPage extends StatelessWidget {
           hasBackButton: true,
           actionButtonWidget: CustomSupportVideoDialog(
               supportVideo:
-                  SupportVideos.links[VideoIdentifier.settings_profile_tab]!)),
+                  SupportVideos.links[VideoIdentifier.settings_profile]!)),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider(

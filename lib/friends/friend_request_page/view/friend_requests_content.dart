@@ -29,8 +29,7 @@ class FriendRequestsContent extends StatelessWidget {
         appBar: CustomAppBar('Freundschaftsanfragen',
             hasBackButton: true,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo:
-                    SupportVideos.links[VideoIdentifier.friends_tab]!)),
+                supportVideo: SupportVideos.links[VideoIdentifier.friends]!)),
         body: BlocBuilder<FriendRequestsCubit, FriendRequestsState>(
             builder: (context, state) {
           if (state is FriendRequestsLoading) {

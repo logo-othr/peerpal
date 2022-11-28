@@ -33,7 +33,7 @@ class LocationInputContent extends StatelessWidget {
               hasBackButton: isInFlowContext,
               actionButtonWidget: CustomSupportVideoDialog(
                   supportVideo:
-                      SupportVideos.links[VideoIdentifier.activity_tab]!)),
+                      SupportVideos.links[VideoIdentifier.activity]!)),
           body: BlocBuilder<ActivityLocationCubit, ActivityLocationInputState>(
               builder: (context, state) {
             return Container(

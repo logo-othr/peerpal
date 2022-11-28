@@ -56,8 +56,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         appBar: CustomAppBar('Entdecken',
             hasBackButton: false,
             actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo:
-                    SupportVideos.links[VideoIdentifier.discover_tab]!)),
+                supportVideo: SupportVideos.links[VideoIdentifier.discover]!)),
         body: BlocBuilder<DiscoverTabBloc, DiscoverTabState>(
           builder: (context, state) {
             switch (state.status) {
