@@ -10,14 +10,17 @@ import 'package:peerpal/activity/presentation/activity_setup/activity_public_ove
 import 'package:peerpal/activity/presentation/activity_setup/activity_wizard_flow.dart';
 import 'package:peerpal/activity/presentation/joined_activities/activity_joined_list_page.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_invitation_button.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 class ActivityFeedContent extends StatefulWidget {
@@ -58,10 +61,11 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
           backgroundColor: PeerPALAppColor.primaryColor,
           child: Icon(Icons.add),
         ),
-        appBar: CustomAppBar(
-          'Aktivitäten',
-          hasBackButton: false,
-        ),
+        appBar: CustomAppBar('Aktivitäten',
+            hasBackButton: false,
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.activity_tab]!)),
         body: BlocBuilder<ActivityFeedBloc, ActivityFeedState>(
             builder: (context, state) {
           if (state.status == ActivityFeedStatus.initial) {
