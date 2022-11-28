@@ -5,9 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_selection/cubit/activity_selection_cubit.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_circle_list_icon.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class ActivitySelectionContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -27,17 +30,17 @@ class ActivitySelectionContent extends StatelessWidget {
     return BlocBuilder<ActivitySelectionCubit, ActivitySelectionState>(
         builder: (context, state) {
       return Scaffold(
-        appBar: CustomAppBar(
-          "Aktivität planen",
-          hasBackButton: true,
-          onBackButtonPressed: () {
-            if (isInFlowContext) {
-              context.flow<Activity>().complete();
-            } else {
-              Navigator.pop(context);
-            }
-          },
-        ),
+        appBar: CustomAppBar("Aktivität planen", hasBackButton: true,
+            onBackButtonPressed: () {
+          if (isInFlowContext) {
+            context.flow<Activity>().complete();
+          } else {
+            Navigator.pop(context);
+          }
+        },
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo:
+                    SupportVideos.links[VideoIdentifier.activity_tab]!)),
         body: Container(
           color: Colors.white,
           child: Column(
