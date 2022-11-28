@@ -75,6 +75,7 @@ class AppUserRepository {
 
   Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+    if (firebaseUser == null) return PeerPALUserDTO.empty;
     var uid = firebaseUser!.uid;
     return await _downloadUserInformation(uid);
   }
