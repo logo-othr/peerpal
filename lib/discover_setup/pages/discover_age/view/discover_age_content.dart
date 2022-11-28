@@ -1,12 +1,15 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_from_to_age_picker.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class DiscoverAgeContent extends StatefulWidget {
   final bool isInFlowContext;
@@ -42,10 +45,11 @@ class _DiscoverAgeContentState extends State<DiscoverAgeContent> {
   Widget build(BuildContext context) {
     var hasBackButton = (widget.isInFlowContext) ? false : true;
     return Scaffold(
-        appBar: CustomAppBar(
-          'Alter',
-          hasBackButton: hasBackButton,
-        ),
+        appBar: CustomAppBar('Alter',
+            hasBackButton: hasBackButton,
+            actionButtonWidget: CustomSupportVideoDialog(
+                supportVideo: SupportVideos
+                    .links[VideoIdentifier.settings_profile_tab]!)),
         body: BlocBuilder<DiscoverAgeCubit, DiscoverAgeState>(
             builder: (context, state) {
           var state = context.read<DiscoverAgeCubit>().state;
