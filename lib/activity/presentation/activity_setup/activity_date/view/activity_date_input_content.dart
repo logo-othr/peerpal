@@ -6,13 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_date/cubit/activity_date_cubit.dart';
+import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/widgets/custom_activity_header_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_picker.dart';
+import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class DateInputContent extends StatelessWidget {
   final bool isInFlowContext;
@@ -22,10 +25,11 @@ class DateInputContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        "Aktivität planen",
-        hasBackButton: true,
-      ),
+      appBar: CustomAppBar("Aktivität planen",
+          hasBackButton: true,
+          actionButtonWidget: CustomSupportVideoDialog(
+              supportVideo:
+                  SupportVideos.links[VideoIdentifier.activity_tab]!)),
       body: BlocBuilder<DateInputCubit, DateInputState>(
         builder: (context, state) {
           return Padding(
@@ -35,8 +39,8 @@ class DateInputContent extends StatelessWidget {
               children: <Widget>[
                 (state is DateInputLoaded)
                     ? CustomActivityHeaderCard(
-                    activity: state.activityName,
-                    icon: ActivityIconData.icons[state.activityCode]!)
+                        activity: state.activityName,
+                        icon: ActivityIconData.icons[state.activityCode]!)
                     : CircularProgressIndicator(),
                 SizedBox(
                   height: 40,
