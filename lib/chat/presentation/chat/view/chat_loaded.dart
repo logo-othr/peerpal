@@ -66,7 +66,7 @@ class ChatLoaded extends StatelessWidget {
       source: ImageSource.gallery,
       maxHeight: 1280,
       maxWidth: 720,
-      imageQuality: 65,
+      imageQuality: 45,
     ))!;
     return profilePicture;
   }
