@@ -111,7 +111,7 @@ class FirebaseNotificationService implements NotificationService {
   // ToDo: test.
   TZDateTime _nextInstanceOfMondayTenAM() {
     TZDateTime scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.thursday) {
+    while (scheduledDate.weekday != DateTime.monday) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
     return scheduledDate;
@@ -122,7 +122,7 @@ class FirebaseNotificationService implements NotificationService {
   TZDateTime _nextInstanceOfTenAM() {
     final TZDateTime now = TZDateTime.now(local);
     TZDateTime scheduledDate =
-        TZDateTime(local, now.year, now.month, now.day, 13, 00);
+        TZDateTime(local, now.year, now.month, now.day, 10, 00);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
