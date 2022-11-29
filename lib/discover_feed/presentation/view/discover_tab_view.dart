@@ -216,19 +216,22 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   }
 
   Widget _buildUser(PeerPALUser user) {
+if (user.discoverLocations == null ||
+        user.discoverActivitiesCodes == null ||
+        user.name == null ||
+        user.id == null) return Container();
     return DiscoverUserListItem(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UserDetailPage(user.id!)));
+    onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return UserDetailPage(user.id ?? "");
+          }));
         },
-        imageLink: user.imagePath,
-        header: user.name,
-        locations: user.discoverLocations?.map((e) => e.place).toList(),
-        activities: user.discoverActivitiesCodes
-            ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
-            .toList());
+    imageLink: user.imagePath,
+    header: user.name,
+    locations: user.discoverLocations?.map((e) => e.place).toList(),
+    activities: user.discoverActivitiesCodes
+        ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
+        .toList());
   }
 
   Widget _noUsersFound() {
