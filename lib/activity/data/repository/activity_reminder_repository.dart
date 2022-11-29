@@ -43,13 +43,13 @@ class ActivityReminderRepository {
       Activity activity) async {
     if (await _notificationService.hasPermission() == false) return;
     TZDateTime firstReminderDateTime =
-    TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
     firstReminderDateTime =
-        firstReminderDateTime.subtract(new Duration(minutes: 15));
+        firstReminderDateTime.subtract(new Duration(minutes: 60));
     TZDateTime secondReminderDateTime =
-    TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
     secondReminderDateTime =
-        secondReminderDateTime.subtract(new Duration(hours: 3));
+        secondReminderDateTime.subtract(new Duration(hours: 12));
     TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);
 
     if (firstReminderDateTime.isAfter(now)) {
