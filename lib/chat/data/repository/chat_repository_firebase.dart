@@ -94,7 +94,7 @@ class ChatRepositoryFirebase implements ChatRepository {
         .collection('messages')
         .where('uids', arrayContains: currentUserId)
         .orderBy('timestamp', descending: true)
-        .limit(50) // ToDo: Remove limitation
+        .limit(40) // ToDo: Remove limitation
         .snapshots();
 
     List<ChatMessage> chatList = <ChatMessage>[];
