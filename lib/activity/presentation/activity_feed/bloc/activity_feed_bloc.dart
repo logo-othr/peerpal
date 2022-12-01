@@ -63,8 +63,8 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
 
       _createdActivityStreamController.stream
           .listen((List<Activity> activities) {
-        activities.map((e) => sl<ActivityReminderRepository>()
-            .setActivityRemindersIfRemindersNotExist(e));
+        sl<ActivityReminderRepository>()
+            .clearAndSetActivityReminders(activities);
       });
 
       Stream<List<Activity>> activityRequestList = sl<ActivityRepository>()
