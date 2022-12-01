@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
@@ -18,10 +20,10 @@ class ActivityReminderRepository {
 
   Future<void> clearAndSetActivityReminders(List<Activity> activities) async {
     List<String>? oldActivityWithReminderList =
-        await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
+    await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
 
     List<String> newActivityWithReminderList =
-        activities.map((e) => e.id ?? "-1").toList();
+    activities.map((e) => e.id ?? "-1").toList();
 
     if (oldActivityWithReminderList != null) {
       for (String oldActivity in oldActivityWithReminderList) {
@@ -41,6 +43,9 @@ class ActivityReminderRepository {
 // ToDo: Nullcheck activity member
   Future<void> setActivityRemindersIfRemindersNotExist(
       Activity activity) async {
+    if (Platform.isIOS && await _notificationService.hasPermission() == false)
+      return;
+
     int firstActivityMinuteDelay = 60;
     int secondActivityDayDelay = 1;
 
@@ -66,10 +71,9 @@ class ActivityReminderRepository {
     }
   }
 
-  Future<void> _setActivityReminderIfReminderNotExist(
-      Activity activity, TZDateTime scheduledDateTime, String message) async {
+  Future<void> _setActivityReminderIfReminderNotExist(Activity activity, TZDateTime scheduledDateTime, String message) async {
     bool reminderForActivityExists =
-        await _reminderForActivityExists(activity.id!);
+    await _reminderForActivityExists(activity.id!);
     if (!reminderForActivityExists) {
       int notificationReminderId = await _notificationService
           .scheduleNotification(activity.name!, message, scheduledDateTime);
@@ -81,7 +85,7 @@ class ActivityReminderRepository {
 
   Future<void> cancelReminderForActivity(String activityId) async {
     List<String>? notificationReminderIds =
-        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
     if (notificationReminderIds == null) {
       logger.i(
           "activity reminder repository: There are no reminders for the activity with id ${activityId}");
@@ -99,18 +103,17 @@ class ActivityReminderRepository {
 
   Future<bool> _reminderForActivityExists(String activityId) async {
     List<String>? notificationReminderIds =
-        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
     return (notificationReminderIds != null);
     //  if (notificationReminderIds == null) return false;
 //bool doesReminderExists = notificationReminderIds.contains(activityId);
 //    return (doesReminderExists);
   }
 
-  Future<void> _saveReminderIdForActivityId(
-      String activityId, int reminderId) async {
+  Future<void> _saveReminderIdForActivityId(String activityId, int reminderId) async {
     String reminderIdStr = reminderId.toString();
     List<String>? nullableReminderIdListForActivity =
-        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
     List<String> reminderIdListForActivity =
         nullableReminderIdListForActivity ?? <String>[];
     reminderIdListForActivity.add(reminderIdStr);
@@ -118,7 +121,7 @@ class ActivityReminderRepository {
         "${_ACTIVITY_REMINDER_PREFIX}${activityId}", reminderIdListForActivity);
 
     List<String>? activitiesWithReminder =
-        await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
+    await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
 
     if (activitiesWithReminder != null) {
       if (!activitiesWithReminder.contains(activityId)) {
