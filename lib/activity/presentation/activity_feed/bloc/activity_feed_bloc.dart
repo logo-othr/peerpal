@@ -61,6 +61,12 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
           sl<ActivityRepository>().getCreatedActivities(currentUserId);
       _createdActivityStreamController.addStream(createdActivityStream);
 
+      _createdActivityStreamController.stream
+          .listen((List<Activity> activities) {
+        activities.map((e) => sl<ActivityReminderRepository>()
+            .setActivityRemindersIfRemindersNotExist(e));
+      });
+
       Stream<List<Activity>> activityRequestList = sl<ActivityRepository>()
           .getPrivateRequestActivitiesForUser(currentUserId);
       _activityRequestListController.addStream(activityRequestList);
