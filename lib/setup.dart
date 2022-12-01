@@ -66,7 +66,11 @@ Future<void> setupAuthentication() async {
 }
 
 Future<void> setupFirebase() async {
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    logger.e(e);
+  }
 }
 
 void setupTimeZones() {
