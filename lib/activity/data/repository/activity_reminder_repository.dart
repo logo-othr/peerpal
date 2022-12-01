@@ -41,24 +41,28 @@ class ActivityReminderRepository {
 // ToDo: Nullcheck activity member
   Future<void> setActivityRemindersIfRemindersNotExist(
       Activity activity) async {
-    if (await _notificationService.hasPermission() == false) return;
+    int firstActivityMinuteDelay = 60;
+    int secondActivityDayDelay = 1;
+
     TZDateTime firstReminderDateTime =
         TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    firstReminderDateTime =
-        firstReminderDateTime.subtract(new Duration(minutes: 60));
+    firstReminderDateTime = firstReminderDateTime
+        .subtract(new Duration(minutes: firstActivityMinuteDelay));
     TZDateTime secondReminderDateTime =
         TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    secondReminderDateTime =
-        secondReminderDateTime.subtract(new Duration(hours: 12));
+    secondReminderDateTime = secondReminderDateTime
+        .subtract(new Duration(days: secondActivityDayDelay));
     TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);
 
     if (firstReminderDateTime.isAfter(now)) {
-      await _setActivityReminderIfReminderNotExist(activity,
-          firstReminderDateTime, "In 15 Minuten startet deine Aktivität.");
+      await _setActivityReminderIfReminderNotExist(
+          activity,
+          firstReminderDateTime,
+          "Bald startet die Aktivität ${activity.name}.");
     }
     if (secondReminderDateTime.isAfter(now)) {
       await _setActivityReminderIfReminderNotExist(activity,
-          secondReminderDateTime, "In 3 Stunden startet deine Aktivität.");
+          secondReminderDateTime, "${activity.name} startet demnächst.");
     }
   }
 
@@ -67,9 +71,8 @@ class ActivityReminderRepository {
     bool reminderForActivityExists =
         await _reminderForActivityExists(activity.id!);
     if (!reminderForActivityExists) {
-      int notificationReminderId =
-          await _notificationService.scheduleNotification(activity.name!,
-              'Erinnerung an die Aktivität.', scheduledDateTime);
+      int notificationReminderId = await _notificationService
+          .scheduleNotification(activity.name!, message, scheduledDateTime);
       _saveReminderIdForActivityId(activity.id!, notificationReminderId);
     } else
       logger.i(
