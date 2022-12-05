@@ -29,7 +29,7 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
-  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '8.11.0'
+  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '10.2.0'
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
@@ -37,6 +37,14 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings['IOS_DEPLOYMENT_TARGET'] = '11.0'
+    end
+        target.build_configurations.each do |config|
+          if Gem::Version.new('8.0') > Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+          end
+        end
     flutter_additional_ios_build_settings(target)
     # Workaround https://github.com/flutter/flutter/issues/111475.
     target_is_resource_bundle = target.respond_to?(:product_type) && target.product_type == 'com.apple.product-type.bundle'
