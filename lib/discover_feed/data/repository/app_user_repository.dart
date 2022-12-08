@@ -150,6 +150,12 @@ class AppUserRepository {
     var currentPeerPALUser =
         await getCurrentUserInformation(authenticatedUserId);
 
+    if (currentPeerPALUser.discoverActivitiesCodes == null ||
+        currentPeerPALUser.discoverActivitiesCodes!.isEmpty ||
+        currentPeerPALUser.discoverLocations == null ||
+        currentPeerPALUser.discoverLocations!.isEmpty)
+      return new BehaviorSubject(); // ToDo: implement excaption handling
+
     var publicUserCollection =
         await _firestore.collection(UserDatabaseContract.publicUsers);
 
