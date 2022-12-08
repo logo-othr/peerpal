@@ -63,11 +63,13 @@ class ActivityReminderRepository {
       await _setActivityReminderIfReminderNotExist(
           activity,
           firstReminderDateTime,
-          "Bald startet die Aktivität ${activity.name}.");
+          "Bald startet die Aktivität ${activity.name?.replaceAll('-', '')}.");
     }
     if (secondReminderDateTime.isAfter(now)) {
-      await _setActivityReminderIfReminderNotExist(activity,
-          secondReminderDateTime, "${activity.name} startet demnächst.");
+      await _setActivityReminderIfReminderNotExist(
+          activity,
+          secondReminderDateTime,
+          "${activity.name?.replaceAll('-', '')} startet demnächst.");
     }
   }
 
