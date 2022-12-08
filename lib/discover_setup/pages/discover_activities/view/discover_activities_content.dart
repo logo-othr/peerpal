@@ -135,6 +135,13 @@ class DiscoverActivitiesContent extends StatelessWidget {
 
   Future<void> _update(
       DiscoverActivitiesState state, BuildContext context) async {
+    if (state.selectedActivities.length < 1) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+            SnackBar(content: Text(("Bitte wählen sie mindestens 1 aus."))));
+      return;
+    }
     if (isInFlowContext) {
       await context.read<DiscoverActivitiesCubit>().postData();
       context.flow<PeerPALUser>().complete((s) => s.copyWith(
