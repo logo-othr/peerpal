@@ -201,12 +201,16 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
         Expanded(
           child: Scrollbar(
             isAlwaysShown: true,
-            child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return _buildUser(users[index]);
-              },
-              itemCount: users.length,
-              controller: _controller,
+            child: SingleChildScrollView(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return _buildUser(users[index]);
+                },
+                itemCount: users.length,
+                controller: _controller,
+              ),
             ),
           ),
         ),
