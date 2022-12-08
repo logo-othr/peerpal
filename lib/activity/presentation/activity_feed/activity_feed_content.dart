@@ -177,7 +177,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                   Tab(
                       child: Center(
                     child: Text(
-                      "ERSTELLTE AKTIVTÄTEN",
+                      "ERSTELLTE AKTIVITÄTEN",
                       style: TextStyle(
                           color: PeerPALAppColor.primaryColor,
                           fontSize: MediaQuery.of(context).size.width / 35),
