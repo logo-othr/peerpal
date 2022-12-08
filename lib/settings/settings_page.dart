@@ -556,9 +556,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         CustomTableRow(
                           text: "(10) Ausgabe: Benachrichtigungen",
-                          onPressed: () async => {
-                            sl<NotificationService>()
-                                .printPendingNotifications()
+                          onPressed: () async {
+                            String pendingNotificationsString =
+                                await sl<NotificationService>()
+                                    .printPendingNotifications();
+
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    elevation: 0,
+                                    backgroundColor: Colors.white,
+                                    child: Container(
+                                      width: 200,
+                                      height: 200,
+                                      child: SingleChildScrollView(
+                                        child: Text(pendingNotificationsString),
+                                      ),
+                                    ),
+                                  );
+                                });
                           },
                         ),
                       ],
