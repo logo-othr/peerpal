@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
@@ -43,8 +41,10 @@ class ActivityReminderRepository {
 // ToDo: Nullcheck activity member
   Future<void> setActivityRemindersIfRemindersNotExist(
       Activity activity) async {
-    if (Platform.isIOS && await _notificationService.hasPermission() == false)
+    if (await _notificationService.hasPermission() == false) {
+      logger.e("No permission for activity reminders: ${activity}");
       return;
+    }
 
     int firstActivityMinuteDelay = 60;
     int secondActivityDayDelay = 1;
