@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -174,7 +175,11 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<int> scheduleWeeklyNotification() async {
-    if (Platform.isIOS && (await hasPermission()) == false) return -1;
+    if ((await hasPermission()) == false) {
+      logger.e("No permission for weekly reminders");
+
+      return -1;
+    }
 // ToDo: Move title and message up
     bool weeklyRemindersActive = await isWeeklyReminderScheduled();
     if (!weeklyRemindersActive) {
@@ -300,17 +305,33 @@ class FirebaseNotificationService implements NotificationService {
     if (await hasPermission()) {
       return true;
     }
-    NotificationSettings newSettings =
-    await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+
+    if (Platform.isAndroid) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      if (androidInfo.version.release == "13") {
+        print('Running on ${androidInfo.version.release}');
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.requestPermission();
+      }
+    } else {
+      NotificationSettings newSettings =
+          await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+
     final SharedPreferences _preferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     _preferences.setBool(HAS_ASKED_FOR_PERMISSION, true);
 
-    return newSettings.authorizationStatus == AuthorizationStatus.authorized;
+    return await hasPermission();
   }
 
   Future<void> _ensureInitialized() async {
