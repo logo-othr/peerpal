@@ -37,8 +37,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ProfileSetupState(userInformation));
     } else if (userInformation.isDiscoverNotComplete) {
       emit(DiscoverSetupState(userInformation));
-    } else if (!(await _hasPermission()) &&
-        Platform.isIOS &&
+    } else if (!(await hasPermission()) &&
         !(await sl<NotificationService>().hasAskedForPermission()) &&
         !notificationRequestButtonClicked) {
       print("Is ios: " + Platform.isIOS.toString());
@@ -52,7 +51,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<bool> _hasPermission() async {
+  Future<bool> hasPermission() async {
     NotificationService notificationService = sl<NotificationService>();
     bool hasPermission = (await notificationService.hasPermission());
     return hasPermission;
