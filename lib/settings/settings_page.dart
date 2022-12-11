@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
@@ -16,6 +17,7 @@ import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart'
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
+import 'package:peerpal/settings/device_info_page.dart';
 import 'package:peerpal/settings/imprint_page.dart';
 import 'package:peerpal/settings/privacy_policy_page.dart';
 import 'package:peerpal/setup.dart';
@@ -28,6 +30,7 @@ import 'package:peerpal/widgets/custom_table_row.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
 import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -97,7 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       height: 120,
                       width: 120,
                       child:
-                      Image(image: AssetImage('assets/peerpal_logo.png')))),
+                          Image(image: AssetImage('assets/peerpal_logo.png')))),
               SizedBox(height: 10),
               Divider(thickness: 1, color: PeerPALAppColor.primaryColor),
               SizedBox(height: 10),
@@ -312,15 +315,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                           border: Border.all(
                                               width: 2,
                                               color:
-                                              PeerPALAppColor.primaryColor),
+                                                  PeerPALAppColor.primaryColor),
                                           borderRadius:
-                                          BorderRadius.circular(10)),
+                                              BorderRadius.circular(10)),
                                       height: 300,
                                       child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                            CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
                                             "Entwicklereinstellungen \n anschalten?",
@@ -336,57 +339,57 @@ class _SettingsPageState extends State<SettingsPage> {
                                             alignment: Alignment.center,
                                             child: Padding(
                                               padding:
-                                              const EdgeInsets.fromLTRB(
-                                                  0, 10, 0, 0),
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 10, 0, 0),
                                               child: Container(
                                                 color: Colors.transparent,
                                                 child: Column(
                                                   children: [
                                                     Padding(
                                                       padding: const EdgeInsets
-                                                          .fromLTRB(
+                                                              .fromLTRB(
                                                           15, 10, 0, 10),
                                                       child: CustomPeerPALHeading3(
                                                           text:
-                                                          "Passwort eingeben:",
+                                                              "Passwort eingeben:",
                                                           fontSize: 20,
                                                           color: Colors.black),
                                                     ),
                                                     Padding(
                                                       padding: const EdgeInsets
-                                                          .fromLTRB(
+                                                              .fromLTRB(
                                                           15, 5, 15, 0),
                                                       child: TextField(
                                                         textInputAction:
-                                                        TextInputAction
-                                                            .newline,
+                                                            TextInputAction
+                                                                .newline,
                                                         keyboardType:
-                                                        TextInputType
-                                                            .multiline,
+                                                            TextInputType
+                                                                .multiline,
                                                         minLines: 1,
                                                         maxLines: 5,
                                                         style: TextStyle(
                                                             fontSize: 18),
                                                         controller:
-                                                        passwordController,
+                                                            passwordController,
                                                         decoration:
-                                                        InputDecoration(
+                                                            InputDecoration(
                                                           contentPadding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                              left: 35,
-                                                              top: 35,
-                                                              right: 35),
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 35,
+                                                                  top: 35,
+                                                                  right: 35),
                                                           hintMaxLines: 3,
                                                           filled: true,
                                                           fillColor:
-                                                          Colors.white,
+                                                              Colors.white,
                                                           border:
-                                                          OutlineInputBorder(
+                                                              OutlineInputBorder(
                                                             borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                10),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
                                                           ),
                                                         ),
                                                       ),
@@ -579,6 +582,26 @@ class _SettingsPageState extends State<SettingsPage> {
                                     ),
                                   );
                                 });
+                          },
+                        ),
+                        CustomTableRow(
+                          text: "(11) Push-Notification-Test",
+                          onPressed: () async => {
+                            sl<NotificationService>().scheduleNotification(
+                                "test",
+                                "test",
+                                tz.TZDateTime.now(tz.local)
+                                    .add(Duration(seconds: 5)))
+                          },
+                        ),
+                        CustomTableRow(
+                          text: "(12) Geräteinformationen",
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DeviceInfoPage()),
+                            );
                           },
                         ),
                       ],
