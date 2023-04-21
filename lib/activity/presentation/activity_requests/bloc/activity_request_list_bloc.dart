@@ -31,8 +31,7 @@ class ActivityRequestListBloc
       ActivityRequestListEvent event) async* {
     if (event is LoadActivityRequestList) {
       Stream<List<Activity>> activityRequestListStream =
-          sl<ActivityRepository>()
-              .getPrivateRequestActivitiesForUser(currentUserId);
+          sl<ActivityRepository>().getJoinActivityRequests(currentUserId);
       _activityRequestListStreamController.addStream(activityRequestListStream);
 
       yield state.copyWith(

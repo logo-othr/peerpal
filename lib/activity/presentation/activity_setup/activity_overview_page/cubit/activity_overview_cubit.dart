@@ -19,9 +19,9 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
 
   Future<void> loadData({Activity? activityToChange}) async {
     Activity activity =
-        activityToChange ?? _activityRepository.getCurrentActivity();
+        activityToChange ?? _activityRepository.getActivityForPosting();
     if (activityToChange != null)
-      _activityRepository.updateLocalActivity(activity);
+      _activityRepository.updateActivityForPosting(activity);
     PeerPALUser activityCreator =
         await _appUserRepository.getUserInformation(activity.creatorId!);
     List<PeerPALUser> invitationIds = [];
@@ -46,14 +46,14 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
 
   setActivityToPublic() async {
     var updatedActivity = state.activity.copyWith(public: true);
-    await _activityRepository.updateLocalActivity(updatedActivity);
+    await _activityRepository.updateActivityForPosting(updatedActivity);
     emit(ActivityOverviewLoaded(updatedActivity, state.activityCreator,
         state.attendees, state.invitationIds));
   }
 
   setActivityToPrivate() async {
     var updatedActivity = state.activity.copyWith(public: false);
-    await _activityRepository.updateLocalActivity(updatedActivity);
+    await _activityRepository.updateActivityForPosting(updatedActivity);
     emit(ActivityOverviewLoaded(updatedActivity, state.activityCreator,
         state.attendees, state.invitationIds));
   }
@@ -61,14 +61,14 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
   Future<void> updateActivity(String description, String timestamp) async {
     var updatedActivity =
         state.activity.copyWith(description: description, timestamp: timestamp);
-    await _activityRepository.updateLocalActivity(updatedActivity);
+    await _activityRepository.updateActivityForPosting(updatedActivity);
     await _activityRepository.updateActivity(updatedActivity);
   }
 
   Future<void> createActivity(String description, String timestamp) async {
     var createActivity =
         state.activity.copyWith(description: description, timestamp: timestamp);
-    await _activityRepository.updateLocalActivity(createActivity);
+    await _activityRepository.updateActivityForPosting(createActivity);
     await _activityRepository.postActivity(createActivity);
     await _activityReminderRepository
         .setActivityRemindersIfRemindersNotExist(createActivity);

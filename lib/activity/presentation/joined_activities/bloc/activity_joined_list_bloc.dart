@@ -31,8 +31,8 @@ class ActivityJoinedListBloc
   Stream<ActivityJoinedListState> mapEventToState(
       ActivityJoinedListEvent event) async* {
     if (event is LoadActivityJoinedList) {
-      Stream<List<Activity>> activityJoinedListStream = sl<ActivityRepository>()
-          .getPrivateJoinedActivitiesForUser(currentUserId);
+      Stream<List<Activity>> activityJoinedListStream =
+          sl<ActivityRepository>().getJoinedActivities(currentUserId);
       _activityJoinedListStreamController.addStream(activityJoinedListStream);
 
       _activityJoinedListStreamController.stream

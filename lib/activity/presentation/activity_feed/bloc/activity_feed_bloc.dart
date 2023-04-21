@@ -67,12 +67,12 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
             .clearAndSetActivityReminders(activities);
       });
 
-      Stream<List<Activity>> activityRequestList = sl<ActivityRepository>()
-          .getPrivateRequestActivitiesForUser(currentUserId);
+      Stream<List<Activity>> activityRequestList =
+          sl<ActivityRepository>().getJoinActivityRequests(currentUserId);
       _activityRequestListController.addStream(activityRequestList);
 
-      Stream<List<Activity>> activityJoinedList = sl<ActivityRepository>()
-          .getPrivateJoinedActivitiesForUser(currentUserId);
+      Stream<List<Activity>> activityJoinedList =
+          sl<ActivityRepository>().getJoinedActivities(currentUserId);
       _activityJoinedListController.addStream(activityJoinedList);
 
       _activityJoinedListController.stream.listen((List<Activity> activities) {

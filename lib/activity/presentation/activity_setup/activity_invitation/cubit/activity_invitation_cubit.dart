@@ -25,7 +25,7 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
     var friends = _appUserRepository.getFriendList();
     var friendRequestsSize = _appUserRepository.getFriendRequestsSize();
 
-    var activity = _activityRepository.getCurrentActivity();
+    var activity = _activityRepository.getActivityForPosting();
     List<String> invitationIds =
         activity.invitationIds != null ? activity.invitationIds! : [];
     List<PeerPALUser> invitations = [];
@@ -65,10 +65,10 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
   }
 
   Future<Activity> postData() async {
-    var activity = await _activityRepository.getCurrentActivity();
+    var activity = await _activityRepository.getActivityForPosting();
     activity = activity.copyWith(
         invitationIds: state.invitations.map((e) => e.id!).toList());
-    _activityRepository.updateLocalActivity(activity);
+    _activityRepository.updateActivityForPosting(activity);
     return activity;
   }
 

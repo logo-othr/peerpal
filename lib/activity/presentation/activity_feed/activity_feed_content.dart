@@ -54,7 +54,9 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                 authenticatedUser.id ?? "",
                 DateTime.now().millisecondsSinceEpoch.toString(),
                 activity.id ?? "");
-            context.read<ActivityRepository>().updateLocalActivity(activity);
+            context
+                .read<ActivityRepository>()
+                .updateActivityForPosting(activity);
             await Navigator.of(context).push(ActivityWizardFlow.route(
                 activity)); // ToDo: Move to domain layer
           },

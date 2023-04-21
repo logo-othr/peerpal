@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/data/repository/location_repository.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
@@ -162,6 +163,8 @@ Future<void> setupDependencies() async {
   // ============== Activity ====================
 
   sl.registerLazySingleton<ActivityRepository>(() => ActivityRepository(sl()));
+
+  sl.registerLazySingleton<LocationRepository>(() => LocationRepository());
 
   sl.registerLazySingleton<ActivityReminderRepository>(() =>
       ActivityReminderRepository(

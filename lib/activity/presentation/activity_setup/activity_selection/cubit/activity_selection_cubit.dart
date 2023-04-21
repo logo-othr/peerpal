@@ -15,14 +15,14 @@ class ActivitySelectionCubit extends Cubit<ActivitySelectionState> {
   }
 
   Future<Activity> getCurrentActivity() async {
-    var activity = await _activityRepository.getCurrentActivity();
+    var activity = await _activityRepository.getActivityForPosting();
     return activity;
   }
 
   Future<void> postData(Activity activity) async {
     if (state is ActivitiesLoaded) {
       emit(ActivitiesLoaded(state.activities));
-      _activityRepository.updateLocalActivity(activity);
+      _activityRepository.updateActivityForPosting(activity);
     }
   }
 }

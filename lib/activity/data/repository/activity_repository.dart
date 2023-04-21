@@ -2,14 +2,11 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
-import 'package:peerpal/data/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {
   SharedPreferences _prefs;
-
   ActivityRepository(this._prefs);
 
   static List<Activity> _activities = [
@@ -35,6 +32,8 @@ class ActivityRepository {
     Activity(code: 'other', name: "Sons\u00adti\u00adges")
   ];
 
+  /// Takes in an activity [code] as input and returns the corresponding
+  /// activity name
   static String getActivityNameFromCode(String code) {
     final List<Activity> activities = _activities;
 
@@ -44,35 +43,38 @@ class ActivityRepository {
     return "<Aktivitätsname>";
   }
 
+  /// Generates a list of activity objects that includes all possible
+  /// activity names and codes, with the other members left empty."
   Future<List<Activity>> loadActivityList() async {
     final List<Activity> activities = _activities;
-
     return activities;
   }
 
-  updateLocalActivity(Activity activity) {
+  /// Update the activity whcih is currently being created for posing.
+  updateActivityForPosting(Activity activity) {
     _prefs.setString("activity_creation", jsonEncode(activity.toJson()));
   }
 
-  Activity getCurrentActivity() {
-    var activity = Activity();
-    try {
-      var activityMap = jsonDecode(_prefs.getString('activity_creation')!);
-      activity = Activity.fromJson(activityMap);
-    } catch (e) {
-      // ToDo: Implement.
-    }
+  /// Returns the activity which is currently being created for posting.
+  Activity getActivityForPosting() {
+    var activityMap = jsonDecode(_prefs.getString('activity_creation')!);
+    Activity activity = Activity.fromJson(activityMap);
     return activity;
   }
 
+  /// Writes the [activity] to the newActivity collection. The app server
+  /// subsequently updates the activity and performs additional actions such as
+  /// sending notifications.
   Future<void> postActivity(Activity activity) async {
-    //ToDo: use toJson / toMap
     await FirebaseFirestore.instance
         .collection('newActivity')
         .doc(activity.id)
         .set(activity.toJson());
   }
 
+  /// Writes the [activity] to the updateActivity collection. The app server
+  /// subsequently updates the activity and performs additional actions such as
+  /// sending notifications.
   Future<void> updateActivity(Activity activity) async {
     await FirebaseFirestore.instance
         .collection('updateActivity')
@@ -80,6 +82,10 @@ class ActivityRepository {
         .set(activity.toJson());
   }
 
+  /// Writes the ID of the [activity] along with the ID of the currently logged-in user of the app
+  /// to the joinActivity collection. The app server
+  /// then updates the activity with the new user ID and may perform additional actions, such as
+  /// sending notifications.
   Future<void> joinActivity(Activity activity) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('joinActivity').doc().set({
@@ -89,6 +95,10 @@ class ActivityRepository {
     });
   }
 
+  /// Writes the ID of the [activity] along with the ID of the currently logged-in user of the app
+  /// to the leaveActivity collection. The app server
+  /// then removes the user ID from the activity and may perform additional actions, such as
+  /// sending notifications.
   Future<void> leaveActivity(Activity activity) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('leaveActivity').doc().set({
@@ -98,6 +108,10 @@ class ActivityRepository {
     });
   }
 
+  /// Writes the ID of the [activity] along with the ID of the currently logged-in user of the app
+  /// to the deleteActivity collection. The app server
+  /// first verifies if the user is logged in, and then deletes the activity and may perform
+  /// additional actions, such as sending notifications.
   Future<void> deleteActivity(Activity activity) async {
     String? currentUserId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('deleteActivity').doc().set({
@@ -107,12 +121,9 @@ class ActivityRepository {
     });
   }
 
-  Future<List<Location>> loadLocations() async {
-    final jsonData = await rootBundle.loadString('assets/location.json');
-    final list = json.decode(jsonData) as List<dynamic>;
-    return list.map((e) => Location.fromJson(e)).toList();
-  }
-
+  /// The getCreatedActivities method returns a real-time stream of lists, each containing
+  /// [Activity] objects marked as public.
+  /// The activities are sorted by date.
   Stream<List<Activity>> getPublicActivities(String currentUserId) async* {
     Stream<QuerySnapshot> publicActivityStream = FirebaseFirestore.instance
         .collection('activities')
@@ -128,10 +139,7 @@ class ActivityRepository {
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
-
-        /*if(activity.creatorId != currentUserId)*/
         publicActivityList.add(activity);
-        //logger.i("PublicActivityStream: $activity");
       });
       publicActivityList.sort((a, b) => a.date!.compareTo(b.date!));
 
@@ -139,6 +147,9 @@ class ActivityRepository {
     }
   }
 
+  /// The getCreatedActivities method returns a real-time stream of lists, each containing
+  /// [Activity] objects where each activity was created by the logged-in user.
+  /// The activities are sorted by date.
   Stream<List<Activity>> getCreatedActivities(String currentUserId) async* {
     Stream<QuerySnapshot> createdActivityStream = FirebaseFirestore.instance
         .collection('activities')
@@ -154,15 +165,15 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
         createdActivityList.add(activity);
-        //  logger.i("CreatedActivityStream: $activity");
       });
       createdActivityList.sort((a, b) => a.date!.compareTo(b.date!));
       yield createdActivityList;
     }
   }
 
-  // ToDo: Workaround. Refactor.
-  List<Activity> _replaceOrAddActivity(List<Activity> activityList, Activity activity) {
+  @deprecated
+  List<Activity> _replaceOrAddActivity(
+      List<Activity> activityList, Activity activity) {
     Activity? activityToRemove;
     Activity? activityToAdd;
     bool isReplaced = false;
@@ -180,26 +191,48 @@ class ActivityRepository {
     return activityList;
   }
 
-  List<Activity> sortActivityList(List<Activity> listToSort, String currentUserId) {
+  /// Sorts a list of [Activity] objects based on the creator and activity date.
+  ///
+  /// The sortActivityList method takes in a list of [Activity] objects (listToSort) and the ID
+  /// of the currently logged-in user (currentUserId). It separates the activities created by the
+  /// current user into a creatorList and other public activities into a publicList. Both lists
+  /// are sorted in descending order based on the activity date. The sorted lists are combined and
+  /// returned, with the activities created by the current user first.
+  ///
+  /// Returns a new [List] of sorted [Activity] objects.
+  List<Activity> sortActivityList(
+      List<Activity> listToSort, String currentUserId) {
     List<Activity> creatorList = [];
     List<Activity> publicList = [];
     List<Activity> sortedList = [];
-    for (Activity activty in listToSort) {
-      if (activty.creatorId == currentUserId)
-        creatorList.add(activty);
+    for (Activity activity in listToSort) {
+      if (activity.creatorId == currentUserId)
+        creatorList.add(activity);
       else
-        publicList.add(activty);
+        publicList.add(activity);
     }
+
+    // Sort by date
     creatorList.sort((a, b) => b.date!.compareTo(a.date!));
     publicList.sort((a, b) => b.date!.compareTo(a.date!));
+
+    // Combine
     sortedList.addAll(creatorList);
     sortedList.addAll(publicList);
 
     return sortedList;
   }
 
-  Stream<List<Activity>> getPrivateRequestActivitiesForUser(String currentUserId) async* {
-    Stream<QuerySnapshot> privateRequestActivityStream = FirebaseFirestore
+  /// The getJoinActivityRequests method returns a real-time stream of lists, each containing
+  /// [Activity] objects for which the current user has received an invitation and the date is in the future.
+  /// The activities are sorted by date.
+  ///
+  /// Each activity includes an "invitationIds" property, which holds the IDs of all users invited
+  /// to the activity. When a user joins the activity, their ID is removed from the "invitationIds"
+  /// by the server and added to the "attendeeIds" field.
+  Stream<List<Activity>> getJoinActivityRequests(String currentUserId) async* {
+    // Create Stream
+    Stream<QuerySnapshot> activitiesWithJoinRequestStream = FirebaseFirestore
         .instance
         .collection('activities')
         .where('invitationIds', arrayContains: currentUserId)
@@ -207,42 +240,56 @@ class ActivityRepository {
         .orderBy('date', descending: true)
         .snapshots();
 
-    List<Activity> privateRequestActivitiesFromUserList = <Activity>[];
-    await for (QuerySnapshot querySnapshot in privateRequestActivityStream) {
-      privateRequestActivitiesFromUserList.clear();
+    List<Activity> activitiesWithJoinRequest = <Activity>[];
+
+    // Await new stream update, clear the list and then yield the new list
+    await for (QuerySnapshot querySnapshot in activitiesWithJoinRequestStream) {
+      activitiesWithJoinRequest.clear();
+
+      // Parse firebase QuerySnapshot, extract the document data and
+      // convert it to a activity object
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;
-        var activity = Activity.fromJson(documentData);
-        privateRequestActivitiesFromUserList.add(activity);
-        // logger.i("PrivateRequestActivitiesFromUserStream: $activity");
+        Activity activity = Activity.fromJson(documentData);
+        activitiesWithJoinRequest.add(activity);
       });
-      privateRequestActivitiesFromUserList
-          .sort((a, b) => a.date!.compareTo(b.date!));
-      yield privateRequestActivitiesFromUserList;
+
+      // Sort by date
+      activitiesWithJoinRequest.sort((a, b) => a.date!.compareTo(b.date!));
+
+      yield activitiesWithJoinRequest;
     }
   }
 
-  Stream<List<Activity>> getPrivateJoinedActivitiesForUser(String currentUserId) async* {
-    Stream<QuerySnapshot> privateJoinedActivityStream = FirebaseFirestore
-        .instance
+  /// The getJoinedActivities method returns a real-time stream of lists, each containing
+  /// [Activity] objects where the current user has joined and the activity date
+  /// is in the future. The activities are sorted by date.
+  Stream<List<Activity>> getJoinedActivities(String currentUserId) async* {
+    Stream<QuerySnapshot> joinedActivitiesStream = FirebaseFirestore.instance
         .collection('activities')
         .where('attendeeIds', arrayContains: currentUserId)
         .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
         .orderBy('date', descending: true)
         .snapshots();
 
-    List<Activity> publicJoinedActivitiesFromUserList = <Activity>[];
-    await for (QuerySnapshot querySnapshot in privateJoinedActivityStream) {
-      publicJoinedActivitiesFromUserList.clear();
+    List<Activity> joinedActivities = <Activity>[];
+
+    // Await new stream update, clear the list and then yield the new list
+    await for (QuerySnapshot querySnapshot in joinedActivitiesStream) {
+      joinedActivities.clear();
+
+      // Parse firebase QuerySnapshot, extract the document data and
+      // convert it to a activity object
       querySnapshot.docs.forEach((document) {
         var documentData = document.data() as Map<String, dynamic>;
-        var activity = Activity.fromJson(documentData);
-        publicJoinedActivitiesFromUserList.add(activity);
-        //   logger.i("PublicJoinedActivitiesFromUserStream: $activity");
+        Activity activity = Activity.fromJson(documentData);
+        joinedActivities.add(activity);
       });
-      publicJoinedActivitiesFromUserList
-          .sort((a, b) => a.date!.compareTo(b.date!));
-      yield publicJoinedActivitiesFromUserList;
+
+      // Sort by date
+      joinedActivities.sort((a, b) => a.date!.compareTo(b.date!));
+
+      yield joinedActivities;
     }
   }
 }

@@ -25,7 +25,7 @@ class DateInputCubit extends Cubit<DateInputState> {
   }
 
   Future<void> load() async {
-    var activity = await _activityRepository.getCurrentActivity();
+    var activity = await _activityRepository.getActivityForPosting();
     String? formattedDate;
     String? formattedTime;
     if (activity.date != null) {
@@ -45,10 +45,10 @@ class DateInputCubit extends Cubit<DateInputState> {
     DateFormat inputFormat = DateFormat("dd.MM.yyyy HH:mm");
     DateTime dt = inputFormat.parse('${state.date} ${state.time}');
     // Timestamp ts = Timestamp.fromDate(dt);
-    var activity = await _activityRepository.getCurrentActivity();
+    var activity = await _activityRepository.getActivityForPosting();
 
     activity = activity.copyWith(date: dt.millisecondsSinceEpoch);
-    _activityRepository.updateLocalActivity(activity);
+    _activityRepository.updateActivityForPosting(activity);
     return activity;
   }
 }
