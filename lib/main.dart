@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/activity_repository.dart';
-import 'package:peerpal/app/bloc_observer.dart';
+import 'package:peerpal/activity/data/repository/location_repository.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -51,6 +51,9 @@ class _AppState extends State<App> {
         ),
         RepositoryProvider.value(
           value: sl<ActivityRepository>(),
+        ),
+        RepositoryProvider.value(
+          value: sl<LocationRepository>(),
         )
       ],
       child: BlocProvider(
