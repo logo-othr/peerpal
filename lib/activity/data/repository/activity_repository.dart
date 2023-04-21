@@ -8,81 +8,56 @@ import 'package:peerpal/data/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivityRepository {
+  SharedPreferences _prefs;
+
+  ActivityRepository(this._prefs);
+
+  static List<Activity> _activities = [
+    Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"),
+    Activity(code: 'walking', name: "Spa\u00adzie\u00adren"),
+    Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"),
+    Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"),
+    Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"),
+    Activity(code: 'visit', name: "Be\u00adsuch\u00aden"),
+    Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"),
+    Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"),
+    Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"),
+    Activity(code: 'cooking', name: "Koch\u00aden"),
+    Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"),
+    Activity(code: 'goout', name: "Aus\u00adge\u00adhen"),
+    Activity(code: 'travel', name: "Rei\u00adsen"),
+    Activity(code: 'sightseeing', name: "Sight\u00adseeing"),
+    Activity(code: 'sport', name: "Sport"),
+    Activity(
+        code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"),
+    Activity(code: 'culture', name: "Kul\u00adtur"),
+    Activity(code: 'diy', name: "Heim\u00adwer\u00adken"),
+    Activity(code: 'other', name: "Sons\u00adti\u00adges")
+  ];
+
   static String getActivityNameFromCode(String code) {
-    final List<Activity> activities = [];
-    activities.add(Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"));
-    activities.add(Activity(code: 'walking', name: "Spa\u00adzie\u00adren"));
-    activities.add(Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"));
-    activities
-        .add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
-    activities.add(
-        Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
-    activities.add(Activity(code: 'visit', name: "Be\u00adsuch\u00aden"));
-    activities
-        .add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
-    activities
-        .add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
-    activities
-        .add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
-    activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
-    activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
-    activities.add(Activity(code: 'goout', name: "Aus\u00adge\u00adhen"));
-    activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
-    activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
-    activities.add(Activity(code: 'sport', name: "Sport"));
-    activities.add(Activity(
-        code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
-    activities.add(Activity(code: 'culture', name: "Kul\u00adtur"));
-    activities.add(Activity(code: 'diy', name: "Heim\u00adwer\u00adken"));
-    activities.add(Activity(code: 'other', name: "Sons\u00adti\u00adges"));
+    final List<Activity> activities = _activities;
+
     for (Activity a in activities) {
       if (a.code == code && a.name != null) return a.name!;
     }
     return "<Aktivitätsname>";
   }
 
-  SharedPreferences prefs;
-
-  ActivityRepository(this.prefs);
-
   Future<List<Activity>> loadActivityList() async {
-    final List<Activity> activities = [];
-    activities.add(Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"));
-    activities.add(Activity(code: 'walking', name: "Spa\u00adzie\u00adren"));
-    activities.add(Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"));
-    activities
-        .add(Activity(code: 'coffee', name: "Kaf\u00adfee\u00adtrin\u00adken"));
-    activities.add(
-        Activity(code: 'phone', name: "Te\u00adle\u00adfo\u00adnie\u00adren"));
-    activities.add(Activity(code: 'visit', name: "Be\u00adsuch\u00aden"));
-    activities
-        .add(Activity(code: 'car', name: "Aus\u00adflug mit dem Au\u00adto"));
-    activities
-        .add(Activity(code: 'tv', name: "Fern\u00adse\u00adhen schau\u00aden"));
-    activities
-        .add(Activity(code: 'garden', name: "Gar\u00adten\u00adar\u00adbeit"));
-    activities.add(Activity(code: 'cooking', name: "Koch\u00aden"));
-    activities.add(Activity(code: 'eating', name: "Es\u00adsen ge\u00adhen"));
-    activities.add(Activity(code: 'goout', name: "Aus\u00adge\u00adhen"));
-    activities.add(Activity(code: 'travel', name: "Rei\u00adsen"));
-    activities.add(Activity(code: 'sightseeing', name: "Sight\u00adseeing"));
-    activities.add(Activity(code: 'sport', name: "Sport"));
-    activities.add(Activity(
-        code: 'games', name: "Ge\u00adsell\u00adschafts\u00adspie\u00adle"));
-    activities.add(Activity(code: 'culture', name: "Kul\u00adtur"));
-    activities.add(Activity(code: 'diy', name: "Heim\u00adwer\u00adken"));
-    activities.add(Activity(code: 'other', name: "Sons\u00adti\u00adges"));
+    final List<Activity> activities = _activities;
+
     return activities;
   }
 
   updateLocalActivity(Activity activity) {
-    prefs.setString("activity_creation", jsonEncode(activity.toJson()));
+    _prefs.setString("activity_creation", jsonEncode(activity.toJson()));
   }
 
   Activity getCurrentActivity() {
     var activity = Activity();
     try {
-      var activityMap = jsonDecode(prefs.getString('activity_creation')!);
+      var activityMap = jsonDecode(_prefs.getString('activity_creation')!);
       activity = Activity.fromJson(activityMap);
     } catch (e) {
       // ToDo: Implement.
@@ -179,7 +154,7 @@ class ActivityRepository {
         var documentData = document.data() as Map<String, dynamic>;
         var activity = Activity.fromJson(documentData);
         createdActivityList.add(activity);
-      //  logger.i("CreatedActivityStream: $activity");
+        //  logger.i("CreatedActivityStream: $activity");
       });
       createdActivityList.sort((a, b) => a.date!.compareTo(b.date!));
       yield createdActivityList;
@@ -187,8 +162,7 @@ class ActivityRepository {
   }
 
   // ToDo: Workaround. Refactor.
-  List<Activity> _replaceOrAddActivity(
-      List<Activity> activityList, Activity activity) {
+  List<Activity> _replaceOrAddActivity(List<Activity> activityList, Activity activity) {
     Activity? activityToRemove;
     Activity? activityToAdd;
     bool isReplaced = false;
@@ -206,8 +180,7 @@ class ActivityRepository {
     return activityList;
   }
 
-  List<Activity> sortActivityList(
-      List<Activity> listToSort, String currentUserId) {
+  List<Activity> sortActivityList(List<Activity> listToSort, String currentUserId) {
     List<Activity> creatorList = [];
     List<Activity> publicList = [];
     List<Activity> sortedList = [];
@@ -225,8 +198,7 @@ class ActivityRepository {
     return sortedList;
   }
 
-  Stream<List<Activity>> getPrivateRequestActivitiesForUser(
-      String currentUserId) async* {
+  Stream<List<Activity>> getPrivateRequestActivitiesForUser(String currentUserId) async* {
     Stream<QuerySnapshot> privateRequestActivityStream = FirebaseFirestore
         .instance
         .collection('activities')
@@ -250,8 +222,7 @@ class ActivityRepository {
     }
   }
 
-  Stream<List<Activity>> getPrivateJoinedActivitiesForUser(
-      String currentUserId) async* {
+  Stream<List<Activity>> getPrivateJoinedActivitiesForUser(String currentUserId) async* {
     Stream<QuerySnapshot> privateJoinedActivityStream = FirebaseFirestore
         .instance
         .collection('activities')
