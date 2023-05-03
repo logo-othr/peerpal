@@ -3,15 +3,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/data/repository/firebase_activity_repository.dart';
-import 'package:peerpal/activity/data/repository/location_repository.dart';
 import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
 import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_service.dart';
 import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
+import 'package:peerpal/app/data/location/repository/local_location_repository.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/app/domain/analytics/analytics_service.dart';
+import 'package:peerpal/app/domain/location/location_repository.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/data/firebase_notification_service.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
@@ -166,7 +167,7 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<ActivityRepository>(
       () => FirebaseActivityRepository(sl()));
 
-  sl.registerLazySingleton<LocationRepository>(() => LocationRepository());
+  sl.registerLazySingleton<LocationRepository>(() => LocalLocationRepository());
 
   sl.registerLazySingleton<ActivityReminderRepository>(() =>
       ActivityReminderRepository(

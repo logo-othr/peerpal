@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/activity/data/repository/location_repository.dart';
 import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/app/domain/location/location_repository.dart';
 import 'package:peerpal/data/location.dart';
 
 part 'activity_location_state.dart';
