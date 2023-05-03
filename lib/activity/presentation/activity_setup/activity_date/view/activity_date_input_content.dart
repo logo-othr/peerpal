@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
+import 'package:peerpal/activity/data/resources/activity_icon_data.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_date/cubit/activity_date_cubit.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';

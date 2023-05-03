@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flow_builder/flow_builder.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
+import 'package:peerpal/activity/data/resources/activity_icon_data.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_date/view/activity_date_input_page.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_invitation/view/activity_invitation_input_page.dart';

@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
+import 'package:peerpal/activity/data/resources/activity_icon_data.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/cubit/activity_public_overview_cubit.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';

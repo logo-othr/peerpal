@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:peerpal/activity/data/resources/activity_icon_data..dart';
+import 'package:peerpal/activity/data/resources/activity_icon_data.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
