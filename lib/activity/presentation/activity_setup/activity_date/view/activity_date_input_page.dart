@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_date/cubit/activity_date_cubit.dart';
 
 //platzhalter

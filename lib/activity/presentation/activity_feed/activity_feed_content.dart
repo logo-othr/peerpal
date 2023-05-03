@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/activity_request_list_page.dart';
@@ -54,9 +54,7 @@ class _ActivityFeedContentState extends State<ActivityFeedContent> {
                 authenticatedUser.id ?? "",
                 DateTime.now().millisecondsSinceEpoch.toString(),
                 activity.id ?? "");
-            context
-                .read<ActivityRepository>()
-                .updateActivityForPosting(activity);
+            context.read<ActivityRepository>().updateLocalActivity(activity);
             await Navigator.of(context).push(ActivityWizardFlow.route(
                 activity)); // ToDo: Move to domain layer
           },

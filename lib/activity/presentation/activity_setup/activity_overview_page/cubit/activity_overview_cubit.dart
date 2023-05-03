@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
@@ -19,9 +19,9 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
 
   Future<void> loadData({Activity? activityToChange}) async {
     Activity activity =
-        activityToChange ?? _activityRepository.getActivityForPosting();
+        activityToChange ?? _activityRepository.getLocalActivity();
     if (activityToChange != null)
-      _activityRepository.updateActivityForPosting(activity);
+      _activityRepository.updateLocalActivity(activity);
     PeerPALUser activityCreator =
         await _appUserRepository.getUserInformation(activity.creatorId!);
     List<PeerPALUser> invitationIds = [];
@@ -46,14 +46,14 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
 
   setActivityToPublic() async {
     var updatedActivity = state.activity.copyWith(public: true);
-    await _activityRepository.updateActivityForPosting(updatedActivity);
+    await _activityRepository.updateLocalActivity(updatedActivity);
     emit(ActivityOverviewLoaded(updatedActivity, state.activityCreator,
         state.attendees, state.invitationIds));
   }
 
   setActivityToPrivate() async {
     var updatedActivity = state.activity.copyWith(public: false);
-    await _activityRepository.updateActivityForPosting(updatedActivity);
+    await _activityRepository.updateLocalActivity(updatedActivity);
     emit(ActivityOverviewLoaded(updatedActivity, state.activityCreator,
         state.attendees, state.invitationIds));
   }
@@ -61,14 +61,14 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
   Future<void> updateActivity(String description, String timestamp) async {
     var updatedActivity =
         state.activity.copyWith(description: description, timestamp: timestamp);
-    await _activityRepository.updateActivityForPosting(updatedActivity);
+    await _activityRepository.updateLocalActivity(updatedActivity);
     await _activityRepository.updateActivity(updatedActivity);
   }
 
   Future<void> createActivity(String description, String timestamp) async {
     var createActivity =
         state.activity.copyWith(description: description, timestamp: timestamp);
-    await _activityRepository.updateActivityForPosting(createActivity);
+    await _activityRepository.updateLocalActivity(createActivity);
     await _activityRepository.postActivity(createActivity);
     await _activityReminderRepository
         .setActivityRemindersIfRemindersNotExist(createActivity);

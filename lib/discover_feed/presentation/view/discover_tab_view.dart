@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/data/resources/colors.dart';
@@ -234,8 +234,9 @@ if (user.discoverLocations == null ||
     header: user.name,
     locations: user.discoverLocations?.map((e) => e.place).toList(),
     activities: user.discoverActivitiesCodes
-        ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
-        .toList());
+            ?.map((e) =>
+                context.read<ActivityRepository>().getActivityNameFromCode(e))
+            .toList());
   }
 
   Widget _noUsersFound() {

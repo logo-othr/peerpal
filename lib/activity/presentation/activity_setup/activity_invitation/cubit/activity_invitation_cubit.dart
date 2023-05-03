@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
@@ -25,7 +25,7 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
     var friends = _appUserRepository.getFriendList();
     var friendRequestsSize = _appUserRepository.getFriendRequestsSize();
 
-    var activity = _activityRepository.getActivityForPosting();
+    var activity = _activityRepository.getLocalActivity();
     List<String> invitationIds =
         activity.invitationIds != null ? activity.invitationIds! : [];
     List<PeerPALUser> invitations = [];
@@ -65,10 +65,10 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
   }
 
   Future<Activity> postData() async {
-    var activity = await _activityRepository.getActivityForPosting();
+    var activity = await _activityRepository.getLocalActivity();
     activity = activity.copyWith(
         invitationIds: state.invitations.map((e) => e.id!).toList());
-    _activityRepository.updateActivityForPosting(activity);
+    _activityRepository.updateLocalActivity(activity);
     return activity;
   }
 

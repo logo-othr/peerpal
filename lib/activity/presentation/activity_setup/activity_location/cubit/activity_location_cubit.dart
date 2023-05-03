@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/data/repository/location_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/data/location.dart';
 
@@ -16,7 +16,7 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
 
   Future<void> loadData() async {
     var locations = await _locationRepository.loadLocations();
-    var activity = await _activityRepository.getActivityForPosting();
+    var activity = await _activityRepository.getLocalActivity();
     var locationList = activity.location != null
         ? <Location>[activity.location!]
         : <Location>[].cast<Location>();
@@ -99,10 +99,10 @@ class ActivityLocationCubit extends Cubit<ActivityLocationInputState> {
   Future<Activity> postActivityLocations() async {
     emit(ActivityLocationPosting(state.locations, state.selectedLocations));
 
-    var currentActivity = await _activityRepository.getActivityForPosting();
+    var currentActivity = await _activityRepository.getLocalActivity();
     var activity =
         currentActivity.copyWith(location: state.selectedLocations[0]);
-    _activityRepository.updateActivityForPosting(activity);
+    _activityRepository.updateLocalActivity(activity);
 
     emit(ActivityLocationPosted(state.locations, state.selectedLocations));
     return activity;

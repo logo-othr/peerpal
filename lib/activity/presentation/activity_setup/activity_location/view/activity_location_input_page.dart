@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/data/repository/location_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_location/cubit/activity_location_cubit.dart';
 
 import 'activity_location_input_content.dart';

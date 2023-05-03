@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_activities_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/view/discover_age_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
@@ -12,7 +11,6 @@ import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';
 import 'package:peerpal/widgets/custom_single_table_with_list_items.dart';
-import 'package:provider/provider.dart';
 
 class DiscoverInterestsOverviewContent extends StatefulWidget {
   @override
@@ -156,7 +154,8 @@ class _ChangeInteresst extends StatelessWidget {
     return CustomSingleTableWithListItems(
       heading: "INTERESSEN",
       list: state.appUserInformation.discoverActivitiesCodes
-          ?.map((e) => ActivityRepository.getActivityNameFromCode(e))
+          ?.map((e) =>
+              context.read<ActivityRepository>().getActivityNameFromCode(e))
           .toList(),
       isArrowIconVisible: true,
       onPressed: () async => {

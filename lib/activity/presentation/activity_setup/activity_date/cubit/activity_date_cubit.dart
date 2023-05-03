@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 
 part 'activity_date_state.dart';
@@ -25,7 +25,7 @@ class DateInputCubit extends Cubit<DateInputState> {
   }
 
   Future<void> load() async {
-    var activity = await _activityRepository.getActivityForPosting();
+    var activity = await _activityRepository.getLocalActivity();
     String? formattedDate;
     String? formattedTime;
     if (activity.date != null) {
@@ -45,10 +45,10 @@ class DateInputCubit extends Cubit<DateInputState> {
     DateFormat inputFormat = DateFormat("dd.MM.yyyy HH:mm");
     DateTime dt = inputFormat.parse('${state.date} ${state.time}');
     // Timestamp ts = Timestamp.fromDate(dt);
-    var activity = await _activityRepository.getActivityForPosting();
+    var activity = await _activityRepository.getLocalActivity();
 
     activity = activity.copyWith(date: dt.millisecondsSinceEpoch);
-    _activityRepository.updateActivityForPosting(activity);
+    _activityRepository.updateLocalActivity(activity);
     return activity;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc.dart';
 import 'package:peerpal/data/resources/colors.dart';
@@ -134,7 +134,8 @@ class UserDetailContent extends StatelessWidget {
                                 CustomSingleTable(
                                   heading: 'INTERESSEN',
                                   text: state.user.discoverActivitiesCodes!
-                                      .map((e) => ActivityRepository
+                                      .map((e) => context
+                                          .read<ActivityRepository>()
                                           .getActivityNameFromCode(e))
                                       .toList()
                                       .join(', '),
@@ -214,7 +215,8 @@ class UserDetailContent extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           List<String> activityNames = state.user.discoverActivitiesCodes!
-              .map((e) => ActivityRepository.getActivityNameFromCode(e))
+              .map((e) =>
+                  context.read<ActivityRepository>().getActivityNameFromCode(e))
               .toList();
 
           return CustomActivityDialog(

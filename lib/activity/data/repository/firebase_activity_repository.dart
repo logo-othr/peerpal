@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ActivityRepository {
+class FirebaseActivityRepository implements ActivityRepository {
   SharedPreferences _prefs;
-  ActivityRepository(this._prefs);
 
-  static List<Activity> _activities = [
+  FirebaseActivityRepository(this._prefs);
+
+  List<Activity> _activities = [
     Activity(code: 'shopping', name: "Ein\u00adkau\u00adfen"),
     Activity(code: 'walking', name: "Spa\u00adzie\u00adren"),
     Activity(code: 'music', name: "Mu\u00adsik hö\u00adren"),
@@ -34,7 +36,7 @@ class ActivityRepository {
 
   /// Takes in an activity [code] as input and returns the corresponding
   /// activity name
-  static String getActivityNameFromCode(String code) {
+  String getActivityNameFromCode(String code) {
     final List<Activity> activities = _activities;
 
     for (Activity a in activities) {
@@ -50,13 +52,13 @@ class ActivityRepository {
     return activities;
   }
 
-  /// Update the activity whcih is currently being created for posing.
-  updateActivityForPosting(Activity activity) {
+  /// Update the (local temporary) activity object which is currently being created.
+  updateLocalActivity(Activity activity) {
     _prefs.setString("activity_creation", jsonEncode(activity.toJson()));
   }
 
-  /// Returns the activity which is currently being created for posting.
-  Activity getActivityForPosting() {
+  /// Returns the (local temporary) activity object which is currently being created.
+  Activity getLocalActivity() {
     var activityMap = jsonDecode(_prefs.getString('activity_creation')!);
     Activity activity = Activity.fromJson(activityMap);
     return activity;
