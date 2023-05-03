@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
-import 'package:peerpal/app/bloc/app_bloc.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
+import 'package:peerpal/app/view/bloc/app_bloc.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';

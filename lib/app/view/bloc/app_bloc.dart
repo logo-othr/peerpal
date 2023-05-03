@@ -7,7 +7,6 @@ import 'package:peerpal/authentication/domain/models/auth_user.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 
 part 'app_event.dart';
-
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
