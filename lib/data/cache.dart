@@ -1,11 +1,11 @@
 abstract class Cache {
-  void set<T extends Object>({required String key, required T value});
+  void store<T extends Object>({required String key, required T value});
 
-  bool containsKey(String key);
+  bool hasKey(String key);
 
-  T? get<T extends Object>({required String key});
+  T? retrieve<T extends Object>({required String key});
 
-  void clear({String? key});
+  void clearCache({String? key});
 
   String toString();
 }
