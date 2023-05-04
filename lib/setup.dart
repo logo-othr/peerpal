@@ -90,18 +90,18 @@ Future<void> setupDependencies() async {
     () => sharedPreferences,
   );
 
-  sl.registerLazySingleton<Cache>(() => MemoryCache());
+  sl.registerLazySingleton<Cache>(() => InMemoryCache());
 
   // =============== Chat ===============
   // Bloc
   sl.registerFactory(
-        () => ChatListBloc(sl(), sl(), sl()),
+    () => ChatListBloc(sl(), sl(), sl()),
   );
   sl.registerFactory(
-        () => ChatRequestListBloc(sl(), sl()),
+    () => ChatRequestListBloc(sl(), sl()),
   );
   sl.registerFactory(
-        () => ActivityFeedBloc(),
+    () => ActivityFeedBloc(),
   );
   sl.registerFactory(
         () => ActivityRequestListBloc(),

@@ -52,7 +52,7 @@ class AppUserRepository {
 
     var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
-    cache.set<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
+    cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
 
     var publicUserInformationJson = userDTO.publicUserInformation?.toJson();
     var privateUserInformation = userDTO.privateUserInformation?.toJson();
@@ -240,12 +240,12 @@ class AppUserRepository {
   Future<PeerPALUser> getCurrentUserInformation(String uid) async {
     var userInformation = PeerPALUser.empty;
     var cachedUserDTO =
-        cache.get<PeerPALUserDTO>(key: '{$uid}-userinformation');
+        cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
       var downloadedUserDTO = await _downloadCurrentUserInformation();
-      cache.set<PeerPALUserDTO>(
+      cache.store<PeerPALUserDTO>(
           key: '{$uid}-userinformation', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
     }

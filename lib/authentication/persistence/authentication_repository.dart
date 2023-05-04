@@ -135,7 +135,7 @@ class AuthenticationRepository {
       await Future.wait([
         _firebaseAuth.signOut(),
       ]);
-      cache.clear(key: '{$currentUser.uid}-userinformation');
+      cache.clearCache(key: '{$currentUser.uid}-userinformation');
     } on Exception {
       throw LogoutException();
     }
