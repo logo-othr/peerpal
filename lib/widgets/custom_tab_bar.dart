@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
 
 class CustomTabBar extends StatelessWidget {
   const CustomTabBar({Key? key, required this.index, required this.onTap})

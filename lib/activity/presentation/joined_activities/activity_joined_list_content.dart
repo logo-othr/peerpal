@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/view/activity_public_overview_page.dart';
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
-import 'package:peerpal/data/resources/colors.dart';
-import 'package:peerpal/data/resources/strings.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
+import 'package:peerpal/app/data/resources/strings.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 

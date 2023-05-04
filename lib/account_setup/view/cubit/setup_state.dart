@@ -1,13 +1,13 @@
-part of 'home_cubit.dart';
+part of 'setup_cubit.dart';
 
 @immutable
-abstract class HomeState implements Equatable {
+abstract class SetupState implements Equatable {
   final PeerPALUser userInformation;
 
-  const HomeState(this.userInformation);
+  const SetupState(this.userInformation);
 }
 
-class HomeInitial extends HomeState {
+class HomeInitial extends SetupState {
   const HomeInitial() : super(const PeerPALUser());
 
   @override
@@ -18,7 +18,7 @@ class HomeInitial extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class HomeLoading extends HomeState {
+class HomeLoading extends SetupState {
   const HomeLoading() : super(const PeerPALUser());
 
   @override
@@ -29,7 +29,7 @@ class HomeLoading extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class HomeLoaded extends HomeState {
+class HomeLoaded extends SetupState {
   final PeerPALUser userInformation;
 
   const HomeLoaded(this.userInformation) : super(userInformation);
@@ -42,7 +42,7 @@ class HomeLoaded extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class ProfileSetupState extends HomeState {
+class ProfileSetupState extends SetupState {
   const ProfileSetupState(userInformation) : super(userInformation);
 
   @override
@@ -53,7 +53,7 @@ class ProfileSetupState extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class DiscoverSetupState extends HomeState {
+class DiscoverSetupState extends SetupState {
   const DiscoverSetupState(userInformation) : super(userInformation);
 
   @override
@@ -64,7 +64,7 @@ class DiscoverSetupState extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class NotificationSetupState extends HomeState {
+class NotificationSetupState extends SetupState {
   NotificationSetupState(PeerPALUser userInformation) : super(userInformation);
 
   @override
@@ -76,7 +76,7 @@ class NotificationSetupState extends HomeState {
   bool? get stringify => throw UnimplementedError();
 }
 
-class SetupCompletedState extends HomeState {
+class SetupCompletedState extends SetupState {
   final int index;
 
   const SetupCompletedState(this.index) : super(const PeerPALUser());

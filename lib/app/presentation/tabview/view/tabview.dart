@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
@@ -10,7 +11,6 @@ import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart'
 import 'package:peerpal/discover_feed/presentation/view/discover_tab_view.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
-import 'package:peerpal/home/cubit/home_cubit.dart';
 import 'package:peerpal/settings/settings_page.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_tab_bar.dart';
@@ -56,13 +56,13 @@ class _AppTabViewState extends State<AppTabView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+    return BlocBuilder<SetupCubit, SetupState>(builder: (context, state) {
       if (state is SetupCompletedState) {
         return Scaffold(
           bottomNavigationBar: CustomTabBar(
               index: state.index,
               onTap: (index) {
-                context.read<HomeCubit>().indexChanged(index);
+                context.read<SetupCubit>().indexChanged(index);
               }),
           body: MultiBlocProvider(
             providers: [

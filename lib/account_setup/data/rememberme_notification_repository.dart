@@ -1,4 +1,4 @@
-import 'package:peerpal/app_tab_view/domain/notification_service.dart';
+import 'package:peerpal/app/domain/notification/notification_service.dart';
 
 class RememberMeNotificationRepository {
   final NotificationService _notificationService;

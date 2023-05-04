@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
-import '../data/resources/colors.dart';
+import '../app/data/resources/colors.dart';
 
 class CustomDialog extends StatefulWidget {
   CustomDialog(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
+import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
-import 'package:peerpal/data/resources/colors.dart';
-import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';

@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
+import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app_logger.dart';
-import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/src/date_time.dart';
 import 'package:timezone/timezone.dart' as tz;

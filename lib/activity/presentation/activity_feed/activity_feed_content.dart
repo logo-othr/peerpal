@@ -9,12 +9,12 @@ import 'package:peerpal/activity/presentation/activity_setup/activity_overview_p
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/view/activity_public_overview_page.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_wizard_flow.dart';
 import 'package:peerpal/activity/presentation/joined_activities/activity_joined_list_page.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
+import 'package:peerpal/app/data/resources/strings.dart';
+import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/data/resources/colors.dart';
-import 'package:peerpal/data/resources/strings.dart';
-import 'package:peerpal/data/resources/support_video_links.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_card.dart';

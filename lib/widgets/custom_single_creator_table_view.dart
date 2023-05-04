@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-import '../data/resources/colors.dart';
+import '../app/data/resources/colors.dart';
 
 // ignore: must_be_immutable
 class CustomSingleCreatorTable extends StatelessWidget {

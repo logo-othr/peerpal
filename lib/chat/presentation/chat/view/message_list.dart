@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
-import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 

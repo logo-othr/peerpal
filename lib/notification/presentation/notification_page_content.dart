@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/app_tab_view/domain/notification_service.dart';
-import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
+import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 

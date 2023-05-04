@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:peerpal/app/presentation/bloc/app_bloc.dart';
+import 'package:peerpal/account_setup/view/setup_page.dart';
+import 'package:peerpal/app/presentation/app/bloc/app_bloc.dart';
 import 'package:peerpal/authentication/presentation/presentation.dart';
-import 'package:peerpal/home/view/home_page.dart';
 
 List<Page> onGenerateAuthenticationPages(
     AppAuthenticationStatus state, List<Page<dynamic>> pages) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
 class CustomCircleListItem extends StatelessWidget {

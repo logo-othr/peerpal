@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:peerpal/widgets/custom_activity_dialog_item.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-import '../data/resources/colors.dart';
+import '../app/data/resources/colors.dart';
 
 class Person {
   String name;

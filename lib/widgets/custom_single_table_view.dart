@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../data/resources/colors.dart';
+import '../app/data/resources/colors.dart';
 import 'custom_peerpal_heading.dart';
 
 // ignore: must_be_immutable

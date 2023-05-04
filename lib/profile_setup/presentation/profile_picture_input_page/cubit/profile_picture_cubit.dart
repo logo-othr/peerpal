@@ -12,7 +12,7 @@ import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../data/resources/colors.dart';
+import '../../../../app/data/resources/colors.dart';
 
 part 'profile_picture_state.dart';
 

@@ -4,7 +4,7 @@ import 'package:peerpal/activity/data/resources/activity_icon_data.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-import '../data/resources/colors.dart';
+import '../app/data/resources/colors.dart';
 
 // ignore: must_be_immutable
 class CustomActivityCard extends StatefulWidget {

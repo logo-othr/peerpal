@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/authentication/presentation/passwort_reset/view/password_reset_page.dart';
 import 'package:peerpal/authentication/presentation/presentation.dart';
-import 'package:peerpal/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 

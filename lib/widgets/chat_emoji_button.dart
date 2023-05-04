@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/data/resources/emojis.dart';
+import 'package:peerpal/app/data/resources/emojis.dart';
 import 'package:peerpal/widgets/emoji_button.dart';
 
-import '../data/resources/colors.dart';
+import '../app/data/resources/colors.dart';
 
 class ChatEmojiKeyboard extends StatefulWidget {
   VoidCallback onCancel;

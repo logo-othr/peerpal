@@ -1,14 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/account_setup/domain/start_rememberme_notifications.dart';
+import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
+import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
+import 'package:peerpal/app/presentation/tabview/view/tabview.dart';
 import 'package:peerpal/app_logger.dart';
-import 'package:peerpal/app_tab_view/domain/usecase/start_remote_notifications.dart';
-import 'package:peerpal/app_tab_view/presentation/view/tabview.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
-import 'package:peerpal/home/cubit/home_cubit.dart';
-import 'package:peerpal/home/domain/start_rememberme_notifications.dart';
 import 'package:peerpal/notification/presentation/notification_page.dart';
 import 'package:peerpal/profile_setup/profile_wiazrd_flow.dart';
 import 'package:peerpal/setup.dart';
@@ -25,7 +25,7 @@ class SetupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeCubit(
+      create: (_) => SetupCubit(
         context.read<AppUserRepository>(),
         sl<GetAuthenticatedUser>(),
         sl<StartRemoteNotifications>(),
@@ -67,12 +67,12 @@ class _SetupPageContentState extends State<SetupPageContent> {
   }
 
   void _handleMessageFromTerminatedState(RemoteMessage message) async {
-    context.read<HomeCubit>().indexChanged(3);
+    context.read<SetupCubit>().indexChanged(3);
     logger.i("got message from terminated state stream");
   }
 
   void _handleMessageFromBackgroundStreamState(RemoteMessage message) async {
-    context.read<HomeCubit>().indexChanged(3);
+    context.read<SetupCubit>().indexChanged(3);
     logger.i("got message from background stream");
   }
 
@@ -84,7 +84,7 @@ class _SetupPageContentState extends State<SetupPageContent> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<HomeCubit, HomeState>(
+    return BlocListener<SetupCubit, SetupState>(
       listener: (context, state) async {
         if (state is ProfileSetupState) {
           await loadProfileSetup(context, state);
@@ -96,8 +96,8 @@ class _SetupPageContentState extends State<SetupPageContent> {
           await loadNotificationSetup();
         }
       },
-      child: BlocBuilder<HomeCubit, HomeState>(
-          bloc: BlocProvider.of<HomeCubit>(context),
+      child: BlocBuilder<SetupCubit, SetupState>(
+          bloc: BlocProvider.of<SetupCubit>(context),
           builder: (context, state) {
             if (state is SetupCompletedState) {
               return AppTabView();
@@ -113,7 +113,7 @@ class _SetupPageContentState extends State<SetupPageContent> {
       MaterialPageRoute(builder: (context) => NotificationPage()),
     );
 
-    await BlocProvider.of<HomeCubit>(context).loadCurrentSetupFlowState();
+    await BlocProvider.of<SetupCubit>(context).loadCurrentSetupFlowState();
   }
 
   Future<void> loadProfileSetup(
@@ -121,7 +121,7 @@ class _SetupPageContentState extends State<SetupPageContent> {
     await Navigator.of(context).push(
       ProfileSetupFlow.route(state.userInformation),
     );
-    await BlocProvider.of<HomeCubit>(context).loadCurrentSetupFlowState();
+    await BlocProvider.of<SetupCubit>(context).loadCurrentSetupFlowState();
   }
 
   Future<void> loadDiscoverSetup(
@@ -129,7 +129,7 @@ class _SetupPageContentState extends State<SetupPageContent> {
     await Navigator.of(context).push(
       DiscoverSetupFlow.route(state.userInformation),
     );
-    BlocProvider.of<HomeCubit>(context).loadCurrentSetupFlowState();
+    BlocProvider.of<SetupCubit>(context).loadCurrentSetupFlowState();
   }
 
   Widget _LoadingIndicator() {

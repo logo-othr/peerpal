@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/data/resources/colors.dart';
+import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/view/age_input_page.dart';
 import 'package:peerpal/profile_setup/presentation/name_input_page/view/name_input_page.dart';
 import 'package:peerpal/profile_setup/presentation/phone_input_page/view/phone_input_page.dart';
