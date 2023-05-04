@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
@@ -70,8 +70,7 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
         state.activity.copyWith(description: description, timestamp: timestamp);
     await _activityRepository.updateLocalActivity(createActivity);
     await _activityRepository.postActivity(createActivity);
-    await _activityReminderRepository
-        .setActivityRemindersIfRemindersNotExist(createActivity);
+    await _activityReminderRepository.setActivityReminders(createActivity);
   }
 
   Future<void> deleteActivity() async {

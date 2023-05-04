@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 
 part 'activity_selection_state.dart';
 

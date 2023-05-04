@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_activities_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/view/discover_age_page.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';

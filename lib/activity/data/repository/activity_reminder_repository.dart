@@ -1,34 +1,36 @@
 import 'dart:io';
 
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/app_tab_view/domain/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/src/date_time.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-class ActivityReminderRepository {
+class LocalActivityReminderRepository implements ActivityReminderRepository {
   final SharedPreferences _prefs;
   final NotificationService _notificationService;
   final String _ACTIVITY_REMINDER_PREFIX = 'ACT_REM_';
   final String _ACTIVITY_IDS_WITH_REMINDERS_LIST =
       '_ACTIVITY_IDS_WITH_REMINDERS_LIST';
 
-  ActivityReminderRepository({required prefs, required notificationService})
+  LocalActivityReminderRepository(
+      {required prefs, required notificationService})
       : _prefs = prefs,
         _notificationService = notificationService;
 
-  Future<void> clearAndSetActivityReminders(List<Activity> activities) async {
+  Future<void> setAllReminders(List<Activity> activities) async {
     List<String>? oldActivityWithReminderList =
-    await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
+        await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
 
     List<String> newActivityWithReminderList =
-    activities.map((e) => e.id ?? "-1").toList();
+        activities.map((e) => e.id ?? "-1").toList();
 
     if (oldActivityWithReminderList != null) {
       for (String oldActivity in oldActivityWithReminderList) {
         if (!newActivityWithReminderList.contains(oldActivity)) {
-          await cancelReminderForActivity(oldActivity);
+          await cancelActivityReminders(oldActivity);
           (await _prefs.setStringList(
               _ACTIVITY_IDS_WITH_REMINDERS_LIST, newActivityWithReminderList));
         }
@@ -36,66 +38,21 @@ class ActivityReminderRepository {
     }
 
     for (Activity activity in activities) {
-      await setActivityRemindersIfRemindersNotExist(activity);
+      await setActivityReminders(activity);
     }
   }
 
-// ToDo: Nullcheck activity member
-  Future<void> setActivityRemindersIfRemindersNotExist(
-      Activity activity) async {
-    if (Platform.isIOS && await _notificationService.hasPermission() == false)
-      return;
-
-    int firstActivityMinuteDelay = 60;
-    int secondActivityDayDelay = 1;
-
-    TZDateTime firstReminderDateTime =
-        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    firstReminderDateTime = firstReminderDateTime
-        .subtract(new Duration(minutes: firstActivityMinuteDelay));
-    TZDateTime secondReminderDateTime =
-        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    secondReminderDateTime = secondReminderDateTime
-        .subtract(new Duration(days: secondActivityDayDelay));
-    TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);
-
-    if (firstReminderDateTime.isAfter(now)) {
-      await _setActivityReminderIfReminderNotExist(
-          activity,
-          firstReminderDateTime,
-          "Bald startet die Aktivität ${activity.name?.replaceAll('-', '')}.");
-    }
-    if (secondReminderDateTime.isAfter(now)) {
-      await _setActivityReminderIfReminderNotExist(
-          activity,
-          secondReminderDateTime,
-          "${activity.name?.replaceAll('-', '')} startet demnächst.");
-    }
-  }
-
-  Future<void> _setActivityReminderIfReminderNotExist(Activity activity, TZDateTime scheduledDateTime, String message) async {
-    bool reminderForActivityExists =
-    await _reminderForActivityExists(activity.id!);
-    if (!reminderForActivityExists) {
-      int notificationReminderId = await _notificationService
-          .scheduleNotification(activity.name!, message, scheduledDateTime);
-      _saveReminderIdForActivityId(activity.id!, notificationReminderId);
-    } else
-      logger.i(
-          "Activity reminder for activity id ${activity.id!} is already scheduled");
-  }
-
-  Future<void> cancelReminderForActivity(String activityId) async {
-    List<String>? notificationReminderIds =
-    await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
-    if (notificationReminderIds == null) {
+  Future<void> cancelActivityReminders(String activityId) async {
+    List<String>? reminderIds =
+        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    if (reminderIds == null) {
       logger.i(
           "activity reminder repository: There are no reminders for the activity with id ${activityId}");
       return;
     }
     logger.i(
         "activity reminder repository: cancel activity reminders for activity with id ${activityId}");
-    for (String notificationReminderId in notificationReminderIds) {
+    for (String notificationReminderId in reminderIds) {
       int id = int.tryParse(notificationReminderId) ?? -1;
       await _notificationService.cancelNotification(id);
     }
@@ -103,37 +60,87 @@ class ActivityReminderRepository {
     logger.i("done. canceled all reminders for activity ${activityId}");
   }
 
-  Future<bool> _reminderForActivityExists(String activityId) async {
-    List<String>? notificationReminderIds =
-    await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
-    return (notificationReminderIds != null);
-    //  if (notificationReminderIds == null) return false;
-//bool doesReminderExists = notificationReminderIds.contains(activityId);
-//    return (doesReminderExists);
+  Future<void> setActivityReminders(Activity activity) async {
+    if (Platform.isIOS && await _notificationService.hasPermission() == false)
+      return;
+
+    int minutesBeforeActivity2 = 60;
+    int daysBeforeActivity1 = 1;
+
+    TZDateTime reminder2date =
+        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+    reminder2date =
+        reminder2date.subtract(new Duration(minutes: minutesBeforeActivity2));
+
+    TZDateTime reminder1date =
+        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
+    reminder1date =
+        reminder1date.subtract(new Duration(days: daysBeforeActivity1));
+    TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);
+
+    if (reminder2date.isAfter(now)) {
+      await _setActivityReminder(activity, reminder2date,
+          "Bald startet die Aktivität ${activity.name?.replaceAll('-', '')}.");
+    }
+    if (reminder1date.isAfter(now)) {
+      await _setActivityReminder(activity, reminder1date,
+          "${activity.name?.replaceAll('-', '')} startet demnächst.");
+    }
   }
 
-  Future<void> _saveReminderIdForActivityId(String activityId, int reminderId) async {
-    String reminderIdStr = reminderId.toString();
-    List<String>? nullableReminderIdListForActivity =
-    await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
-    List<String> reminderIdListForActivity =
-        nullableReminderIdListForActivity ?? <String>[];
-    reminderIdListForActivity.add(reminderIdStr);
+  Future<void> _setActivityReminder(
+      Activity activity, TZDateTime scheduledDateTime, String message) async {
+    bool reminderExists = await _reminderExists(activity.id!);
+    if (!reminderExists) {
+      int reminderId = await _notificationService.scheduleNotification(
+          activity.name!, message, scheduledDateTime);
+      _saveReminder(activity.id!, reminderId);
+    } else
+      logger.i(
+          "Activity reminder for activity id ${activity.id!} is already scheduled");
+  }
+
+  Future<bool> _reminderExists(String activityId) async {
+    List<String>? notificationReminderIds =
+        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    return (notificationReminderIds != null);
+  }
+
+  Future<List<String>> _getReminderIds(String activityId) async {
+    List<String>? reminderIds =
+        await _prefs.getStringList("${_ACTIVITY_REMINDER_PREFIX}${activityId}");
+    return reminderIds ?? <String>[];
+  }
+
+  Future<void> _setReminderIds(
+      String activityId, List<String> reminderIds) async {
     await _prefs.setStringList(
-        "${_ACTIVITY_REMINDER_PREFIX}${activityId}", reminderIdListForActivity);
+        "${_ACTIVITY_REMINDER_PREFIX}${activityId}", reminderIds);
+  }
 
-    List<String>? activitiesWithReminder =
-    await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
+  Future<List<String>> _getActivityIdsWithReminder() async {
+    List<String>? activityIds =
+        await _prefs.getStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}");
+    return activityIds ?? <String>[];
+  }
 
-    if (activitiesWithReminder != null) {
-      if (!activitiesWithReminder.contains(activityId)) {
-        activitiesWithReminder.add(activityId);
-        await _prefs.setStringList(
-            "${_ACTIVITY_IDS_WITH_REMINDERS_LIST}", activitiesWithReminder);
-      }
-    } else {
-      await _prefs
-          .setStringList("${_ACTIVITY_IDS_WITH_REMINDERS_LIST}", [activityId]);
+  Future<void> _setActivityIdsWithReminder(
+      List<String> activityIdsWithReminders) async {
+    await _prefs.setStringList(
+        "${_ACTIVITY_IDS_WITH_REMINDERS_LIST}", activityIdsWithReminders);
+  }
+
+  Future<void> _saveReminder(String activityId, int reminderId) async {
+    List<String>? reminderIds = await _getReminderIds(activityId);
+    reminderIds.add(reminderId.toString());
+    await _setReminderIds(activityId, reminderIds);
+
+    List<String>? activityIdsWithReminders =
+        await _getActivityIdsWithReminder();
+
+    if (!activityIdsWithReminders.contains(activityId)) {
+      activityIdsWithReminders.add(activityId);
+      await _setActivityIdsWithReminder(activityIdsWithReminders);
     }
   }
 }

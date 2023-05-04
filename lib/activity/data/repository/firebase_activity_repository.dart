@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseActivityRepository implements ActivityRepository {

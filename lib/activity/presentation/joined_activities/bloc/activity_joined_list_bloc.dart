@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_joined_list_event.dart';
+
 part 'activity_joined_list_state.dart';
 
 class ActivityJoinedListBloc
@@ -37,8 +38,7 @@ class ActivityJoinedListBloc
 
       _activityJoinedListStreamController.stream
           .listen((List<Activity> activities) {
-        sl<ActivityReminderRepository>()
-            .clearAndSetActivityReminders(activities);
+        sl<ActivityReminderRepository>().setAllReminders(activities);
       });
 
       yield state.copyWith(

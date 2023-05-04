@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/activity_request_list_page.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_overview_page/view/activity_overview_input_page.dart';

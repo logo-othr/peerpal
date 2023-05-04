@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
@@ -57,8 +57,7 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
     Activity updatedActivity = (activity ?? state.activity);
 
     await _activityRepository.joinActivity(state.activity);
-    await _activityReminderRepository
-        .setActivityRemindersIfRemindersNotExist(state.activity);
+    await _activityReminderRepository.setActivityReminders(state.activity);
 
     emit(ActivityPublicOverviewLoaded(
         updatedActivity, state.activityCreator, state.attendees, true));

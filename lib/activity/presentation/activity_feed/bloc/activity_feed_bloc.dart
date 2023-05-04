@@ -4,14 +4,15 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/activity/data/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/domain/data/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
+import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_feed_event.dart';
+
 part 'activity_feed_state.dart';
 
 class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
@@ -63,8 +64,7 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
 
       _createdActivityStreamController.stream
           .listen((List<Activity> activities) {
-        sl<ActivityReminderRepository>()
-            .clearAndSetActivityReminders(activities);
+        sl<ActivityReminderRepository>().setAllReminders(activities);
       });
 
       Stream<List<Activity>> activityRequestList =
@@ -76,8 +76,7 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
       _activityJoinedListController.addStream(activityJoinedList);
 
       _activityJoinedListController.stream.listen((List<Activity> activities) {
-        sl<ActivityReminderRepository>()
-            .clearAndSetActivityReminders(activities);
+        sl<ActivityReminderRepository>().setAllReminders(activities);
       });
 
       yield state.copyWith(
