@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:peerpal/app/view/bloc/app_bloc.dart';
+import 'package:peerpal/app/presentation/bloc/app_bloc.dart';
 import 'package:peerpal/authentication/presentation/presentation.dart';
 import 'package:peerpal/home/view/home_page.dart';
 

@@ -1,3 +1,3 @@
 export 'bloc_observer.dart';
-export 'view/app.dart';
-export 'view/bloc/app_bloc.dart';
+export 'presentation/app.dart';
+export 'presentation/bloc/app_bloc.dart';

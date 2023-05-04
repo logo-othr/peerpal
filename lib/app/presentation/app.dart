@@ -2,7 +2,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/app.dart';
-import 'package:peerpal/app/view/peerpal_theme_data.dart';
+import 'package:peerpal/app/presentation/peerpal_theme_data.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/authentication/routes.dart';
 
