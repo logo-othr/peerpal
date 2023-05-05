@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peerpal/app/domain/core/cache.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/domain/models/auth_user.dart';
-import 'package:peerpal/data/cache.dart';
 
 class SignUpFailure implements Exception {
   SignUpFailure({this.message = 'Fehler bei der Registierung'});

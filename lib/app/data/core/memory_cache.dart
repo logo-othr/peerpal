@@ -1,4 +1,4 @@
-import 'package:peerpal/data/cache.dart';
+import 'package:peerpal/app/domain/core/cache.dart';
 
 class InMemoryCache implements Cache {
   InMemoryCache() : _cacheStorage = <String, Object>{};

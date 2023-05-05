@@ -1,6 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/data/location.dart';
+import 'package:peerpal/app/data/location/dto/location.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
 
 class PeerPALUser extends Equatable {

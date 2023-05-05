@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-import '../data/location.dart';
+import '../app/data/location/dto/location.dart';
 
 class LocationItem extends StatelessWidget {
   const LocationItem(
