@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print
 import 'package:bloc/bloc.dart';
 import 'package:peerpal/app_logger.dart';
 
