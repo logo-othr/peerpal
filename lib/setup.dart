@@ -41,25 +41,12 @@ Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
   logger.i("background handler called");
   logger.i(
       "Handling a background message \n message.data: ${message.data} \n message.messageId: ${message.messageId} \n message.messageType: ${message.messageType} \n message.notification: ${message.notification} \n message.notification.title: ${message.notification?.title}");
-  /*if (message.notification != null) {
-    RemoteNotification remoteNotification = message.notification!;
-    sl<NotificationService>().showNotification(
-        remoteNotification.title ?? "", remoteNotification.body ?? "");
-  }
-  return;*/
-  //navigatorKey.currentState.
 }
 
 Future<void> _remoteNotificationForegroundHandler(RemoteMessage message) async {
   logger.i("foreground handler calleed");
   logger.i(
       "Handling a foreground message \n message.data: ${message.data} \n message.messageId: ${message.messageId} \n message.messageType: ${message.messageType} \n message.notification: ${message.notification} \n message.notification.title: ${message.notification?.title}");
-  /*if (message.notification != null) {
-    RemoteNotification remoteNotification = message.notification!;
-    sl<NotificationService>().showNotification(
-        remoteNotification.title ?? "", remoteNotification.body ?? "");
-  }
-  return;*/
 }
 
 final sl = GetIt.instance;
