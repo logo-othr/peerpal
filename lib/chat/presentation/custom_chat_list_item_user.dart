@@ -5,7 +5,7 @@ import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_peerpal_text.dart';
 
-import 'domain/usecase_response/user_chat.dart';
+import '../domain/usecase_response/user_chat.dart';
 
 // ignore: must_be_immutable
 class CustomChatListItemUser extends StatelessWidget {
