@@ -12,7 +12,6 @@ import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_feed_event.dart';
-
 part 'activity_feed_state.dart';
 
 class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
@@ -64,7 +63,8 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
 
       _createdActivityStreamController.stream
           .listen((List<Activity> activities) {
-        sl<ActivityReminderRepository>().setAllReminders(activities);
+        sl<ActivityReminderRepository>()
+            .setCreatedActivitiesReminders(activities);
       });
 
       Stream<List<Activity>> activityRequestList =
@@ -76,7 +76,8 @@ class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {
       _activityJoinedListController.addStream(activityJoinedList);
 
       _activityJoinedListController.stream.listen((List<Activity> activities) {
-        sl<ActivityReminderRepository>().setAllReminders(activities);
+        sl<ActivityReminderRepository>()
+            .setJoinedActivitiesReminders(activities);
       });
 
       yield state.copyWith(

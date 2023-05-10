@@ -11,7 +11,6 @@ import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_joined_list_event.dart';
-
 part 'activity_joined_list_state.dart';
 
 class ActivityJoinedListBloc
@@ -38,7 +37,8 @@ class ActivityJoinedListBloc
 
       _activityJoinedListStreamController.stream
           .listen((List<Activity> activities) {
-        sl<ActivityReminderRepository>().setAllReminders(activities);
+        sl<ActivityReminderRepository>()
+            .setJoinedActivitiesReminders(activities);
       });
 
       yield state.copyWith(

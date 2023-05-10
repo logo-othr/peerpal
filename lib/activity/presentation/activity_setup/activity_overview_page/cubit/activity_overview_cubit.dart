@@ -70,7 +70,7 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
         state.activity.copyWith(description: description, timestamp: timestamp);
     await _activityRepository.updateLocalActivity(createActivity);
     await _activityRepository.postActivity(createActivity);
-    await _activityReminderRepository.setActivityReminders(createActivity);
+ //   await _activityReminderRepository.setActivityReminders(createActivity);
   }
 
   Future<void> deleteActivity() async {
