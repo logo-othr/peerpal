@@ -22,6 +22,8 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
       : _prefs = prefs,
         _notificationService = notificationService;
 
+  /// Deletes all existing reminders associated with the activities that the
+  /// current user has joined and sets new reminders for the provided [activities].
   @override
   Future<void> setJoinedActivitiesReminders(List<Activity> activities) async {
     List<String> previousActivityIdsWithReminders =
@@ -43,6 +45,8 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
     await _writeJoinedActivityIdsWithReminders(newIds);
   }
 
+  /// Deletes all existing reminders associated with the activities that the
+  /// current user has created and sets new reminders for the provided [activities].
   @override
   Future<void> setCreatedActivitiesReminders(List<Activity> activities) async {
     List<String> previousActivityIdsWithReminders =
