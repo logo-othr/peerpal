@@ -45,6 +45,7 @@ dependencies:
   flutter_keyboard_visibility: ^5.2.0
   url_launcher: ^6.1.5
   flutter_phone_direct_caller: ^2.1.1
+  mockito: ^5.4.0
 
 
 dev_dependencies:
