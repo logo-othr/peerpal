@@ -7,6 +7,8 @@ import 'package:peerpal/activity/data/repository/firebase_activity_repository.da
 import 'package:peerpal/activity/data/repository/local_activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
+import 'package:peerpal/activity/domain/usecase/update_created_activities_reminders.dart';
+import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_request_list_bloc.dart';
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
@@ -151,6 +153,15 @@ Future<void> setupDependencies() async {
   );
 
   // ============== Activity ====================
+
+  // Service
+  // UseCase
+  sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(
+      () => UpdateJoinedActivitiesRemindersUseCase(sl()));
+  sl.registerLazySingleton<UpdateCreatedActivitiesRemindersUseCase>(
+      () => UpdateCreatedActivitiesRemindersUseCase(sl()));
+
+  // Repository
 
   sl.registerLazySingleton<ActivityRepository>(
       () => FirebaseActivityRepository(sl()));

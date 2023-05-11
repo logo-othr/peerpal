@@ -17,11 +17,12 @@ class Activity extends Equatable {
   ///The timestamp is used to store the time when the activity was created.
   final String? timestamp;
   final String? name;
+  final int? date;
   final String? code;
   final String? description;
   final String? creatorId;
   final String? creatorName;
-  final int? date;
+
   final Location? location;
   final List<String>? attendeeIds;
   final List<String>? invitationIds;

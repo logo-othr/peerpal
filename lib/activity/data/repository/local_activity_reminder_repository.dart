@@ -22,69 +22,16 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
       : _prefs = prefs,
         _notificationService = notificationService;
 
-  /// Deletes all existing reminders associated with the activities that the
-  /// current user has joined and sets new reminders for the provided [activities].
-  @override
-  Future<void> setJoinedActivitiesReminders(List<Activity> activities) async {
-    List<String> previousActivityIdsWithReminders =
-        await _readJoinedActivityIdsWithReminders() ?? [];
 
-    List<String> newIds = activities
-        .where((activity) => activity.id != null)
-        .map((activity) => activity.id!)
-        .toList();
-
-    for (String activityId in previousActivityIdsWithReminders) {
-      await _cancelActivityReminders(activityId);
-    }
-
-    for (Activity activity in activities) {
-      await _setActivityReminders(activity);
-    }
-
-    await _writeJoinedActivityIdsWithReminders(newIds);
-  }
-
-  /// Deletes all existing reminders associated with the activities that the
-  /// current user has created and sets new reminders for the provided [activities].
-  @override
-  Future<void> setCreatedActivitiesReminders(List<Activity> activities) async {
-    List<String> previousActivityIdsWithReminders =
-        await _readCreatedActivityIdsWithReminders() ?? [];
-
-    List<String> newIds = activities
-        .where((activity) => activity.id != null)
-        .map((activity) => activity.id!)
-        .toList();
-
-    for (String activityId in previousActivityIdsWithReminders) {
-      await _cancelActivityReminders(activityId);
-    }
-
-    for (Activity activity in activities) {
-      await _setActivityReminders(activity);
-    }
-
-    await _writeCreatedActivityIdsWithReminders(newIds);
-  }
-
-  Future<List<String>?> _readCreatedActivityIdsWithReminders() async {
-    return await _prefs.getStringList(_createdActivityIdsWithRemindersKey);
-  }
-
-  Future<void> _writeCreatedActivityIdsWithReminders(List<String> ids) async {
-    await _prefs.setStringList(_createdActivityIdsWithRemindersKey, ids);
-  }
-
-  Future<List<String>?> _readJoinedActivityIdsWithReminders() async {
+  Future<List<String>?> getJoinedActivityIdsWithReminders() async {
     return await _prefs.getStringList(_joinedActivityIdsWithRemindersKey);
   }
 
-  Future<void> _writeJoinedActivityIdsWithReminders(List<String> ids) async {
+  Future<void> setJoinedActivityIdsWithReminders(List<String> ids) async {
     await _prefs.setStringList(_joinedActivityIdsWithRemindersKey, ids);
   }
 
-  Future<void> _cancelActivityReminders(String activityId) async {
+  Future<void> cancelActivityReminders(String activityId) async {
     logger.i("Cancel reminders for ${activityId}");
 
     List<String>? reminderIds = await _prefs
@@ -100,7 +47,7 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
     (await _prefs.remove("${_activityReminderPrefixKey}${activityId}"));
   }
 
-  Future<void> _setActivityReminders(Activity activity) async {
+  Future<void> setActivityReminders(Activity activity) async {
     // ToDo: Business logic!
     if (Platform.isIOS && await _notificationService.hasPermission() == false)
       return;
@@ -127,6 +74,41 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
       await _setActivityReminder(activity, reminder1date,
           "${activity.name?.replaceAll('-', '')} startet demnächst.");
     }
+  }
+
+  /// Deletes all existing reminders associated with the activities that the
+  /// current user has joined and sets new reminders for the provided [activities].
+
+  /// Deletes all existing reminders associated with the activities that the
+  /// current user has created and sets new reminders for the provided [activities].
+  @override
+  Future<void> updateCreatedActivitiesReminders(
+      List<Activity> activities) async {
+    List<String> previousActivityIdsWithReminders =
+        await getCreatedActivityIdsWithReminders() ?? [];
+
+    List<String> newIds = activities
+        .where((activity) => activity.id != null)
+        .map((activity) => activity.id!)
+        .toList();
+
+    for (String activityId in previousActivityIdsWithReminders) {
+      await cancelActivityReminders(activityId);
+    }
+
+    for (Activity activity in activities) {
+      await setActivityReminders(activity);
+    }
+
+    await setCreatedActivityIdsWithReminders(newIds);
+  }
+
+  Future<List<String>?> getCreatedActivityIdsWithReminders() async {
+    return await _prefs.getStringList(_createdActivityIdsWithRemindersKey);
+  }
+
+  Future<void> setCreatedActivityIdsWithReminders(List<String> ids) async {
+    await _prefs.setStringList(_createdActivityIdsWithRemindersKey, ids);
   }
 
   Future<void> _setActivityReminder(
