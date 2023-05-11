@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
@@ -47,10 +45,11 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
     (await _prefs.remove("${_activityReminderPrefixKey}${activityId}"));
   }
 
-  Future<void> setActivityReminders(Activity activity) async {
+  Future<void> setActivityReminder(
+      Activity activity, TZDateTime reminderDate) async {
     // ToDo: Business logic!
-    if (Platform.isIOS && await _notificationService.hasPermission() == false)
-      return;
+    // if (Platform.isIOS && await _notificationService.hasPermission() == false)
+    //  return;
 
     int minutesBeforeActivity2 = 60;
     int daysBeforeActivity1 = 1;
@@ -81,27 +80,7 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
 
   /// Deletes all existing reminders associated with the activities that the
   /// current user has created and sets new reminders for the provided [activities].
-  @override
-  Future<void> updateCreatedActivitiesReminders(
-      List<Activity> activities) async {
-    List<String> previousActivityIdsWithReminders =
-        await getCreatedActivityIdsWithReminders() ?? [];
 
-    List<String> newIds = activities
-        .where((activity) => activity.id != null)
-        .map((activity) => activity.id!)
-        .toList();
-
-    for (String activityId in previousActivityIdsWithReminders) {
-      await cancelActivityReminders(activityId);
-    }
-
-    for (Activity activity in activities) {
-      await setActivityReminders(activity);
-    }
-
-    await setCreatedActivityIdsWithReminders(newIds);
-  }
 
   Future<List<String>?> getCreatedActivityIdsWithReminders() async {
     return await _prefs.getStringList(_createdActivityIdsWithRemindersKey);
@@ -111,6 +90,7 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
     await _prefs.setStringList(_createdActivityIdsWithRemindersKey, ids);
   }
 
+  // ToDo: When the reminder already exists, cancel it and re-schedule it
   Future<void> _setActivityReminder(
       Activity activity, TZDateTime scheduledDateTime, String message) async {
     bool reminderExists = await _reminderExists(activity.id!);

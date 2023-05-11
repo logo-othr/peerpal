@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
-import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders.dart';
+import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 

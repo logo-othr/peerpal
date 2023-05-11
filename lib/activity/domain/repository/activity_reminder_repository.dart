@@ -1,4 +1,5 @@
 import 'package:peerpal/activity/domain/models/activity.dart';
+import 'package:timezone/timezone.dart';
 
 abstract class ActivityReminderRepository {
   /// Deletes all existing reminders associated with the activities that the
@@ -17,5 +18,5 @@ abstract class ActivityReminderRepository {
 
   Future<void> cancelActivityReminders(String activityId);
 
-  Future<void> setActivityReminders(Activity activity);
+  Future<void> setActivityReminder(Activity activity, TZDateTime reminderDate);
 }
