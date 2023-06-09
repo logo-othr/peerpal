@@ -173,9 +173,6 @@ class FirebaseActivityRepository implements ActivityRepository {
     }
   }
 
-  @deprecated
-
-
   /// The getJoinActivityRequests method returns a real-time stream of lists, each containing
   /// [Activity] objects for which the current user has received an invitation and the date is in the future.
   /// The activities are sorted by date.
