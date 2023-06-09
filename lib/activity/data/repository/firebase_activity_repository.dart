@@ -202,12 +202,11 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// returned, with the activities created by the current user first.
   ///
   /// Returns a new [List] of sorted [Activity] objects.
-  List<Activity> sortActivityList(
-      List<Activity> listToSort, String currentUserId) {
+  List<Activity> sortActivityList(List<Activity> list, String currentUserId) {
     List<Activity> creatorList = [];
     List<Activity> publicList = [];
     List<Activity> sortedList = [];
-    for (Activity activity in listToSort) {
+    for (Activity activity in list) {
       if (activity.creatorId == currentUserId)
         creatorList.add(activity);
       else

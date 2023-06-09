@@ -36,10 +36,6 @@ abstract class ActivityRepository {
   /// [Activity] objects where each activity was created by the logged-in user.
   Stream<List<Activity>> getCreatedActivities(String currentUserId);
 
-  /// Sorts a list of [Activity] objects
-  List<Activity> sortActivityList(
-      List<Activity> listToSort, String currentUserId);
-
   /// The getJoinActivityRequests method returns a real-time stream of lists, each containing
   /// [Activity] objects for which the current user has received an invitation and the date is in the future.
   Stream<List<Activity>> getJoinActivityRequests(String currentUserId);
