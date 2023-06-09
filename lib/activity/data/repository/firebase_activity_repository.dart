@@ -174,24 +174,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   }
 
   @deprecated
-  List<Activity> _replaceOrAddActivity(
-      List<Activity> activityList, Activity activity) {
-    Activity? activityToRemove;
-    Activity? activityToAdd;
-    bool isReplaced = false;
-    for (Activity a in activityList) {
-      if (a.id == activity.id) {
-        activityToAdd = (activity);
-        activityToRemove = a;
-        isReplaced = true;
-      }
-    }
-    if (activityToAdd != null) activityList.add(activityToAdd);
-    if (activityToRemove != null) activityList.remove(activityToRemove);
-    if (!isReplaced) activityList.add(activity);
 
-    return activityList;
-  }
 
   /// The getJoinActivityRequests method returns a real-time stream of lists, each containing
   /// [Activity] objects for which the current user has received an invitation and the date is in the future.
