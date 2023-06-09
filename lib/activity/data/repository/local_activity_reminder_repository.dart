@@ -4,7 +4,6 @@ import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/src/date_time.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class LocalActivityReminderRepository implements ActivityReminderRepository {
   final SharedPreferences _prefs;
@@ -19,7 +18,6 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
       {required prefs, required notificationService})
       : _prefs = prefs,
         _notificationService = notificationService;
-
 
   Future<List<String>?> getJoinedActivityIdsWithReminders() async {
     return await _prefs.getStringList(_joinedActivityIdsWithRemindersKey);
@@ -51,36 +49,9 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
     // if (Platform.isIOS && await _notificationService.hasPermission() == false)
     //  return;
 
-    int minutesBeforeActivity2 = 60;
-    int daysBeforeActivity1 = 1;
-
-    TZDateTime reminder2date =
-        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    reminder2date =
-        reminder2date.subtract(new Duration(minutes: minutesBeforeActivity2));
-
-    TZDateTime reminder1date =
-        TZDateTime.fromMillisecondsSinceEpoch(tz.local, activity.date!);
-    reminder1date =
-        reminder1date.subtract(new Duration(days: daysBeforeActivity1));
-    TZDateTime now = tz.TZDateTime.from(DateTime.now(), tz.local);
-
-    if (reminder2date.isAfter(now)) {
-      await _setActivityReminder(activity, reminder2date,
-          "Bald startet die Aktivität ${activity.name?.replaceAll('-', '')}.");
-    }
-    if (reminder1date.isAfter(now)) {
-      await _setActivityReminder(activity, reminder1date,
-          "${activity.name?.replaceAll('-', '')} startet demnächst.");
-    }
+    await _setActivityReminder(activity, reminderDate,
+        "${activity.name?.replaceAll('-', '')} startet demnächst.");
   }
-
-  /// Deletes all existing reminders associated with the activities that the
-  /// current user has joined and sets new reminders for the provided [activities].
-
-  /// Deletes all existing reminders associated with the activities that the
-  /// current user has created and sets new reminders for the provided [activities].
-
 
   Future<List<String>?> getCreatedActivityIdsWithReminders() async {
     return await _prefs.getStringList(_createdActivityIdsWithRemindersKey);
