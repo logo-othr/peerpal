@@ -1,15 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 
-class MockNotificationService extends Mock implements NotificationService {
-  Future<bool> hasPermission() {
-    return super.noSuchMethod(Invocation.method(#hasPermission, null),
-        returnValue: Future.value(true));
-  }
-}
+@GenerateNiceMocks([MockSpec<NotificationService>()])
+import 'has_ios_notification_permission_usecase_test.mocks.dart';
 
 void main() {
   late HasIOSNotificationPermissionUseCase hasIOSPermission;
@@ -23,7 +20,6 @@ void main() {
 
   group('HasIOSNotificationPermissionUseCase Tests', () {
     test('returns true when platform is iOS and has permission', () async {
-      // Force the platform to be iOS
       TestWidgetsFlutterBinding.ensureInitialized();
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
@@ -32,7 +28,6 @@ void main() {
 
       expect(await hasIOSPermission.call(), true);
 
-      // Reset the platform after the test
       debugDefaultTargetPlatformOverride = null;
     });
 
