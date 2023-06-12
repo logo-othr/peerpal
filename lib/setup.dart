@@ -8,6 +8,7 @@ import 'package:peerpal/activity/data/repository/local_activity_reminder_reposit
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/usecase/calculate_reminder_dates_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_created_activities_reminders_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders_usecase.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
@@ -157,6 +158,8 @@ Future<void> setupDependencies() async {
 
   // Service
   // UseCase
+  sl.registerLazySingleton<HasIOSNotificationPermissionUseCase>(
+      () => HasIOSNotificationPermissionUseCase(sl()));
   sl.registerLazySingleton<CalculateUpcomingReminderDatesUseCase>(
       () => CalculateUpcomingReminderDatesUseCase());
   sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
@@ -166,7 +169,8 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<UpdateCreatedActivitiesRemindersUseCase>(() =>
       UpdateCreatedActivitiesRemindersUseCase(
           filterUpcomingRemindersUseCase: sl(),
-          activityReminderRepository: sl()));
+          activityReminderRepository: sl(),
+          isIOSNotificationPermissionUseCase: sl()));
 
   // Repository
 

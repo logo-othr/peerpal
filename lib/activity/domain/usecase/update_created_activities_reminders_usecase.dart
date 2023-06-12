@@ -1,19 +1,21 @@
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/usecase/calculate_reminder_dates_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class UpdateCreatedActivitiesRemindersUseCase {
   final ActivityReminderRepository activityReminderRepository;
-
+  final HasIOSNotificationPermissionUseCase isIOSNotificationPermissionUseCase;
   final CalculateUpcomingReminderDatesUseCase filterUpcomingRemindersUseCase;
 
-  UpdateCreatedActivitiesRemindersUseCase({
-    required this.activityReminderRepository,
-    required this.filterUpcomingRemindersUseCase,
-  });
+  UpdateCreatedActivitiesRemindersUseCase(
+      {required this.activityReminderRepository,
+      required this.filterUpcomingRemindersUseCase,
+      required this.isIOSNotificationPermissionUseCase});
 
   Future<void> call(List<Activity> activities) async {
+    if (await isIOSNotificationPermissionUseCase()) return;
     List<String> previousActivityIdsWithReminders =
         await activityReminderRepository.getCreatedActivityIdsWithReminders() ??
             [];

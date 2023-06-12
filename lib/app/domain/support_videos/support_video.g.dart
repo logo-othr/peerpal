@@ -13,7 +13,7 @@ SupportVideo _$SupportVideoFromJson(Map<String, dynamic> json) => SupportVideo(
 
 Map<String, dynamic> _$SupportVideoToJson(SupportVideo instance) =>
     <String, dynamic>{
-      'identifier': _$VideoIdentifierEnumMap[instance.identifier],
+      'identifier': _$VideoIdentifierEnumMap[instance.identifier]!,
       'link': instance.link,
     };
 
