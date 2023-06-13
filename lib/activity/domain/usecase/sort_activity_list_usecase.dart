@@ -11,10 +11,10 @@ class SortActivityListUseCase {
   ///
   /// Returns a new [List] of sorted [Activity] objects.
   Future<List<Activity>> call(List<Activity> list, String currentUserId) async {
-    return sortActivityList(list, currentUserId);
+    return _sortActivityList(list, currentUserId);
   }
 
-  List<Activity> sortActivityList(List<Activity> list, String currentUserId) {
+  List<Activity> _sortActivityList(List<Activity> list, String currentUserId) {
     List<Activity> creatorList = [];
     List<Activity> publicList = [];
     List<Activity> sortedList = [];
