@@ -158,8 +158,8 @@ Future<void> setupDependencies() async {
 
   // Service
   // UseCase
-  sl.registerLazySingleton<HasIOSNotificationPermissionUseCase>(
-      () => HasIOSNotificationPermissionUseCase(sl()));
+  sl.registerLazySingleton<IsIOSWithoutNotificationPermissionUseCase>(
+      () => IsIOSWithoutNotificationPermissionUseCase(sl()));
   sl.registerLazySingleton<CalculateUpcomingReminderDatesUseCase>(
       () => CalculateUpcomingReminderDatesUseCase());
   sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
@@ -170,7 +170,7 @@ Future<void> setupDependencies() async {
       UpdateCreatedActivitiesRemindersUseCase(
           filterUpcomingRemindersUseCase: sl(),
           activityReminderRepository: sl(),
-          isIOSNotificationPermissionUseCase: sl()));
+          isIOSWithoutNotificationPermission: sl()));
 
   // Repository
 

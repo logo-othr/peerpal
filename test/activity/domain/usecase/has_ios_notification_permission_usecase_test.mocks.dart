@@ -35,7 +35,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> registerDeviceToken() => (super.noSuchMethod(
         Invocation.method(
@@ -45,7 +44,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> startRemoteNotificationBackgroundHandler(
     dynamic firebaseMessagingBackgroundHandler,
@@ -62,7 +60,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> stopRemoteNotificationBackgroundHandler() =>
       (super.noSuchMethod(
@@ -73,7 +70,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<int> scheduleNotification(
     String? title,
@@ -92,7 +88,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<int>.value(0),
         returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
-
   @override
   _i3.Future<int> showNotification(
     String? title,
@@ -109,7 +104,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<int>.value(0),
         returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
-
   @override
   _i3.Future<int> scheduleWeeklyNotification() => (super.noSuchMethod(
         Invocation.method(
@@ -119,7 +113,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<int>.value(0),
         returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
-
   @override
   _i3.Future<String> printPendingNotifications() => (super.noSuchMethod(
         Invocation.method(
@@ -129,7 +122,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<String>.value(''),
         returnValueForMissingStub: _i3.Future<String>.value(''),
       ) as _i3.Future<String>);
-
   @override
   _i3.Future<bool> hasPermission() => (super.noSuchMethod(
         Invocation.method(
@@ -139,7 +131,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<bool>.value(false),
         returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
-
   @override
   _i3.Future<bool> requestPermission() => (super.noSuchMethod(
         Invocation.method(
@@ -149,7 +140,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<bool>.value(false),
         returnValueForMissingStub: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
-
   @override
   _i3.Future<void> cancelNotification(int? notificationId) =>
       (super.noSuchMethod(
@@ -160,7 +150,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> cancelAll() => (super.noSuchMethod(
         Invocation.method(
@@ -170,7 +159,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> setWeeklyReminderScheduled(bool? isScheduled) =>
       (super.noSuchMethod(
@@ -181,7 +169,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> scheduleDailyNotification() => (super.noSuchMethod(
         Invocation.method(
@@ -191,7 +178,6 @@ class MockNotificationService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<bool> hasAskedForPermission() => (super.noSuchMethod(
         Invocation.method(

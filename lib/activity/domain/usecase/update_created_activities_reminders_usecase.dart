@@ -6,16 +6,17 @@ import 'package:timezone/timezone.dart' as tz;
 
 class UpdateCreatedActivitiesRemindersUseCase {
   final ActivityReminderRepository activityReminderRepository;
-  final HasIOSNotificationPermissionUseCase isIOSNotificationPermissionUseCase;
+  final IsIOSWithoutNotificationPermissionUseCase
+      isIOSWithoutNotificationPermission;
   final CalculateUpcomingReminderDatesUseCase filterUpcomingRemindersUseCase;
 
   UpdateCreatedActivitiesRemindersUseCase(
       {required this.activityReminderRepository,
       required this.filterUpcomingRemindersUseCase,
-      required this.isIOSNotificationPermissionUseCase});
+      required this.isIOSWithoutNotificationPermission});
 
   Future<void> call(List<Activity> activities) async {
-    if (await isIOSNotificationPermissionUseCase()) return;
+    if (await isIOSWithoutNotificationPermission()) return;
     List<String> previousActivityIdsWithReminders =
         await activityReminderRepository.getCreatedActivityIdsWithReminders() ??
             [];

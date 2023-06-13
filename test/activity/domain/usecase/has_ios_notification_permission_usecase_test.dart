@@ -5,40 +5,41 @@ import 'package:mockito/mockito.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 
-@GenerateNiceMocks([MockSpec<NotificationService>()])
 import 'has_ios_notification_permission_usecase_test.mocks.dart';
 
+@GenerateNiceMocks([MockSpec<NotificationService>()])
 void main() {
-  late HasIOSNotificationPermissionUseCase hasIOSPermission;
+  late IsIOSWithoutNotificationPermissionUseCase
+      isIOSWithoutNotificationPermission;
   late MockNotificationService mockNotificationService;
 
   setUp(() {
     mockNotificationService = MockNotificationService();
-    hasIOSPermission =
-        HasIOSNotificationPermissionUseCase(mockNotificationService);
+    isIOSWithoutNotificationPermission =
+        IsIOSWithoutNotificationPermissionUseCase(mockNotificationService);
   });
 
-  group('HasIOSNotificationPermissionUseCase Tests', () {
-    test('returns true when platform is iOS and has permission', () async {
+  group('IsIOSWithoutNotificationPermissionUseCase Tests', () {
+    test('returns false when platform is iOS and has permission', () async {
       TestWidgetsFlutterBinding.ensureInitialized();
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       when(mockNotificationService.hasPermission())
           .thenAnswer((_) async => true);
 
-      expect(await hasIOSPermission.call(), true);
+      expect(await isIOSWithoutNotificationPermission(), false);
 
       debugDefaultTargetPlatformOverride = null;
     });
 
-    test('returns false when platform is iOS and has no permission', () async {
+    test('returns true when platform is iOS and has no permission', () async {
       TestWidgetsFlutterBinding.ensureInitialized();
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       when(mockNotificationService.hasPermission())
           .thenAnswer((_) async => false);
 
-      expect(await hasIOSPermission(), false);
+      expect(await isIOSWithoutNotificationPermission(), true);
 
       debugDefaultTargetPlatformOverride = null;
     });
@@ -47,7 +48,7 @@ void main() {
       TestWidgetsFlutterBinding.ensureInitialized();
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-      expect(await hasIOSPermission(), false);
+      expect(await isIOSWithoutNotificationPermission(), false);
 
       debugDefaultTargetPlatformOverride = null;
     });
