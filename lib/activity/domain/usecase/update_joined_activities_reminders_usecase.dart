@@ -1,43 +1,61 @@
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_dates_usecase.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 
 class UpdateJoinedActivitiesRemindersUseCase {
   final ActivityReminderRepository activityReminderRepository;
-
   final CalculateUpcomingReminderDatesUseCase filterUpcomingRemindersUseCase;
+  final IsIOSWithoutNotificationPermissionUseCase
+      isIOSWithoutNotificationPermission;
 
   UpdateJoinedActivitiesRemindersUseCase({
     required this.activityReminderRepository,
     required this.filterUpcomingRemindersUseCase,
+    required this.isIOSWithoutNotificationPermission,
   });
 
-  Future<void> call(List<Activity> activities) async {
-    List<String> previousActivityIdsWithReminders =
-        await activityReminderRepository.getJoinedActivityIdsWithReminders() ??
-            [];
+  Future<void> call(Iterable<Activity> activities) async {
+    if (await isIOSWithoutNotificationPermission()) return;
 
-    List<String> newIds = activities
-        .where((activity) => activity.id != null)
-        .map((activity) => activity.id!)
-        .toList();
+    final previousActivityIdsWithReminders =
+        await _fetchPreviousActivityIdsWithReminders();
+    final newIds = _getActivityIds(activities);
 
-    for (String activityId in previousActivityIdsWithReminders) {
-      await activityReminderRepository.cancelActivityReminders(activityId);
-    }
-
-    for (Activity activity in activities) {
-      await _setActivityReminders(activity);
-    }
+    await _cancelPreviousReminders(previousActivityIdsWithReminders);
+    await _setNewReminders(activities);
 
     await activityReminderRepository.setJoinedActivityIdsWithReminders(newIds);
   }
 
+  Future<List<String>> _fetchPreviousActivityIdsWithReminders() async {
+    return await activityReminderRepository
+            .getJoinedActivityIdsWithReminders() ??
+        [];
+  }
+
+  List<String> _getActivityIds(Iterable<Activity> activities) {
+    return activities
+        .where((activity) => activity.id != null)
+        .map((activity) => activity.id!)
+        .toList();
+  }
+
+  Future<void> _cancelPreviousReminders(List<String> activityIds) async {
+    for (var activityId in activityIds) {
+      await activityReminderRepository.cancelActivityReminders(activityId);
+    }
+  }
+
+  Future<void> _setNewReminders(Iterable<Activity> activities) async {
+    for (var activity in activities) {
+      await _setActivityReminders(activity);
+    }
+  }
+
   Future<void> _setActivityReminders(Activity activity) async {
-    List<tz.TZDateTime> upcomingReminders =
-        await filterUpcomingRemindersUseCase(activity);
-    for (tz.TZDateTime reminderDate in upcomingReminders) {
+    final upcomingReminders = await filterUpcomingRemindersUseCase(activity);
+    for (var reminderDate in upcomingReminders) {
       await activityReminderRepository.setActivityReminder(
           activity, reminderDate);
     }
