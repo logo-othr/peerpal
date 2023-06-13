@@ -38,7 +38,7 @@ void main() {
       when(mockNotificationService.hasPermission())
           .thenAnswer((_) async => false);
 
-      expect(await hasIOSPermission.call(), false);
+      expect(await hasIOSPermission(), false);
 
       debugDefaultTargetPlatformOverride = null;
     });
@@ -47,7 +47,7 @@ void main() {
       TestWidgetsFlutterBinding.ensureInitialized();
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
-      expect(await hasIOSPermission.call(), false);
+      expect(await hasIOSPermission(), false);
 
       debugDefaultTargetPlatformOverride = null;
     });
