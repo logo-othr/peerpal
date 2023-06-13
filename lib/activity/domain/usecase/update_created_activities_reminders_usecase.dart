@@ -16,25 +16,31 @@ class UpdateCreatedActivitiesRemindersUseCase {
       required this.isIOSWithoutNotificationPermission});
 
   Future<void> call(List<Activity> activities) async {
-    if (await isIOSWithoutNotificationPermission()) return;
-    List<String> previousActivityIdsWithReminders =
-        await activityReminderRepository.getCreatedActivityIdsWithReminders() ??
-            [];
+    if (await isIOSWithoutNotificationPermission())
+      return; // TODO: Add error handling
 
-    List<String> newIds = activities
-        .where((activity) => activity.id != null)
-        .map((activity) => activity.id!)
-        .toList();
+    final previousActivityIdsWithReminders =
+        await _fetchPreviousActivityIdsWithReminders();
+    final newIds = _getActivityIds(activities);
 
-    for (String activityId in previousActivityIdsWithReminders) {
-      await activityReminderRepository.cancelActivityReminders(activityId);
-    }
-
-    for (Activity activity in activities) {
-      await _setActivityReminders(activity);
-    }
+    await _cancelPreviousReminders(previousActivityIdsWithReminders);
+    await _setNewReminders(activities);
 
     await activityReminderRepository.setCreatedActivityIdsWithReminders(newIds);
+
+    await activityReminderRepository.setCreatedActivityIdsWithReminders(newIds);
+  }
+
+  Future<void> _cancelPreviousReminders(List<String> activityIds) async {
+    for (var activityId in activityIds) {
+      await activityReminderRepository.cancelActivityReminders(activityId);
+    }
+  }
+
+  Future<void> _setNewReminders(Iterable<Activity> activities) async {
+    for (var activity in activities) {
+      await _setActivityReminders(activity);
+    }
   }
 
   Future<void> _setActivityReminders(Activity activity) async {
@@ -44,5 +50,18 @@ class UpdateCreatedActivitiesRemindersUseCase {
       await activityReminderRepository.setActivityReminder(
           activity, reminderDate);
     }
+  }
+
+  List<String> _getActivityIds(List<Activity> activities) {
+    return activities
+        .where((activity) => activity.id != null)
+        .map((activity) => activity.id!)
+        .toList();
+  }
+
+  Future<List<String>> _fetchPreviousActivityIdsWithReminders() async {
+    return await activityReminderRepository
+            .getCreatedActivityIdsWithReminders() ??
+        [];
   }
 }
