@@ -1,6 +1,6 @@
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
-import 'package:peerpal/activity/domain/usecase/calculate_reminder_dates_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_dates_usecase.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class UpdateJoinedActivitiesRemindersUseCase {

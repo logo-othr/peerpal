@@ -7,7 +7,7 @@ import 'package:peerpal/activity/data/repository/firebase_activity_repository.da
 import 'package:peerpal/activity/data/repository/local_activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
-import 'package:peerpal/activity/domain/usecase/calculate_reminder_dates_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_dates_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_created_activities_reminders_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders_usecase.dart';
