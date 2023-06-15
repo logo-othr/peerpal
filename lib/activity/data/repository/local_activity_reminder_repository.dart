@@ -45,9 +45,6 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
 
   Future<void> setActivityReminder(
       Activity activity, TZDateTime reminderDate) async {
-    // ToDo: Business logic!
-    // if (Platform.isIOS && await _notificationService.hasPermission() == false)
-    //  return;
 
     await _setActivityReminder(activity, reminderDate,
         "${activity.name?.replaceAll('-', '')} startet demnächst.");
@@ -61,7 +58,6 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
     await _prefs.setStringList(_createdActivityIdsWithRemindersKey, ids);
   }
 
-  // ToDo: When the reminder already exists, cancel it and re-schedule it
   Future<void> _setActivityReminder(
       Activity activity, TZDateTime scheduledDateTime, String message) async {
     bool reminderExists = await _reminderExists(activity.id!);
@@ -69,9 +65,11 @@ class LocalActivityReminderRepository implements ActivityReminderRepository {
       int reminderId = await _notificationService.scheduleNotification(
           activity.name!, message, scheduledDateTime);
       _saveReminder(activity.id!, reminderId);
-    } else
+    } else {
+      // TODO: When the reminder already exists, cancel it and re-schedule it
       logger.i(
           "Activity reminder for activity id ${activity.id!} is already scheduled");
+    }
   }
 
   Future<bool> _reminderExists(String activityId) async {
