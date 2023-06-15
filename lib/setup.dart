@@ -165,7 +165,8 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
       UpdateJoinedActivitiesRemindersUseCase(
           activityReminderRepository: sl(),
-          filterUpcomingRemindersUseCase: sl()));
+          filterUpcomingRemindersUseCase: sl(),
+          isIOSWithoutNotificationPermission: sl()));
   sl.registerLazySingleton<UpdateCreatedActivitiesRemindersUseCase>(() =>
       UpdateCreatedActivitiesRemindersUseCase(
           filterUpcomingRemindersUseCase: sl(),
