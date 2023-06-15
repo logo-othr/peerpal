@@ -13,6 +13,8 @@ import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_date
     as _i6;
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart'
     as _i7;
+import 'package:peerpal/activity/domain/usecase/schedule_activity_reminder_usecase.dart'
+    as _i8;
 import 'package:timezone/timezone.dart' as _i5;
 
 // ignore_for_file: type=lint
@@ -44,7 +46,6 @@ class MockActivityReminderRepository extends _i1.Mock
         ),
         returnValue: _i3.Future<List<String>?>.value(),
       ) as _i3.Future<List<String>?>);
-
   @override
   _i3.Future<void> setJoinedActivityIdsWithReminders(List<String>? ids) =>
       (super.noSuchMethod(
@@ -55,7 +56,6 @@ class MockActivityReminderRepository extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<List<String>?> getCreatedActivityIdsWithReminders() =>
       (super.noSuchMethod(
@@ -65,7 +65,6 @@ class MockActivityReminderRepository extends _i1.Mock
         ),
         returnValue: _i3.Future<List<String>?>.value(),
       ) as _i3.Future<List<String>?>);
-
   @override
   _i3.Future<void> setCreatedActivityIdsWithReminders(List<String>? ids) =>
       (super.noSuchMethod(
@@ -76,7 +75,6 @@ class MockActivityReminderRepository extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> cancelActivityReminders(String? activityId) =>
       (super.noSuchMethod(
@@ -87,7 +85,6 @@ class MockActivityReminderRepository extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> setActivityReminder(
     _i4.Activity? activity,
@@ -143,4 +140,33 @@ class MockIsIOSWithoutNotificationPermissionUseCase extends _i1.Mock
         ),
         returnValue: _i3.Future<bool>.value(false),
       ) as _i3.Future<bool>);
+}
+
+/// A class which mocks [ScheduleActivityReminderUseCase].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScheduleActivityReminderUseCase extends _i1.Mock
+    implements _i8.ScheduleActivityReminderUseCase {
+  MockScheduleActivityReminderUseCase() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<void> call(
+    _i4.Activity? activity,
+    _i5.TZDateTime? reminderDate,
+    String? message,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [
+            activity,
+            reminderDate,
+            message,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }

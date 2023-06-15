@@ -9,6 +9,7 @@ import 'package:peerpal/activity/domain/repository/activity_reminder_repository.
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_dates_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/schedule_activity_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_created_activities_reminders_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders_usecase.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
@@ -157,21 +158,6 @@ Future<void> setupDependencies() async {
   // ============== Activity ====================
 
   // Service
-  // UseCase
-  sl.registerLazySingleton<IsIOSWithoutNotificationPermissionUseCase>(
-      () => IsIOSWithoutNotificationPermissionUseCase(sl()));
-  sl.registerLazySingleton<CalculateUpcomingReminderDatesUseCase>(
-      () => CalculateUpcomingReminderDatesUseCase());
-  sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
-      UpdateJoinedActivitiesRemindersUseCase(
-          activityReminderRepository: sl(),
-          filterUpcomingRemindersUseCase: sl(),
-          isIOSWithoutNotificationPermission: sl()));
-  sl.registerLazySingleton<UpdateCreatedActivitiesRemindersUseCase>(() =>
-      UpdateCreatedActivitiesRemindersUseCase(
-          filterUpcomingRemindersUseCase: sl(),
-          activityReminderRepository: sl(),
-          isIOSWithoutNotificationPermission: sl()));
 
   // Repository
 
@@ -184,6 +170,26 @@ Future<void> setupDependencies() async {
       LocalActivityReminderRepository(
           prefs: sl<SharedPreferences>(),
           notificationService: sl<NotificationService>()));
+
+  // UseCase
+  sl.registerLazySingleton<ScheduleActivityReminderUseCase>(
+      () => ScheduleActivityReminderUseCase(sl()));
+  sl.registerLazySingleton<IsIOSWithoutNotificationPermissionUseCase>(
+      () => IsIOSWithoutNotificationPermissionUseCase(sl()));
+  sl.registerLazySingleton<CalculateUpcomingReminderDatesUseCase>(
+      () => CalculateUpcomingReminderDatesUseCase());
+  sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
+      UpdateJoinedActivitiesRemindersUseCase(
+          activityReminderRepository: sl(),
+          filterUpcomingRemindersUseCase: sl(),
+          isIOSWithoutNotificationPermission: sl(),
+          scheduleActivityReminderUseCase: sl()));
+  sl.registerLazySingleton<UpdateCreatedActivitiesRemindersUseCase>(() =>
+      UpdateCreatedActivitiesRemindersUseCase(
+          filterUpcomingRemindersUseCase: sl(),
+          activityReminderRepository: sl(),
+          isIOSWithoutNotificationPermission: sl(),
+          scheduleActivityReminderUseCase: sl()));
 
   // ============== Analytics ====================
   sl.registerLazySingleton<AnalyticsService>(() => FirebaseAnalyticsService());

@@ -2,17 +2,20 @@ import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_dates_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/schedule_activity_reminder_usecase.dart';
 
 class UpdateJoinedActivitiesRemindersUseCase {
   final ActivityReminderRepository activityReminderRepository;
   final CalculateUpcomingReminderDatesUseCase filterUpcomingRemindersUseCase;
   final IsIOSWithoutNotificationPermissionUseCase
       isIOSWithoutNotificationPermission;
+  final ScheduleActivityReminderUseCase scheduleActivityReminderUseCase;
 
   UpdateJoinedActivitiesRemindersUseCase({
     required this.activityReminderRepository,
     required this.filterUpcomingRemindersUseCase,
     required this.isIOSWithoutNotificationPermission,
+    required this.scheduleActivityReminderUseCase,
   });
 
   Future<void> call(Iterable<Activity> activities) async {
@@ -56,8 +59,8 @@ class UpdateJoinedActivitiesRemindersUseCase {
   Future<void> _setActivityReminders(Activity activity) async {
     final upcomingReminders = await filterUpcomingRemindersUseCase(activity);
     for (var reminderDate in upcomingReminders) {
-      await activityReminderRepository.setActivityReminder(
-          activity, reminderDate);
+      await scheduleActivityReminderUseCase.call(activity, reminderDate,
+          "${activity.name?.replaceAll('-', '')} startet demnächst.");
     }
   }
 }

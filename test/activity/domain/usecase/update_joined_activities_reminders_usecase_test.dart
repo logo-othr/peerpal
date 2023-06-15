@@ -5,6 +5,7 @@ import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/usecase/calculate_upcoming_reminder_dates_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
+import 'package:peerpal/activity/domain/usecase/schedule_activity_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/update_joined_activities_reminders_usecase.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -14,7 +15,8 @@ import 'update_joined_activities_reminders_usecase_test.mocks.dart';
 @GenerateMocks([
   ActivityReminderRepository,
   CalculateUpcomingReminderDatesUseCase,
-  IsIOSWithoutNotificationPermissionUseCase
+  IsIOSWithoutNotificationPermissionUseCase,
+  ScheduleActivityReminderUseCase,
 ])
 void main() {
   late UpdateJoinedActivitiesRemindersUseCase
@@ -24,6 +26,7 @@ void main() {
       mockFilterUpcomingRemindersUseCase;
   late MockIsIOSWithoutNotificationPermissionUseCase
       mockIsIOSWithoutNotificationPermissionUseCase;
+  late MockScheduleActivityReminderUseCase mockScheduleActivityReminderUseCase;
 
   late Activity testActivity1;
   late Activity testActivity2;
@@ -37,13 +40,16 @@ void main() {
         MockCalculateUpcomingReminderDatesUseCase();
     mockIsIOSWithoutNotificationPermissionUseCase =
         MockIsIOSWithoutNotificationPermissionUseCase();
+    mockScheduleActivityReminderUseCase = MockScheduleActivityReminderUseCase();
 
     updateJoinedActivitiesRemindersUseCase =
         UpdateJoinedActivitiesRemindersUseCase(
             activityReminderRepository: mockActivityReminderRepository,
             filterUpcomingRemindersUseCase: mockFilterUpcomingRemindersUseCase,
             isIOSWithoutNotificationPermission:
-                mockIsIOSWithoutNotificationPermissionUseCase);
+                mockIsIOSWithoutNotificationPermissionUseCase,
+            scheduleActivityReminderUseCase:
+                mockScheduleActivityReminderUseCase);
 
     testActivity1 = Activity(
         id: "1",
