@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
@@ -79,7 +81,7 @@ Future<void> setupDependencies() async {
   // SharedPreferences
   var sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(
-    () => sharedPreferences,
+        () => sharedPreferences,
   );
 
   sl.registerLazySingleton<Cache>(() => InMemoryCache());
@@ -87,13 +89,13 @@ Future<void> setupDependencies() async {
   // =============== Chat ===============
   // Bloc
   sl.registerFactory(
-    () => ChatListBloc(sl(), sl(), sl()),
+        () => ChatListBloc(sl(), sl(), sl()),
   );
   sl.registerFactory(
-    () => ChatRequestListBloc(sl(), sl()),
+        () => ChatRequestListBloc(sl(), sl()),
   );
   sl.registerFactory(
-    () => ActivityFeedBloc(),
+        () => ActivityFeedBloc(),
   );
   sl.registerFactory(
         () => ActivityRequestListBloc(),
@@ -123,14 +125,14 @@ Future<void> setupDependencies() async {
   // =============== Repository ===============
 
   sl.registerLazySingleton<AuthenticationRepository>(
-    () => AuthenticationRepository(cache: sl()),
+        () => AuthenticationRepository(cache: sl()),
   );
 
   // =============== Notification ===============
 
   // Service
   sl.registerLazySingleton<NotificationService>(
-    () => FirebaseNotificationService(),
+        () => FirebaseNotificationService(),
   );
 
   // UseCase
@@ -138,14 +140,14 @@ Future<void> setupDependencies() async {
       StartRemoteNotifications(
           notificationService: sl<NotificationService>(),
           remoteNotificationBackgroundHandler:
-              _remoteNotificationBackgroundHandler,
+          _remoteNotificationBackgroundHandler,
           remoteNotificationForegroundHandler:
-              _remoteNotificationForegroundHandler));
+          _remoteNotificationForegroundHandler));
 
   sl.registerLazySingleton<StartRememberMeNotifications>(
-      () => StartRememberMeNotifications(
-            rememberMeNotificationRepository:
-                sl<RememberMeNotificationRepository>(),
+          () => StartRememberMeNotifications(
+        rememberMeNotificationRepository:
+        sl<RememberMeNotificationRepository>(),
           ));
 
   // Repository
@@ -156,13 +158,18 @@ Future<void> setupDependencies() async {
   );
 
   // ============== Activity ====================
+  sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
   // Service
 
   // Repository
 
-  sl.registerLazySingleton<ActivityRepository>(
-      () => FirebaseActivityRepository(sl()));
+  sl.registerLazySingleton<ActivityRepository>(() => FirebaseActivityRepository(
+        prefs: sl<SharedPreferences>(),
+        firestore: sl<FirebaseFirestore>(),
+        auth: sl<FirebaseAuth>(),
+      ));
 
   sl.registerLazySingleton<LocationRepository>(() => LocalLocationRepository());
 
@@ -175,9 +182,9 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<ScheduleActivityReminderUseCase>(
       () => ScheduleActivityReminderUseCase(sl()));
   sl.registerLazySingleton<IsIOSWithoutNotificationPermissionUseCase>(
-      () => IsIOSWithoutNotificationPermissionUseCase(sl()));
+          () => IsIOSWithoutNotificationPermissionUseCase(sl()));
   sl.registerLazySingleton<CalculateUpcomingReminderDatesUseCase>(
-      () => CalculateUpcomingReminderDatesUseCase());
+          () => CalculateUpcomingReminderDatesUseCase());
   sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
       UpdateJoinedActivitiesRemindersUseCase(
           activityReminderRepository: sl(),
@@ -195,5 +202,5 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<AnalyticsService>(() => FirebaseAnalyticsService());
 
   sl.registerLazySingleton<AnalyticsRepository>(
-      () => FirebaseAnalyticsRepository(analyticsService: sl()));
+          () => FirebaseAnalyticsRepository(analyticsService: sl()));
 }

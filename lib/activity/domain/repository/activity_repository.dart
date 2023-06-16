@@ -7,7 +7,7 @@ abstract class ActivityRepository {
 
   /// Generates a list of activity objects that includes all possible
   /// activity names and codes, with the other members left empty."
-  Future<List<Activity>> loadActivityList();
+  List<Activity> loadActivityList();
 
   /// Update the (local temporary) activity object which is currently being created.
   updateLocalActivity(Activity activity);
