@@ -7,29 +7,29 @@ import 'package:peerpal/activity/domain/models/activity_code.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const Map<ActivityCode, String> ActivityNames = {
-  ActivityCode.shopping: "Ein\u00adkau\u00adfen",
-  ActivityCode.walking: "Spa\u00adzie\u00adren",
-  ActivityCode.music: "Mu\u00adsik hö\u00adren",
-  ActivityCode.coffee: "Kaf\u00adfee\u00adtrin\u00adken",
-  ActivityCode.phone: "Te\u00adle\u00adfo\u00adnie\u00adren",
-  ActivityCode.visit: "Be\u00adsuch\u00aden",
-  ActivityCode.car: "Aus\u00adflug mit dem Au\u00adto",
-  ActivityCode.tv: "Fern\u00adse\u00adhen schau\u00aden",
-  ActivityCode.garden: "Gar\u00adten\u00adar\u00adbeit",
-  ActivityCode.cooking: "Koch\u00aden",
-  ActivityCode.eating: "Es\u00adsen ge\u00adhen",
-  ActivityCode.goout: "Aus\u00adge\u00adhen",
-  ActivityCode.travel: "Rei\u00adsen",
-  ActivityCode.sightseeing: "Sight\u00adseeing",
-  ActivityCode.sport: "Sport",
-  ActivityCode.games: "Ge\u00adsell\u00adschafts\u00adspie\u00adle",
-  ActivityCode.culture: "Kul\u00adtur",
-  ActivityCode.diy: "Heim\u00adwer\u00adken",
-  ActivityCode.other: "Sons\u00adti\u00adges",
-};
-
 class FirebaseActivityRepository implements ActivityRepository {
+  static const Map<ActivityCode, String> ActivityNames = {
+    ActivityCode.shopping: "Ein\u00adkau\u00adfen",
+    ActivityCode.walking: "Spa\u00adzie\u00adren",
+    ActivityCode.music: "Mu\u00adsik hö\u00adren",
+    ActivityCode.coffee: "Kaf\u00adfee\u00adtrin\u00adken",
+    ActivityCode.phone: "Te\u00adle\u00adfo\u00adnie\u00adren",
+    ActivityCode.visit: "Be\u00adsuch\u00aden",
+    ActivityCode.car: "Aus\u00adflug mit dem Au\u00adto",
+    ActivityCode.tv: "Fern\u00adse\u00adhen schau\u00aden",
+    ActivityCode.garden: "Gar\u00adten\u00adar\u00adbeit",
+    ActivityCode.cooking: "Koch\u00aden",
+    ActivityCode.eating: "Es\u00adsen ge\u00adhen",
+    ActivityCode.goout: "Aus\u00adge\u00adhen",
+    ActivityCode.travel: "Rei\u00adsen",
+    ActivityCode.sightseeing: "Sight\u00adseeing",
+    ActivityCode.sport: "Sport",
+    ActivityCode.games: "Ge\u00adsell\u00adschafts\u00adspie\u00adle",
+    ActivityCode.culture: "Kul\u00adtur",
+    ActivityCode.diy: "Heim\u00adwer\u00adken",
+    ActivityCode.other: "Sons\u00adti\u00adges",
+  };
+
   final SharedPreferences _prefs;
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
@@ -55,7 +55,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   List<Activity> loadActivityList() {
     return ActivityNames.entries
         .map((e) =>
-            Activity(code: e.key.toString().split('.').last, name: e.value))
+        Activity(code: e.key.toString().split('.').last, name: e.value))
         .toList();
   }
 
