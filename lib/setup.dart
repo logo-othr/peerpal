@@ -20,6 +20,7 @@ import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_jo
 import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_service.dart';
 import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
 import 'package:peerpal/app/data/core/memory_cache.dart';
+import 'package:peerpal/app/data/firestore/firestore_service.dart';
 import 'package:peerpal/app/data/location/repository/local_location_repository.dart';
 import 'package:peerpal/app/data/notification/firebase_notification_service.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
@@ -132,7 +133,7 @@ Future<void> setupDependencies() async {
 
   // Service
   sl.registerLazySingleton<NotificationService>(
-        () => FirebaseNotificationService(),
+    () => FirebaseNotificationService(),
   );
 
   // UseCase
@@ -140,14 +141,14 @@ Future<void> setupDependencies() async {
       StartRemoteNotifications(
           notificationService: sl<NotificationService>(),
           remoteNotificationBackgroundHandler:
-          _remoteNotificationBackgroundHandler,
+              _remoteNotificationBackgroundHandler,
           remoteNotificationForegroundHandler:
-          _remoteNotificationForegroundHandler));
+              _remoteNotificationForegroundHandler));
 
   sl.registerLazySingleton<StartRememberMeNotifications>(
-          () => StartRememberMeNotifications(
-        rememberMeNotificationRepository:
-        sl<RememberMeNotificationRepository>(),
+      () => StartRememberMeNotifications(
+            rememberMeNotificationRepository:
+                sl<RememberMeNotificationRepository>(),
           ));
 
   // Repository
@@ -165,9 +166,13 @@ Future<void> setupDependencies() async {
 
   // Repository
 
+  sl.registerLazySingleton<FirestoreService>(() => FirestoreService(
+        firestore: sl<FirebaseFirestore>(),
+      ));
+
   sl.registerLazySingleton<ActivityRepository>(() => FirebaseActivityRepository(
         prefs: sl<SharedPreferences>(),
-        firestore: sl<FirebaseFirestore>(),
+        firestoreService: sl<FirestoreService>(),
         auth: sl<FirebaseAuth>(),
       ));
 
@@ -182,9 +187,9 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<ScheduleActivityReminderUseCase>(
       () => ScheduleActivityReminderUseCase(sl()));
   sl.registerLazySingleton<IsIOSWithoutNotificationPermissionUseCase>(
-          () => IsIOSWithoutNotificationPermissionUseCase(sl()));
+      () => IsIOSWithoutNotificationPermissionUseCase(sl()));
   sl.registerLazySingleton<CalculateUpcomingReminderDatesUseCase>(
-          () => CalculateUpcomingReminderDatesUseCase());
+      () => CalculateUpcomingReminderDatesUseCase());
   sl.registerLazySingleton<UpdateJoinedActivitiesRemindersUseCase>(() =>
       UpdateJoinedActivitiesRemindersUseCase(
           activityReminderRepository: sl(),
@@ -202,5 +207,5 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<AnalyticsService>(() => FirebaseAnalyticsService());
 
   sl.registerLazySingleton<AnalyticsRepository>(
-          () => FirebaseAnalyticsRepository(analyticsService: sl()));
+      () => FirebaseAnalyticsRepository(analyticsService: sl()));
 }

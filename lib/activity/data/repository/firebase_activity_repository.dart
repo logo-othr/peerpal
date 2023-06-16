@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/models/activity_code.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
+import 'package:peerpal/app/data/firestore/firestore_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseActivityRepository implements ActivityRepository {
@@ -31,15 +32,15 @@ class FirebaseActivityRepository implements ActivityRepository {
   };
 
   final SharedPreferences _prefs;
-  final FirebaseFirestore _firestore;
+  final FirestoreService _firestoreService;
   final FirebaseAuth _auth;
 
   FirebaseActivityRepository({
     required SharedPreferences prefs,
-    required FirebaseFirestore firestore,
+    required FirestoreService firestoreService,
     required FirebaseAuth auth,
   })  : _prefs = prefs,
-        _firestore = firestore,
+        _firestoreService = firestoreService,
         _auth = auth;
 
   /// Takes in an activity [code] as input and returns the corresponding
@@ -55,7 +56,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   List<Activity> loadActivityList() {
     return ActivityNames.entries
         .map((e) =>
-        Activity(code: e.key.toString().split('.').last, name: e.value))
+            Activity(code: e.key.toString().split('.').last, name: e.value))
         .toList();
   }
 
@@ -75,20 +76,24 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// subsequently updates the activity and performs additional actions such as
   /// sending notifications.
   Future<void> postActivity(Activity activity) async {
-    await _firestore
-        .collection('newActivity')
-        .doc(activity.id)
-        .set(activity.toJson());
+    try {
+      await _firestoreService.setDocument(
+          collection: 'newActivity',
+          docId: activity.id!,
+          data: activity.toJson());
+    } catch (e) {
+// TODO: handle exception
+    }
   }
 
   /// Writes the [activity] to the updateActivity collection. The app server
   /// subsequently updates the activity and performs additional actions such as
   /// sending notifications.
   Future<void> updateActivity(Activity activity) async {
-    await _firestore
-        .collection('updateActivity')
-        .doc(activity.id)
-        .set(activity.toJson());
+    await _firestoreService.setDocument(
+        collection: 'updateActivity',
+        docId: activity.id!,
+        data: activity.toJson());
   }
 
   /// Writes the ID of the [activity] along with the ID of the currently logged-in user of the app
@@ -98,11 +103,17 @@ class FirebaseActivityRepository implements ActivityRepository {
   Future<void> joinActivity(Activity activity) async {
     final currentUserId = _auth.currentUser?.uid;
     if (currentUserId != null) {
-      await _firestore.collection('joinActivity').doc().set({
+      final Map<String, dynamic> data = {
         'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-        'activityId': activity.id,
+        'activityId': activity.id!,
         'joiningId': currentUserId,
-      });
+      };
+      try {
+        await _firestoreService.setDocument(
+            collection: 'joinActivity', docId: null, data: data);
+      } catch (e) {
+        // TODO: Handle exception
+      }
     }
   }
 
@@ -113,11 +124,17 @@ class FirebaseActivityRepository implements ActivityRepository {
   Future<void> leaveActivity(Activity activity) async {
     final currentUserId = _auth.currentUser?.uid;
     if (currentUserId != null) {
-      await _firestore.collection('leaveActivity').doc().set({
+      final Map<String, dynamic> data = {
         'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
         'activityId': activity.id,
         'leavingId': currentUserId,
-      });
+      };
+      try {
+        await _firestoreService.setDocument(
+            collection: 'leaveActivity', docId: null, data: data);
+      } catch (e) {
+        // TODO: Handle exception
+      }
     }
   }
 
@@ -127,12 +144,19 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// additional actions, such as sending notifications.
   Future<void> deleteActivity(Activity activity) async {
     final currentUserId = _auth.currentUser?.uid;
+
     if (currentUserId != null) {
-      await _firestore.collection('deleteActivity').doc().set({
+      final Map<String, dynamic> data = {
         'userId': currentUserId,
         'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
         'activityId': activity.id,
-      });
+      };
+      try {
+        await _firestoreService.setDocument(
+            collection: 'deleteActivity', docId: null, data: data);
+      } catch (e) {
+        // TODO: Handle exception
+      }
     }
   }
 
@@ -140,7 +164,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// [Activity] objects marked as public.
   /// The activities are sorted by date.
   Stream<List<Activity>> getPublicActivities(String currentUserId) {
-    return _firestore
+    return _firestoreService
         .collection('activities')
         .where('public', isEqualTo: true)
         .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
@@ -153,7 +177,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// [Activity] objects where each activity was created by the logged-in user.
   /// The activities are sorted by date.
   Stream<List<Activity>> getCreatedActivities(String currentUserId) {
-    return _firestore
+    return _firestoreService
         .collection('activities')
         .where('creatorId', isEqualTo: currentUserId)
         .orderBy('date', descending: true)
@@ -169,7 +193,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// to the activity. When a user joins the activity, their ID is removed from the "invitationIds"
   /// by the server and added to the "attendeeIds" field.
   Stream<List<Activity>> getJoinActivityRequests(String currentUserId) {
-    return _firestore
+    return _firestoreService
         .collection('activities')
         .where('invitationIds', arrayContains: currentUserId)
         .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
@@ -182,7 +206,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// [Activity] objects where the current user has joined and the activity date
   /// is in the future. The activities are sorted by date.
   Stream<List<Activity>> getJoinedActivities(String currentUserId) {
-    return _firestore
+    return _firestoreService
         .collection('activities')
         .where('attendeeIds', arrayContains: currentUserId)
         .where('date', isGreaterThan: DateTime.now().millisecondsSinceEpoch)
