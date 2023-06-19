@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/authentication/domain/models/email_model.dart';
+import 'package:peerpal/authentication/exceptions/login_exception.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 
 part 'password_reset_state.dart';

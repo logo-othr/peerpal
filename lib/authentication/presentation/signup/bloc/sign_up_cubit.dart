@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/authentication/domain/domain.dart';
+import 'package:peerpal/authentication/exceptions/sign_up_failure.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 
 part 'sign_up_state.dart';
