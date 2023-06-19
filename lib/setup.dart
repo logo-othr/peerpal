@@ -130,7 +130,7 @@ Future<void> setupDependencies() async {
   // =============== Repository ===============
 
   sl.registerLazySingleton<AuthenticationRepository>(
-        () => AuthenticationRepository(cache: sl()),
+        () => AuthenticationRepository(cache: sl(), authService: sl()),
   );
 
   // =============== Notification ===============
