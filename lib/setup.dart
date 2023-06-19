@@ -30,7 +30,9 @@ import 'package:peerpal/app/domain/location/location_repository.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/app_logger.dart';
+import 'package:peerpal/authentication/domain/auth_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
+import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user.dart';
@@ -82,21 +84,23 @@ Future<void> setupDependencies() async {
   // SharedPreferences
   var sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(
-        () => sharedPreferences,
+    () => sharedPreferences,
   );
 
   sl.registerLazySingleton<Cache>(() => InMemoryCache());
 
+  sl.registerLazySingleton<AuthService>(
+      () => AuthServiceFirebase(firebaseAuth: sl()));
   // =============== Chat ===============
   // Bloc
   sl.registerFactory(
-        () => ChatListBloc(sl(), sl(), sl()),
+    () => ChatListBloc(sl(), sl(), sl()),
   );
   sl.registerFactory(
-        () => ChatRequestListBloc(sl(), sl()),
+    () => ChatRequestListBloc(sl(), sl()),
   );
   sl.registerFactory(
-        () => ActivityFeedBloc(),
+    () => ActivityFeedBloc(),
   );
   sl.registerFactory(
         () => ActivityRequestListBloc(),
@@ -112,7 +116,7 @@ Future<void> setupDependencies() async {
 
   // Repo
   sl.registerLazySingleton<ChatRepository>(
-        () => ChatRepositoryFirebase(),
+        () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
   );
 
   // =============== User ===============
