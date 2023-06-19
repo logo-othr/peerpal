@@ -8,6 +8,6 @@ class SendChatRequestResponse {
   Future<void> call(String currentUserId, String chatPartnerId, bool response,
       String chatId) async {
     return chatRepository.sendChatRequestResponse(
-        currentUserId, chatPartnerId, response, chatId);
+        chatPartnerId, response, chatId);
   }
 }

@@ -110,7 +110,6 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
                 text: "Annehmen",
                 onPressed: () {
                   context.read<ChatRepository>().sendChatRequestResponse(
-                      currentUserId,
                       currentState.chatPartner.id!,
                       true,
                       currentState.userChat.chat.chatId);
@@ -121,7 +120,6 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
                 text: "Ablehnen",
                 onPressed: () {
                   context.read<ChatRepository>().sendChatRequestResponse(
-                      currentUserId,
                       currentState.chatPartner.id!,
                       false,
                       currentState.userChat.chat.chatId);

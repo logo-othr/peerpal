@@ -10,6 +10,6 @@ class GetChatsForUser {
 
   Stream<List<Chat>> call() {
     String appUserId = authenticationRepository.currentUser.id;
-    return chatRepository.getChatListForUserId(appUserId);
+    return chatRepository.getChatListForUserId();
   }
 }
