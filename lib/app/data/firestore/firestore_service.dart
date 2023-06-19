@@ -23,4 +23,19 @@ class FirestoreService {
   CollectionReference collection(String path) {
     return _firestore.collection(path);
   }
+
+  Stream<List<T>> convertSnapshotStreamToModelListStream<T>(
+      Stream<QuerySnapshot> querySnapshotStream,
+      T Function(Map<String, dynamic>) fromJsonFunc) async* {
+    List<T> list = <T>[];
+    await for (QuerySnapshot querySnapshot in querySnapshotStream) {
+      list.clear();
+      querySnapshot.docs.forEach((document) {
+        var documentData = document.data() as Map<String, dynamic>;
+        var item = fromJsonFunc(documentData);
+        list.add(item);
+      });
+      yield list;
+    }
+  }
 }
