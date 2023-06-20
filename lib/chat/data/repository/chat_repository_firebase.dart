@@ -11,16 +11,13 @@ import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/firebase_collections.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
 
 class ChatRepositoryFirebase implements ChatRepository {
   final FirestoreService _firestoreService;
   final AuthService _authService;
 
-  final String _chatNotificationsCollection = 'chatNotifications';
-  final String _chatRequestResponseCollection = 'chatRequestResponse';
-  final String _chatsCollection = 'chats';
-  final String _messagesSubCollection = 'messages';
   final String _timestampField = 'timestamp';
   final String _uidsField = 'uids';
 
@@ -43,14 +40,18 @@ class ChatRepositoryFirebase implements ChatRepository {
     logger.i("Chat-Stream created.");
 
     yield* _firestoreService.convertSnapshotStreamToModelListStream(
-        chatStream, (jsonData) => ChatDTO.fromJson(jsonData));
+        chatStream, _fromJsonToChat);
+  }
+
+  Chat _fromJsonToChat(Map<String, dynamic> jsonData) {
+    return ChatDTO.fromJson(jsonData);
   }
 
   Future<void> sendChatMessage(PeerPALUser userInformation, String? chatId,
       String message, MessageType type) async {
     String currentUserId = await _authService.getCurrentUserId();
     await _firestoreService.setDocument(
-        collection: _chatNotificationsCollection,
+        collection: FirebaseCollections.chatNotifications,
         docId: null,
         data: {
           'chatId': chatId,
@@ -66,7 +67,7 @@ class ChatRepositoryFirebase implements ChatRepository {
       String chatPartnerId, bool response, String chatId) async {
     String currentUserId = await _authService.getCurrentUserId();
     await _firestoreService.setDocument(
-        collection: _chatRequestResponseCollection,
+        collection: FirebaseCollections.chatRequestResponse,
         docId: null,
         data: {
           'chatId': chatId,
@@ -83,19 +84,22 @@ class ChatRepositoryFirebase implements ChatRepository {
       yield messageList.length;
     }
   }
-
   Stream<List<ChatMessage>> getChatMessagesForChat(String chatId) async* {
     String currentUserId = await _authService.getCurrentUserId();
     Stream<QuerySnapshot> messageStream = _firestoreService
-        .collection(_chatsCollection)
+        .collection(FirebaseCollections.chats)
         .doc(chatId)
-        .collection(_messagesSubCollection)
+        .collection(FirebaseCollections.messages)
         .where(_uidsField, arrayContains: currentUserId)
         .orderBy(_timestampField, descending: true)
         .limit(40)
         .snapshots();
 
     yield* _firestoreService.convertSnapshotStreamToModelListStream(
-        messageStream, (jsonData) => ChatMessageDTO.fromJson(jsonData));
+        messageStream, _fromJsonToChatMessage);
+  }
+
+  ChatMessage _fromJsonToChatMessage(Map<String, dynamic> jsonData) {
+    return ChatMessageDTO.fromJson(jsonData);
   }
 }
