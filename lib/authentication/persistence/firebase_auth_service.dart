@@ -5,6 +5,7 @@ import 'package:peerpal/authentication/domain/models/auth_user.dart';
 import 'package:peerpal/authentication/exceptions/login_exception.dart';
 import 'package:peerpal/authentication/exceptions/logout_exception.dart';
 import 'package:peerpal/authentication/exceptions/sign_up_failure.dart';
+import 'package:peerpal/authentication/strings/auth_error_codes.dart';
 import 'package:peerpal/authentication/strings/auth_error_messages.dart';
 
 class AuthServiceFirebase implements AuthService {
@@ -44,9 +45,8 @@ class AuthServiceFirebase implements AuthService {
       logger.i(AuthErrorMessages.passwordResetEmailSent);
       return true;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      if (e.code == AuthErrorCodes.userNotFound) {
         logger.i(AuthErrorMessages.noUserFound);
-        // ToDo: throw exception
         return false;
       }
     }
@@ -60,15 +60,14 @@ class AuthServiceFirebase implements AuthService {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      // https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/createUserWithEmailAndPassword.html
       switch (e.code) {
-        case 'email-already-in-use':
+        case AuthErrorCodes.emailAlreadyInUse:
           throw SignUpFailure(message: AuthErrorMessages.emailAlreadyInUse);
-        case 'operation-not-allowed':
+        case AuthErrorCodes.operationNotAllowed:
           throw SignUpFailure(message: AuthErrorMessages.operationNotAllowed);
-        case 'weak-password:':
+        case AuthErrorCodes.weakPassword:
           throw SignUpFailure(message: AuthErrorMessages.weakPassword);
-        case 'too-many-requests':
+        case AuthErrorCodes.tooManyRequests:
           throw SignUpFailure(message: AuthErrorMessages.tooManyRequests);
         default:
           throw SignUpFailure();
@@ -88,17 +87,16 @@ class AuthServiceFirebase implements AuthService {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      // error-codes: https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
       switch (e.code) {
-        case 'wrong-password':
-        case 'user-not-found':
-        throw LoginException(
+        case AuthErrorCodes.wrongPassword:
+        case AuthErrorCodes.userNotFound:
+          throw LoginException(
               message: AuthErrorMessages.wrongPasswordOrUserNotFound);
-        case 'user-disabled':
+        case AuthErrorCodes.userDisabled:
           throw LoginException(message: AuthErrorMessages.userDisabled);
-        case 'invalid-email':
+        case AuthErrorCodes.invalidEmail:
           throw LoginException(message: AuthErrorMessages.invalidEmail);
-        case 'too-many-requests':
+        case AuthErrorCodes.tooManyRequests:
           throw LoginException(message: AuthErrorMessages.tooManyRequests);
         default:
           throw LoginException();
@@ -106,8 +104,6 @@ class AuthServiceFirebase implements AuthService {
     } on Exception {
       throw LoginException();
     }
-
-    // await registerFCMDeviceToken(); // disabled because we want to register the device token only after the profile and discover setup ToDo: Test.
   }
 
   @override
