@@ -5,6 +5,7 @@ import 'package:peerpal/authentication/domain/models/auth_user.dart';
 import 'package:peerpal/authentication/exceptions/login_exception.dart';
 import 'package:peerpal/authentication/exceptions/logout_exception.dart';
 import 'package:peerpal/authentication/exceptions/sign_up_failure.dart';
+import 'package:peerpal/authentication/strings/auth_error_messages.dart';
 
 class AuthServiceFirebase implements AuthService {
   final FirebaseAuth _firebaseAuth;
@@ -25,7 +26,7 @@ class AuthServiceFirebase implements AuthService {
   }
 
   AuthUser _getUserFromFirebaseUser() {
-    var firebaseUser = FirebaseAuth.instance.currentUser;
+    var firebaseUser = _firebaseAuth.currentUser;
 
     return (firebaseUser == null
         ? AuthUser.empty
@@ -40,11 +41,11 @@ class AuthServiceFirebase implements AuthService {
   Future<bool> resetPassword({required String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
-      logger.i("password reset email sent");
+      logger.i(AuthErrorMessages.passwordResetEmailSent);
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        logger.i('No user found for that email.');
+        logger.i(AuthErrorMessages.noUserFound);
         // ToDo: throw exception
         return false;
       }
@@ -62,18 +63,13 @@ class AuthServiceFirebase implements AuthService {
       // https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/createUserWithEmailAndPassword.html
       switch (e.code) {
         case 'email-already-in-use':
-          throw SignUpFailure(
-              message: "Diese E-Mail ist bereits in Benutzung.");
+          throw SignUpFailure(message: AuthErrorMessages.emailAlreadyInUse);
         case 'operation-not-allowed':
-          throw SignUpFailure(
-              message: 'Es ist ein Fehler aufgetreten. '
-                  'Registierungen sind deaktiviert.');
+          throw SignUpFailure(message: AuthErrorMessages.operationNotAllowed);
         case 'weak-password:':
-          throw SignUpFailure(message: 'Das gewählte Passwort ist zu schwach.');
+          throw SignUpFailure(message: AuthErrorMessages.weakPassword);
         case 'too-many-requests':
-          throw SignUpFailure(
-              message: 'Der Server ist ausgelastet. Bitte versuche es später '
-                  'oder morgen noch einmal.');
+          throw SignUpFailure(message: AuthErrorMessages.tooManyRequests);
         default:
           throw SignUpFailure();
       }
@@ -96,18 +92,14 @@ class AuthServiceFirebase implements AuthService {
       switch (e.code) {
         case 'wrong-password':
         case 'user-not-found':
-          throw LoginException(
-              message:
-                  'Falsches Passwort oder die der Nutzer existiert nicht.');
+        throw LoginException(
+              message: AuthErrorMessages.wrongPasswordOrUserNotFound);
         case 'user-disabled':
-          throw LoginException(message: 'Der Account wurde deaktiviert.');
+          throw LoginException(message: AuthErrorMessages.userDisabled);
         case 'invalid-email':
-          throw LoginException(message: 'Die E-Mail ist ungültig.');
+          throw LoginException(message: AuthErrorMessages.invalidEmail);
         case 'too-many-requests':
-          throw LoginException(
-              message:
-                  'Der Server ist ausgelastet. Bitte versuche es später oder '
-                  "morgen noch einmal.");
+          throw LoginException(message: AuthErrorMessages.tooManyRequests);
         default:
           throw LoginException();
       }
