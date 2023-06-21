@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/app/data/location/dto/location.dart';
 import 'package:peerpal/app/domain/core/cache.dart';
 import 'package:peerpal/discover_feed/data/dto/peerpal_user_dto.dart';
@@ -28,20 +27,7 @@ class AppUserRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-/*
-  String get currentUserId {
-    return _getUserFromFirebaseUser().id;
-  }
 
-  AuthUser _getUserFromFirebaseUser() {
-    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
-
-    return (firebaseUser == null
-        ? AuthUser.empty
-        : AuthUser(id: firebaseUser.uid, email: firebaseUser.email));
-  }
-
- */
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
     var uid = peerPALUser.id;
@@ -250,17 +236,6 @@ class AppUserRepository {
       userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
-  }
-
-  Future<List<Activity>> loadActivityList() async {
-    final List<Activity> activities = [];
-    activities.add(Activity(code: 'biking', name: "Radfahren"));
-    activities.add(Activity(code: 'hiking', name: "Wandern"));
-    activities.add(Activity(code: 'soccer', name: "Fußball"));
-    activities.add(Activity(code: 'tennis', name: "Tennis"));
-    activities.add(Activity(code: 'gardening', name: "Gartenarbeit"));
-    activities.add(Activity(code: 'help', name: "Hilfe gesucht"));
-    return activities;
   }
 
   List<CommunicationType> loadCommunicationList() {
