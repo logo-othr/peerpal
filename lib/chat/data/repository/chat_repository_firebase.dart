@@ -21,6 +21,8 @@ class ChatRepositoryFirebase implements ChatRepository {
   final String _timestampField = 'timestamp';
   final String _uidsField = 'uids';
 
+  final Map<String, Stream<List<ChatMessage>>> _chatMessageStreams = {};
+
   ChatRepositoryFirebase({
     required FirestoreService firestoreService,
     required AuthService authService,
@@ -79,24 +81,29 @@ class ChatRepositoryFirebase implements ChatRepository {
   }
 
   Stream<int> messageCountForChat(String chatId) async* {
-    String currentUserId = await _authService.getCurrentUserId();
     await for (var messageList in getChatMessagesForChat(chatId)) {
       yield messageList.length;
     }
   }
+
   Stream<List<ChatMessage>> getChatMessagesForChat(String chatId) async* {
     String currentUserId = await _authService.getCurrentUserId();
-    Stream<QuerySnapshot> messageStream = _firestoreService
-        .collection(FirebaseCollections.chats)
-        .doc(chatId)
-        .collection(FirebaseCollections.messages)
-        .where(_uidsField, arrayContains: currentUserId)
-        .orderBy(_timestampField, descending: true)
-        .limit(40)
-        .snapshots();
+    if (!_chatMessageStreams.containsKey(chatId)) {
+      Stream<QuerySnapshot> messageStream = _firestoreService
+          .collection(FirebaseCollections.chats)
+          .doc(chatId)
+          .collection(FirebaseCollections.messages)
+          .where(_uidsField, arrayContains: currentUserId)
+          .orderBy(_timestampField, descending: true)
+          .limit(40)
+          .snapshots();
 
-    yield* _firestoreService.convertSnapshotStreamToModelListStream(
-        messageStream, _fromJsonToChatMessage);
+      _chatMessageStreams[chatId] =
+          _firestoreService.convertSnapshotStreamToModelListStream(
+              messageStream, _fromJsonToChatMessage);
+    }
+
+    yield* _chatMessageStreams[chatId]!;
   }
 
   ChatMessage _fromJsonToChatMessage(Map<String, dynamic> jsonData) {
