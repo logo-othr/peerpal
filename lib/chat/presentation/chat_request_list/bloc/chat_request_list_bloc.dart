@@ -14,20 +14,24 @@ part 'chat_request_list_state.dart';
 
 class ChatRequestListBloc
     extends Bloc<ChatRequestListEvent, ChatRequestListState> {
-  GetChatsForUser _getChatsForUser;
-  GetChatRequestForUser _getChatRequestForUser;
-  StreamController<List<Chat>> _chatStreamController = new BehaviorSubject();
-  StreamController<List<UserChat>> _userFriendRequestStreamController =
-      new BehaviorSubject();
+  final GetChatsForUser _getChatsForUser;
+  final GetChatRequestForUser _getChatRequestForUser;
+  final StreamController<List<Chat>> _chatStreamController =
+      BehaviorSubject<List<Chat>>();
+  final StreamController<List<UserChat>> _userFriendRequestStreamController =
+      BehaviorSubject<List<UserChat>>();
+  late StreamSubscription _chatSubscription;
+  late StreamSubscription _chatRequestSubscription;
 
   ChatRequestListBloc(this._getChatsForUser, this._getChatRequestForUser)
       : super(ChatRequestListState());
 
   @override
   Future<void> close() {
-    // ToDo: Check for memory leaks
-    // _chatStreamController.close();
-    // _userFriendRequestStreamController.close();
+    _chatSubscription.cancel();
+    _chatRequestSubscription.cancel();
+    _chatStreamController.close();
+    _userFriendRequestStreamController.close();
     return super.close();
   }
 
@@ -35,16 +39,33 @@ class ChatRequestListBloc
   Stream<ChatRequestListState> mapEventToState(
       ChatRequestListEvent event) async* {
     if (event is ChatRequestListLoaded) {
-      Stream<List<Chat>> chatStream = _getChatsForUser();
-      _chatStreamController.addStream(chatStream);
+      _chatSubscription = _getChatsForUser().listen((chatList) {
+        _chatStreamController.add(chatList);
+      });
 
-      Stream<List<UserChat>> chatRequestStream =
-          _getChatRequestForUser(_chatStreamController.stream);
-      _userFriendRequestStreamController.addStream(chatRequestStream);
+      _chatRequestSubscription =
+          _getChatRequestForUser(_chatStreamController.stream)
+              .listen((userChatList) {
+        _userFriendRequestStreamController.add(userChatList);
+      });
 
-      yield state.copyWith(
-          status: ChatRequestListStatus.success,
-          chatRequests: _userFriendRequestStreamController.stream);
+      yield* _mapChatRequestsToState();
     }
   }
+
+  Stream<ChatRequestListState> _mapChatRequestsToState() async* {
+    yield ChatRequestListState(
+      status: ChatRequestListStatus.success,
+      chatRequests: _userFriendRequestStreamController.stream,
+    );
+  }
+}
+
+class ChatRequestListSuccess extends ChatRequestListEvent {
+  final List<UserChat> userChatList;
+
+  ChatRequestListSuccess(this.userChatList);
+
+  @override
+  List<Object> get props => [userChatList];
 }
