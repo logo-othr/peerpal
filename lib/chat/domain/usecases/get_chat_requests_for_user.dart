@@ -14,21 +14,32 @@ class GetChatRequestForUser {
       this.authenticationRepository);
 
   Stream<List<UserChat>> call(Stream<List<Chat>> chatStream) async* {
-    var appUserId = authenticationRepository.currentUser.id;
-    List<UserChat> userChats = <UserChat>[];
+    final appUserId = authenticationRepository.currentUser.id;
+
     await for (List<Chat> chatList in chatStream) {
-      userChats.clear();
-      for (Chat chat in chatList) {
+      final userChats = await Future.wait(chatList.map((chat) async {
         if (chat.chatRequestAccepted == false && chat.startedBy != appUserId) {
-          List<String> userIds = chat.uids;
-          userIds.remove(appUserId);
-          PeerPALUser peerPALUser =
-          await appUserRepository.getUserInformation(userIds.first);
-          UserChat userChat = UserChat(chat: chat, user: peerPALUser);
-          userChats.add(userChat);
+          final String? peerUserId = chat.uids
+              .firstWhere((userId) => userId != appUserId, orElse: null);
+          if (peerUserId == null) {
+            throw Exception('No  user ID found in chat');
+          }
+          try {
+            final peerPALUser =
+                await appUserRepository.getUserInformation(peerUserId);
+            return _createUserChat(chat, peerPALUser);
+          } catch (e) {
+            throw Exception(
+                'Failed to fetch user information for $peerUserId: $e');
+          }
         }
-      }
-      yield userChats;
+      }));
+
+      yield userChats.whereType<UserChat>().toList();
     }
+  }
+
+  UserChat _createUserChat(Chat chat, PeerPALUser peerPALUser) {
+    return UserChat(chat: chat, user: peerPALUser);
   }
 }
