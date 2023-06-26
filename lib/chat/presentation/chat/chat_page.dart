@@ -33,7 +33,7 @@ class ChatPage extends StatelessWidget {
           getChatsForUser: sl<GetChatsForUser>(),
           appUserRepository: context.read<AppUserRepository>(),
           authenticationRepository: context.read<AuthenticationRepository>(),
-          getUserChatForChat: sl<GetUserChatForChat>(),
+          getUserChatForChat: sl<UserChatsForChat>(),
           getAuthenticatedUser: sl<GetAuthenticatedUser>(),
           sendMessage: SendChatMessage(context.read<ChatRepository>()),
           sendChatRequestResponse:

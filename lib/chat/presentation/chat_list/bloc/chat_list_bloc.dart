@@ -16,7 +16,7 @@ part 'chat_list_state.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   GetChatsForUser _getChatsForUser;
-  GetUserChatForChat _getUserChatForChat;
+  UserChatsForChat _getUserChatForChat;
   GetChatRequestForUser _getChatRequestForUser;
   StreamController<List<Chat>> _chatStreamController = new BehaviorSubject();
   StreamController<List<UserChat>> _userChatStreamController =

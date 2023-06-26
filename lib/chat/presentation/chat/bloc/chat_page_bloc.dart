@@ -20,13 +20,12 @@ import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_u
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_page_event.dart';
-
 part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   GetChatsForUser _getChatsForUser;
   GetMessagesForChat _getMessagesForChat;
-  GetUserChatForChat _getUserChatForChat;
+  UserChatsForChat _getUserChatForChat;
   SendChatRequestResponse _sendChatRequestResponse;
   GetAuthenticatedUser _getAuthenticatedUser;
   SendChatMessage _sendMessage;
