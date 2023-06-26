@@ -32,7 +32,7 @@ class ChatRepositoryFirebase implements ChatRepository {
   String _currentTimestamp() =>
       DateTime.now().millisecondsSinceEpoch.toString();
 
-  Stream<List<Chat>> getChatListForUserId() async* {
+  Stream<List<Chat>> getChats() async* {
     String currentUserId = await _authService.getCurrentUserId();
     Stream<QuerySnapshot> chatStream = _firestoreService
         .collection(UserDatabaseContract.chat)

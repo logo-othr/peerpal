@@ -6,7 +6,7 @@ import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 abstract class ChatRepository {
-  Stream<List<Chat>> getChatListForUserId();
+  Stream<List<Chat>> getChats();
 
   Future<void> sendChatMessage(PeerPALUser userInformation, String? chatId,
       String message, MessageType type);

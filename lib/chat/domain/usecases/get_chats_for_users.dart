@@ -9,7 +9,6 @@ class GetChatsForUser {
   GetChatsForUser(this.chatRepository, this.authenticationRepository);
 
   Stream<List<Chat>> call() {
-    String appUserId = authenticationRepository.currentUser.id;
-    return chatRepository.getChatListForUserId();
+    return chatRepository.getChats();
   }
 }
