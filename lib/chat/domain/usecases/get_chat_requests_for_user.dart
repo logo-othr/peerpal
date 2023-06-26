@@ -22,15 +22,15 @@ class GetChatRequestForUser {
           final String? peerUserId = chat.uids
               .firstWhere((userId) => userId != appUserId, orElse: null);
           if (peerUserId == null) {
-            throw Exception('No  user ID found in chat');
-          }
-          try {
-            final peerPALUser =
-                await appUserRepository.getUserInformation(peerUserId);
-            return _createUserChat(chat, peerPALUser);
-          } catch (e) {
-            throw Exception(
-                'Failed to fetch user information for $peerUserId: $e');
+            print('No  user ID found in chat');
+          } else {
+            try {
+              final peerPALUser =
+                  await appUserRepository.getUserInformation(peerUserId);
+              return _createUserChat(chat, peerPALUser);
+            } catch (e) {
+              print('Failed to fetch user information for $peerUserId: $e');
+            }
           }
         }
       }));
