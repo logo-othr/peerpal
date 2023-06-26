@@ -13,6 +13,7 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/firebase_collections.dart';
 import 'package:peerpal/repository/contracts/user_database_contract.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ChatRepositoryFirebase implements ChatRepository {
   final FirestoreService _firestoreService;
@@ -21,7 +22,8 @@ class ChatRepositoryFirebase implements ChatRepository {
   final String _timestampField = 'timestamp';
   final String _uidsField = 'uids';
 
-  final Map<String, Stream<List<ChatMessage>>> _chatMessageStreams = {};
+  final Map<String, BehaviorSubject<List<ChatMessage>>> _chatMessageStreams =
+      {};
 
   ChatRepositoryFirebase({
     required FirestoreService firestoreService,
@@ -98,15 +100,22 @@ class ChatRepositoryFirebase implements ChatRepository {
           .limit(40)
           .snapshots();
 
-      _chatMessageStreams[chatId] =
-          _firestoreService.convertSnapshotStreamToModelListStream(
-              messageStream, _fromJsonToChatMessage);
+      _chatMessageStreams[chatId] = BehaviorSubject<List<ChatMessage>>.seeded(
+        await _firestoreService
+            .convertSnapshotStreamToModelListStream(
+                messageStream, _fromJsonToChatMessage)
+            .first,
+      );
     }
 
-    yield* _chatMessageStreams[chatId]!;
+    yield* _chatMessageStreams[chatId]!.stream;
   }
 
   ChatMessage _fromJsonToChatMessage(Map<String, dynamic> jsonData) {
     return ChatMessageDTO.fromJson(jsonData);
+  }
+
+  void dispose() {
+    _chatMessageStreams.values.forEach((stream) => stream.close());
   }
 }
