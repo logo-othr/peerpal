@@ -38,9 +38,9 @@ class SendMessageEvent extends ChatPageEvent {
       required this.type});
 }
 
-class UploadImageEvent extends ChatPageEvent {
+/*class UploadImageEvent extends ChatPageEvent {
   final XFile? image;
   final UserChat? userChat;
 
   UploadImageEvent({required this.image, required this.userChat});
-}
+}*/

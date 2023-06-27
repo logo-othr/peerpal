@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
@@ -78,8 +77,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
             _chatPartnerId, event.response, event.chatId);
       } else if (event is SendMessageEvent) {
         await _handleSendMessageEvent(event);
-      } else if (event is UploadImageEvent) {
-        yield* _handleUploadImageEvent(event);
+        /*} else if (event is UploadImageEvent) {
+        yield* _handleUploadImageEvent(event);*/
       } else if (event is UserChatsUpdatedEvent) {
         yield* _handleUserChatsUpdatedEvent(event);
       }
@@ -92,24 +91,32 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   Stream<ChatPageState> _handleUserChatsUpdatedEvent(
       UserChatsUpdatedEvent event) async* {
     PeerPALUser chatPartner = await _getCurrentChatPartner();
-    List<UserChat> chats = event.chats;
-    UserChat? currentChat = null;
-    for (UserChat chat in chats) {
-      if (chat.user.id == _chatPartnerId) currentChat = chat;
-    }
+    UserChat? currentChat = _findCurrentChat(event.chats);
+
     if (currentChat != null) {
-      Stream<List<ChatMessage>> _chatMessageStream =
-          _getMessagesForChat(currentChat);
-      yield ChatLoadedState(
-          chatPartner: chatPartner,
-          messages: _chatMessageStream,
-          userId: this._chatPartnerId,
-          userChat: currentChat,
-          appUser: await _getAuthenticatedUser());
+      yield await _yieldChatLoadedState(chatPartner, currentChat);
     } else {
       yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
     }
+  }
+
+  UserChat? _findCurrentChat(List<UserChat> chats) {
+    return chats.firstWhere((chat) => chat.user.id == _chatPartnerId);
+  }
+
+  Future<ChatLoadedState> _yieldChatLoadedState(
+      PeerPALUser chatPartner, UserChat currentChat) async {
+    Stream<List<ChatMessage>> chatMessageStream =
+        _getMessagesForChat(currentChat);
+    PeerPALUser appUser = await _getAuthenticatedUser();
+
+    return ChatLoadedState(
+        chatPartner: chatPartner,
+        messages: chatMessageStream,
+        userId: this._chatPartnerId,
+        userChat: currentChat,
+        appUser: appUser);
   }
 
   Future<void> _handleSendMessageEvent(SendMessageEvent event) async {
@@ -123,6 +130,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     }
   }
 
+  /*
   Stream<ChatPageState> _handleUploadImageEvent(UploadImageEvent event) async* {
     PeerPALUser chatPartner = await _getCurrentChatPartner();
     yield ChatLoadingState(chatPartner: chatPartner);
@@ -136,15 +144,16 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     } else {
       yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
-      _generateUserChatsUpdatedEventsOnChatUpdates();
+      startChatListUpdateListener();
     }
-  }
+  }*/
 
   Stream<ChatPageState> _handleLoadChatPageEvent(
       LoadChatPageEvent event) async* {
     PeerPALUser chatPartner = await _getCurrentChatPartner();
 
     yield ChatLoadingState(chatPartner: chatPartner);
+
     if (_chatIsLoaded(event.userChat)) {
       yield ChatLoadedState(
           chatPartner: chatPartner,
@@ -155,7 +164,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     } else {
       yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
-      _generateUserChatsUpdatedEventsOnChatUpdates();
+      startChatListUpdateListener();
     }
   }
 
@@ -166,7 +175,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     return _chatMessageStreamController.stream;
   }
 
-  void _generateUserChatsUpdatedEventsOnChatUpdates() {
+  void startChatListUpdateListener() {
     Stream<List<Chat>> chatUpdatesStream = _getChatsForUser();
     Stream<List<UserChat>> userChatsUpdatesStream =
         _getUserChatForChat(chatUpdatesStream, false);
