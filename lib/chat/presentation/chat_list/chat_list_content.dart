@@ -82,15 +82,6 @@ class _ChatListContentState extends State<ChatListContent> {
             }
           },
         ),
-        /*  Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                    top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
-                    bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
-            child: CustomCupertinoSearchBar(
-              enabled: false,
-                searchBarController: searchFieldController)),*/
         Expanded(
           child: StreamBuilder<List<UserChat>>(
             stream: context.read<ChatListBloc>().state.chats,
@@ -126,29 +117,6 @@ class _ChatListContentState extends State<ChatListContent> {
     );
   }
 
-/* Widget buildChatPartner(BuildContext context, UserChat userChat) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-              bottom:
-                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
-      child: TextButton(
-        onPressed: () async {
-          // context.read<ChatListBloc>()..add(ChatClickEvent(userChat));
-          sl<ChatListBloc>()..add(ChatClickEvent(userChat));
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatPage(
-                        userChat: userChat,
-                        userId: userChat.user.id!,
-                      )));
-        },
-        child: CustomChatListItemUser(userInformation: userChat),
-      ),
-    );
-  }*/
 }
 
 void debugChatStreamText(AsyncSnapshot snapshot) {
