@@ -107,7 +107,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
           userChat: currentChat,
           appUser: await _getAuthenticatedUser());
     } else {
-      yield WaitingForChatOrFirstMessage(
+      yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
     }
   }
@@ -134,15 +134,16 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
           userChat: event.userChat!,
           appUser: await _getAuthenticatedUser());
     } else {
-      yield WaitingForChatOrFirstMessage(
+      yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
-      yield* _yieldChatLoadedStateWhenChatIsLoaded(chatPartner);
+      _generateUserChatsUpdatedEventsOnChatUpdates();
     }
   }
 
   Stream<ChatPageState> _handleLoadChatPageEvent(
       LoadChatPageEvent event) async* {
     PeerPALUser chatPartner = await _getCurrentChatPartner();
+
     yield ChatLoadingState(chatPartner: chatPartner);
     if (_chatIsLoaded(event.userChat)) {
       yield ChatLoadedState(
@@ -152,9 +153,9 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
           userChat: event.userChat!,
           appUser: await _getAuthenticatedUser());
     } else {
-      yield WaitingForChatOrFirstMessage(
+      yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
-      yield* _yieldChatLoadedStateWhenChatIsLoaded(chatPartner);
+      _generateUserChatsUpdatedEventsOnChatUpdates();
     }
   }
 
@@ -165,17 +166,16 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     return _chatMessageStreamController.stream;
   }
 
-  Stream<ChatLoadedState> _yieldChatLoadedStateWhenChatIsLoaded(
-      PeerPALUser chatPartner) async* {
-    Stream<List<Chat>> chatStream =
-        _getChatsForUser(); // ToDo: Use streamcontroller
-    Stream<List<UserChat>> userChatStream =
-        _getUserChatForChat(chatStream, false);
-    BehaviorSubject<List<UserChat>> userChatStreamController =
+  void _generateUserChatsUpdatedEventsOnChatUpdates() {
+    Stream<List<Chat>> chatUpdatesStream = _getChatsForUser();
+    Stream<List<UserChat>> userChatsUpdatesStream =
+        _getUserChatForChat(chatUpdatesStream, false);
+    BehaviorSubject<List<UserChat>> userChatsStreamController =
         BehaviorSubject();
-    userChatStreamController.addStream(userChatStream);
-    userChatStreamController.listen((chats) {
-      add(UserChatsUpdatedEvent(chats));
+
+    userChatsStreamController.addStream(userChatsUpdatesStream);
+    userChatsStreamController.listen((updatedChats) {
+      add(UserChatsUpdatedEvent(updatedChats));
     });
   }
 

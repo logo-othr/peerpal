@@ -39,15 +39,14 @@ class ChatLoadedState extends ChatPageState {
       required this.appUser});
 }
 
-class WaitingForChatOrFirstMessage extends ChatPageState {
+class WaitingForChatState extends ChatPageState {
   final PeerPALUser chatPartner;
   final PeerPALUser appUser;
 
   @override
   List<Object?> get props => [chatPartner, appUser];
 
-  WaitingForChatOrFirstMessage(
-      {required this.chatPartner, required this.appUser});
+  WaitingForChatState({required this.chatPartner, required this.appUser});
 }
 
 class UploadImageState extends ChatPageState {

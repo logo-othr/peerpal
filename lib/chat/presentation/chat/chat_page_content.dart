@@ -30,7 +30,7 @@ class ChatPageContent extends StatelessWidget {
               focus: _focus,
               textEditingController: _textEditingController,
             );
-          } else if (state is WaitingForChatOrFirstMessage) {
+          } else if (state is WaitingForChatState) {
             return WaitingForFirstMessage(
               state: state,
               focusNode: _focus,
