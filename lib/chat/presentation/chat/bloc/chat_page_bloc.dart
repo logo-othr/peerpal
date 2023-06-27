@@ -77,8 +77,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
             _chatPartnerId, event.response, event.chatId);
       } else if (event is SendMessageEvent) {
         await _handleSendMessageEvent(event);
-        /*} else if (event is UploadImageEvent) {
-        yield* _handleUploadImageEvent(event);*/
       } else if (event is UserChatsUpdatedEvent) {
         yield* _handleUserChatsUpdatedEvent(event);
       }
@@ -130,23 +128,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     }
   }
 
-  /*
-  Stream<ChatPageState> _handleUploadImageEvent(UploadImageEvent event) async* {
-    PeerPALUser chatPartner = await _getCurrentChatPartner();
-    yield ChatLoadingState(chatPartner: chatPartner);
-    if (_chatIsLoaded(event.userChat)) {
-      yield ChatLoadedState(
-          chatPartner: chatPartner,
-          messages: _loadChatMessages(event.userChat!),
-          userId: this._chatPartnerId,
-          userChat: event.userChat!,
-          appUser: await _getAuthenticatedUser());
-    } else {
-      yield WaitingForChatState(
-          chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
-      startChatListUpdateListener();
-    }
-  }*/
 
   Stream<ChatPageState> _handleLoadChatPageEvent(
       LoadChatPageEvent event) async* {
