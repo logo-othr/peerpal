@@ -30,8 +30,7 @@ class InvitationInputCubit extends Cubit<ActivityInvitationState> {
         activity.invitationIds != null ? activity.invitationIds! : [];
     List<PeerPALUser> invitations = [];
     for (var invitationId in invitationIds) {
-      PeerPALUser peerPALUser =
-          await _appUserRepository.getUserInformation(invitationId);
+      PeerPALUser peerPALUser = await _appUserRepository.getUser(invitationId);
       invitations.add(peerPALUser);
     }
 

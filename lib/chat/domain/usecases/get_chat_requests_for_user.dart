@@ -25,8 +25,7 @@ class GetChatRequestForUser {
             print('No  user ID found in chat');
           } else {
             try {
-              final peerPALUser =
-                  await appUserRepository.getUserInformation(peerUserId);
+              final peerPALUser = await appUserRepository.getUser(peerUserId);
               return _createUserChat(chat, peerPALUser);
             } catch (e) {
               print('Failed to fetch user information for $peerUserId: $e');

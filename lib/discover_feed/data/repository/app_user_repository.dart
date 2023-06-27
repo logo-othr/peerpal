@@ -66,7 +66,7 @@ class AppUserRepository {
     return await _downloadUserInformation(uid);
   }
 
-  Future<PeerPALUser> getUserInformation(String uid) async {
+  Future<PeerPALUser> getUser(String uid) async {
     return (await _downloadUserInformation(uid)).toDomainObject();
   }
 

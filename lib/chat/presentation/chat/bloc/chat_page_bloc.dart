@@ -87,8 +87,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
 
   Stream<ChatPageState> _handleUserChatsUpdatedEvent(
       UserChatsUpdatedEvent event) async* {
-    PeerPALUser chatPartner =
-        await _appUserRepository.getUserInformation(_chatPartnerId);
+    PeerPALUser chatPartner = await _appUserRepository.getUser(_chatPartnerId);
     List<UserChat> chats = event.chats;
     UserChat? currentChat = null;
     for (UserChat chat in chats) {
@@ -122,8 +121,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
 
   Stream<ChatPageState> _handleUploadImageEvent(UploadImageEvent event) async* {
     ChatPageState currentState = state;
-    PeerPALUser chatPartner =
-        await _appUserRepository.getUserInformation(_chatPartnerId);
+    PeerPALUser chatPartner = await _appUserRepository.getUser(_chatPartnerId);
     yield ChatLoadingState(chatPartner: chatPartner);
     if (_chatIsLoaded(event.userChat)) {
       yield ChatLoadedState(
@@ -141,8 +139,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
 
   Stream<ChatPageState> _handleLoadChatPageEvent(
       LoadChatPageEvent event) async* {
-    PeerPALUser chatPartner =
-        await _appUserRepository.getUserInformation(_chatPartnerId);
+    PeerPALUser chatPartner = await _appUserRepository.getUser(_chatPartnerId);
     yield ChatLoadingState(chatPartner: chatPartner);
     if (_chatIsLoaded(event.userChat)) {
       yield ChatLoadedState(

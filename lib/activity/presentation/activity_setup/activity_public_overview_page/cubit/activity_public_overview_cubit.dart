@@ -29,13 +29,13 @@ class ActivityPublicOverviewCubit extends Cubit<ActivityPublicOverviewState> {
     }
 
     PeerPALUser activityCreator =
-        await _appUserRepository.getUserInformation(activity.creatorId!);
+        await _appUserRepository.getUser(activity.creatorId!);
 
     List<PeerPALUser> attendees = [];
 
     if (activity.attendeeIds != null) {
       await Future.forEach<String>(activity.attendeeIds!, (element) async {
-        PeerPALUser user = await _appUserRepository.getUserInformation(element);
+        PeerPALUser user = await _appUserRepository.getUser(element);
         attendees.add(user);
       });
     }

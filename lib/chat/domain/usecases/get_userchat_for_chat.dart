@@ -36,7 +36,7 @@ class UserChatsForChat {
   Future<UserChat> convertChatToUserChat(Chat chat, String appUserId) async {
     var userIds = List<String>.from(chat.uids);
     userIds.remove(appUserId);
-    var peerUser = await appUserRepository.getUserInformation(userIds.first);
+    var peerUser = await appUserRepository.getUser(userIds.first);
     return UserChat(chat: chat, user: peerUser);
   }
 }

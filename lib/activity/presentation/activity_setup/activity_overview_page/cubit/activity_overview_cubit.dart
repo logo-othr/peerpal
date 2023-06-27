@@ -23,19 +23,19 @@ class OverviewInputCubit extends Cubit<ActivityOverviewState> {
     if (activityToChange != null)
       _activityRepository.updateLocalActivity(activity);
     PeerPALUser activityCreator =
-        await _appUserRepository.getUserInformation(activity.creatorId!);
+        await _appUserRepository.getUser(activity.creatorId!);
     List<PeerPALUser> invitationIds = [];
     List<PeerPALUser> attendees = [];
 
     if (activity.attendeeIds != null) {
       await Future.forEach<String>(activity.attendeeIds!, (element) async {
-        PeerPALUser user = await _appUserRepository.getUserInformation(element);
+        PeerPALUser user = await _appUserRepository.getUser(element);
         attendees.add(user);
       });
     }
     if (activity.invitationIds != null) {
       await Future.forEach<String>(activity.invitationIds!, (element) async {
-        PeerPALUser user = await _appUserRepository.getUserInformation(element);
+        PeerPALUser user = await _appUserRepository.getUser(element);
         invitationIds.add(user);
       });
     }
