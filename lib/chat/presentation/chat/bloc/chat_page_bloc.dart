@@ -72,7 +72,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     try {
       if (event is LoadChatPageEvent) {
         yield* _handleLoadChatPageEvent(event);
-      } else if (event is SendChatRequestResponseButtonPressedEvent) {
+      } else if (event is SendChatRequestResponseEvent) {
         await _sendChatRequestResponse(_authenticationRepository.currentUser.id,
             _chatPartnerId, event.response, event.chatId);
       } else if (event is SendMessageEvent) {

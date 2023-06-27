@@ -12,11 +12,11 @@ class LoadChatPageEvent extends ChatPageEvent {
   LoadChatPageEvent(this.userChat);
 }
 
-class SendChatRequestResponseButtonPressedEvent extends ChatPageEvent {
+class SendChatRequestResponseEvent extends ChatPageEvent {
   final bool response;
   final String chatId;
 
-  SendChatRequestResponseButtonPressedEvent(this.response, this.chatId);
+  SendChatRequestResponseEvent(this.response, this.chatId);
 }
 
 class UserChatsUpdatedEvent extends ChatPageEvent {
