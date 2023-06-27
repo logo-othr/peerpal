@@ -103,10 +103,10 @@ Future<void> setupDependencies() async {
     () => ActivityFeedBloc(),
   );
   sl.registerFactory(
-    () => ActivityRequestListBloc(),
+        () => ActivityRequestListBloc(),
   );
   sl.registerFactory(
-    () => ActivityJoinedListBloc(),
+        () => ActivityJoinedListBloc(),
   );
 
   // UseCase
@@ -116,7 +116,7 @@ Future<void> setupDependencies() async {
 
   // Repo
   sl.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
+        () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
   );
 
   // =============== User ===============
