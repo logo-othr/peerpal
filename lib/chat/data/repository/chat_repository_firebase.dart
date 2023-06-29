@@ -100,12 +100,12 @@ class ChatRepositoryFirebase implements ChatRepository {
           .limit(40)
           .snapshots();
 
-      _chatMessageStreams[chatId] = BehaviorSubject<List<ChatMessage>>.seeded(
-        await _firestoreService
-            .convertSnapshotStreamToModelListStream(
-                messageStream, _fromJsonToChatMessage)
-            .first,
-      );
+      var chatMessageStream =
+          _firestoreService.convertSnapshotStreamToModelListStream(
+              messageStream, _fromJsonToChatMessage);
+
+      _chatMessageStreams[chatId] = BehaviorSubject<List<ChatMessage>>()
+        ..addStream(chatMessageStream);
     }
 
     yield* _chatMessageStreams[chatId]!.stream;
