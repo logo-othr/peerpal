@@ -6,19 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_for_users_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat_usecase.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_list_event.dart';
-
 part 'chat_list_state.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   GetChatsForUserUseCase _getChatsForUser;
   UserChatsForChatUseCase _getUserChatForChat;
-  GetChatRequestForUserUseCase _getChatRequestForUser;
+  GetChatRequestsUseCase _getChatRequestForUser;
   StreamController<List<Chat>> _chatStreamController = new BehaviorSubject();
   StreamController<List<UserChat>> _userChatStreamController =
       new BehaviorSubject();

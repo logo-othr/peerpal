@@ -5,12 +5,12 @@ import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
-class GetChatRequestForUserUseCase {
+class GetChatRequestsUseCase {
   final ChatRepository chatRepository;
   final AppUserRepository appUserRepository;
   final AuthenticationRepository authenticationRepository;
 
-  GetChatRequestForUserUseCase(this.chatRepository, this.appUserRepository,
+  GetChatRequestsUseCase(this.chatRepository, this.appUserRepository,
       this.authenticationRepository);
 
   Stream<List<UserChat>> call(Stream<List<Chat>> chatStream) async* {
