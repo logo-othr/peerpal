@@ -35,9 +35,9 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
+import 'package:peerpal/chat/domain/usecases/chat_to_userchat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat_usecase.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -111,7 +111,7 @@ Future<void> setupDependencies() async {
 
   // UseCase
   sl.registerLazySingleton(() => GetChatsUseCase(sl(), sl()));
-  sl.registerLazySingleton(() => UserChatsForChatUseCase(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => ChatToUserChatUseCase(sl(), sl(), sl()));
   sl.registerLazySingleton(() => GetChatRequestsUseCase(sl(), sl(), sl()));
 
   // Repo
