@@ -37,6 +37,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       new BehaviorSubject();
 
   late final ChatPageHandler _chatPageHandler;
+  late final SendMessageHandler _sendMessageHandler;
 
   ChatPageBloc(
       {required getMessagesForChat,
@@ -61,6 +62,9 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     this._chatPageHandler = ChatPageHandler(
         addEventToBloc: add,
         chatMessageStreamController: _chatMessageStreamController);
+
+    this._sendMessageHandler =
+        SendMessageHandler(sendChatMessageUseCase: _sendMessage);
   }
 
   @override
@@ -89,7 +93,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         await _sendChatRequestResponse(_authenticationRepository.currentUser.id,
             _chatPartnerId, event.response, event.chatId);
       } else if (event is SendMessageEvent) {
-        await _handleSendMessageEvent(event);
+        yield* _sendMessageHandler.handle(event);
       } else if (event is UserChatsUpdatedEvent) {
         yield* _handleUserChatsUpdatedEvent(event);
       }
@@ -129,8 +133,17 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         userChat: currentChat,
         appUser: appUser);
   }
+}
 
-  Future<void> _handleSendMessageEvent(SendMessageEvent event) async {
+class SendMessageHandler {
+  SendChatMessageUseCase _sendMessage;
+
+  SendMessageHandler({required SendChatMessageUseCase sendChatMessageUseCase})
+      : this._sendMessage = sendChatMessageUseCase;
+
+  Stream<ChatPageState> handle(
+    SendMessageEvent event,
+  ) async* {
     if (event.payload.trim() != '') {
       await _sendMessage(
         event.chatPartner,
