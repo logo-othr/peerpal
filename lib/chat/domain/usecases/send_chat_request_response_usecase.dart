@@ -1,9 +1,9 @@
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 
-class SendChatRequestResponse {
+class SendChatRequestResponseUseCase {
   final ChatRepository chatRepository;
 
-  SendChatRequestResponse(this.chatRepository);
+  SendChatRequestResponseUseCase(this.chatRepository);
 
   Future<void> call(String currentUserId, String chatPartnerId, bool response,
       String chatId) async {

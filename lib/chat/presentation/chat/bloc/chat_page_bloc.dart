@@ -8,26 +8,27 @@ import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_for_users.dart';
-import 'package:peerpal/chat/domain/usecases/get_messages_for_chat.dart';
-import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat.dart';
-import 'package:peerpal/chat/domain/usecases/send_chat_message.dart';
-import 'package:peerpal/chat/domain/usecases/send_chat_request_response.dart';
+import 'package:peerpal/chat/domain/usecases/get_chats_for_users_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_messages_for_chat_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/send_chat_request_response_usecase.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_page_event.dart';
+
 part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
-  GetChatsForUser _getChatsForUser;
-  GetMessagesForChat _getMessagesForChat;
-  UserChatsForChat _getUserChatForChat;
-  SendChatRequestResponse _sendChatRequestResponse;
+  GetChatsForUserUseCase _getChatsForUser;
+  GetMessagesForChatUseCase _getMessagesForChat;
+  UserChatsForChatUseCase _getUserChatForChat;
+  SendChatRequestResponseUseCase _sendChatRequestResponse;
   GetAuthenticatedUser _getAuthenticatedUser;
-  SendChatMessage _sendMessage;
+  SendChatMessageUseCase _sendMessage;
   String _chatPartnerId;
   AppUserRepository _appUserRepository;
   AuthenticationRepository _authenticationRepository;

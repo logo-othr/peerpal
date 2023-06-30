@@ -5,17 +5,18 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_for_users.dart';
+import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_chats_for_users_usecase.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_request_list_event.dart';
+
 part 'chat_request_list_state.dart';
 
 class ChatRequestListBloc
     extends Bloc<ChatRequestListEvent, ChatRequestListState> {
-  final GetChatsForUser _getChatsForUser;
-  final GetChatRequestForUser _getChatRequestForUser;
+  final GetChatsForUserUseCase _getChatsForUser;
+  final GetChatRequestForUserUseCase _getChatRequestForUser;
   final StreamController<List<Chat>> _chatStreamController =
       BehaviorSubject<List<Chat>>();
   final StreamController<List<UserChat>> _userFriendRequestStreamController =

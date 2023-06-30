@@ -35,9 +35,9 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_for_users.dart';
-import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat.dart';
+import 'package:peerpal/chat/domain/usecases/get_chat_requests_for_user_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_chats_for_users_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat_usecase.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -103,20 +103,21 @@ Future<void> setupDependencies() async {
     () => ActivityFeedBloc(),
   );
   sl.registerFactory(
-        () => ActivityRequestListBloc(),
+    () => ActivityRequestListBloc(),
   );
   sl.registerFactory(
-        () => ActivityJoinedListBloc(),
+    () => ActivityJoinedListBloc(),
   );
 
   // UseCase
-  sl.registerLazySingleton(() => GetChatsForUser(sl(), sl()));
-  sl.registerLazySingleton(() => UserChatsForChat(sl(), sl(), sl()));
-  sl.registerLazySingleton(() => GetChatRequestForUser(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => GetChatsForUserUseCase(sl(), sl()));
+  sl.registerLazySingleton(() => UserChatsForChatUseCase(sl(), sl(), sl()));
+  sl.registerLazySingleton(
+      () => GetChatRequestForUserUseCase(sl(), sl(), sl()));
 
   // Repo
   sl.registerLazySingleton<ChatRepository>(
-        () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
+    () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
   );
 
   // =============== User ===============
