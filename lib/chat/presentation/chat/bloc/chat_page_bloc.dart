@@ -8,8 +8,8 @@ import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
+import 'package:peerpal/chat/domain/usecases/get_chat_messages_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_for_users_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_messages_for_chat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_userchat_for_chat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_request_response_usecase.dart';
@@ -19,12 +19,11 @@ import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_u
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_page_event.dart';
-
 part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   GetChatsForUserUseCase _getChatsForUser;
-  GetMessagesForChatUseCase _getMessagesForChat;
+  GetChatMessagesUseCase _getMessagesForChat;
   UserChatsForChatUseCase _getUserChatForChat;
   SendChatRequestResponseUseCase _sendChatRequestResponse;
   GetAuthenticatedUser _getAuthenticatedUser;
