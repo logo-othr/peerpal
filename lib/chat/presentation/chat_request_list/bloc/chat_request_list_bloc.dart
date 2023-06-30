@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_for_users_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_request_list_event.dart';
@@ -14,7 +14,7 @@ part 'chat_request_list_state.dart';
 
 class ChatRequestListBloc
     extends Bloc<ChatRequestListEvent, ChatRequestListState> {
-  final GetChatsForUserUseCase _getChatsForUser;
+  final GetChatsUseCase _getChatsForUser;
   final GetChatRequestsUseCase _getChatRequestForUser;
   final StreamController<List<Chat>> _chatStreamController =
       BehaviorSubject<List<Chat>>();
