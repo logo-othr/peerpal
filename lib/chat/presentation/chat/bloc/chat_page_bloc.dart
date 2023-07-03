@@ -74,7 +74,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   }
 
   Future<PeerPALUser> _getCurrentChatPartner() async {
-    return _appUserRepository.getUser(_chatPartnerId);
+    return await _appUserRepository.getUser(_chatPartnerId);
   }
 
   @override
@@ -132,6 +132,38 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         userId: this._chatPartnerId,
         userChat: currentChat,
         appUser: appUser);
+  }
+}
+
+class UserChatsUpdatedHandler {
+  Future<PeerPALUser> Function() _getCurrentChatPartner;
+  UserChat? Function(List<UserChat> chats) _findCurrentChat;
+  Future<ChatLoadedState> Function(
+      PeerPALUser chatPartner, UserChat currentChat) _yieldChatLoadedState;
+  GetAuthenticatedUser _getAuthenticatedUser;
+
+  UserChatsUpdatedHandler({
+    required Future<PeerPALUser> Function() getCurrentChatPartner,
+    required UserChat? Function(List<UserChat> chats) findCurrentChat,
+    required Future<ChatLoadedState> Function(
+            PeerPALUser chatPartner, UserChat currentChat)
+        yieldChatLoadedState,
+    required GetAuthenticatedUser getAuthenticatedUser,
+  })  : this._getCurrentChatPartner = getCurrentChatPartner,
+        this._findCurrentChat = findCurrentChat,
+        this._yieldChatLoadedState = yieldChatLoadedState,
+        this._getAuthenticatedUser = getAuthenticatedUser {}
+
+  Stream<ChatPageState> handle(UserChatsUpdatedEvent event) async* {
+    PeerPALUser chatPartner = await _getCurrentChatPartner();
+    UserChat? currentChat = _findCurrentChat(event.chats);
+
+    if (currentChat != null) {
+      yield await _yieldChatLoadedState(chatPartner, currentChat);
+    } else {
+      yield WaitingForChatState(
+          chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
+    }
   }
 }
 
