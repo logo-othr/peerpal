@@ -28,15 +28,15 @@ class ChatPage extends StatelessWidget {
       onWillPop: () async => true,
       child: BlocProvider<ChatPageBloc>(
         create: (context) => ChatPageBloc(
-          getMessagesForChat:
+          getMessagesForChatUseCase:
               GetChatMessagesUseCase(context.read<ChatRepository>()),
-          getChatsForUser: sl<GetChatsUseCase>(),
+          getChatsForUserUseCase: sl<GetChatsUseCase>(),
           appUserRepository: context.read<AppUserRepository>(),
           authenticationRepository: context.read<AuthenticationRepository>(),
-          getUserChatForChat: sl<ChatToUserChatUseCase>(),
+          getUserChatForChatUseCase: sl<ChatToUserChatUseCase>(),
           getAuthenticatedUser: sl<GetAuthenticatedUser>(),
           sendMessage: SendChatMessageUseCase(context.read<ChatRepository>()),
-          sendChatRequestResponse:
+          sendChatRequestResponseUseCase:
               SendChatRequestResponseUseCase(context.read<ChatRepository>()),
           chatPartnerId: userId,
         )..add(LoadChatPageEvent(userChat)),
