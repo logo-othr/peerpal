@@ -6,7 +6,7 @@ import 'package:peerpal/app/data/support_videos/resources/support_video_links.da
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/view/chat_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_page.dart';
 import 'package:peerpal/chat/presentation/custom_chat_list_item_user.dart';

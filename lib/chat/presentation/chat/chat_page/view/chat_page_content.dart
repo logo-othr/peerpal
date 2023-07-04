@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app_logger.dart';
-import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_loaded.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_loading.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_waiting_for_first_message.dart';

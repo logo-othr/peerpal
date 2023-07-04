@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
-import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 

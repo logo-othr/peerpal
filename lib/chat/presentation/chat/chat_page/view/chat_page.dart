@@ -8,8 +8,8 @@ import 'package:peerpal/chat/domain/usecases/get_chat_messages_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_request_response_usecase.dart';
-import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page_content.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/view/chat_page_content.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
@@ -20,7 +20,6 @@ class ChatPage extends StatelessWidget {
 
   const ChatPage({required this.userId, this.userChat, Key? key})
       : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {

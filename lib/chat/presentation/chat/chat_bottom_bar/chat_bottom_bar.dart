@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/presentation/chat/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/cubit/chat_bottom_bar_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
-import 'package:provider/provider.dart';
 
 class ChatBottomBar extends StatefulWidget {
   final String currentUserId;
@@ -34,19 +33,50 @@ class ChatBottomBar extends StatefulWidget {
 }
 
 class _ChatBottomBarState extends State<ChatBottomBar> {
+  late final ChatBottomBarCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = ChatBottomBarCubit(
+      chatRepository: sl<ChatRepository>(),
+      currentUserId: widget.currentUserId,
+      userChat: widget.userChat,
+      appUser: widget.appUser,
+      chatPartner: widget.chatPartner,
+    );
+    _cubit.loadChat();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (isChatRequestNotAccepted && isChatNotStartedByAppUser) {
-      return _chatRequestReplyButtons(context, widget.currentUserId);
-    } else {
-      return _chatBottomBar();
-    }
+    return BlocBuilder<ChatBottomBarCubit, ChatBottomBarState>(
+      bloc: _cubit,
+      builder: (context, state) {
+        if (state is ChatBottomBarLoadingState) {
+          return CustomLoadingIndicator(text: "Chat wird geladen..");
+        } else if (state is ChatBottomBarLoadedState) {
+          if (state.isChatRequestNotAccepted &&
+              state.isChatNotStartedByAppUser) {
+            return _chatRequestReplyButtons(context);
+          } else if (state.messageCount == 0) {
+            return _chatDoesNotExist();
+          } else {
+            return _bottomBarContent();
+          }
+        } else if (state is ChatBottomBarErrorState) {
+          return Text('Error: ${state.errorMessage}');
+        } else {
+          return Container(); // fallback if none of the above states match
+        }
+      },
+    );
   }
 
   Widget _chatBottomBar() {
     return StreamBuilder<int>(
       stream:
-          sl<ChatRepository>().messageCountForChat(widget.userChat.chat.chatId),
+      sl<ChatRepository>().messageCountForChat(widget.userChat.chat.chatId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return CustomLoadingIndicator(text: "Chat wird geladen..");
@@ -97,10 +127,7 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
     );
   }
 
-  Widget _chatRequestReplyButtons(BuildContext context, String currentUserId) {
-    // ToDo: dispatch event?
-    ChatPageBloc bloc = context.read<ChatPageBloc>();
-    ChatLoadedState currentState = bloc.state as ChatLoadedState;
+  Widget _chatRequestReplyButtons(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
       child: Container(
@@ -109,21 +136,14 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
             CustomPeerPALButton(
                 text: "Annehmen",
                 onPressed: () {
-                  context.read<ChatRepository>().sendChatRequestResponse(
-                      currentState.chatPartner.id!,
-                      true,
-                      currentState.userChat.chat.chatId);
+                  _cubit.sendChatRequestResponse(true);
                   Navigator.pop(context);
                 }),
             SizedBox(height: 8),
             CustomPeerPALButton(
                 text: "Ablehnen",
                 onPressed: () {
-                  context.read<ChatRepository>().sendChatRequestResponse(
-                      currentState.chatPartner.id!,
-                      false,
-                      currentState.userChat.chat.chatId);
-                  // context.read<ChatListBloc>().add(ChatListLoaded());
+                  _cubit.sendChatRequestResponse(false);
                   Navigator.pop(context);
                 }),
           ],
