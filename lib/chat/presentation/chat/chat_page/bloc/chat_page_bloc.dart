@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
@@ -12,7 +11,6 @@ import 'package:peerpal/chat/domain/usecases/chat_to_userchat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_messages_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/send_chat_request_response_usecase.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
@@ -20,17 +18,14 @@ import 'package:rxdart/rxdart.dart';
 
 part 'chat_page_event.dart';
 part 'chat_page_state.dart';
-
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   GetChatsUseCase _getChatsForUserUseCase;
   GetChatMessagesUseCase _getMessagesForChatUseCase;
   ChatToUserChatUseCase _getUserChatForChatUseCase;
-  SendChatRequestResponseUseCase _sendChatRequestResponseUseCase;
   GetAuthenticatedUser _getAuthenticatedUser;
   SendChatMessageUseCase _sendMessageUseCase;
   String _chatPartnerId;
   AppUserRepository _appUserRepository;
-  AuthenticationRepository _authenticationRepository;
   StreamController<List<ChatMessage>> _chatMessageStreamController =
       new BehaviorSubject();
 
@@ -43,7 +38,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       required getChatsForUserUseCase,
       required getUserChatForChatUseCase,
       required sendMessage,
-      required sendChatRequestResponseUseCase,
       required getAuthenticatedUser,
       required appUserRepository,
       required authenticationRepository,
@@ -52,10 +46,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         this._getChatsForUserUseCase = getChatsForUserUseCase,
         this._getUserChatForChatUseCase = getUserChatForChatUseCase,
         this._sendMessageUseCase = sendMessage,
-        this._sendChatRequestResponseUseCase = sendChatRequestResponseUseCase,
         this._getAuthenticatedUser = getAuthenticatedUser,
         this._appUserRepository = appUserRepository,
-        this._authenticationRepository = authenticationRepository,
         this._chatPartnerId = chatPartnerId,
         super(ChatPageInitial()) {
     this._loadChatPageHandler = LoadChatPageHandler(

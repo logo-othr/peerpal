@@ -76,7 +76,7 @@ class _ChatBottomBarState extends State<ChatBottomBar> {
   Widget _chatBottomBar() {
     return StreamBuilder<int>(
       stream:
-      sl<ChatRepository>().messageCountForChat(widget.userChat.chat.chatId),
+          sl<ChatRepository>().messageCountForChat(widget.userChat.chat.chatId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return CustomLoadingIndicator(text: "Chat wird geladen..");
