@@ -34,7 +34,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   StreamController<List<ChatMessage>> _chatMessageStreamController =
       new BehaviorSubject();
 
-  late final ChatPageHandler _chatPageHandler;
+  late final LoadChatPageHandler _loadChatPageHandler;
   late final SendMessageHandler _sendMessageHandler;
   late final UserChatsUpdatedHandler _userChatsUpdateHandler;
 
@@ -58,7 +58,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         this._authenticationRepository = authenticationRepository,
         this._chatPartnerId = chatPartnerId,
         super(ChatPageInitial()) {
-    this._chatPageHandler = ChatPageHandler(
+    this._loadChatPageHandler = LoadChatPageHandler(
       addEventToBloc: add,
       chatMessageStreamController: _chatMessageStreamController,
       getCurrentChatPartner: _getCurrentChatPartner,
@@ -93,7 +93,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   Stream<ChatPageState> mapEventToState(ChatPageEvent event) async* {
     try {
       if (event is LoadChatPageEvent) {
-        yield* _chatPageHandler.handle(
+        yield* _loadChatPageHandler.handle(
           event,
         );
       } else if (event is SendChatRequestResponseEvent) {
@@ -174,7 +174,7 @@ class SendMessageHandler {
   }
 }
 
-class ChatPageHandler {
+class LoadChatPageHandler {
   final Function(ChatPageEvent) addEventToBloc;
   final StreamController<List<ChatMessage>> chatMessageStreamController;
 
@@ -185,7 +185,7 @@ class ChatPageHandler {
   final ChatToUserChatUseCase getUserChatForChat;
   final String chatPartnerId;
 
-  ChatPageHandler({
+  LoadChatPageHandler({
     required this.addEventToBloc,
     required this.chatMessageStreamController,
     required this.getCurrentChatPartner,
