@@ -19,10 +19,10 @@ class SendChatRequestResponseEvent extends ChatPageEvent {
   SendChatRequestResponseEvent(this.response, this.chatId);
 }
 
-class UserChatsUpdatedEvent extends ChatPageEvent {
+class ChatListUpdatedEvent extends ChatPageEvent {
   final List<UserChat> chats;
 
-  UserChatsUpdatedEvent(this.chats);
+  ChatListUpdatedEvent(this.chats);
 }
 
 class SendMessageEvent extends ChatPageEvent {
@@ -37,10 +37,3 @@ class SendMessageEvent extends ChatPageEvent {
       required this.payload,
       required this.type});
 }
-
-/*class UploadImageEvent extends ChatPageEvent {
-  final XFile? image;
-  final UserChat? userChat;
-
-  UploadImageEvent({required this.image, required this.userChat});
-}*/

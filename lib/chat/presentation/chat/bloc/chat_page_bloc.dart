@@ -31,8 +31,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   String _chatPartnerId;
   AppUserRepository _appUserRepository;
   AuthenticationRepository _authenticationRepository;
-  StreamController<List<ChatMessage>> _chatMessageStream =
-      new BehaviorSubject();
   StreamController<List<ChatMessage>> _chatMessageStreamController =
       new BehaviorSubject();
 
@@ -76,14 +74,14 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
 
     this._userChatsUpdateHandler = UserChatsUpdatedHandler(
         getCurrentChatPartner: _getCurrentChatPartner,
-        findCurrentChat: _findCurrentChat,
-        yieldChatLoadedState: _yieldChatLoadedState,
-        getAuthenticatedUser: getAuthenticatedUser);
+        getChatMessagesUseCase: _getMessagesForChatUseCase,
+        getAuthenticatedUser: getAuthenticatedUser,
+        chatPartnerId: _chatPartnerId);
   }
 
   @override
   Future<void> close() {
-    _chatMessageStream.close();
+    _chatMessageStreamController.close();
     return super.close();
   }
 
@@ -106,7 +104,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
             event.chatId);
       } else if (event is SendMessageEvent) {
         yield* _sendMessageHandler.handle(event);
-      } else if (event is UserChatsUpdatedEvent) {
+      } else if (event is ChatListUpdatedEvent) {
         yield* _userChatsUpdateHandler.handle(event);
       }
     } on Exception {
@@ -115,63 +113,40 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     }
   }
 
-  Stream<ChatPageState> _handleUserChatsUpdatedEvent(
-      UserChatsUpdatedEvent event) async* {
-    PeerPALUser chatPartner = await _getCurrentChatPartner();
-    UserChat? currentChat = _findCurrentChat(event.chats);
-
-    if (currentChat != null) {
-      yield await _yieldChatLoadedState(chatPartner, currentChat);
-    } else {
-      yield WaitingForChatState(
-          chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
-    }
-  }
-
-  UserChat? _findCurrentChat(List<UserChat> chats) {
-    return chats.firstWhere((chat) => chat.user.id == _chatPartnerId);
-  }
-
-  Future<ChatLoadedState> _yieldChatLoadedState(
-      PeerPALUser chatPartner, UserChat currentChat) async {
-    Stream<List<ChatMessage>> chatMessageStream =
-        _getMessagesForChatUseCase(currentChat);
-    PeerPALUser appUser = await _getAuthenticatedUser();
-
-    return ChatLoadedState(
-        chatPartner: chatPartner,
-        messages: chatMessageStream,
-        userId: this._chatPartnerId,
-        userChat: currentChat,
-        appUser: appUser);
-  }
 }
 
 class UserChatsUpdatedHandler {
   Future<PeerPALUser> Function() _getCurrentChatPartner;
-  UserChat? Function(List<UserChat> chats) _findCurrentChat;
-  Future<ChatLoadedState> Function(
-      PeerPALUser chatPartner, UserChat currentChat) _yieldChatLoadedState;
+  GetChatMessagesUseCase _getChatMessagesUseCase;
+  String _chatPartnerId;
   GetAuthenticatedUser _getAuthenticatedUser;
 
   UserChatsUpdatedHandler({
     required Future<PeerPALUser> Function() getCurrentChatPartner,
-    required UserChat? Function(List<UserChat> chats) findCurrentChat,
-    required Future<ChatLoadedState> Function(
-            PeerPALUser chatPartner, UserChat currentChat)
-        yieldChatLoadedState,
+    required GetChatMessagesUseCase getChatMessagesUseCase,
     required GetAuthenticatedUser getAuthenticatedUser,
+    required String chatPartnerId,
   })  : this._getCurrentChatPartner = getCurrentChatPartner,
-        this._findCurrentChat = findCurrentChat,
-        this._yieldChatLoadedState = yieldChatLoadedState,
-        this._getAuthenticatedUser = getAuthenticatedUser {}
+        this._getChatMessagesUseCase = getChatMessagesUseCase,
+        this._getAuthenticatedUser = getAuthenticatedUser,
+        this._chatPartnerId = chatPartnerId {}
 
-  Stream<ChatPageState> handle(UserChatsUpdatedEvent event) async* {
+  Stream<ChatPageState> handle(ChatListUpdatedEvent event) async* {
     PeerPALUser chatPartner = await _getCurrentChatPartner();
-    UserChat? currentChat = _findCurrentChat(event.chats);
+    UserChat? currentChat = event.chats
+        .firstWhere((chat) => chat.user.id == _chatPartnerId, orElse: null);
 
     if (currentChat != null) {
-      yield await _yieldChatLoadedState(chatPartner, currentChat);
+      Stream<List<ChatMessage>> chatMessageStream =
+          _getChatMessagesUseCase(currentChat);
+      PeerPALUser appUser = await _getAuthenticatedUser();
+
+      yield ChatLoadedState(
+          chatPartner: chatPartner,
+          messages: chatMessageStream,
+          userId: this._chatPartnerId,
+          userChat: currentChat,
+          appUser: appUser);
     } else {
       yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await _getAuthenticatedUser());
@@ -257,7 +232,7 @@ class ChatPageHandler {
 
     userChatsStreamController.addStream(userChatsUpdatesStream);
     userChatsStreamController.listen((updatedChats) {
-      addEventToBloc(UserChatsUpdatedEvent(updatedChats));
+      addEventToBloc(ChatListUpdatedEvent(updatedChats));
     });
   }
 
