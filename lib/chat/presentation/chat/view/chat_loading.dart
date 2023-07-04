@@ -16,6 +16,19 @@ class ChatLoading extends StatelessWidget {
   })  : this._state = state,
         super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _chatHeaderBar(context, _state.chatPartner),
+        FriendRequestButton(
+          chatPartner: _state.chatPartner,
+          appUserRepository: sl<AppUserRepository>(),
+        ),
+      ],
+    );
+  }
+
   Widget _chatHeaderBar(BuildContext context, PeerPALUser chatPartner) {
     return ChatHeaderBar(
         chatPartner: chatPartner,
@@ -28,18 +41,5 @@ class ChatLoading extends StatelessWidget {
                 ),
               ),
             ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _chatHeaderBar(context, _state.chatPartner),
-        FriendRequestButton(
-          chatPartner: _state.chatPartner,
-          appUserRepository: sl<AppUserRepository>(),
-        ),
-      ],
-    );
   }
 }

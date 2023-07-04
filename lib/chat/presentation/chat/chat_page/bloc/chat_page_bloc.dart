@@ -18,6 +18,7 @@ import 'package:rxdart/rxdart.dart';
 
 part 'chat_page_event.dart';
 part 'chat_page_state.dart';
+
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   GetChatsUseCase _getChatsForUserUseCase;
   GetChatMessagesUseCase _getMessagesForChatUseCase;
@@ -85,9 +86,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   Stream<ChatPageState> mapEventToState(ChatPageEvent event) async* {
     try {
       if (event is LoadChatPageEvent) {
-        yield* _loadChatPageHandler.handle(
-          event,
-        );
+        yield* _loadChatPageHandler.handle(event);
       } else if (event is SendMessageEvent) {
         yield* _sendMessageHandler.handle(event);
       } else if (event is ChatListUpdatedEvent) {
