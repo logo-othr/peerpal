@@ -53,13 +53,11 @@ class ChatLoaded extends StatelessWidget {
   Future<void> _sendTextMessage(PeerPALUser chatPartner, String? chatId,
       String content, BuildContext context) async {
     _textEditingController.clear();
-    context.read<ChatPageBloc>()
-      ..add(SendMessageEvent(
+    context.read<ChatLoadedCubit>().sendMessage(
         chatPartner: chatPartner,
         chatId: chatId,
         payload: content,
-        type: MessageType.text,
-      ));
+        messageType: MessageType.text);
   }
 
   Future<XFile> pickPictureFromGallery() async {
