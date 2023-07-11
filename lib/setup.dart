@@ -38,6 +38,8 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/chat_to_userchat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -93,6 +95,10 @@ Future<void> setupDependencies() async {
       () => AuthServiceFirebase(firebaseAuth: sl()));
   // =============== Chat ===============
   // Bloc
+
+  sl.registerFactory(
+    () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
+  );
   sl.registerFactory(
     () => ChatListBloc(sl(), sl(), sl()),
   );
@@ -106,17 +112,19 @@ Future<void> setupDependencies() async {
     () => ActivityRequestListBloc(),
   );
   sl.registerFactory(
-    () => ActivityJoinedListBloc(),
+        () => ActivityJoinedListBloc(),
   );
 
   // UseCase
   sl.registerLazySingleton(() => GetChatsUseCase(sl(), sl()));
   sl.registerLazySingleton(() => ChatToUserChatUseCase(sl(), sl(), sl()));
   sl.registerLazySingleton(() => GetChatRequestsUseCase(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
+
 
   // Repo
   sl.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
+        () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
   );
 
   // =============== User ===============
