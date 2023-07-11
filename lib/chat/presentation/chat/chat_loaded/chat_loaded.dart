@@ -9,6 +9,7 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_bottom_bar.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
@@ -75,13 +76,11 @@ class ChatLoaded extends StatelessWidget {
       String content, BuildContext context) async {
     var image = await pickPictureFromGallery();
     String url = await postPicture(image, _state.userChat);
-    context.read<ChatPageBloc>()
-      ..add(SendMessageEvent(
+    context.read<ChatLoadedCubit>().sendMessage(
         chatPartner: chatPartner,
         chatId: chatId,
         payload: url,
-        type: MessageType.image,
-      ));
+        messageType: MessageType.image);
   }
 
   Future<String> postPicture(XFile? chatImage, UserChat? userChat) async {
