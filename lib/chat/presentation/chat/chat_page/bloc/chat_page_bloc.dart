@@ -31,7 +31,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       new BehaviorSubject();
 
   late final LoadChatPageHandler _loadChatPageHandler;
-  late final SendMessageHandler _sendMessageHandler;
   late final UserChatsUpdatedHandler _userChatsUpdateHandler;
 
   ChatPageBloc(
@@ -62,9 +61,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       chatPartnerId: _chatPartnerId,
     );
 
-    this._sendMessageHandler =
-        SendMessageHandler(sendChatMessageUseCase: _sendMessageUseCase);
-
     this._userChatsUpdateHandler = UserChatsUpdatedHandler(
         getCurrentChatPartner: _getCurrentChatPartner,
         getChatMessagesUseCase: _getMessagesForChatUseCase,
@@ -87,8 +83,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     try {
       if (event is LoadChatPageEvent) {
         yield* _loadChatPageHandler.handle(event);
-      } else if (event is SendMessageEvent) {
-        yield* _sendMessageHandler.handle(event);
       } else if (event is ChatListUpdatedEvent) {
         yield* _userChatsUpdateHandler.handle(event);
       }
@@ -139,25 +133,6 @@ class UserChatsUpdatedHandler {
   }
 }
 
-class SendMessageHandler {
-  SendChatMessageUseCase _sendMessage;
-
-  SendMessageHandler({required SendChatMessageUseCase sendChatMessageUseCase})
-      : this._sendMessage = sendChatMessageUseCase;
-
-  Stream<ChatPageState> handle(
-    SendMessageEvent event,
-  ) async* {
-    if (event.payload.trim() != '') {
-      await _sendMessage(
-        event.chatPartner,
-        event.chatId,
-        event.payload,
-        event.type,
-      );
-    }
-  }
-}
 
 class LoadChatPageHandler {
   final Function(ChatPageEvent) addEventToBloc;
