@@ -27,16 +27,6 @@ class ChatPageContent extends StatelessWidget {
           } else if (state is ChatLoadingState) {
             return ChatLoading(state: state);
           } else if (state is ChatLoadedState) {
-            /*
-            else if (state is ChatLoadedState) {
-            return BlocProvider<ChatLoadedCubit>(
-              create: (context) => ChatLoadedCubit(
-              ),
-              child: ChatLoaded(focus: _focus, textEditingController: _textEditingController),
-            );
-          }
-
-             */
 
             return BlocProvider(
               create: (context) => sl<ChatLoadedCubit>(),
