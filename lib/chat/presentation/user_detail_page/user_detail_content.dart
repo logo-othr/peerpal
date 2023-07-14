@@ -16,10 +16,10 @@ import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 import 'package:peerpal/widgets/custom_single_table.dart';
 import 'package:peerpal/widgets/friend_request_peerpal_button.dart';
 
-class UserDetailContent extends StatelessWidget {
+class UserInformationContent extends StatelessWidget {
   final bool hasMessageButton;
 
-  UserDetailContent({
+  UserInformationContent({
     required this.hasMessageButton,
     Key? key,
   }) : super(key: key);

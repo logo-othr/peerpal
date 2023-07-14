@@ -33,7 +33,7 @@ class CustomFriendRequestCard extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              UserDetailPage(userInformation.id!)));
+                              UserInformationPage(userInformation.id!)));
                 },
                 child: Material(
                     borderRadius: const BorderRadius.all(Radius.circular(25.0)),

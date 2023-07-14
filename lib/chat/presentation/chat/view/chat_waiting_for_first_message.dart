@@ -60,7 +60,7 @@ class WaitingForFirstMessage extends StatelessWidget {
         onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UserDetailPage(
+                builder: (context) => UserInformationPage(
                   chatPartner.id!,
                   hasMessageButton: false,
                 ),

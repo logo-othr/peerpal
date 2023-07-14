@@ -4,15 +4,16 @@ import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_content.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 
-class UserDetailPage extends StatelessWidget {
+class UserInformationPage extends StatelessWidget {
   final String userId;
   final bool hasMessageButton;
 
-  const UserDetailPage(this.userId, {Key? key, this.hasMessageButton = true})
+  const UserInformationPage(this.userId,
+      {Key? key, this.hasMessageButton = true})
       : super(key: key);
 
   static MaterialPage<void> page(String userId) {
-    return MaterialPage<void>(child: UserDetailPage(userId));
+    return MaterialPage<void>(child: UserInformationPage(userId));
   }
 
   @override
@@ -23,7 +24,7 @@ class UserDetailPage extends StatelessWidget {
         create: (context) =>
             UserDetailBloc(userId, context.read<AppUserRepository>())
               ..add(LoadUserDetail()),
-        child: UserDetailContent(hasMessageButton: hasMessageButton),
+        child: UserInformationContent(hasMessageButton: hasMessageButton),
       ),
     );
   }

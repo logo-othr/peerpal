@@ -132,7 +132,7 @@ class _ActivityPublicOverviewContentState
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  UserDetailPage(
+                                                  UserInformationPage(
                                                       activity.creatorId!)));
                                     }),
                                 CustomSingleTable(

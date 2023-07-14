@@ -42,10 +42,10 @@ class ChatLoaded extends StatelessWidget {
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => UserDetailPage(
-              chatPartner.id!,
-              hasMessageButton: false,
-            ),
+            builder: (context) => UserInformationPage(
+                  chatPartner.id!,
+                  hasMessageButton: false,
+                ),
           ),
         ));
   }

@@ -227,7 +227,7 @@ if (user.discoverLocations == null ||
     return DiscoverUserListItem(
     onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return UserDetailPage(user.id ?? "");
+            return UserInformationPage(user.id ?? "");
           }));
         },
     imageLink: user.imagePath,

@@ -156,7 +156,7 @@ class FriendsOverviewContent extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              UserDetailPage(userInformation.id!)));
+                              UserInformationPage(userInformation.id!)));
                 },
                 child:
                     CustomFriendListItemUser(userInformation: userInformation),

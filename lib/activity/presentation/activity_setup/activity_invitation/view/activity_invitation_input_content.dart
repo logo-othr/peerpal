@@ -220,7 +220,7 @@ class _InviteFriendsContentState extends State<InviteFriendsContent> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserDetailPage(user.id!)));
+                          builder: (context) => UserInformationPage(user.id!)));
                 },
                 child: CustomActivityInviteFriendsListItem(
                   peerPALUser: user,
