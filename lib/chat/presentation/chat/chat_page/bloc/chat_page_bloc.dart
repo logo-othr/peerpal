@@ -4,13 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/domain/usecases/chat_to_userchat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_messages_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_users_chats.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
@@ -20,32 +17,26 @@ part 'chat_page_event.dart';
 part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
-  GetChatsUseCase _getChatsForUserUseCase;
   GetChatMessagesUseCase _getMessagesForChatUseCase;
-  ChatToUserChatUseCase _getUserChatForChatUseCase;
+
   GetAuthenticatedUser _getAuthenticatedUser;
-  SendChatMessageUseCase _sendMessageUseCase;
   String _chatPartnerId;
   AppUserRepository _appUserRepository;
   StreamController<List<ChatMessage>> _chatMessageStreamController =
       new BehaviorSubject();
-
+  GetUsersChats _getChats;
   late final LoadChatPageHandler _loadChatPageHandler;
   late final UserChatsUpdatedHandler _userChatsUpdateHandler;
 
   ChatPageBloc(
       {required getMessagesForChatUseCase,
-      required getChatsForUserUseCase,
-      required getUserChatForChatUseCase,
-      required sendMessage,
+      required getChats,
       required getAuthenticatedUser,
       required appUserRepository,
       required authenticationRepository,
       required chatPartnerId})
       : this._getMessagesForChatUseCase = getMessagesForChatUseCase,
-        this._getChatsForUserUseCase = getChatsForUserUseCase,
-        this._getUserChatForChatUseCase = getUserChatForChatUseCase,
-        this._sendMessageUseCase = sendMessage,
+        this._getChats = getChats,
         this._getAuthenticatedUser = getAuthenticatedUser,
         this._appUserRepository = appUserRepository,
         this._chatPartnerId = chatPartnerId,
@@ -56,9 +47,8 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       getCurrentChatPartner: _getCurrentChatPartner,
       getMessagesForChat: _getMessagesForChatUseCase,
       getAuthenticatedUser: _getAuthenticatedUser,
-      getChatsForUser: _getChatsForUserUseCase,
-      getUserChatForChat: _getUserChatForChatUseCase,
       chatPartnerId: _chatPartnerId,
+      getChats: _getChats,
     );
 
     this._userChatsUpdateHandler = UserChatsUpdatedHandler(
@@ -91,7 +81,6 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
           message: "Es ist ein unbekannter Fehler aufgetreten.");
     }
   }
-
 }
 
 class UserChatsUpdatedHandler {
@@ -133,7 +122,6 @@ class UserChatsUpdatedHandler {
   }
 }
 
-
 class LoadChatPageHandler {
   final Function(ChatPageEvent) addEventToBloc;
   final StreamController<List<ChatMessage>> chatMessageStreamController;
@@ -141,8 +129,7 @@ class LoadChatPageHandler {
   final Future<PeerPALUser> Function() getCurrentChatPartner;
   final GetChatMessagesUseCase getMessagesForChat;
   final GetAuthenticatedUser getAuthenticatedUser;
-  final GetChatsUseCase getChatsForUser;
-  final ChatToUserChatUseCase getUserChatForChat;
+  final GetUsersChats getChats;
   final String chatPartnerId;
 
   LoadChatPageHandler({
@@ -151,8 +138,7 @@ class LoadChatPageHandler {
     required this.getCurrentChatPartner,
     required this.getMessagesForChat,
     required this.getAuthenticatedUser,
-    required this.getChatsForUser,
-    required this.getUserChatForChat,
+    required this.getChats,
     required this.chatPartnerId,
   });
 
@@ -171,7 +157,7 @@ class LoadChatPageHandler {
     } else {
       yield WaitingForChatState(
           chatPartner: chatPartner, appUser: await getAuthenticatedUser());
-      startChatListUpdateListener(getChatsForUser, getUserChatForChat);
+      startChatListUpdateListener(getChats);
     }
   }
 
@@ -182,11 +168,8 @@ class LoadChatPageHandler {
     return chatMessageStreamController.stream;
   }
 
-  void startChatListUpdateListener(Function() getChatsForUser,
-      Function(Stream<List<Chat>>, bool) getUserChatForChat) {
-    Stream<List<Chat>> chatUpdatesStream = getChatsForUser();
-    Stream<List<UserChat>> userChatsUpdatesStream =
-        getUserChatForChat(chatUpdatesStream, false);
+  void startChatListUpdateListener(GetUsersChats getChats) {
+    Stream<List<UserChat>> userChatsUpdatesStream = getChats(false);
     BehaviorSubject<List<UserChat>> userChatsStreamController =
         BehaviorSubject();
 

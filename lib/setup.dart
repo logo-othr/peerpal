@@ -35,9 +35,8 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/chat/domain/usecases/chat_to_userchat_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_users_chats.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
@@ -100,7 +99,7 @@ Future<void> setupDependencies() async {
     () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
   );
   sl.registerFactory(
-    () => ChatListBloc(sl(), sl(), sl()),
+        () => ChatListBloc(sl(), sl()),
   );
   sl.registerFactory(
     () => ChatRequestListBloc(sl(), sl()),
@@ -112,19 +111,19 @@ Future<void> setupDependencies() async {
     () => ActivityRequestListBloc(),
   );
   sl.registerFactory(
-        () => ActivityJoinedListBloc(),
+    () => ActivityJoinedListBloc(),
   );
 
   // UseCase
-  sl.registerLazySingleton(() => GetChatsUseCase(sl(), sl()));
-  sl.registerLazySingleton(() => ChatToUserChatUseCase(sl(), sl(), sl()));
+  //sl.registerLazySingleton(() => GetChatsUseCase(sl(), sl()));
+  //sl.registerLazySingleton(() => ChatToUserChatUseCase(sl(), sl(), sl()));
+  sl.registerLazySingleton(() => GetUsersChats(sl(), sl(), sl()));
   sl.registerLazySingleton(() => GetChatRequestsUseCase(sl(), sl(), sl()));
   sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
 
-
   // Repo
   sl.registerLazySingleton<ChatRepository>(
-        () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
+    () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
   );
 
   // =============== User ===============

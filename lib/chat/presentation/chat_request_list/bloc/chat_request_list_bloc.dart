@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_chats_usecase.dart';
+import 'package:peerpal/chat/domain/usecases/get_users_chats.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'chat_request_list_event.dart';
@@ -14,16 +13,16 @@ part 'chat_request_list_state.dart';
 
 class ChatRequestListBloc
     extends Bloc<ChatRequestListEvent, ChatRequestListState> {
-  final GetChatsUseCase _getChatsForUser;
+  final GetUsersChats _getChats;
   final GetChatRequestsUseCase _getChatRequestForUser;
-  final StreamController<List<Chat>> _chatStreamController =
-      BehaviorSubject<List<Chat>>();
+  final StreamController<List<UserChat>> _chatStreamController =
+      BehaviorSubject<List<UserChat>>();
   final StreamController<List<UserChat>> _userFriendRequestStreamController =
       BehaviorSubject<List<UserChat>>();
   late StreamSubscription _chatSubscription;
   late StreamSubscription _chatRequestSubscription;
 
-  ChatRequestListBloc(this._getChatsForUser, this._getChatRequestForUser)
+  ChatRequestListBloc(this._getChats, this._getChatRequestForUser)
       : super(ChatRequestListState());
 
   @override
@@ -39,7 +38,7 @@ class ChatRequestListBloc
   Stream<ChatRequestListState> mapEventToState(
       ChatRequestListEvent event) async* {
     if (event is ChatRequestListLoaded) {
-      _chatSubscription = _getChatsForUser().listen((chatList) {
+      _chatSubscription = _getChats(false).listen((chatList) {
         _chatStreamController.add(chatList);
       });
 

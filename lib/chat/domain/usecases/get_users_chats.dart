@@ -4,16 +4,17 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 
-class ChatToUserChatUseCase {
+class GetUsersChats {
   final ChatRepository chatRepository;
   final AppUserRepository appUserRepository;
   final AuthenticationRepository authenticationRepository;
 
-  ChatToUserChatUseCase(this.chatRepository, this.appUserRepository,
-      this.authenticationRepository);
+  GetUsersChats(this.chatRepository, this.authenticationRepository,
+      this.appUserRepository);
 
-  Stream<List<UserChat>> call(
-      Stream<List<Chat>> chatStream, bool filter) async* {
+  Stream<List<UserChat>> call(bool filter) async* {
+    Stream<List<Chat>> chatStream = chatRepository.getChats();
+
     var appUserId = authenticationRepository.currentUser.id;
     await for (List<Chat> chatList in chatStream) {
       List<UserChat> userChats = <UserChat>[];
@@ -27,10 +28,24 @@ class ChatToUserChatUseCase {
     }
   }
 
-  bool shouldAddChat(Chat chat, String appUserId, bool filter) {
-    return (chat.chatRequestAccepted == true) ||
-        (chat.chatRequestAccepted == false && chat.startedBy == appUserId) ||
-        (!filter);
+  bool shouldAddChat(Chat chat, String appUserId, bool applyFilter) {
+    // If applyFilter is false, add chat without checking other conditions
+    if (!applyFilter) {
+      return true;
+    }
+
+    // If chat request is accepted, add chat
+    if (chat.chatRequestAccepted) {
+      return true;
+    }
+
+    // If chat request is not accepted but chat was started by the user, add it
+    if (!chat.chatRequestAccepted && chat.startedBy == appUserId) {
+      return true;
+    }
+
+    // If none of the conditions are met, do not add the chat
+    return false;
   }
 
   Future<UserChat> convertChatToUserChat(Chat chat, String appUserId) async {
