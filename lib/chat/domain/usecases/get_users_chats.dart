@@ -16,10 +16,18 @@ class GetUsersChats {
     Stream<List<Chat>> chatStream = chatRepository.getChats();
 
     var appUserId = authenticationRepository.currentUser.id;
+
     await for (List<Chat> chatList in chatStream) {
       List<UserChat> userChats = <UserChat>[];
       for (Chat chat in chatList) {
-        if (shouldAddChat(chat, appUserId, filter)) {
+        if (chat.chatRequestAccepted == true) {
+          UserChat userChat = await convertChatToUserChat(chat, appUserId);
+          userChats.add(userChat);
+        } else if (chat.chatRequestAccepted == false &&
+            chat.startedBy == appUserId) {
+          UserChat userChat = await convertChatToUserChat(chat, appUserId);
+          userChats.add(userChat);
+        } else if (filter == false) {
           UserChat userChat = await convertChatToUserChat(chat, appUserId);
           userChats.add(userChat);
         }
@@ -28,25 +36,7 @@ class GetUsersChats {
     }
   }
 
-  bool shouldAddChat(Chat chat, String appUserId, bool applyFilter) {
-    // If applyFilter is false, add chat without checking other conditions
-    if (!applyFilter) {
-      return true;
-    }
 
-    // If chat request is accepted, add chat
-    if (chat.chatRequestAccepted) {
-      return true;
-    }
-
-    // If chat request is not accepted but chat was started by the user, add it
-    if (!chat.chatRequestAccepted && chat.startedBy == appUserId) {
-      return true;
-    }
-
-    // If none of the conditions are met, do not add the chat
-    return false;
-  }
 
   Future<UserChat> convertChatToUserChat(Chat chat, String appUserId) async {
     var userIds = List<String>.from(chat.uids);
