@@ -121,7 +121,7 @@ class _ChatRow extends StatelessWidget {
                         userId: userChat.user.id!,
                       )));
         },
-        child: CustomChatListItemUser(
+        child: ChatListRow(
             userInformation: userChat,
             redDot: false), // TODO: Reimplement red dot
       ),

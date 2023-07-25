@@ -99,7 +99,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
                         userId: userInformation.user.id!,
                       )));
         },
-        child: CustomChatListItemUser(
+        child: ChatListRow(
           userInformation: userInformation,
           redDot: true,
         ),

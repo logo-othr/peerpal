@@ -8,11 +8,11 @@ import 'package:peerpal/widgets/custom_peerpal_text.dart';
 import '../domain/usecase_response/user_chat.dart';
 
 // ignore: must_be_immutable
-class CustomChatListItemUser extends StatelessWidget {
+class ChatListRow extends StatelessWidget {
   UserChat userInformation;
   bool redDot;
 
-  CustomChatListItemUser({required this.userInformation, required this.redDot});
+  ChatListRow({required this.userInformation, required this.redDot});
 
   @override
   Widget build(BuildContext context) {
