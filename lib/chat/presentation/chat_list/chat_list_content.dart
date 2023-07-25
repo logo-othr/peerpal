@@ -59,18 +59,17 @@ class _ChatContentBuilder extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         ChatRequestsBanner(),
-        ChatsBuilder(
-            listScrollController: listScrollController, context: context),
+        ChatList(listScrollController: listScrollController, context: context),
       ],
     );
   }
 }
 
-class ChatsBuilder extends StatelessWidget {
+class ChatList extends StatelessWidget {
   final ScrollController listScrollController;
   final BuildContext context;
 
-  const ChatsBuilder({
+  const ChatList({
     Key? key,
     required this.listScrollController,
     required this.context,
