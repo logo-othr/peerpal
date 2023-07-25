@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page/view/chat_page.dart';
+import 'package:peerpal/chat/presentation/chat_list_row.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
-import 'package:peerpal/chat/presentation/custom_chat_list_item_user.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
 
@@ -68,8 +67,21 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
               } else {
                 return Scrollbar(
                   child: ListView.builder(
-                    itemBuilder: (context, index) =>
-                        buildChatPartner(context, snapshot.data![index]),
+                    itemBuilder: (context, index) => ChatListRow(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(
+                              userChat: snapshot.data![index],
+                              userId: snapshot.data![index].user.id!,
+                            ),
+                          ),
+                        );
+                      },
+                      userInformation: snapshot.data![index],
+                      redDot: true,
+                    ),
                     itemCount: snapshot.data!.length,
                     controller: listScrollController,
                   ),
@@ -79,31 +91,6 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget buildChatPartner(BuildContext context, UserChat userInformation) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-              bottom:
-                  BorderSide(width: 1, color: PeerPALAppColor.secondaryColor))),
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatPage(
-                        userChat: userInformation,
-                        userId: userInformation.user.id!,
-                      )));
-        },
-        child: ChatListRow(
-          userInformation: userInformation,
-          redDot: true,
-        ),
-      ),
     );
   }
 }
