@@ -9,7 +9,7 @@ import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/app/presentation/app/bloc/app_bloc.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
+import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
@@ -502,7 +502,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               });
 
                               logger.d("Reset Chat");
-                              sl<ChatListBloc>()..add(ChatListLoaded());
+                              sl<ChatListCubit>().loadChatList();
                               await Future.delayed(Duration(seconds: 2));
 
                               setState(() {
