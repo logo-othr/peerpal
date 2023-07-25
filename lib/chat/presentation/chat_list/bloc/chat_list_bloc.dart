@@ -1,17 +1,10 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
-import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_users_chats.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'chat_list_event.dart';
 part 'chat_list_state.dart';
-
+/*
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   GetChatRequestsUseCase _getChatRequestForUser;
   StreamController<List<UserChat>> _userChatStreamController =
@@ -95,3 +88,4 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 }
+*/
