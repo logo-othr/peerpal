@@ -96,8 +96,8 @@ class ChatList extends StatelessWidget {
                       ),
                     );
                   },
-                  userInformation: state.chats[index],
-                  redDot: false),
+                  userChat: state.chats[index],
+                  newMessageIndicator: false),
               itemCount: state.chats.length,
               controller: listScrollController,
             ),

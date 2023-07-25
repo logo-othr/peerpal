@@ -79,8 +79,8 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
                           ),
                         );
                       },
-                      userInformation: snapshot.data![index],
-                      redDot: true,
+                      userChat: snapshot.data![index],
+                      newMessageIndicator: true,
                     ),
                     itemCount: snapshot.data!.length,
                     controller: listScrollController,
