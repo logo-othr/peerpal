@@ -1,5 +1,5 @@
 part of 'chat_list_bloc.dart';
-
+/*
 enum ChatListStatus { initial, success, error, chatClicked, streamUpdated }
 
 class ChatListState extends Equatable {
@@ -34,3 +34,4 @@ class ChatListState extends Equatable {
   @override
   List<Object> get props => [status, chats, chatRequests, redDot, lastClicked];
 }
+*/
