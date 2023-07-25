@@ -35,11 +35,13 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
 import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
+import 'package:peerpal/chat/domain/usecases/get_all_userchats.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/get_users_chats.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
-import 'package:peerpal/chat/presentation/chat_list/bloc/chat_list_bloc.dart';
+import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
+import 'package:peerpal/chat/presentation/chat_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
@@ -94,12 +96,22 @@ Future<void> setupDependencies() async {
       () => AuthServiceFirebase(firebaseAuth: sl()));
   // =============== Chat ===============
   // Bloc
+  sl.registerFactory(
+    () => ChatRequestsCubit(sl(), sl()),
+  );
+
+  sl.registerFactory(
+    () => GetAllUserChats(
+        chatRepository: sl(),
+        userRepository: sl(),
+        authenticationRepository: sl()),
+  );
 
   sl.registerFactory(
     () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
   );
   sl.registerFactory(
-        () => ChatListBloc(sl(), sl()),
+    () => ChatListCubit(sl(), sl()),
   );
   sl.registerFactory(
     () => ChatRequestListBloc(sl(), sl()),
