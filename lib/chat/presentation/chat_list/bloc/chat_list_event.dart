@@ -1,4 +1,4 @@
-part of 'chat_list_bloc.dart';
+/*part of 'chat_list_bloc.dart';
 
 @immutable
 abstract class ChatListEvent extends Equatable {
@@ -25,3 +25,4 @@ class ChatListStreamUpdate extends ChatListEvent {
 
   ChatListStreamUpdate(this.userChats);
 }
+*/

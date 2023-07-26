@@ -1,10 +1,8 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 
+/*
 part 'chat_list_event.dart';
 part 'chat_list_state.dart';
-/*
+
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   GetChatRequestsUseCase _getChatRequestForUser;
   StreamController<List<UserChat>> _userChatStreamController =
