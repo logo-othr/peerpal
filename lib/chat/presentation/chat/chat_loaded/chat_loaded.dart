@@ -10,7 +10,7 @@ import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_bottom_bar.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
 import 'package:peerpal/chat/presentation/chat/view/message_list.dart';
@@ -73,7 +73,7 @@ class ChatLoaded extends StatelessWidget {
   Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
       String content, BuildContext context) async {
     var image = await pickPictureFromGallery();
-    String url = await postPicture(image, _state.userChat);
+    String url = await postPicture(image, _state.currentChat);
     context.read<ChatLoadedCubit>().sendMessage(
         chatPartner: chatPartner,
         chatId: chatId,
@@ -111,30 +111,30 @@ class ChatLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _chatHeaderBar(context, _state.chatPartner),
+        _chatHeaderBar(context, _state.currentChat.user),
         FriendRequestButton(
-            chatPartner: _state.chatPartner,
+            chatPartner: _state.currentChat.user,
             appUserRepository: sl<AppUserRepository>()),
         MessageList(state: _state),
         ChatBottomBar(
-          appUser: _state.appUser,
+          appUser: _state.currentUser,
           chatMessageController: _textEditingController,
-          chatPartner: _state.chatPartner,
+          chatPartner: _state.currentChat!.user,
           chatMessageInputField: ChatMessageInputField(
             sendImageMessage: () => _sendImageMessage(
-                _state.chatPartner,
-                _state.userChat.chat.chatId,
+                _state.currentChat!.user,
+                _state.currentChat!.chat.chatId,
                 _textEditingController.text,
                 context),
             textEditingController: _textEditingController,
             focus: _focus,
             sendTextMessage: () => _sendTextMessage(
-                _state.chatPartner,
-                _state.userChat.chat.chatId,
+                _state.currentChat.user,
+                _state.currentChat.chat.chatId,
                 _textEditingController.text,
                 context),
           ),
-          userChat: _state.userChat,
+          userChat: _state.currentChat,
           currentUserId: sl<AuthenticationRepository>().currentUser.id,
         ),
       ],
