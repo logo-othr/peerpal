@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/view/friend_request_button.dart';
 import 'package:peerpal/chat/presentation/chat_header_bar.dart';
@@ -12,13 +12,13 @@ import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 
 class WaitingForFirstMessage extends StatelessWidget {
-  final WaitingForChatState _state;
+  final NewChatState _state;
   final TextEditingController _textEditingController;
   final FocusNode _focus;
 
   const WaitingForFirstMessage({
     Key? key,
-    required WaitingForChatState state,
+    required NewChatState state,
     required TextEditingController textEditingController,
     required FocusNode focusNode,
   })  : this._state = state,
@@ -42,7 +42,7 @@ class WaitingForFirstMessage extends StatelessWidget {
               "Schreibe eine Nachricht, um ${_state.chatPartner.name} eine Chat-Anfrage zu schicken"),
         )),
         Spacer(),
-        ChatButtons(_state.appUser.phoneNumber,
+        ChatButtons(_state.currentUser.phoneNumber,
             textEditingController: _textEditingController),
         ChatMessageInputField(
             textEditingController: _textEditingController,
@@ -71,12 +71,11 @@ class WaitingForFirstMessage extends StatelessWidget {
   Future<void> _sendChatMessage(PeerPALUser chatPartner, String? chatId,
       String content, BuildContext context) async {
     _textEditingController.clear();
-    context.read<ChatPageBloc>()
-      ..add(SendMessageEvent(
-        chatPartner: chatPartner,
-        chatId: chatId,
-        payload: content,
-        type: MessageType.text,
-      ));
+    context.read<ChatPageCubit>().sendMessage(
+          chatPartner: chatPartner,
+          chatId: chatId,
+          payload: content,
+          type: MessageType.text,
+        );
   }
 }
