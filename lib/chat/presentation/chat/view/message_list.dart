@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
-import 'package:peerpal/widgets/custom_loading_indicator.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MessageList extends StatefulWidget {
@@ -37,38 +36,19 @@ class _MessageListState extends State<MessageList> {
     _listScrollController.addListener(_scrollListener);
 
     return Flexible(
-        child: StreamBuilder<List<ChatMessage>>(
-      stream: widget.state.messages,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<ChatMessage>> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data!.isEmpty) {
-            return Container(
-                height: 100,
-                alignment: Alignment.center,
-                child: Text("Keine Nachrichten gefunden"));
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(10.0),
-            itemBuilder: (context, index) {
-              ChatMessage message = snapshot.data![index];
-              var isAppUserMessage =
-                  (message.userId == widget.state.appUser.id);
-              var imageUrl = isAppUserMessage
-                  ? widget.state.appUser.imagePath
-                  : widget.state.chatPartner.imagePath;
-              return buildChatMessage(message, isAppUserMessage, imageUrl!);
-            },
-            itemCount: snapshot.data?.length,
-            reverse: true,
-            controller: _listScrollController,
-          );
-        } else {
-          return Center(
-            child: CustomLoadingIndicator(text: "Lade Daten..."),
-          );
-        }
+        child: ListView.builder(
+      padding: const EdgeInsets.all(10.0),
+      itemBuilder: (context, index) {
+        ChatMessage message = state.messages[index];
+        var isAppUserMessage = (message.userId == widget.state.currentUser.id);
+        var imageUrl = isAppUserMessage
+            ? widget.state.currentUser.imagePath
+            : widget.state.chatPartner.imagePath;
+        return buildChatMessage(message, isAppUserMessage, imageUrl!);
       },
+      itemCount: state.messages.length,
+      reverse: true,
+      controller: _listScrollController,
     ));
   }
 
