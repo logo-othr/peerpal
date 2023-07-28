@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/bloc/chat_page_bloc.dart';
-import 'package:peerpal/chat/presentation/chat/view/chat_loading.dart';
+import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/view/chat_waiting_for_first_message.dart';
 import 'package:peerpal/setup.dart';
 
@@ -21,13 +20,13 @@ class ChatPageContent extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child:
-        BlocBuilder<ChatPageBloc, ChatPageState>(builder: (context, state) {
+        BlocBuilder<ChatPageCubit, ChatPageState>(
+            builder: (context, state) {
           if (state is ChatPageInitial) {
             return CircularProgressIndicator();
           } else if (state is ChatLoadingState) {
-            return ChatLoading(state: state);
+            return CircularProgressIndicator();
           } else if (state is ChatLoadedState) {
-
             return BlocProvider(
               create: (context) => sl<ChatLoadedCubit>(),
               child: ChatLoaded(
@@ -36,15 +35,17 @@ class ChatPageContent extends StatelessWidget {
                 textEditingController: _textEditingController,
               ),
             );
-          } else if (state is WaitingForChatState) {
+          } else if (state is NewChatState) {
             return WaitingForFirstMessage(
               state: state,
               focusNode: _focus,
               textEditingController: _textEditingController,
             );
-          } else if (state is ChatPageError) {
+          }
+          /* else if (state is ChatPageError) {
             return _chatContentError(state);
-          } else {
+          }*/
+          else {
             return CircularProgressIndicator();
           }
         }),
@@ -58,11 +59,11 @@ class ChatPageContent extends StatelessWidget {
     });
   }
 
-  Widget _chatContentError(ChatPageError state) {
+/*Widget _chatContentError(ChatPageError state) {
     return Container(
       child: Center(
         child: Text(state.message),
       ),
     );
-  }
+  }*/
 }
