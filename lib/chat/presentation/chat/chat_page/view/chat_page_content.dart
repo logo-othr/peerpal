@@ -4,7 +4,7 @@ import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
-import 'package:peerpal/chat/presentation/chat/view/chat_waiting_for_first_message.dart';
+import 'package:peerpal/chat/presentation/chat/widgets/chat_waiting_for_first_message.dart';
 import 'package:peerpal/setup.dart';
 
 class ChatPageContent extends StatelessWidget {
