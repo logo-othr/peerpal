@@ -126,9 +126,6 @@ Future<void> setupDependencies() async {
   );
 
   // UseCase
-  //sl.registerLazySingleton(() => GetChatsUseCase(sl(), sl()));
-  //sl.registerLazySingleton(() => ChatToUserChatUseCase(sl(), sl(), sl()));
-  sl.registerLazySingleton(() => GetUsersChats(sl(), sl(), sl()));
   sl.registerLazySingleton(() => GetChatRequestsUseCase(sl(), sl(), sl()));
   sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
 
