@@ -11,12 +11,12 @@ import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 
-class WaitingForFirstMessage extends StatelessWidget {
+class NewChat extends StatelessWidget {
   final NewChatState _state;
   final TextEditingController _textEditingController;
   final FocusNode _focus;
 
-  const WaitingForFirstMessage({
+  const NewChat({
     Key? key,
     required NewChatState state,
     required TextEditingController textEditingController,
