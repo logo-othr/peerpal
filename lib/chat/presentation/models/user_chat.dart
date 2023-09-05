@@ -9,10 +9,8 @@ class UserChat implements Equatable {
   final PeerPALUser user;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [chat, user];
 
   @override
-  // TODO: implement stringify
-  bool? get stringify => throw UnimplementedError();
+  bool? get stringify => true;
 }
