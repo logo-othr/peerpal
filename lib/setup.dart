@@ -37,7 +37,6 @@ import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/get_all_userchats.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/get_users_chats.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
