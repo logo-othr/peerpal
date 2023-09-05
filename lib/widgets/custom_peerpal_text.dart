@@ -16,10 +16,10 @@ class CustomPeerPALText extends StatelessWidget {
     return Text(
       text!,
       style: TextStyle(
-          fontSize: fontSize,
-          color: color,
-          fontWeight: fontWeight,
-          fontFamily: 'CustomPeerPalFontFamily'),
+        fontSize: fontSize,
+        color: color,
+        fontWeight: fontWeight,
+      ),
       textAlign: textAlign,
     );
   }

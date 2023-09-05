@@ -34,7 +34,6 @@ class CustomActivityInviteFriendsListItem extends StatelessWidget {
     var textStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
-      fontFamily: 'CustomPeerPalFontFamily',
       color: PeerPALAppColor.primaryColor,
     );
 
