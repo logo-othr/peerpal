@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
-import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_page/view/chat_page.dart';
+import 'package:peerpal/chat/presentation/chat_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list_row.dart';
-import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
 
@@ -27,7 +26,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
+    return BlocBuilder<ChatRequestsCubit, ChatRequestsState>(
         builder: (context, state) {
       return Scaffold(
         appBar: CustomAppBar('Nachrichtenanfragen',
@@ -35,61 +34,46 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
             actionButtonWidget: CustomSupportVideoDialog(
                 supportVideo:
                     SupportVideos.links[VideoIdentifier.chat_request]!)),
-        body: BlocBuilder<ChatRequestListBloc, ChatRequestListState>(
+        body: BlocBuilder<ChatRequestsCubit, ChatRequestsState>(
             builder: (context, state) {
-          if (state.status == ChatRequestListStatus.initial) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state.status == ChatRequestListStatus.success) {
-            return ChatRequestList(context);
+          if (state.status == ChatRequestsStatus.initial) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state.requests.isEmpty) {
+            return Container();
           } else {
-            return ChatRequestList(context);
+            return ChatRequestList(state);
           }
         }),
       );
     });
   }
 
-  Widget ChatRequestList(BuildContext context) {
+  Widget ChatRequestList(ChatRequestsState state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Expanded(
-          child: StreamBuilder<List<UserChat>>(
-            stream: context.read<ChatRequestListBloc>().state.chatRequests,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<UserChat>> snapshot) {
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text(
-                    "Es gibt keine Nachrichtenanfragen.",
-                  ),
-                );
-              } else {
-                return Scrollbar(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => ChatListRow(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatPage(
-                              userChat: snapshot.data![index],
-                              userId: snapshot.data![index].user.id!,
-                            ),
-                          ),
-                        );
-                      },
-                      userChat: snapshot.data![index],
-                      newMessageIndicator: true,
+            child: Scrollbar(
+          child: ListView.builder(
+            itemBuilder: (context, index) => ChatListRow(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(
+                      userChat: state.requests[index],
+                      userId: state.requests[index].user.id!,
                     ),
-                    itemCount: snapshot.data!.length,
-                    controller: listScrollController,
                   ),
                 );
-              }
-            },
+              },
+              userChat: context.read<ChatRequestsCubit>().state.requests[index],
+              newMessageIndicator: true,
+            ),
+            itemCount: context.read<ChatRequestsCubit>().state.requests.length,
+            controller: listScrollController,
           ),
-        ),
+        )),
       ],
     );
   }
