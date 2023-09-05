@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
@@ -51,9 +52,8 @@ class ChatPageCubit extends Cubit<ChatPageState> {
     _chatSubscription?.cancel();
     _chatSubscription = getAllUserChats().listen(
       (chats) async {
-        UserChat? currentChat = chats.firstWhere(
-            (chat) => chat.user.id == state.chatPartnerId,
-            orElse: null);
+        UserChat? currentChat = chats
+            .firstWhereOrNull((chat) => chat.user.id == state.chatPartnerId);
         if (currentChat != null) {
           PeerPALUser currentUser = await getAuthenticatedUser();
           PeerPALUser chatPartner =
@@ -101,5 +101,7 @@ class ChatPageCubit extends Cubit<ChatPageState> {
       {required PeerPALUser chatPartner,
       String? chatId,
       required String payload,
-      required MessageType type}) {}
+      required MessageType type}) {
+    chatRepository.sendChatMessage(chatPartner, chatId, payload, type);
+  }
 }
