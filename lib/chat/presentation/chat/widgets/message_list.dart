@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/models/chat_message.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MessageList extends StatefulWidget {

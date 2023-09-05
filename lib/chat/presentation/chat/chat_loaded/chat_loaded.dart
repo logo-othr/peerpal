@@ -10,7 +10,7 @@ import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_bottom_bar.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/friend_request_button.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/message_list.dart';

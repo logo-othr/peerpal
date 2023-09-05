@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/cubit/chat_page_cubit.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/chat_message_input_field.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/friend_request_button.dart';
 import 'package:peerpal/chat/presentation/chat_header_bar.dart';

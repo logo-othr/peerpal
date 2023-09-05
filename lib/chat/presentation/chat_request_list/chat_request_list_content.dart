@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
-import 'package:peerpal/chat/presentation/chat/chat_page/view/chat_page.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loading/view/chat_page.dart';
 import 'package:peerpal/chat/presentation/chat_list_row.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
