@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/chat/presentation/chat_request_list/bloc/chat_request_list_bloc.dart';
+import 'package:peerpal/chat/presentation/chat_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_content.dart';
 import 'package:peerpal/setup.dart';
 
@@ -14,12 +14,9 @@ class ChatRequestListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => true,
-      child: BlocProvider<ChatRequestListBloc>(
-        child: ChatRequestListContent(),
-        create: (context) =>
-            sl<ChatRequestListBloc>()..add(ChatRequestListLoaded()),
-      ),
-    );
+        onWillPop: () async => true,
+        child: BlocProvider.value(
+            value: sl<ChatRequestsCubit>()..loadChatRequests(),
+            child: ChatRequestListContent()));
   }
 }
