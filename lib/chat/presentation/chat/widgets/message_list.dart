@@ -19,6 +19,8 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   final ChatLoadedState state;
   final ScrollController _listScrollController = ScrollController();
+
+// TODO: Refactor to separate business logic from the presentation layer
   String phoneNumberPattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
 
   _MessageListState({required this.state});
