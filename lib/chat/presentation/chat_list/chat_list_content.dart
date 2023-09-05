@@ -89,7 +89,7 @@ class ChatList extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChatPage(
+                        builder: (context) => LoadChatPage(
                           userChat: state.chats[index],
                           userId: state.chats[index].user.id!,
                         ),

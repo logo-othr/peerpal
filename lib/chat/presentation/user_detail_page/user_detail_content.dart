@@ -178,7 +178,7 @@ class UserInformationContent extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ChatPage(
+                                          builder: (context) => LoadChatPage(
                                                 userId: state.user.id!,
                                                 userChat: null,
                                               )),

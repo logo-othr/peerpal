@@ -9,11 +9,11 @@ import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 
-class ChatPage extends StatelessWidget {
+class LoadChatPage extends StatelessWidget {
   final String userId;
   final UserChat? userChat;
 
-  const ChatPage({required this.userId, this.userChat, Key? key})
+  const LoadChatPage({required this.userId, this.userChat, Key? key})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class ChatPage extends StatelessWidget {
             getAllUserChats: sl<GetAllUserChats>(),
             chatPartnerId: userId)
           ..loadChat(),
-        child: ChatPageContent(),
+        child: LoadChatContent(),
       ),
     );
   }

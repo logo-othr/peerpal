@@ -60,7 +60,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ChatPage(
+                    builder: (context) => LoadChatPage(
                       userChat: state.requests[index],
                       userId: state.requests[index].user.id!,
                     ),

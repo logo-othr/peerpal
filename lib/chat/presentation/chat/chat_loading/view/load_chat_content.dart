@@ -6,8 +6,8 @@ import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubi
 import 'package:peerpal/chat/presentation/chat/new_chat/view/new_chat.dart';
 import 'package:peerpal/setup.dart';
 
-class ChatPageContent extends StatelessWidget {
-  ChatPageContent({
+class LoadChatContent extends StatelessWidget {
+  LoadChatContent({
     Key? key,
   }) : super(key: key);
   final TextEditingController _textEditingController = TextEditingController();
