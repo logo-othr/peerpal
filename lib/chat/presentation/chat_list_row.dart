@@ -74,14 +74,14 @@ class _UserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (chatData.user.imagePath == null || chatData.user.imagePath!.isEmpty) {
-      return DefaultUserAvatar();
+      return _DefaultUserAvatar();
     }
 
     return _NetworkUserAvatar(imagePath: chatData.user.imagePath!);
   }
 }
 
-class DefaultUserAvatar extends StatelessWidget {
+class _DefaultUserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -106,7 +106,7 @@ class _NetworkUserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      errorWidget: (context, object, stackTrace) => DefaultUserAvatar(),
+      errorWidget: (context, object, stackTrace) => _DefaultUserAvatar(),
       imageUrl: imagePath,
       fit: BoxFit.cover,
       width: 60.0,

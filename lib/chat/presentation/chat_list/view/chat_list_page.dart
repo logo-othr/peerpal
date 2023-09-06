@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/chat/presentation/chat_list/chat_list_content.dart';
+import 'package:peerpal/chat/presentation/chat_list/view/chat_list_content.dart';
 
 class ChatListPage extends StatelessWidget {
   const ChatListPage({Key? key}) : super(key: key);
