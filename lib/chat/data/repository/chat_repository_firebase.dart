@@ -20,6 +20,12 @@ class ChatRepositoryFirebase implements ChatRepository {
   final AuthService _authService;
 
   final String _timestampField = 'timestamp';
+  final String _chatIdField = 'chatId';
+  final String _messageField = 'message';
+  final String _fromIdField = 'fromId';
+  final String _toIdField = 'toId';
+  final String _messageTypeField = 'type';
+  final String _responseField = 'response';
   final String _uidsField = 'uids';
 
   final Map<String, BehaviorSubject<List<ChatMessage>>> _chatMessageStreams =
@@ -58,12 +64,12 @@ class ChatRepositoryFirebase implements ChatRepository {
         collection: FirebaseCollections.chatNotifications,
         docId: null,
         data: {
-          'chatId': chatId,
-          'message': message,
-          'fromId': currentUserId,
-          'toId': userInformation.id,
-          'type': type.toUIString,
-          'timestamp': _currentTimestamp(),
+          _chatIdField: chatId,
+          _messageField: message,
+          _fromIdField: currentUserId,
+          _toIdField: userInformation.id,
+          _messageTypeField: type.toUIString,
+          _timestampField: _currentTimestamp(),
         });
   }
 
@@ -74,11 +80,11 @@ class ChatRepositoryFirebase implements ChatRepository {
         collection: FirebaseCollections.chatRequestResponse,
         docId: null,
         data: {
-          'chatId': chatId,
-          'response': response,
-          'fromId': currentUserId,
-          'toId': chatPartnerId,
-          'timestamp': _currentTimestamp(),
+          _chatIdField: chatId,
+          _responseField: response,
+          _fromIdField: currentUserId,
+          _toIdField: chatPartnerId,
+          _timestampField: _currentTimestamp(),
         });
   }
 
@@ -97,7 +103,7 @@ class ChatRepositoryFirebase implements ChatRepository {
           .collection(FirebaseCollections.messages)
           .where(_uidsField, arrayContains: currentUserId)
           .orderBy(_timestampField, descending: true)
-          .limit(40)
+          .limit(40) // TODO: Remove limit and replace it with pagination
           .snapshots();
 
       var chatMessageStream =
