@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
+import 'package:peerpal/chat/domain/message_type.dart';
 import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -161,9 +162,7 @@ class _LastMessage extends StatelessWidget {
       return "Nachricht konnte nicht geladen werden";
     }
 
-    if (chatData.chat.lastMessage!.message
-        .toString()
-        .contains("https://firebasestorage.googleapis.com/")) {
+    if (chatData.chat.lastMessage!.type == MessageType.image) {
       return "Foto";
     }
 
