@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/view/load_chat_page.dart';
-import 'package:peerpal/chat/presentation/user_detail_page/bloc/user_detail_bloc.dart';
+import 'package:peerpal/chat/presentation/user_detail_page/cubit/user_detail_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
@@ -26,69 +26,52 @@ class UserInformationContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserDetailBloc, UserDetailState>(
+    return BlocBuilder<UserDetailCubit, UserDetailState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: CustomAppBar(
-            'Profil',
-            hasBackButton: true,
-          ),
-          body: state.status != UserDetailStatus.success
-              ? Center(child: CircularProgressIndicator())
-              : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                    top: BorderSide(
-                                        width: 1,
-                                        color: PeerPALAppColor.secondaryColor),
-                                    bottom: BorderSide(
-                                        width: 1,
-                                        color:
-                                            PeerPALAppColor.secondaryColor))),
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                    child: Material(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(50.0)),
-                                        clipBehavior: Clip.hardEdge,
-                                        child: (context
-                                                        .read<UserDetailBloc>()
-                                                        .state
-                                                        .user
-                                                        .imagePath ==
-                                                    null ||
-                                                context
-                                                    .read<UserDetailBloc>()
-                                                    .state
-                                                    .user
-                                                    .imagePath!
-                                                    .isEmpty)
-                                            ? Icon(
-                                                Icons.account_circle,
-                                                size: 100.0,
-                                                color: Colors.grey,
-                                              )
-                                            : CachedNetworkImage(
-                                                imageUrl: context
-                                                    .read<UserDetailBloc>()
-                                                    .state
-                                                    .user
-                                                    .imagePath!,
-                                                fit: BoxFit.cover,
-                                                width: 100.0,
-                                                height: 100.0,
-                                          /*  placeholder:
+        if (state is UserDetailLoaded) {
+          return Scaffold(
+            appBar: CustomAppBar(
+              'Profil',
+              hasBackButton: true,
+            ),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                                top: BorderSide(
+                                    width: 1,
+                                    color: PeerPALAppColor.secondaryColor),
+                                bottom: BorderSide(
+                                    width: 1,
+                                    color: PeerPALAppColor.secondaryColor))),
+                        child: Center(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                child: Material(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(50.0)),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: (state.user.imagePath == null ||
+                                            state.user.imagePath!.isEmpty)
+                                        ? Icon(
+                                            Icons.account_circle,
+                                            size: 100.0,
+                                            color: Colors.grey,
+                                          )
+                                        : CachedNetworkImage(
+                                            imageUrl: state.user.imagePath!,
+                                            fit: BoxFit.cover,
+                                            width: 100.0,
+                                            height: 100.0,
+                                            /*  placeholder:
                                                   (BuildContext context, url) =>
                                                       SizedBox(
                                                 width: 100,
@@ -100,117 +83,119 @@ class UserInformationContent extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),*/
-                                                errorWidget: (context, object,
-                                                    stackTrace) {
-                                                  return const Icon(
-                                                    Icons.account_circle,
-                                                    size: 100.0,
-                                                    color: Colors.grey,
-                                                  );
-                                                },
-                                              )
-                                        /* : const Icon(
+                                            errorWidget:
+                                                (context, object, stackTrace) {
+                                              return const Icon(
+                                                Icons.account_circle,
+                                                size: 100.0,
+                                                color: Colors.grey,
+                                              );
+                                            },
+                                          )
+                                    /* : const Icon(
                                               Icons.account_circle,
                                               size: 100.0,
                                               color: Colors.grey,
                                             ),*/
-                                        ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                                    child: CustomPeerPALHeading2(
-                                      '${context.read<UserDetailBloc>().state.user.name} | ${context.read<UserDetailBloc>().state.user.age}',
-                                      color: Colors.black,
                                     ),
-                                  )
-                                ],
                               ),
-                            )),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                CustomSingleTable(
-                                  heading: 'INTERESSEN',
-                                  text: state.user.discoverActivitiesCodes!
-                                      .map((e) => context
-                                          .read<ActivityRepository>()
-                                          .getActivityNameFromCode(e))
-                                      .toList()
-                                      .join(', '),
-                                  isArrowIconVisible: true,
-                                  onPressed: () {
-                                    _showActivityDialog(state, context);
-                                  },
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                                child: CustomPeerPALHeading2(
+                                  '${state.user.name} | ${state.user.age}',
+                                  color: Colors.black,
                                 ),
-                                CustomSingleTable(
-                                  heading: 'KOMMUNIKATIONSART',
-                                  text: state
-                                      .user.discoverCommunicationPreferences!
-                                      .map((e) => e.toUIString)
-                                      .toList()
-                                      .join(', '),
-                                  isArrowIconVisible: false,
-                                  onPressed: () {},
-                                ),
-                                CustomSingleTable(
-                                  heading: 'ORT',
-                                  text: state.user.discoverLocations!
-                                      .map((e) => e.place)
-                                      .toList()
-                                      .join(', '),
-                                  isArrowIconVisible: false,
-                                  onPressed: () {},
-                                ),
-                              ],
-                            ),
+                              )
+                            ],
                           ),
+                        )),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            CustomSingleTable(
+                              heading: 'INTERESSEN',
+                              text: state.user.discoverActivitiesCodes!
+                                  .map((e) => context
+                                      .read<ActivityRepository>()
+                                      .getActivityNameFromCode(e))
+                                  .toList()
+                                  .join(', '),
+                              isArrowIconVisible: true,
+                              onPressed: () {
+                                _showActivityDialog(state, context);
+                              },
+                            ),
+                            CustomSingleTable(
+                              heading: 'KOMMUNIKATIONSART',
+                              text: state.user.discoverCommunicationPreferences!
+                                  .map((e) => e.toUIString)
+                                  .toList()
+                                  .join(', '),
+                              isArrowIconVisible: false,
+                              onPressed: () {},
+                            ),
+                            CustomSingleTable(
+                              heading: 'ORT',
+                              text: state.user.discoverLocations!
+                                  .map((e) => e.place)
+                                  .toList()
+                                  .join(', '),
+                              isArrowIconVisible: false,
+                              onPressed: () {},
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 20),
-                        Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => LoadChatPage(
-                                                userId: state.user.id!,
-                                                userChat: null,
-                                              )),
-                                    );
-                                  },
-                                  child: hasMessageButton
-                                      ? CustomPeerPALButton(
-                                          text: "Nachricht schreiben",
-                                        )
-                                      : Container(),
-                                ),
-                              ],
-                            )),
-                        SizedBox(height: 8),
-                        Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                friendRequestButton(context, state.user),
-                              ],
-                            ))
-                      ],
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 20),
+                    Container(
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoadChatPage(
+                                            userId: state.user.id!,
+                                            userChat: null,
+                                          )),
+                                );
+                              },
+                              child: hasMessageButton
+                                  ? CustomPeerPALButton(
+                                      text: "Nachricht schreiben",
+                                    )
+                                  : Container(),
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 8),
+                    Container(
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            friendRequestButton(context, state.user),
+                          ],
+                        ))
+                  ],
                 ),
-        );
+              ),
+            ),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
 
-  Future _showActivityDialog(UserDetailState state, BuildContext context) {
+  Future _showActivityDialog(UserDetailLoaded state, BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
