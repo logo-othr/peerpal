@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 part 'chat_bottom_bar_state.dart';

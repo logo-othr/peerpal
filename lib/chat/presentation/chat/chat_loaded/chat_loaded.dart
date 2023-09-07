@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/domain/usecase_response/user_chat.dart';
+import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_bottom_bar.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
