@@ -91,7 +91,6 @@ class MockChatRepository extends _i1.Mock implements _i6.ChatRepository {
         ),
         returnValue: _i7.Stream<List<_i8.Chat>>.empty(),
       ) as _i7.Stream<List<_i8.Chat>>);
-
   @override
   _i7.Future<void> sendChatMessage(
     _i3.PeerPALUser? userInformation,
@@ -112,7 +111,6 @@ class MockChatRepository extends _i1.Mock implements _i6.ChatRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<void> sendChatRequestResponse(
     String? chatPartnerId,
@@ -131,7 +129,6 @@ class MockChatRepository extends _i1.Mock implements _i6.ChatRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Stream<int> messageCountForChat(String? chatId) => (super.noSuchMethod(
         Invocation.method(
@@ -140,7 +137,6 @@ class MockChatRepository extends _i1.Mock implements _i6.ChatRepository {
         ),
         returnValue: _i7.Stream<int>.empty(),
       ) as _i7.Stream<int>);
-
   @override
   _i7.Stream<List<_i10.ChatMessage>> getChatMessagesForChat(String? chatId) =>
       (super.noSuchMethod(
@@ -168,7 +164,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
           Invocation.getter(#cache),
         ),
       ) as _i2.Cache);
-
   @override
   _i7.Future<void> updateUserInformation(_i3.PeerPALUser? peerPALUser) =>
       (super.noSuchMethod(
@@ -179,7 +174,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<void> updateServerNameCache(dynamic userName) =>
       (super.noSuchMethod(
@@ -190,7 +184,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<_i3.PeerPALUser> getUser(String? uid) => (super.noSuchMethod(
         Invocation.method(
@@ -205,7 +198,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
           ),
         )),
       ) as _i7.Future<_i3.PeerPALUser>);
-
   @override
   _i7.Future<List<_i3.PeerPALUser>> findUserByName(
     String? userName, {
@@ -220,7 +212,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue:
             _i7.Future<List<_i3.PeerPALUser>>.value(<_i3.PeerPALUser>[]),
       ) as _i7.Future<List<_i3.PeerPALUser>>);
-
   @override
   _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>
       getMatchingUsersPaginatedStream(
@@ -244,7 +235,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
               ),
             )),
           ) as _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>);
-
   @override
   _i3.PeerPALUser? convertDocumentSnapshotToPeerPALUser(
           _i12.DocumentSnapshot<Object?>? document) =>
@@ -252,7 +242,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         #convertDocumentSnapshotToPeerPALUser,
         [document],
       )) as _i3.PeerPALUser?);
-
   @override
   _i7.Future<_i3.PeerPALUser> getCurrentUserInformation(String? uid) =>
       (super.noSuchMethod(
@@ -268,7 +257,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
           ),
         )),
       ) as _i7.Future<_i3.PeerPALUser>);
-
   @override
   List<_i13.CommunicationType> loadCommunicationList() => (super.noSuchMethod(
         Invocation.method(
@@ -277,7 +265,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
         returnValue: <_i13.CommunicationType>[],
       ) as List<_i13.CommunicationType>);
-
   @override
   _i7.Future<List<_i14.Location>> loadLocations() => (super.noSuchMethod(
         Invocation.method(
@@ -286,7 +273,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
         returnValue: _i7.Future<List<_i14.Location>>.value(<_i14.Location>[]),
       ) as _i7.Future<List<_i14.Location>>);
-
   @override
   _i7.Future<void> sendFriendRequestToUser(_i3.PeerPALUser? userInformation) =>
       (super.noSuchMethod(
@@ -297,7 +283,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<void> canceledFriendRequest(_i3.PeerPALUser? userInformation) =>
       (super.noSuchMethod(
@@ -308,7 +293,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<void> friendRequestResponse(
     _i3.PeerPALUser? userInformation,
@@ -325,7 +309,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Stream<List<_i3.PeerPALUser>> getFriendList() => (super.noSuchMethod(
         Invocation.method(
@@ -334,7 +317,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
         returnValue: _i7.Stream<List<_i3.PeerPALUser>>.empty(),
       ) as _i7.Stream<List<_i3.PeerPALUser>>);
-
   @override
   _i7.Stream<List<_i3.PeerPALUser>> getSentFriendRequestsFromUser() =>
       (super.noSuchMethod(
@@ -344,7 +326,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
         returnValue: _i7.Stream<List<_i3.PeerPALUser>>.empty(),
       ) as _i7.Stream<List<_i3.PeerPALUser>>);
-
   @override
   _i7.Stream<List<_i3.PeerPALUser>> getFriendRequestsFromUser() =>
       (super.noSuchMethod(
@@ -354,7 +335,6 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
         returnValue: _i7.Stream<List<_i3.PeerPALUser>>.empty(),
       ) as _i7.Stream<List<_i3.PeerPALUser>>);
-
   @override
   _i7.Stream<int> getFriendRequestsSize() => (super.noSuchMethod(
         Invocation.method(
@@ -382,13 +362,11 @@ class MockAuthenticationRepository extends _i1.Mock
           Invocation.getter(#cache),
         ),
       ) as _i2.Cache);
-
   @override
   _i7.Stream<_i5.AuthUser> get user => (super.noSuchMethod(
         Invocation.getter(#user),
         returnValue: _i7.Stream<_i5.AuthUser>.empty(),
       ) as _i7.Stream<_i5.AuthUser>);
-
   @override
   _i5.AuthUser get currentUser => (super.noSuchMethod(
         Invocation.getter(#currentUser),
@@ -397,7 +375,6 @@ class MockAuthenticationRepository extends _i1.Mock
           Invocation.getter(#currentUser),
         ),
       ) as _i5.AuthUser);
-
   @override
   _i7.Future<void> signUp({
     required String? email,
@@ -415,7 +392,6 @@ class MockAuthenticationRepository extends _i1.Mock
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<void> loginWithEmailAndPassword({
     required String? email,
@@ -433,7 +409,6 @@ class MockAuthenticationRepository extends _i1.Mock
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
-
   @override
   _i7.Future<bool> resetPassword({required String? email}) =>
       (super.noSuchMethod(
@@ -444,7 +419,6 @@ class MockAuthenticationRepository extends _i1.Mock
         ),
         returnValue: _i7.Future<bool>.value(false),
       ) as _i7.Future<bool>);
-
   @override
   _i7.Future<void> logout() => (super.noSuchMethod(
         Invocation.method(
