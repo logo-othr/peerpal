@@ -15,7 +15,8 @@ class GetChatRequestsUseCase {
     final appUserId = authenticationRepository.currentUser.id;
 
     await for (List<UserChat> chatList in chatStream) {
-      final userChats = await Future.wait(chatList.map((chat) async {
+      final List<UserChat?> userChats =
+          await Future.wait(chatList.map((chat) async {
         if (chat.chat.chatRequestAccepted == false &&
             chat.chat.startedBy != appUserId) {
           return chat;
