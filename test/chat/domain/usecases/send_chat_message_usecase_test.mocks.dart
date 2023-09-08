@@ -39,7 +39,6 @@ class MockChatRepository extends _i1.Mock implements _i2.ChatRepository {
         ),
         returnValue: _i3.Stream<List<_i4.Chat>>.empty(),
       ) as _i3.Stream<List<_i4.Chat>>);
-
   @override
   _i3.Future<void> sendChatMessage(
     _i5.PeerPALUser? userInformation,
@@ -60,7 +59,6 @@ class MockChatRepository extends _i1.Mock implements _i2.ChatRepository {
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Future<void> sendChatRequestResponse(
     String? chatPartnerId,
@@ -79,7 +77,6 @@ class MockChatRepository extends _i1.Mock implements _i2.ChatRepository {
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
-
   @override
   _i3.Stream<int> messageCountForChat(String? chatId) => (super.noSuchMethod(
         Invocation.method(
@@ -88,7 +85,6 @@ class MockChatRepository extends _i1.Mock implements _i2.ChatRepository {
         ),
         returnValue: _i3.Stream<int>.empty(),
       ) as _i3.Stream<int>);
-
   @override
   _i3.Stream<List<_i7.ChatMessage>> getChatMessagesForChat(String? chatId) =>
       (super.noSuchMethod(
