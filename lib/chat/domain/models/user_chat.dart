@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:peerpal/chat/domain/models/chat.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
-class UserChat {
+class UserChat extends Equatable {
   UserChat({required this.chat, required this.user});
 
   final Chat chat;
@@ -16,4 +17,7 @@ class UserChat {
       user: user ?? this.user,
     );
   }
+
+  @override
+  List<Object?> get props => [chat, user];
 }
