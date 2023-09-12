@@ -28,7 +28,7 @@ class ChatRepositoryFirebase implements ChatRepository {
   final String _responseField = 'response';
   final String _uidsField = 'uids';
 
-  final Map<String, BehaviorSubject<List<ChatMessage>>> _chatMessageStreams =
+  final Map<String, BehaviorSubject<List<ChatMessage>>> _messageStreamCache =
       {};
 
   ChatRepositoryFirebase({
@@ -96,7 +96,7 @@ class ChatRepositoryFirebase implements ChatRepository {
 
   Stream<List<ChatMessage>> getChatMessagesForChat(String chatId) async* {
     String currentUserId = await _authService.getCurrentUserId();
-    if (!_chatMessageStreams.containsKey(chatId)) {
+    if (!_messageStreamCache.containsKey(chatId)) {
       Stream<QuerySnapshot> messageStream = _firestoreService
           .collection(FirebaseCollections.chats)
           .doc(chatId)
@@ -110,18 +110,15 @@ class ChatRepositoryFirebase implements ChatRepository {
           _firestoreService.convertSnapshotStreamToModelListStream(
               messageStream, _fromJsonToChatMessage);
 
-      _chatMessageStreams[chatId] = BehaviorSubject<List<ChatMessage>>()
+      _messageStreamCache[chatId] = BehaviorSubject<List<ChatMessage>>()
         ..addStream(chatMessageStream);
     }
 
-    yield* _chatMessageStreams[chatId]!.stream;
+    yield* _messageStreamCache[chatId]!.stream;
   }
 
   ChatMessage _fromJsonToChatMessage(Map<String, dynamic> jsonData) {
     return ChatMessageDTO.fromJson(jsonData);
   }
 
-  void dispose() {
-    _chatMessageStreams.values.forEach((stream) => stream.close());
-  }
 }
