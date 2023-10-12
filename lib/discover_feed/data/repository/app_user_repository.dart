@@ -6,13 +6,13 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:peerpal/app/data/location/dto/location.dart';
+import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app/domain/core/cache.dart';
 import 'package:peerpal/discover_feed/data/dto/peerpal_user_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/private_user_information_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/public_user_information_dto.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
-import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../app_logger.dart';

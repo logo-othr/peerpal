@@ -4,9 +4,9 @@ import 'package:peerpal/app/data/analytics/dto/analytic_add_activity_click_dto.d
 import 'package:peerpal/app/data/analytics/dto/analytic_public_activity_click_dto.dart';
 import 'package:peerpal/app/data/analytics/dto/analytic_user_search_dto.dart';
 import 'package:peerpal/app/data/analytics/dto/analytic_video_click_dto.dart';
+import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app/domain/analytics/analytics_service.dart';
 import 'package:peerpal/app/domain/support_videos/support_video.dart';
-import 'package:peerpal/repository/contracts/user_database_contract.dart';
 
 class FirebaseAnalyticsService extends AnalyticsService {
   @override

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peerpal/app/data/firestore/firestore_service.dart';
+import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/domain/auth_service.dart';
 import 'package:peerpal/chat/data/dtos/chat_dto.dart';
@@ -12,7 +13,6 @@ import 'package:peerpal/chat/domain/models/chat_message.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/firebase_collections.dart';
-import 'package:peerpal/repository/contracts/user_database_contract.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatRepositoryFirebase implements ChatRepository {
