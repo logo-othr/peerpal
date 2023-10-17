@@ -6,7 +6,7 @@ import 'package:peerpal/app/data/support_videos/resources/support_video_links.da
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
-import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
+import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -23,7 +23,7 @@ class DiscoverTabView extends StatefulWidget {
 
 class _DiscoverTabViewState extends State<DiscoverTabView> {
   final _searchFieldController = TextEditingController();
-  late DiscoverTabBloc _discoverTabBloc;
+  late DiscoverFeedCubit discoverFeedCubit;
   bool _isSearchEmpty = true;
   bool _isSearchFocused = false;
   final _focusNode = FocusNode();
@@ -34,11 +34,8 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   @override
   void initState() {
     super.initState();
-    _discoverTabBloc = context.read<DiscoverTabBloc>();
+    discoverFeedCubit = context.read<DiscoverFeedCubit>();
     _focusNode.addListener(_onSearchFieldFocusChange);
-    /*_controller.addListener(() {
-      _scrollFetch();
-    });*/
     _searchFieldController.addListener(_onSearchFieldTextChange);
   }
 
@@ -57,25 +54,18 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             hasBackButton: false,
             actionButtonWidget: CustomSupportVideoDialog(
                 supportVideo: SupportVideos.links[VideoIdentifier.discover]!)),
-        body: BlocBuilder<DiscoverTabBloc, DiscoverTabState>(
-          builder: (context, state) {
-            switch (state.status) {
-              case DiscoverTabStatus.error:
-                return Center(child: Text(_loadUsersErrorMessage));
-              case DiscoverTabStatus.success:
-                return Column(
-                  children: [
-                    _buildSearchBar(),
-                    _isSearchEmpty
-                        ? buildDiscoverStream()
-                        : _buildSearchResult(),
-                  ],
-                );
-              default:
-                return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+        body: BlocBuilder<DiscoverFeedCubit, DiscoverFeedState>(
+            builder: (context, state) {
+          if (state is DiscoverFeedLoaded) {
+            return Column(
+              children: [
+                _buildSearchBar(),
+                _isSearchEmpty ? buildDiscoverStream() : _buildSearchResult(),
+              ],
+            );
+          } else
+            return CircularProgressIndicator();
+        }),
       ),
     );
   }
@@ -104,7 +94,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   Widget _buildSearchResult() {
     return Column(
       children: [
-        _buildSearchResultList(_discoverTabBloc.state.searchResults),
+        _buildSearchResultList(discoverFeedCubit.state.searchResults),
       ],
     );
   }
@@ -124,7 +114,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   Widget buildDiscoverStream() {
     return Expanded(
       child: StreamBuilder<List<PeerPALUser>>(
-        stream: _discoverTabBloc.state.userStream,
+        stream: discoverFeedCubit.state.userStream,
         builder:
             (BuildContext context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
           if (snapshot.hasData && snapshot.data!.length > 0) {
@@ -171,8 +161,8 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
       child: CustomPeerPALButton(
         text: "Suchen",
         onPressed: () async => {
-          _discoverTabBloc
-              .add(SearchUser(_searchFieldController.text.toString()))
+          discoverFeedCubit.searchUser(
+              searchQuery: _searchFieldController.text.toString())
         },
       ),
     );
@@ -188,7 +178,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
             context,
             MaterialPageRoute(
                 builder: (context) => DiscoverInterestsOverviewPage()),
-          ).then((value) => context.read<DiscoverTabBloc>().add(LoadUsers()))
+          ).then((value) => discoverFeedCubit.loadUsers())
         },
       ),
     );
@@ -220,20 +210,20 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   }
 
   Widget _buildUser(PeerPALUser user) {
-if (user.discoverLocations == null ||
+    if (user.discoverLocations == null ||
         user.discoverActivitiesCodes == null ||
         user.name == null ||
         user.id == null) return Container();
     return DiscoverUserListItem(
-    onPressed: () {
+        onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return UserInformationPage(user.id ?? "");
           }));
         },
-    imageLink: user.imagePath,
-    header: user.name,
-    locations: user.discoverLocations?.map((e) => e.place).toList(),
-    activities: user.discoverActivitiesCodes
+        imageLink: user.imagePath,
+        header: user.name,
+        locations: user.discoverLocations?.map((e) => e.place).toList(),
+        activities: user.discoverActivitiesCodes
             ?.map((e) =>
                 context.read<ActivityRepository>().getActivityNameFromCode(e))
             .toList());

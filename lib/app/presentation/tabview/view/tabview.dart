@@ -7,7 +7,7 @@ import 'package:peerpal/authentication/persistence/authentication_repository.dar
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/view/chat_list_page.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
-import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
+import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
 import 'package:peerpal/discover_feed/presentation/view/discover_tab_view.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
@@ -66,11 +66,12 @@ class _AppTabViewState extends State<AppTabView> {
               }),
           body: MultiBlocProvider(
             providers: [
-              BlocProvider<DiscoverTabBloc>(
-                create: (context) => DiscoverTabBloc(
-                    context.read<AppUserRepository>(),
-                    context.read<AuthenticationRepository>())
-                  ..add(LoadUsers()),
+              BlocProvider<DiscoverFeedCubit>(
+                create: (context) => DiscoverFeedCubit(
+                    appUsersRepository: context.read<AppUserRepository>(),
+                    authenticationRepository:
+                        context.read<AuthenticationRepository>())
+                  ..loadUsers(),
               ),
               BlocProvider<ChatListCubit>(
                 create: (context) => sl<ChatListCubit>()..loadChatList(),

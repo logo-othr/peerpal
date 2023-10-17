@@ -11,7 +11,7 @@ import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
-import 'package:peerpal/discover_feed/presentation/bloc/discover_feed_bloc.dart';
+import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
@@ -118,8 +118,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => DiscoverInterestsOverviewPage()),
-                  ).then((value) =>
-                      context.read<DiscoverTabBloc>().add(LoadUsers()))
+                  ).then(
+                      (value) => context.read<DiscoverFeedCubit>().loadUsers())
                 },
               ),
               CustomTableHeader(heading: "RECHTLICHES"),
@@ -511,7 +511,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               });
                               logger.d("Reset Discover");
 
-                              context.read<DiscoverTabBloc>()..add(LoadUsers());
+                              context.read<DiscoverFeedCubit>().loadUsers();
                               await Future.delayed(Duration(seconds: 2));
                               setState(() {
                                 reset_stream_text =
