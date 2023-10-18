@@ -13,13 +13,17 @@ part 'discover_feed_state.dart';
 
 class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   DiscoverFeedCubit(
-      {required appUsersRepository, required authenticationRepository})
+      {required analyticsRepository,
+      required appUsersRepository,
+      required authenticationRepository})
       : this._appUsersRepository = appUsersRepository,
         this._authenticationRepository = authenticationRepository,
+        this._analyticsRepository = analyticsRepository,
         super(DiscoverFeedInitial());
 
   final AppUserRepository _appUsersRepository;
   final AuthenticationRepository _authenticationRepository;
+  final AnalyticsRepository _analyticsRepository;
   BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   Future<void> loadUsers() async {
@@ -34,7 +38,7 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   Future<void> searchUser({required String searchQuery}) async {
     GetAuthenticatedUser _getAuthenticatedUser = sl<GetAuthenticatedUser>();
     var authenticatedUser = await _getAuthenticatedUser();
-    sl<AnalyticsRepository>().addUserSearch(authenticatedUser.id ?? "",
+    _analyticsRepository.addUserSearch(authenticatedUser.id ?? "",
         DateTime.now().millisecondsSinceEpoch.toString(), searchQuery ?? "");
     List<PeerPALUser> usersFound =
         await _searchUser(username: _sanitizeUsername(searchQuery));

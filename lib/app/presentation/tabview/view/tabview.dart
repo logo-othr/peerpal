@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
+import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/view/chat_list_page.dart';
@@ -68,6 +69,7 @@ class _AppTabViewState extends State<AppTabView> {
             providers: [
               BlocProvider<DiscoverFeedCubit>(
                 create: (context) => DiscoverFeedCubit(
+                    analyticsRepository: sl<AnalyticsRepository>(),
                     appUsersRepository: context.read<AppUserRepository>(),
                     authenticationRepository:
                         context.read<AuthenticationRepository>())
