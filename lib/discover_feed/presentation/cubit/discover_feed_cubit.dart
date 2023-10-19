@@ -27,8 +27,11 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   Future<void> loadUsers() async {
+    // Find peers
     _userStream = await _appUsersRepository
         .findPeers(_authenticationRepository.currentUser.id);
+
+    // Emit result
     emit(DiscoverFeedLoaded(
       searchResults: state.searchResults,
       userStream: _userStream!.stream,
