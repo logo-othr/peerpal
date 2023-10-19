@@ -24,8 +24,7 @@ class DiscoverTabView extends StatefulWidget {
 class _DiscoverTabViewState extends State<DiscoverTabView> {
   final _searchFieldController = TextEditingController();
   late DiscoverFeedCubit discoverFeedCubit;
-  bool _isSearchEmpty = true;
-  bool _isSearchFocused = false;
+
   final _focusNode = FocusNode();
   final String _loadUsersErrorMessage =
       'Die Nutzer konnten nicht geladen werden.';
@@ -48,47 +47,83 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onTap: _dismissKeyboard,
       child: Scaffold(
-        appBar: CustomAppBar('Entdecken',
-            hasBackButton: false,
-            actionButtonWidget: CustomSupportVideoDialog(
-                supportVideo: SupportVideos.links[VideoIdentifier.discover]!)),
-        body: BlocBuilder<DiscoverFeedCubit, DiscoverFeedState>(
-            builder: (context, state) {
-          if (state is DiscoverFeedLoaded) {
-            return Column(
-              children: [
-                _buildSearchBar(),
-                _isSearchEmpty ? buildDiscoverStream() : _buildSearchResult(),
-              ],
-            );
-          } else
-            return CircularProgressIndicator();
-        }),
+        appBar: _buildCustomAppBar(),
+        body: _buildBodyContent(),
       ),
     );
   }
 
-  Widget _buildSearchBar() {
+  void _dismissKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  CustomAppBar _buildCustomAppBar() {
+    return CustomAppBar(
+      'Entdecken',
+      hasBackButton: false,
+      actionButtonWidget: CustomSupportVideoDialog(
+        supportVideo: SupportVideos.links[VideoIdentifier.discover]!,
+      ),
+    );
+  }
+
+  Widget _buildBodyContent() {
+    return BlocBuilder<DiscoverFeedCubit, DiscoverFeedState>(
+      builder: (context, state) {
+        return state is DiscoverFeedLoaded
+            ? _buildDiscoverFeedContent(
+                state.isSearchEmpty, state.isSearchFocused)
+            : CircularProgressIndicator();
+      },
+    );
+  }
+
+  Widget _buildDiscoverFeedContent(bool isSearchEmpty, bool isSearchFocused) {
+    return Column(
+      children: [
+        _buildSearchBar(isSearchEmpty),
+        isSearchEmpty
+            ? _buildDiscoverStream(isSearchFocused)
+            : _buildSearchResult(),
+      ],
+    );
+  }
+
+  Widget _buildSearchBar(bool isSearchEmpty) {
     return Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-                top:
-                    BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
-                bottom: BorderSide(
-                    width: 1, color: PeerPALAppColor.secondaryColor))),
-        child: Column(
-          children: [
-            CustomCupertinoSearchBar(
-                focusNode: _focusNode,
-                enabled: true,
-                heading: 'Personensuche',
-                searchBarController: this._searchFieldController),
-            _isSearchEmpty ? Container() : _buildSearchButton(),
-          ],
-        ));
+      decoration: _searchBarDecoration(),
+      child: Column(
+        children: [
+          _buildCustomSearchBar(),
+          _displaySearchButtonIfSearchIsNotEmpty(isSearchEmpty),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _searchBarDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      border: Border(
+        top: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+        bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+      ),
+    );
+  }
+
+  Widget _buildCustomSearchBar() {
+    return CustomCupertinoSearchBar(
+      focusNode: _focusNode,
+      enabled: true,
+      heading: 'Personensuche',
+      searchBarController: _searchFieldController,
+    );
+  }
+
+  Widget _displaySearchButtonIfSearchIsNotEmpty(bool isSearchEmpty) {
+    return isSearchEmpty ? Container() : _buildSearchButton();
   }
 
   Widget _buildSearchResult() {
@@ -111,48 +146,66 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     );
   }
 
-  Widget buildDiscoverStream() {
+  Widget _buildDiscoverStream(bool isSearchFocused) {
     return Expanded(
       child: StreamBuilder<List<PeerPALUser>>(
         stream: discoverFeedCubit.state.userStream,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
-          if (snapshot.hasData && snapshot.data!.length > 0) {
-            return _buildUserList(snapshot.data!);
-          }
-          if (snapshot.hasData && snapshot.data!.length == 0) {
-            return _noUsersFound();
-          }
-          if (!snapshot.hasData) {
-            return CustomLoadingIndicator(text: _loadingMessage);
-          }
-          return CircularProgressIndicator();
-        },
+        builder: (context, snapshot) =>
+            _buildStreamContent(snapshot, isSearchFocused),
       ),
     );
   }
 
+  Widget _buildStreamContent(
+      AsyncSnapshot<List<PeerPALUser>> snapshot, bool isSearchFocused) {
+    if (snapshot.hasData) {
+      return _handleSnapshotWithData(snapshot, isSearchFocused);
+    }
+
+    return snapshot.connectionState == ConnectionState.waiting
+        ? CustomLoadingIndicator(text: _loadingMessage)
+        : CircularProgressIndicator();
+  }
+
+  Widget _handleSnapshotWithData(
+      AsyncSnapshot<List<PeerPALUser>> snapshot, bool isSearchFocused) {
+    final users = snapshot.data!;
+    return users.isNotEmpty
+        ? _buildUserList(users, isSearchFocused)
+        : _noUsersFound();
+  }
+
   Widget _buildUserListHeader() {
     return Container(
-        width: double.infinity,
-        height: 90,
-        decoration: BoxDecoration(
-            color: Colors.grey[100],
-            border: Border(
-                bottom: BorderSide(
-                    width: 1, color: PeerPALAppColor.secondaryColor))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomPeerPALHeading3(
-              text: 'Personen die deinen\nSuchkriterien entsprechen',
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ));
+      width: double.infinity,
+      height: 90,
+      decoration: _userListHeaderDecoration(),
+      child: _buildUserListHeaderText(),
+    );
+  }
+
+  BoxDecoration _userListHeaderDecoration() {
+    return BoxDecoration(
+      color: Colors.grey[100],
+      border: Border(
+        bottom: BorderSide(width: 1, color: PeerPALAppColor.secondaryColor),
+      ),
+    );
+  }
+
+  Widget _buildUserListHeaderText() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CustomPeerPALHeading3(
+          text: 'Personen die deinen\nSuchkriterien entsprechen',
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
   }
 
   Widget _buildSearchButton() {
@@ -184,109 +237,144 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
     );
   }
 
-  Widget _buildUserList(List<PeerPALUser> users) {
+  Widget _buildUserList(List<PeerPALUser> users, bool isSearchFocused) {
     return Column(
       children: [
         _buildUserListHeader(),
-        Expanded(
-          child: Scrollbar(
-            isAlwaysShown: true,
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return _buildUser(users[index]);
-                },
-                itemCount: users.length,
-                controller: _controller,
-              ),
-            ),
-          ),
-        ),
-        _isSearchFocused ? Container() : _buildChangeDiscoverCriteriaButton()
+        _buildUserListView(users),
+        _conditionallyShowDiscoverCriteriaButton(isSearchFocused),
       ],
     );
   }
 
+  Widget _buildUserListView(List<PeerPALUser> users) {
+    return Expanded(
+      child: Scrollbar(
+        isAlwaysShown: true,
+        child: SingleChildScrollView(
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemBuilder: (context, index) => _buildUser(users[index]),
+            itemCount: users.length,
+            controller: _controller,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _conditionallyShowDiscoverCriteriaButton(isSearchFocused) {
+    return isSearchFocused ? Container() : _buildChangeDiscoverCriteriaButton();
+  }
+
   Widget _buildUser(PeerPALUser user) {
-    if (user.discoverLocations == null ||
-        user.discoverActivitiesCodes == null ||
-        user.name == null ||
-        user.id == null) return Container();
+    if (!_isValidUser(user)) return Container();
+
     return DiscoverUserListItem(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return UserInformationPage(user.id ?? "");
-          }));
-        },
-        imageLink: user.imagePath,
-        header: user.name,
-        locations: user.discoverLocations?.map((e) => e.place).toList(),
-        activities: user.discoverActivitiesCodes
-            ?.map((e) =>
-                context.read<ActivityRepository>().getActivityNameFromCode(e))
-            .toList());
+      onPressed: () => _navigateToUserInformationPage(user),
+      imageLink: user.imagePath,
+      header: user.name,
+      locations: _extractLocations(user),
+      activities: _extractActivities(user),
+    );
+  }
+
+  bool _isValidUser(PeerPALUser user) {
+    return user.discoverLocations != null &&
+        user.discoverActivitiesCodes != null &&
+        user.name != null &&
+        user.id != null;
+  }
+
+  void _navigateToUserInformationPage(PeerPALUser user) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserInformationPage(user.id!),
+      ),
+    );
+  }
+
+  List<String>? _extractLocations(PeerPALUser user) {
+    return user.discoverLocations?.map((e) => e.place).toList();
+  }
+
+  List<String>? _extractActivities(PeerPALUser user) {
+    return user.discoverActivitiesCodes
+        ?.map((e) =>
+            context.read<ActivityRepository>().getActivityNameFromCode(e))
+        .toList();
   }
 
   Widget _noUsersFound() {
     return Column(
       children: [
-        Container(
-            width: double.infinity,
-            height: 90,
-            decoration: BoxDecoration(
-                color: Colors.grey[100],
-                border: Border(
-                    bottom: BorderSide(
-                        width: 1, color: PeerPALAppColor.secondaryColor))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomPeerPALHeading3(
-                  text: 'Personen die deinen\nSuchkriterien entsprechen',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            )),
-        SizedBox(height: 100),
-        const Center(child: Text('Es konnten keine Nutzer gefunden werden')),
+        _buildNoUsersFoundHeader(),
+        _buildNoUsersFoundMessage(),
       ],
+    );
+  }
+
+  Widget _buildNoUsersFoundHeader() {
+    return Container(
+      width: double.infinity,
+      height: 90,
+      decoration: _noUsersFoundHeaderDecoration(),
+      child: Center(
+        child: CustomPeerPALHeading3(
+          text: 'Personen die deinen\nSuchkriterien entsprechen',
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration _noUsersFoundHeaderDecoration() {
+    return BoxDecoration(
+      color: Colors.grey[100],
+      border: Border(
+        bottom: BorderSide(
+          width: 1,
+          color: PeerPALAppColor.secondaryColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoUsersFoundMessage() {
+    return SizedBox(
+      height: 100,
+      child: const Center(
+        child: Text('Es konnten keine Nutzer gefunden werden'),
+      ),
     );
   }
 
   void _onSearchFieldFocusChange() {
     if (_focusNode.hasFocus) {
       setState(() {
-        _isSearchFocused = true;
+        discoverFeedCubit.setSearchFocused(true);
       });
     } else {
       setState(() {
-        _isSearchFocused = false;
+        discoverFeedCubit.setSearchFocused(false);
       });
     }
   }
 
   ScrollController _controller = ScrollController();
 
-  /* void _scrollFetch() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      _discoverTabBloc.fetchUser();
-    }
-  }*/
-
   void _onSearchFieldTextChange() {
     if (_searchFieldController.text.length > 0) {
       setState(() {
-        _isSearchEmpty = false;
+        discoverFeedCubit.setSearchEmpty(false);
       });
     } else {
       setState(() {
-        _isSearchEmpty = true;
+        discoverFeedCubit.setSearchEmpty(true);
       });
     }
   }

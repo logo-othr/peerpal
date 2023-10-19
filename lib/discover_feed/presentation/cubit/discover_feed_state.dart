@@ -4,21 +4,34 @@ part of 'discover_feed_cubit.dart';
 abstract class DiscoverFeedState implements Equatable {
   final Stream<List<PeerPALUser>> userStream;
   final List<PeerPALUser> searchResults;
+  final bool isSearchEmpty = true;
+  final bool isSearchFocused = false;
 
-  DiscoverFeedState({required this.userStream, required this.searchResults});
+  DiscoverFeedState(
+      {required this.userStream,
+      required this.searchResults,
+      required isSearchEmpty,
+      required isSearchFocused});
 
   @override
-  List<Object?> get props => [userStream, searchResults];
+  List<Object?> get props =>
+      [userStream, searchResults, isSearchEmpty, isSearchFocused];
 
   @override
   bool? get stringify => true;
 }
 
 class DiscoverFeedInitial extends DiscoverFeedState {
-  DiscoverFeedInitial() : super(userStream: Stream.empty(), searchResults: []);
+  DiscoverFeedInitial()
+      : super(
+            userStream: Stream.empty(),
+            searchResults: [],
+            isSearchEmpty: true,
+            isSearchFocused: false);
 
   @override
-  List<Object?> get props => [userStream, searchResults];
+  List<Object?> get props =>
+      [userStream, searchResults, isSearchEmpty, isSearchFocused];
 
   @override
   bool? get stringify => true;
@@ -27,12 +40,23 @@ class DiscoverFeedInitial extends DiscoverFeedState {
 class DiscoverFeedLoaded extends DiscoverFeedState {
   final Stream<List<PeerPALUser>> userStream;
   final List<PeerPALUser> searchResults;
+  final bool isSearchEmpty;
+  final bool isSearchFocused;
 
-  DiscoverFeedLoaded({required this.userStream, required this.searchResults})
-      : super(userStream: userStream, searchResults: searchResults);
+  DiscoverFeedLoaded(
+      {required this.userStream,
+      required this.searchResults,
+      required this.isSearchEmpty,
+      required this.isSearchFocused})
+      : super(
+            userStream: Stream.empty(),
+            searchResults: [],
+            isSearchEmpty: true,
+            isSearchFocused: false);
 
   @override
-  List<Object?> get props => [userStream, searchResults];
+  List<Object?> get props =>
+      [userStream, searchResults, isSearchEmpty, isSearchFocused];
 
   @override
   bool? get stringify => true;

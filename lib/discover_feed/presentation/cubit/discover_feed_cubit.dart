@@ -35,6 +35,8 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
     emit(DiscoverFeedLoaded(
       searchResults: state.searchResults,
       userStream: _userStream!.stream,
+      isSearchEmpty: state.isSearchEmpty,
+      isSearchFocused: state.isSearchFocused,
     ));
   }
 
@@ -55,6 +57,8 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
     return emit(DiscoverFeedLoaded(
       searchResults: usersFound,
       userStream: state.userStream,
+      isSearchEmpty: state.isSearchEmpty,
+      isSearchFocused: state.isSearchFocused,
     ));
   }
 
@@ -64,5 +68,21 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
 
   String _sanitizeUsername(String userName) {
     return userName.toString().trim();
+  }
+
+  void setSearchFocused(bool isSearchFocused) {
+    emit(DiscoverFeedLoaded(
+        userStream: state.userStream,
+        searchResults: state.searchResults,
+        isSearchEmpty: state.isSearchEmpty,
+        isSearchFocused: isSearchFocused));
+  }
+
+  void setSearchEmpty(bool isSearchEmpty) {
+    emit(DiscoverFeedLoaded(
+        userStream: state.userStream,
+        searchResults: state.searchResults,
+        isSearchEmpty: isSearchEmpty,
+        isSearchFocused: state.isSearchFocused));
   }
 }
