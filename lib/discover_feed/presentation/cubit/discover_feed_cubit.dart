@@ -27,8 +27,8 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   Future<void> loadUsers() async {
-    _userStream = await _appUsersRepository.getMatchingUsersPaginatedStream(
-        _authenticationRepository.currentUser.id);
+    _userStream = await _appUsersRepository
+        .findPeers(_authenticationRepository.currentUser.id);
     emit(DiscoverFeedLoaded(
       searchResults: state.searchResults,
       userStream: _userStream!.stream,
@@ -36,12 +36,19 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   }
 
   Future<void> searchUser({required String searchQuery}) async {
+    // Get the authenticated app user
     GetAuthenticatedUser _getAuthenticatedUser = sl<GetAuthenticatedUser>();
     var authenticatedUser = await _getAuthenticatedUser();
+
+    // Log the user search
     _analyticsRepository.addUserSearch(authenticatedUser.id ?? "",
         DateTime.now().millisecondsSinceEpoch.toString(), searchQuery ?? "");
+
+    // Search for the username
     List<PeerPALUser> usersFound =
         await _searchUser(username: _sanitizeUsername(searchQuery));
+
+    // Emit result
     return emit(DiscoverFeedLoaded(
       searchResults: usersFound,
       userStream: state.userStream,

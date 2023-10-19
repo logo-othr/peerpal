@@ -128,90 +128,95 @@ class AppUserRepository {
     return peerPALUserDTO;
   }
 
-
-
-  Future<BehaviorSubject<List<PeerPALUser>>> getMatchingUsersPaginatedStream(
-      String authenticatedUserId,
-      {int limit = 4}) async {
+  Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
+      String authenticatedUserId) async {
     var currentPeerPALUser =
         await getCurrentUserInformation(authenticatedUserId);
 
-    if (currentPeerPALUser.discoverActivitiesCodes == null ||
-        currentPeerPALUser.discoverActivitiesCodes!.isEmpty ||
-        currentPeerPALUser.discoverLocations == null ||
-        currentPeerPALUser.discoverLocations!.isEmpty)
-      return new BehaviorSubject(); // ToDo: implement excaption handling
+    // Check if any discovery settings are empty and return an empty BehaviorSubject if true.
+    if (isDiscoverySettingsEmpty(currentPeerPALUser)) return BehaviorSubject();
 
-    var publicUserCollection =
-        await _firestore.collection(UserDatabaseContract.publicUsers);
-
-    Query<Map<String, dynamic>> locationQuery = publicUserCollection.where(
-        UserDatabaseContract.discoverLocations,
-        arrayContainsAny:
-            currentPeerPALUser.discoverLocations!.map((e) => e.place).toList());
-
-    locationQuery = locationQuery
-        .orderBy(UserDatabaseContract.userAge)
-        .orderBy(UserDatabaseContract.userName)
-        .orderBy(UserDatabaseContract.uid);
-
+    // Build and run location and activity queries.
     Stream<QuerySnapshot<Map<String, dynamic>>> locationStream =
-        locationQuery.snapshots();
-    BehaviorSubject<QuerySnapshot<Map<String, dynamic>>>
-        locationStreamController = new BehaviorSubject();
-    locationStreamController.addStream(locationStream);
-
-    Query<Map<String, dynamic>> activitiesQuery = publicUserCollection.where(
-        UserDatabaseContract.discoverActivities,
-        arrayContainsAny:
-            currentPeerPALUser.discoverActivitiesCodes!.map((e) => e).toList());
-
-    activitiesQuery = activitiesQuery
-        .orderBy(UserDatabaseContract.userAge)
-        .orderBy(UserDatabaseContract.userName)
-        .orderBy(UserDatabaseContract.uid);
-
+        buildAndRunQuery(
+            currentPeerPALUser.discoverLocations!.map((e) => e.place).toList(),
+            UserDatabaseContract.discoverLocations);
     Stream<QuerySnapshot<Map<String, dynamic>>> activityStream =
-        activitiesQuery.snapshots();
-    BehaviorSubject<QuerySnapshot<Map<String, dynamic>>>
-        activityStreamController = new BehaviorSubject();
-    activityStreamController.addStream(activityStream);
+        buildAndRunQuery(
+            currentPeerPALUser.discoverActivitiesCodes!.map((e) => e).toList(),
+            UserDatabaseContract.discoverActivities);
 
-    Stream<List<PeerPALUser>> combinedFilteredUserStream = Rx.combineLatest2(
-        locationStreamController.stream, activityStreamController.stream,
-        (QuerySnapshot<Map<String, dynamic>> matchedByLocationDocuments,
-            QuerySnapshot<Map<String, dynamic>> matchedByActivityDocuments) {
-      List<PeerPALUser> matchedByLocationUserList = [];
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document
-          in matchedByLocationDocuments.docs) {
-        if (convertDocumentSnapshotToPeerPALUser(document) != null)
-          matchedByLocationUserList
-              .add(convertDocumentSnapshotToPeerPALUser(document)!);
-      }
-
-      List<PeerPALUser> matchedByActivityUserList = [];
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document
-          in matchedByActivityDocuments.docs) {
-        if (convertDocumentSnapshotToPeerPALUser(document) != null)
-          matchedByActivityUserList
-              .add(convertDocumentSnapshotToPeerPALUser(document)!);
-      }
-
-      List<PeerPALUser> unfilteredMatchedUsers = []
-        ..addAll(matchedByLocationUserList)
-        ..addAll(matchedByActivityUserList);
-
-      final temp = Set<String>();
-      List<PeerPALUser> uniqueList =
-          unfilteredMatchedUsers.where((str) => temp.add(str.id!)).toList();
-      uniqueList.shuffle();
-      return uniqueList;
-    });
+    // Combine both streams to generate a list of unique matched PeerPALUsers.
+    Stream<List<PeerPALUser>> combinedFilteredUserStream =
+        combineLocationAndActivityStreams(locationStream, activityStream);
 
     BehaviorSubject<List<PeerPALUser>> combinedFilteredUserStreamController =
         BehaviorSubject();
     combinedFilteredUserStreamController.addStream(combinedFilteredUserStream);
+
     return combinedFilteredUserStreamController;
+  }
+
+  bool isDiscoverySettingsEmpty(PeerPALUser user) {
+    return user.discoverActivitiesCodes == null ||
+        user.discoverActivitiesCodes!.isEmpty ||
+        user.discoverLocations == null ||
+        user.discoverLocations!.isEmpty;
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> buildAndRunQuery(
+      List<dynamic> filterValues, String fieldName) {
+    // Apply query filters and sorting criteria.
+    Query<Map<String, dynamic>> query = _firestore
+        .collection(UserDatabaseContract.publicUsers)
+        .where(fieldName, arrayContainsAny: filterValues)
+        .orderBy(UserDatabaseContract.userAge)
+        .orderBy(UserDatabaseContract.userName)
+        .orderBy(UserDatabaseContract.uid);
+
+    // Convert the query to a stream.
+    return query.snapshots();
+  }
+
+  Stream<List<PeerPALUser>> combineLocationAndActivityStreams(
+      Stream<QuerySnapshot<Map<String, dynamic>>> locationStream,
+      Stream<QuerySnapshot<Map<String, dynamic>>> activityStream) {
+    return Rx.combineLatest2(locationStream, activityStream,
+        (QuerySnapshot<Map<String, dynamic>> matchedByLocationDocuments,
+            QuerySnapshot<Map<String, dynamic>> matchedByActivityDocuments) {
+      List<PeerPALUser> matchedByLocationUsers =
+          convertQueryToPeerPALUsers(matchedByLocationDocuments);
+      List<PeerPALUser> matchedByActivityUsers =
+          convertQueryToPeerPALUsers(matchedByActivityDocuments);
+
+      // Combine and shuffle unique users.
+      List<PeerPALUser> uniqueUsers = combineAndFilterUniqueUsers(
+          matchedByLocationUsers, matchedByActivityUsers);
+
+      return uniqueUsers;
+    });
+  }
+
+  List<PeerPALUser> convertQueryToPeerPALUsers(
+      QuerySnapshot<Map<String, dynamic>> query) {
+    return query.docs
+        .map((document) => convertDocumentSnapshotToPeerPALUser(document))
+        .where((user) => user != null)
+        .cast<PeerPALUser>()
+        .toList();
+  }
+
+  List<PeerPALUser> combineAndFilterUniqueUsers(
+      List<PeerPALUser> locationUsers, List<PeerPALUser> activityUsers) {
+    List<PeerPALUser> combinedUsers = List.from(locationUsers)
+      ..addAll(activityUsers);
+
+    final seenIds = Set<String>();
+    List<PeerPALUser> uniqueUsers =
+        combinedUsers.where((user) => seenIds.add(user.id!)).toList();
+
+    uniqueUsers.shuffle();
+    return uniqueUsers;
   }
 
   PeerPALUser? convertDocumentSnapshotToPeerPALUser(DocumentSnapshot document) {

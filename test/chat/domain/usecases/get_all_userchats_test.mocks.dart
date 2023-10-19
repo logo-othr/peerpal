@@ -212,20 +212,20 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue:
             _i7.Future<List<_i3.PeerPALUser>>.value(<_i3.PeerPALUser>[]),
       ) as _i7.Future<List<_i3.PeerPALUser>>);
+
   @override
-  _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>
-      getMatchingUsersPaginatedStream(
+  _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>> findPeers(
     String? authenticatedUserId, {
     int? limit = 4,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getMatchingUsersPaginatedStream,
-              [authenticatedUserId],
-              {#limit: limit},
-            ),
-            returnValue:
-                _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>.value(
+      (super.noSuchMethod(
+        Invocation.method(
+          #getMatchingUsersPaginatedStream,
+          [authenticatedUserId],
+          {#limit: limit},
+        ),
+        returnValue:
+            _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>.value(
                     _FakeBehaviorSubject_2<List<_i3.PeerPALUser>>(
               this,
               Invocation.method(
