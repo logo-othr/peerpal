@@ -25,7 +25,7 @@ class PhoneInputCubit extends Cubit<PhoneInputState> {
     var userInformation = await _getAuthenticatedUser();
     var updatedUserInformation =
         userInformation.copyWith(phoneNumber: phoneNumber);
-    await _authRepository.updateUserInformation(updatedUserInformation);
+    await _authRepository.updateUser(updatedUserInformation);
     emit(PhoneInputPosted(phone));
   }
 

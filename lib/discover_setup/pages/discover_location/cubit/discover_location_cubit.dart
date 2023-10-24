@@ -87,7 +87,7 @@ class DiscoverLocationCubit extends Cubit<DiscoverLocationState> {
       var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation =
           userInformation.copyWith(discoverLocations: state.selectedLocations);
-      await _appUserRepository.updateUserInformation(updatedUserInformation);
+      await _appUserRepository.updateUser(updatedUserInformation);
 
       emit(DiscoverLocationPosted(state.locations, state.selectedLocations));
     }

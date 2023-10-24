@@ -143,6 +143,6 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   Future<void> _updateProfilePicturePath(String profilePicturePath) async {
     PeerPALUser user = await _getAuthenticatedUser();
     PeerPALUser updatedUser = user.copyWith(imagePath: profilePicturePath);
-    await _userRepository.updateUserInformation(updatedUser);
+    await _userRepository.updateUser(updatedUser);
   }
 }

@@ -165,7 +165,7 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
       ) as _i2.Cache);
   @override
-  _i7.Future<void> updateUserInformation(_i3.PeerPALUser? peerPALUser) =>
+  _i7.Future<void> updateUser(_i3.PeerPALUser? peerPALUser) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateUserInformation,
@@ -174,6 +174,7 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),
       ) as _i7.Future<void>);
+
   @override
   _i7.Future<void> updateServerNameCache(dynamic userName) =>
       (super.noSuchMethod(

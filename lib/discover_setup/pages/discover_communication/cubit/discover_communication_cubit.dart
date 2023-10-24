@@ -54,7 +54,7 @@ class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
       var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation = userInformation.copyWith(
           discoverCommunicationPreferences: state.selectedCommunicationTypes);
-      await _appUserRepository.updateUserInformation(updatedUserInformation);
+      await _appUserRepository.updateUser(updatedUserInformation);
 
       emit(DiscoverCommunicationPosted(
           state.communicationTypes, state.selectedCommunicationTypes));

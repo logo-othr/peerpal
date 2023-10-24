@@ -62,7 +62,7 @@ class DiscoverActivitiesCubit extends Cubit<DiscoverActivitiesState> {
       var updatedUserInformation = userInformation.copyWith(
           discoverActivities:
               state.selectedActivities.map((e) => e.code!).toList());
-      await _appUserRepository.updateUserInformation(updatedUserInformation);
+      await _appUserRepository.updateUser(updatedUserInformation);
 
       emit(
           DiscoverActivitiesPosted(state.activities, state.selectedActivities));

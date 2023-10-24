@@ -33,7 +33,7 @@ class DiscoverAgeCubit extends Cubit<DiscoverAgeState> {
     var authenticatedUser = await _getAuthenticatedUser();
     var updatedUserInformation = authenticatedUser.copyWith(
         discoverFromAge: selectedFromAge, discoverToAge: selectedToAge);
-    await _appUserRepository.updateUserInformation(updatedUserInformation);
+    await _appUserRepository.updateUser(updatedUserInformation);
 
     emit(DiscoverAgePosted(selectedFromAge, selectedToAge));
   }

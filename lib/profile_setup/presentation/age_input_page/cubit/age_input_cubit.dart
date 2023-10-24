@@ -23,7 +23,7 @@ class AgeInputCubit extends Cubit<AgeInputState> {
     var userInformation = await _getAuthenticatedUser();
     var updatedUserInformation =
         userInformation.copyWith(age: state.selectedAge);
-    await _appUserRepository.updateUserInformation(updatedUserInformation);
+    await _appUserRepository.updateUser(updatedUserInformation);
     emit(AgeInputPosted(state.selectedAge));
   }
 

@@ -31,7 +31,7 @@ class AppUserRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirestoreService _firestoreService;
 
-  Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
+  Future<void> updateUser(PeerPALUser peerPALUser) async {
     final uid = peerPALUser.id;
 
     // Nullcheck

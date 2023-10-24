@@ -30,7 +30,7 @@ class NameInputCubit extends Cubit<NameInputState> {
       var userInformation = await _getAuthenticatedUser();
       var updatedUserInformation =
           userInformation.copyWith(name: state.username.value);
-      await _appUserRepository.updateUserInformation(updatedUserInformation);
+      await _appUserRepository.updateUser(updatedUserInformation);
       await _appUserRepository
           .updateServerNameCache(updatedUserInformation.name); // ToDo: clean up
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
