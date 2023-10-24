@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:peerpal/app/data/firestore/firestore_service.dart';
 import 'package:peerpal/app/data/location/dto/location.dart';
 import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app/domain/core/cache.dart';
@@ -18,33 +19,37 @@ import 'package:rxdart/rxdart.dart';
 import '../../../app_logger.dart';
 
 class AppUserRepository {
-  AppUserRepository({
-    firebase_auth.FirebaseAuth? firebaseAuth,
-    required this.cache,
-  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  AppUserRepository(
+      {firebase_auth.FirebaseAuth? firebaseAuth,
+      required this.cache,
+      required firestoreService})
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+        this._firestoreService = firestoreService;
 
   final Cache cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-
+  final FirestoreService _firestoreService;
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
     var uid = peerPALUser.id;
-    var publicUserCollection =
-        _firestore.collection(UserDatabaseContract.publicUsers).doc(uid);
-    var privateUserCollection =
-        _firestore.collection(UserDatabaseContract.privateUsers).doc(uid);
+    DocumentReference<Object?> userDocumentReference =
+        _firestoreService.collection(UserDatabaseContract.publicUsers).doc(uid);
+    DocumentReference<Object?> privateUserCollection = _firestoreService
+        .collection(UserDatabaseContract.privateUsers)
+        .doc(uid);
 
-    var userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
+    PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
 
     cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
 
-    var publicUserInformationJson = userDTO.publicUserInformation?.toJson();
-    var privateUserInformation = userDTO.privateUserInformation?.toJson();
+    Map<String, dynamic>? publicUserInformationJson =
+        userDTO.publicUserInformation?.toJson();
+    Map<String, dynamic>? privateUserInformation =
+        userDTO.privateUserInformation?.toJson();
 
     if (publicUserInformationJson != null)
-      await publicUserCollection.set(
+      await userDocumentReference.set(
           publicUserInformationJson, SetOptions(merge: true));
     if (privateUserInformation != null)
       await privateUserCollection.set(
@@ -403,5 +408,4 @@ class AppUserRepository {
 //----------------------------------------------------
 //Friends End
 //----------------------------------------------------
-
 }
