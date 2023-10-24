@@ -5,6 +5,7 @@ import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
+import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/subjects.dart';
@@ -15,15 +16,18 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   DiscoverFeedCubit(
       {required analyticsRepository,
       required appUsersRepository,
-      required findPeers})
+      required findPeers,
+      required findUserByName})
       : this._appUsersRepository = appUsersRepository,
         this._analyticsRepository = analyticsRepository,
         this._findPeers = findPeers,
+        this._findUserByName = findUserByName,
         super(DiscoverFeedInitial());
 
   final AppUserRepository _appUsersRepository;
   final AnalyticsRepository _analyticsRepository;
   final FindPeers _findPeers;
+  final FindUserByName _findUserByName;
   BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   Future<void> loadUsers() async {
@@ -49,8 +53,7 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
         DateTime.now().millisecondsSinceEpoch.toString(), searchQuery ?? "");
 
     // Search for the username
-    List<PeerPALUser> usersFound =
-        await _searchUser(username: _sanitizeUsername(searchQuery));
+    List<PeerPALUser> usersFound = await _findUserByName(searchQuery);
 
     // Emit result
     return emit(DiscoverFeedLoaded(
@@ -59,14 +62,6 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
       isSearchEmpty: state.isSearchEmpty,
       isSearchFocused: state.isSearchFocused,
     ));
-  }
-
-  Future<List<PeerPALUser>> _searchUser({required String username}) async {
-    return await _appUsersRepository.findUserByName(username);
-  }
-
-  String _sanitizeUsername(String userName) {
-    return userName.toString().trim();
   }
 
   void setSearchFocused(bool isSearchFocused) {
