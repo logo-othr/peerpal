@@ -4,10 +4,10 @@ import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
-import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/view/chat_list_page.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
 import 'package:peerpal/discover_feed/presentation/view/discover_tab_view.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
@@ -69,11 +69,10 @@ class _AppTabViewState extends State<AppTabView> {
             providers: [
               BlocProvider<DiscoverFeedCubit>(
                 create: (context) => DiscoverFeedCubit(
-                    analyticsRepository: sl<AnalyticsRepository>(),
-                    appUsersRepository: context.read<AppUserRepository>(),
-                    authenticationRepository:
-                        context.read<AuthenticationRepository>())
-                  ..loadUsers(),
+                  findPeers: sl<FindPeers>(),
+                  analyticsRepository: sl<AnalyticsRepository>(),
+                  appUsersRepository: context.read<AppUserRepository>(),
+                )..loadUsers(),
               ),
               BlocProvider<ChatListCubit>(
                 create: (context) => sl<ChatListCubit>()..loadChatList(),

@@ -42,6 +42,7 @@ import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dar
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -111,7 +112,7 @@ Future<void> setupDependencies() async {
   sl.registerFactory(
     () => ChatListCubit(sl(), sl()),
   );
- /* sl.registerFactory(
+  /* sl.registerFactory(
     () => ChatRequestListBloc(sl(), sl()),
   );*/
   sl.registerFactory(
@@ -175,6 +176,10 @@ Future<void> setupDependencies() async {
     () => RememberMeNotificationRepository(
         notificationService: sl<NotificationService>()),
   );
+
+  // ============== Discover ====================
+  sl.registerLazySingleton(
+      () => FindPeers(userRepository: sl(), authenticationRepository: sl()));
 
   // ============== Activity ====================
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);

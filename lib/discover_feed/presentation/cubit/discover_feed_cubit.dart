@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
-import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/subjects.dart';
@@ -15,21 +15,20 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
   DiscoverFeedCubit(
       {required analyticsRepository,
       required appUsersRepository,
-      required authenticationRepository})
+      required findPeers})
       : this._appUsersRepository = appUsersRepository,
-        this._authenticationRepository = authenticationRepository,
         this._analyticsRepository = analyticsRepository,
+        this._findPeers = findPeers,
         super(DiscoverFeedInitial());
 
   final AppUserRepository _appUsersRepository;
-  final AuthenticationRepository _authenticationRepository;
   final AnalyticsRepository _analyticsRepository;
+  final FindPeers _findPeers;
   BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   Future<void> loadUsers() async {
     // Find peers
-    _userStream = await _appUsersRepository
-        .findPeers(_authenticationRepository.currentUser.id);
+    _userStream = await _findPeers();
 
     // Emit result
     emit(DiscoverFeedLoaded(
