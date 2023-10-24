@@ -11,6 +11,7 @@ import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
 import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
 import 'package:peerpal/discover_feed/presentation/view/discover_tab_view.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_page.dart';
 import 'package:peerpal/settings/settings_page.dart';
@@ -73,6 +74,7 @@ class _AppTabViewState extends State<AppTabView> {
                   findPeers: sl<FindPeers>(),
                   findUserByName: sl<FindUserByName>(),
                   analyticsRepository: sl<AnalyticsRepository>(),
+                  getAuthenticatedUser: sl<GetAuthenticatedUser>(),
                   appUsersRepository: context.read<AppUserRepository>(),
                 )..loadUsers(),
               ),

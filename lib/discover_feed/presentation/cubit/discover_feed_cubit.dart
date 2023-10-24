@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
@@ -17,17 +16,18 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
       {required analyticsRepository,
       required appUsersRepository,
       required findPeers,
-      required findUserByName})
-      : this._appUsersRepository = appUsersRepository,
-        this._analyticsRepository = analyticsRepository,
+      required findUserByName,
+      required getAuthenticatedUser})
+      : this._analyticsRepository = analyticsRepository,
         this._findPeers = findPeers,
         this._findUserByName = findUserByName,
+        this._authenticatedUser = getAuthenticatedUser,
         super(DiscoverFeedInitial());
 
-  final AppUserRepository _appUsersRepository;
   final AnalyticsRepository _analyticsRepository;
   final FindPeers _findPeers;
   final FindUserByName _findUserByName;
+  final GetAuthenticatedUser _authenticatedUser;
   BehaviorSubject<List<PeerPALUser>>? _userStream;
 
   Future<void> loadUsers() async {
