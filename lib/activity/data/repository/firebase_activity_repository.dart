@@ -77,7 +77,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// sending notifications.
   Future<void> postActivity(Activity activity) async {
     try {
-      await _firestoreService.setDocumentData(
+      await _firestoreService.setDocument(
           collection: 'newActivity',
           docId: activity.id!,
           data: activity.toJson());
@@ -90,7 +90,7 @@ class FirebaseActivityRepository implements ActivityRepository {
   /// subsequently updates the activity and performs additional actions such as
   /// sending notifications.
   Future<void> updateActivity(Activity activity) async {
-    await _firestoreService.setDocumentData(
+    await _firestoreService.setDocument(
         collection: 'updateActivity',
         docId: activity.id!,
         data: activity.toJson());
@@ -109,7 +109,7 @@ class FirebaseActivityRepository implements ActivityRepository {
         'joiningId': currentUserId,
       };
       try {
-        await _firestoreService.setDocumentData(
+        await _firestoreService.setDocument(
             collection: 'joinActivity', docId: null, data: data);
       } catch (e) {
         // TODO: Handle exception
@@ -130,7 +130,7 @@ class FirebaseActivityRepository implements ActivityRepository {
         'leavingId': currentUserId,
       };
       try {
-        await _firestoreService.setDocumentData(
+        await _firestoreService.setDocument(
             collection: 'leaveActivity', docId: null, data: data);
       } catch (e) {
         // TODO: Handle exception
@@ -152,7 +152,7 @@ class FirebaseActivityRepository implements ActivityRepository {
         'activityId': activity.id,
       };
       try {
-        await _firestoreService.setDocumentData(
+        await _firestoreService.setDocument(
             collection: 'deleteActivity', docId: null, data: data);
       } catch (e) {
         // TODO: Handle exception

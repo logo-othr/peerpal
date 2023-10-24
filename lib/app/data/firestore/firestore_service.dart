@@ -6,7 +6,11 @@ class FirestoreService {
   FirestoreService({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
-  Future<void> setDocumentData(
+  DocumentReference<Object?> getDocument(String collectionName, String docId) {
+    return _firestore.collection(collectionName).doc(docId);
+  }
+
+  Future<void> setDocument(
       {required String collection,
       required String? docId,
       required Map<String, dynamic> data}) async {

@@ -60,7 +60,7 @@ class ChatRepositoryFirebase implements ChatRepository {
   Future<void> sendChatMessage(PeerPALUser userInformation, String? chatId,
       String message, MessageType type) async {
     String currentUserId = await _authService.getCurrentUserId();
-    await _firestoreService.setDocumentData(
+    await _firestoreService.setDocument(
         collection: FirebaseCollections.chatNotifications,
         docId: null,
         data: {
@@ -76,7 +76,7 @@ class ChatRepositoryFirebase implements ChatRepository {
   Future<void> sendChatRequestResponse(
       String chatPartnerId, bool response, String chatId) async {
     String currentUserId = await _authService.getCurrentUserId();
-    await _firestoreService.setDocumentData(
+    await _firestoreService.setDocument(
         collection: FirebaseCollections.chatRequestResponse,
         docId: null,
         data: {
