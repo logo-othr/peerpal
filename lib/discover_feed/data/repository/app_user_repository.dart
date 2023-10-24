@@ -68,30 +68,6 @@ class AppUserRepository {
     cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
   }
 
-  /* Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
-    var uid = peerPALUser.id;
-    DocumentReference<Object?> userDocumentReference =
-        _firestoreService.collection(UserDatabaseContract.publicUsers).doc(uid);
-    DocumentReference<Object?> privateUserCollection = _firestoreService
-        .collection(UserDatabaseContract.privateUsers)
-        .doc(uid);
-
-    PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
-
-    cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
-
-    Map<String, dynamic>? publicUserInformationJson =
-        userDTO.publicUserInformation?.toJson();
-    Map<String, dynamic>? privateUserInformation =
-        userDTO.privateUserInformation?.toJson();
-
-    if (publicUserInformationJson != null)
-      await userDocumentReference.set(
-          publicUserInformationJson, SetOptions(merge: true));
-    if (privateUserInformation != null)
-      await privateUserCollection.set(
-          privateUserInformation, SetOptions(merge: true));
-  }*/
 
   Future<void> updateServerNameCache(userName) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
@@ -101,7 +77,7 @@ class AppUserRepository {
         .set({'userId': currentUserId, 'name': userName});
   }
 
-  Future<PeerPALUserDTO> _downloadCurrentUserInformation() async {
+  Future<PeerPALUserDTO> _getAuthenticatedUser() async {
     var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
     if (firebaseUser == null) return PeerPALUserDTO.empty;
     var uid = firebaseUser!.uid;
@@ -277,7 +253,7 @@ class AppUserRepository {
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
-      var downloadedUserDTO = await _downloadCurrentUserInformation();
+      var downloadedUserDTO = await _getAuthenticatedUser();
       cache.store<PeerPALUserDTO>(
           key: '{$uid}-userinformation', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
