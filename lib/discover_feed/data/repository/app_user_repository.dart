@@ -22,7 +22,7 @@ class AppUserRepository {
   AppUserRepository(
       {firebase_auth.FirebaseAuth? firebaseAuth,
       required this.cache,
-      required firestoreService})
+      required FirestoreService firestoreService})
       : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         this._firestoreService = firestoreService;
 
@@ -32,6 +32,43 @@ class AppUserRepository {
   final FirestoreService _firestoreService;
 
   Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
+    final uid = peerPALUser.id;
+
+    // Nullcheck
+    if (uid == null) return; // ToDo: Throw exception
+
+    // Fetching document references.
+    final DocumentReference<Object?> publicDocRef =
+        _firestoreService.getDocument(UserDatabaseContract.publicUsers, uid);
+    final DocumentReference<Object?> privateDocRef =
+        _firestoreService.getDocument(UserDatabaseContract.privateUsers, uid);
+
+    // Convert domain object to DTO and cache.
+    final PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
+    _storeUserInCache(uid, userDTO);
+
+    // Serializing DTO to JSON.
+    final Map<String, dynamic>? publicUserInfo =
+        userDTO.publicUserInformation?.toJson();
+    final Map<String, dynamic>? privateUserInfo =
+        userDTO.privateUserInformation?.toJson();
+
+    // Nullcheck
+    if (publicUserInfo == null || privateUserInfo == null) {
+      return; // ToDo: Throw exception
+    }
+
+    // Setting data in Firestore.
+    await _firestoreService.setDocumentData(publicDocRef, publicUserInfo);
+    await _firestoreService.setDocumentData(privateDocRef, privateUserInfo);
+  }
+
+  // ToDo: Move to cache service
+  void _storeUserInCache(String uid, PeerPALUserDTO userDTO) {
+    cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
+  }
+
+  /* Future<void> updateUserInformation(PeerPALUser peerPALUser) async {
     var uid = peerPALUser.id;
     DocumentReference<Object?> userDocumentReference =
         _firestoreService.collection(UserDatabaseContract.publicUsers).doc(uid);
@@ -54,7 +91,7 @@ class AppUserRepository {
     if (privateUserInformation != null)
       await privateUserCollection.set(
           privateUserInformation, SetOptions(merge: true));
-  }
+  }*/
 
   Future<void> updateServerNameCache(userName) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;

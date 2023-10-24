@@ -10,6 +10,11 @@ class FirestoreService {
     return _firestore.collection(collectionName).doc(docId);
   }
 
+  Future<void> setDocumentData(
+      DocumentReference<Object?> document, Map<String, dynamic> data) async {
+    await document.set(data, SetOptions(merge: true));
+  }
+
   Future<void> setDocument(
       {required String collection,
       required String? docId,

@@ -141,12 +141,13 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton(() => GetAuthenticatedUser(sl(), sl()));
 
   // Repo
-  sl.registerLazySingleton(() => AppUserRepository(cache: sl()));
+  sl.registerLazySingleton(
+      () => AppUserRepository(cache: sl(), firestoreService: sl()));
 
   // =============== Repository ===============
 
   sl.registerLazySingleton<AuthenticationRepository>(
-        () => AuthenticationRepository(cache: sl(), authService: sl()),
+    () => AuthenticationRepository(cache: sl(), authService: sl()),
   );
 
   // =============== Notification ===============
