@@ -228,9 +228,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         String debugInfo = "";
                         var currentAuthenticatedUser =
                             sl<AuthenticationRepository>().currentUser;
-                        var currentAppUser = await sl<AppUserRepository>()
-                            .getCurrentUserInformation(
-                                currentAuthenticatedUser.id);
+                        var currentAppUser =
+                            await sl<AppUserRepository>().getCachedAppUser();
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         String currentPrefs = "";

@@ -68,20 +68,12 @@ class AppUserRepository {
     cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
   }
 
-
   Future<void> updateServerNameCache(userName) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance
         .collection('updateNameAtServer')
         .doc()
         .set({'userId': currentUserId, 'name': userName});
-  }
-
-  Future<PeerPALUserDTO> _getAuthenticatedUser() async {
-    var firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
-    if (firebaseUser == null) return PeerPALUserDTO.empty;
-    var uid = firebaseUser!.uid;
-    return await _downloadUserInformation(uid);
   }
 
   Future<PeerPALUser> getUser(String uid) async {
@@ -148,8 +140,7 @@ class AppUserRepository {
 
   Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
       String authenticatedUserId) async {
-    var currentPeerPALUser =
-        await getCurrentUserInformation(authenticatedUserId);
+    var currentPeerPALUser = await getCachedAppUser();
 
     // Check if any discovery settings are empty and return an empty BehaviorSubject if true.
     if (isDiscoverySettingsEmpty(currentPeerPALUser)) return BehaviorSubject();
@@ -246,14 +237,19 @@ class AppUserRepository {
     return null;
   }
 
-  Future<PeerPALUser> getCurrentUserInformation(String uid) async {
-    var userInformation = PeerPALUser.empty;
-    var cachedUserDTO =
+  Future<PeerPALUser> getCachedAppUser() async {
+    firebase_auth.User? firebaseUser =
+        firebase_auth.FirebaseAuth.instance.currentUser;
+    String uid = firebaseUser!.uid;
+
+    PeerPALUser userInformation = PeerPALUser.empty;
+    PeerPALUserDTO? cachedUserDTO =
         cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
-      var downloadedUserDTO = await _getAuthenticatedUser();
+      PeerPALUserDTO downloadedUserDTO = await _downloadUserInformation(uid);
+
       cache.store<PeerPALUserDTO>(
           key: '{$uid}-userinformation', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
