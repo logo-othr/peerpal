@@ -45,9 +45,12 @@ import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/friends/data/firebase_friend_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+
+import 'friends/domain/repository/friend_repository.dart';
 
 @pragma('vm:entry-point')
 Future<void> _remoteNotificationBackgroundHandler(RemoteMessage message) async {
@@ -227,6 +230,11 @@ Future<void> setupDependencies() async {
           activityReminderRepository: sl(),
           isIOSWithoutNotificationPermission: sl(),
           scheduleActivityReminderUseCase: sl()));
+
+  // =============== Friends ===============
+  sl.registerLazySingleton<FriendRepository>(() => FirebaseFriendRepository(
+        firestoreService: sl<FirestoreService>(),
+      ));
 
   // ============== Analytics ====================
   sl.registerLazySingleton<AnalyticsService>(() => FirebaseAnalyticsService());

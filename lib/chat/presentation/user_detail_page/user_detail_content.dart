@@ -5,9 +5,9 @@ import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/view/load_chat_page.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/cubit/user_detail_cubit.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
+import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_activity_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
@@ -213,7 +213,7 @@ class UserInformationContent extends StatelessWidget {
 
   Widget friendRequestButton(BuildContext context, PeerPALUser chatPartner) {
     return StreamBuilder<List<PeerPALUser>>(
-        stream: sl.get<AppUserRepository>().getFriendList(),
+        stream: sl.get<FriendRepository>().getFriendList(),
         // ToDo: move to correct layer
         builder: (context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
           if (snapshot.hasData) {
@@ -225,7 +225,7 @@ class UserInformationContent extends StatelessWidget {
             } else {
               return StreamBuilder<List<PeerPALUser>>(
                   stream: sl
-                      .get<AppUserRepository>()
+                      .get<FriendRepository>()
                       .getSentFriendRequestsFromUser(),
                   builder:
                       (context, AsyncSnapshot<List<PeerPALUser>> snapshot) {
@@ -238,7 +238,7 @@ class UserInformationContent extends StatelessWidget {
                             buttonText: "Anfrage abbrechen",
                             onPressed: () {
                               sl
-                                  .get<AppUserRepository>()
+                                  .get<FriendRepository>()
                                   .canceledFriendRequest(chatPartner);
                             },
                             color: Colors.red);
@@ -247,7 +247,7 @@ class UserInformationContent extends StatelessWidget {
                             buttonText: "Freundschaftsanfrage senden",
                             onPressed: () {
                               sl
-                                  .get<AppUserRepository>()
+                                  .get<FriendRepository>()
                                   .sendFriendRequestToUser(chatPartner);
                             },
                             color: PeerPALAppColor.primaryColor);
