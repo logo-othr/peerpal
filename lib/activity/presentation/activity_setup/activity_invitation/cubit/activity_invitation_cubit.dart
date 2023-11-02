@@ -7,23 +7,26 @@ import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_invitation_state.dart';
 
 class InvitationInputCubit extends Cubit<ActivityInvitationState> {
-  InvitationInputCubit(this._appUserRepository, this._activityRepository)
+  InvitationInputCubit(
+      this._appUserRepository, this._activityRepository, this._friendRepository)
       : super(ActivityInvitationInitial());
 
   final AppUserRepository _appUserRepository;
   final ActivityRepository _activityRepository;
+  final FriendRepository _friendRepository;
 
   StreamController<List<PeerPALUser>> _userStreamController =
       new BehaviorSubject();
 
   Future<void> getData() async {
-    var friends = _appUserRepository.getFriendList();
-    var friendRequestsSize = _appUserRepository.getFriendRequestsSize();
+    var friends = _friendRepository.getFriendList();
+    var friendRequestsSize = _friendRepository.getFriendRequestsSize();
 
     var activity = _activityRepository.getLocalActivity();
     List<String> invitationIds =

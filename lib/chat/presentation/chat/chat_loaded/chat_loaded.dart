@@ -18,6 +18,7 @@ import 'package:peerpal/chat/presentation/chat_header_bar.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/setup.dart';
 import 'package:uuid/uuid.dart';
 
@@ -113,8 +114,10 @@ class ChatLoaded extends StatelessWidget {
       children: [
         _chatHeaderBar(context, _state.currentChat.user),
         FriendRequestButton(
-            chatPartner: _state.currentChat.user,
-            appUserRepository: sl<AppUserRepository>()),
+          chatPartner: _state.currentChat.user,
+          appUserRepository: sl<AppUserRepository>(),
+          friendRepository: sl<FriendRepository>(),
+        ),
         MessageList(state: _state),
         ChatBottomBar(
           appUser: _state.currentUser,

@@ -8,6 +8,7 @@ import 'package:peerpal/chat/presentation/chat_header_bar.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 
@@ -32,8 +33,10 @@ class NewChat extends StatelessWidget {
       children: [
         _chatHeaderBar(context, _state.chatPartner),
         FriendRequestButton(
-            chatPartner: _state.chatPartner,
-            appUserRepository: sl<AppUserRepository>()),
+          chatPartner: _state.chatPartner,
+          appUserRepository: sl<AppUserRepository>(),
+          friendRepository: sl<FriendRepository>(),
+        ),
         Spacer(),
         Center(
             child: Padding(

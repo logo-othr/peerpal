@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/widgets/single_chat_cancel_friend_request_button.dart';
 import 'package:peerpal/widgets/single_chat_send_friend_request_button.dart';
 
 class FriendRequestButton extends StatelessWidget {
   final PeerPALUser chatPartner;
   final AppUserRepository _appUserRepository;
+  final FriendRepository _friendRepository;
 
   const FriendRequestButton(
       {Key? key,
       required this.chatPartner,
-      required AppUserRepository appUserRepository})
+      required AppUserRepository appUserRepository,
+      required friendRepository})
       : this._appUserRepository = appUserRepository,
+        this._friendRepository = friendRepository,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<PeerPALUser>>(
-        stream: _appUserRepository.getFriendList(),
+        stream: _friendRepository.getFriendList(),
         builder:
             (context, AsyncSnapshot<List<PeerPALUser>> friendListSnapshot) {
           if (!friendListSnapshot.hasData ||
@@ -32,7 +36,7 @@ class FriendRequestButton extends StatelessWidget {
 
   Widget _friendRequestButton() {
     return StreamBuilder<List<PeerPALUser>>(
-        stream: _appUserRepository.getSentFriendRequestsFromUser(),
+        stream: _friendRepository.getSentFriendRequestsFromUser(),
         builder: (context,
             AsyncSnapshot<List<PeerPALUser>> sentFriendRequestsSnapshot) {
           if (sentFriendRequestsSnapshot.hasData) {
@@ -70,7 +74,7 @@ class FriendRequestButton extends StatelessWidget {
     return SendFriendRequestButton(
         buttonText: "Anfrage senden",
         onPressed: () {
-          _appUserRepository.sendFriendRequestToUser(chatPartner);
+          _friendRepository.sendFriendRequestToUser(chatPartner);
         });
   }
 
@@ -78,7 +82,7 @@ class FriendRequestButton extends StatelessWidget {
     return CancelFriendRequestButton(
         buttonText: "Anfrage gesendet",
         onPressed: () {
-          _appUserRepository.canceledFriendRequest(chatPartner);
+          _friendRepository.canceledFriendRequest(chatPartner);
         });
   }
 }
