@@ -44,7 +44,9 @@ import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/data/local_communication_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/repository/communication_repository.dart';
 import 'package:peerpal/friends/data/firebase_friend_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -97,6 +99,10 @@ Future<void> setupDependencies() async {
 
   sl.registerLazySingleton<AuthService>(
       () => AuthServiceFirebase(firebaseAuth: sl()));
+
+  sl.registerLazySingleton<CommunicationRepository>(
+      () => LocalCommunicationRepository());
+
   // =============== Chat ===============
   // Bloc
   sl.registerFactory(

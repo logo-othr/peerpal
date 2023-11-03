@@ -4,21 +4,23 @@ import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/repository/communication_repository.dart';
 
 part 'discover_communication_state.dart';
 
 class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
   DiscoverCommunicationCubit(
-      this._appUserRepository, this._getAuthenticatedUser)
+      this._appUserRepo, this._getAuthUser, this._comRepo)
       : super(DiscoverCommunicationInitial());
-  final AppUserRepository _appUserRepository;
-  final GetAuthenticatedUser _getAuthenticatedUser;
+  final AppUserRepository _appUserRepo;
+  final GetAuthenticatedUser _getAuthUser;
+  final CommunicationRepository _comRepo;
 
   Future<void> loadData() async {
-    var communicationTypes = await _appUserRepository.loadCommunicationList();
-    PeerPALUser authenticatedUser = await _getAuthenticatedUser();
+    List<CommunicationType> communicationTypes = await _comRepo.getTypes();
+    PeerPALUser authUser = await _getAuthUser();
     List<CommunicationType> selectedCommunicationTypes =
-        authenticatedUser.discoverCommunicationPreferences ??
+        authUser.discoverCommunicationPreferences ??
             <CommunicationType>[].cast<CommunicationType>();
     emit(DiscoverCommunicationSelected(
         communicationTypes, selectedCommunicationTypes));
@@ -51,10 +53,10 @@ class DiscoverCommunicationCubit extends Cubit<DiscoverCommunicationState> {
       emit(DiscoverCommunicationPosting(
           state.communicationTypes, state.selectedCommunicationTypes));
 
-      var userInformation = await _getAuthenticatedUser();
+      var userInformation = await _getAuthUser();
       var updatedUserInformation = userInformation.copyWith(
           discoverCommunicationPreferences: state.selectedCommunicationTypes);
-      await _appUserRepository.updateUser(updatedUserInformation);
+      await _appUserRepo.updateUser(updatedUserInformation);
 
       emit(DiscoverCommunicationPosted(
           state.communicationTypes, state.selectedCommunicationTypes));

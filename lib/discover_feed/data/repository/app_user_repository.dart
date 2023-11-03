@@ -10,7 +10,6 @@ import 'package:peerpal/discover_feed/data/dto/peerpal_user_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/private_user_information_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/public_user_information_dto.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
-import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../app_logger.dart';
@@ -18,12 +17,13 @@ import '../../../app_logger.dart';
 class AppUserRepository {
   AppUserRepository(
       {firebase_auth.FirebaseAuth? firebaseAuth,
-      required this.cache,
+      required Cache cache,
       required FirestoreService firestoreService})
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+      : _cache = cache,
+        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         this._firestoreService = firestoreService;
 
-  final Cache cache;
+  final Cache _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirestoreService _firestoreService;
@@ -62,7 +62,7 @@ class AppUserRepository {
 
   // ToDo: Move to cache service
   void _storeUserInCache(String uid, PeerPALUserDTO userDTO) {
-    cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
+    _cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
   }
 
   Future<void> updateServerNameCache(userName) async {
@@ -119,6 +119,19 @@ class AppUserRepository {
       logger.i(e);
     }
 
+    /*
+     var publicUserDocument = _firestoreService.getDocument(
+        UserDatabaseContract.publicUsers, uid);
+
+    var privateUserDocument = null;
+
+    try {
+      privateUserDocument = _firestoreService.getDocument(
+          UserDatabaseContract.privateUsers, uid);
+    } on Exception catch (e) {
+      logger.i('$e'); // ToDo: Use firebase error codes
+    }*/
+
     if (publicUserDocument.exists && publicUserDocument.data() != null) {
       var publicUserData = publicUserDocument.data();
       publicUserDataDTO = PublicUserInformationDTO.fromJson(publicUserData!);
@@ -137,24 +150,24 @@ class AppUserRepository {
 
   Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
       String authenticatedUserId) async {
-    var currentPeerPALUser = await getCachedAppUser();
+    var appUser = await getCachedAppUser();
 
     // Check if any discovery settings are empty and return an empty BehaviorSubject if true.
-    if (isDiscoverySettingsEmpty(currentPeerPALUser)) return BehaviorSubject();
+    if (isDiscoverySettingsEmpty(appUser)) return BehaviorSubject();
 
     // Build and run location and activity queries.
-    Stream<QuerySnapshot<Map<String, dynamic>>> locationStream =
-        buildAndRunQuery(
-            currentPeerPALUser.discoverLocations!.map((e) => e.place).toList(),
-            UserDatabaseContract.discoverLocations);
-    Stream<QuerySnapshot<Map<String, dynamic>>> activityStream =
-        buildAndRunQuery(
-            currentPeerPALUser.discoverActivitiesCodes!.map((e) => e).toList(),
-            UserDatabaseContract.discoverActivities);
+    Stream<QuerySnapshot<Map<String, dynamic>>> locationStream = _getUsers(
+      whereFieldName: UserDatabaseContract.discoverLocations,
+      arrayContainsAny: appUser.discoverLocations!.map((e) => e.place).toList(),
+    );
+    Stream<QuerySnapshot<Map<String, dynamic>>> activityStream = _getUsers(
+      whereFieldName: UserDatabaseContract.discoverActivities,
+      arrayContainsAny: appUser.discoverActivitiesCodes!.map((e) => e).toList(),
+    );
 
     // Combine both streams to generate a list of unique matched PeerPALUsers.
     Stream<List<PeerPALUser>> combinedFilteredUserStream =
-        combineLocationAndActivityStreams(locationStream, activityStream);
+        _combineLocationAndActivityStreams(locationStream, activityStream);
 
     BehaviorSubject<List<PeerPALUser>> combinedFilteredUserStreamController =
         BehaviorSubject();
@@ -170,12 +183,13 @@ class AppUserRepository {
         user.discoverLocations!.isEmpty;
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> buildAndRunQuery(
-      List<dynamic> filterValues, String fieldName) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> _getUsers(
+      {required List<dynamic> arrayContainsAny,
+      required String whereFieldName}) {
     // Apply query filters and sorting criteria.
     Query<Map<String, dynamic>> query = _firestore
         .collection(UserDatabaseContract.publicUsers)
-        .where(fieldName, arrayContainsAny: filterValues)
+        .where(whereFieldName, arrayContainsAny: arrayContainsAny)
         .orderBy(UserDatabaseContract.userAge)
         .orderBy(UserDatabaseContract.userName)
         .orderBy(UserDatabaseContract.uid);
@@ -184,35 +198,36 @@ class AppUserRepository {
     return query.snapshots();
   }
 
-  Stream<List<PeerPALUser>> combineLocationAndActivityStreams(
+  Stream<List<PeerPALUser>> _combineLocationAndActivityStreams(
       Stream<QuerySnapshot<Map<String, dynamic>>> locationStream,
       Stream<QuerySnapshot<Map<String, dynamic>>> activityStream) {
     return Rx.combineLatest2(locationStream, activityStream,
         (QuerySnapshot<Map<String, dynamic>> matchedByLocationDocuments,
             QuerySnapshot<Map<String, dynamic>> matchedByActivityDocuments) {
       List<PeerPALUser> matchedByLocationUsers =
-          convertQueryToPeerPALUsers(matchedByLocationDocuments);
+          _queryUsers(matchedByLocationDocuments);
       List<PeerPALUser> matchedByActivityUsers =
-          convertQueryToPeerPALUsers(matchedByActivityDocuments);
+          _queryUsers(matchedByActivityDocuments);
 
       // Combine and shuffle unique users.
-      List<PeerPALUser> uniqueUsers = combineAndFilterUniqueUsers(
-          matchedByLocationUsers, matchedByActivityUsers);
+      List<PeerPALUser> uniqueUsers =
+          _combineLists(matchedByLocationUsers, matchedByActivityUsers);
+
+      uniqueUsers.shuffle();
 
       return uniqueUsers;
     });
   }
 
-  List<PeerPALUser> convertQueryToPeerPALUsers(
-      QuerySnapshot<Map<String, dynamic>> query) {
+  List<PeerPALUser> _queryUsers(QuerySnapshot<Map<String, dynamic>> query) {
     return query.docs
-        .map((document) => convertDocumentSnapshotToPeerPALUser(document))
+        .map((document) => _documentToUser(document))
         .where((user) => user != null)
         .cast<PeerPALUser>()
         .toList();
   }
 
-  List<PeerPALUser> combineAndFilterUniqueUsers(
+  List<PeerPALUser> _combineLists(
       List<PeerPALUser> locationUsers, List<PeerPALUser> activityUsers) {
     List<PeerPALUser> combinedUsers = List.from(locationUsers)
       ..addAll(activityUsers);
@@ -225,7 +240,7 @@ class AppUserRepository {
     return uniqueUsers;
   }
 
-  PeerPALUser? convertDocumentSnapshotToPeerPALUser(DocumentSnapshot document) {
+  PeerPALUser? _documentToUser(DocumentSnapshot document) {
     var documentData = document.data() as Map<String, dynamic>;
     var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
     var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
@@ -241,24 +256,17 @@ class AppUserRepository {
 
     PeerPALUser userInformation = PeerPALUser.empty;
     PeerPALUserDTO? cachedUserDTO =
-        cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
+        _cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
       PeerPALUserDTO downloadedUserDTO = await _downloadUserInformation(uid);
 
-      cache.store<PeerPALUserDTO>(
+      _cache.store<PeerPALUserDTO>(
           key: '{$uid}-userinformation', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
-  }
-
-  List<CommunicationType> loadCommunicationList() {
-    final communicationTypes = <CommunicationType>[];
-    communicationTypes.add(CommunicationType.phone);
-    communicationTypes.add(CommunicationType.chat);
-    return communicationTypes;
   }
 
 

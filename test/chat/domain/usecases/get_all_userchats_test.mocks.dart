@@ -157,7 +157,7 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
   }
 
   @override
-  _i2.Cache get cache => (super.noSuchMethod(
+  _i2.Cache get _cache => (super.noSuchMethod(
         Invocation.getter(#cache),
         returnValue: _FakeCache_0(
           this,
@@ -227,22 +227,23 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
         ),
         returnValue:
             _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>.value(
-                    _FakeBehaviorSubject_2<List<_i3.PeerPALUser>>(
-              this,
-              Invocation.method(
-                #getMatchingUsersPaginatedStream,
-                [authenticatedUserId],
-                {#limit: limit},
-              ),
-            )),
-          ) as _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>);
+                _FakeBehaviorSubject_2<List<_i3.PeerPALUser>>(
+          this,
+          Invocation.method(
+            #getMatchingUsersPaginatedStream,
+            [authenticatedUserId],
+            {#limit: limit},
+          ),
+        )),
+      ) as _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>>);
+
   @override
-  _i3.PeerPALUser? convertDocumentSnapshotToPeerPALUser(
-          _i12.DocumentSnapshot<Object?>? document) =>
+  _i3.PeerPALUser? _documentToUser(_i12.DocumentSnapshot<Object?>? document) =>
       (super.noSuchMethod(Invocation.method(
         #convertDocumentSnapshotToPeerPALUser,
         [document],
       )) as _i3.PeerPALUser?);
+
   @override
   _i7.Future<_i3.PeerPALUser> getCurrentUserInformation(String? uid) =>
       (super.noSuchMethod(
