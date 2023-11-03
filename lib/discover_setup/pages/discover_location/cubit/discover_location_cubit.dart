@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/app/data/location/dto/location.dart';
+import 'package:peerpal/app/domain/location/location_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
@@ -8,14 +9,16 @@ import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_u
 part 'discover_location_state.dart';
 
 class DiscoverLocationCubit extends Cubit<DiscoverLocationState> {
-  DiscoverLocationCubit(this._appUserRepository, this._getAuthenticatedUser)
+  DiscoverLocationCubit(this._appUserRepository, this._getAuthenticatedUser,
+      this._locationRepository)
       : super(DiscoverLocationInitial());
 
   final AppUserRepository _appUserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
+  final LocationRepository _locationRepository;
 
   Future<void> loadData() async {
-    var locations = await _appUserRepository.loadLocations();
+    var locations = await _locationRepository.loadLocations();
     PeerPALUser authenticatedUser = await _getAuthenticatedUser();
     List<Location> selectedLocations =
         authenticatedUser.discoverLocations ?? <Location>[].cast<Location>();

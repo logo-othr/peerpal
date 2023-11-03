@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:peerpal/app/data/firestore/firestore_service.dart';
-import 'package:peerpal/app/data/location/dto/location.dart';
 import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app/domain/core/cache.dart';
 import 'package:peerpal/discover_feed/data/dto/peerpal_user_dto.dart';
@@ -264,31 +261,5 @@ class AppUserRepository {
     return communicationTypes;
   }
 
-  Future<List<Location>> loadLocations() async {
-    final jsonData = await rootBundle.loadString('assets/location.json');
-    final list = json.decode(jsonData) as List<dynamic>;
-    return list.map((e) => Location.fromJson(e)).toList();
-  }
 
-  //----------------------------------------------------
-  //Friends Start
-  //----------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//----------------------------------------------------
-//Friends End
-//----------------------------------------------------
 }
