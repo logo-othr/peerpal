@@ -27,6 +27,7 @@ class AppUserRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirestoreService _firestoreService;
+  final userCacheString = 'userinformation';
 
   Future<void> updateUser(PeerPALUser peerPALUser) async {
     final uid = peerPALUser.id;
@@ -72,7 +73,11 @@ class AppUserRepository {
   }
 
   Future<PeerPALUser> getUser(String uid) async {
-    return (await _downloadUserInformation(uid)).toDomainObject();
+    print("GET_USER");
+    var userDTO = await _downloadUserInformation(uid);
+    _storeUserInCache(uid, userDTO);
+    var user = userDTO.toDomainObject();
+    return user;
   }
 
   Future<List<PeerPALUser>> findUserByName(String userName,
@@ -139,15 +144,17 @@ class AppUserRepository {
     String uid = firebaseUser!.uid;
 
     PeerPALUser userInformation = PeerPALUser.empty;
+
     PeerPALUserDTO? cachedUserDTO =
-        _cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
+        _cache.retrieve<PeerPALUserDTO>(key: '$uid-$userCacheString');
+
     if (cachedUserDTO != null) {
       userInformation = cachedUserDTO.toDomainObject();
     } else {
       PeerPALUserDTO downloadedUserDTO = await _downloadUserInformation(uid);
 
       _cache.store<PeerPALUserDTO>(
-          key: '{$uid}-userinformation', value: downloadedUserDTO);
+          key: '$uid-$userCacheString', value: downloadedUserDTO);
       userInformation = downloadedUserDTO.toDomainObject();
     }
     return userInformation;
@@ -155,7 +162,9 @@ class AppUserRepository {
 
   // ToDo: Move to cache service
   void _storeUserInCache(String uid, PeerPALUserDTO userDTO) {
-    _cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
+    _cache.store<PeerPALUserDTO>(key: '$uid-$userCacheString', value: userDTO);
+    print("STORE_CACHE_PRINT" + _cache.toString());
+    print("STORE_USER_CACHED" + userDTO.toString());
   }
 
   Future<PeerPALUserDTO> _downloadUserInformation(String uid) async {
@@ -227,9 +236,9 @@ class AppUserRepository {
       Stream<QuerySnapshot<Map<String, dynamic>>> locationStream,
       Stream<QuerySnapshot<Map<String, dynamic>>> activityStream) {
     return Rx.combineLatest2(locationStream, activityStream,
-        (QuerySnapshot<Map<String, dynamic>> matchedByLocationDocuments,
+            (QuerySnapshot<Map<String, dynamic>> matchedByLocationDocuments,
             QuerySnapshot<Map<String, dynamic>> matchedByActivityDocuments) {
-      List<PeerPALUser> matchedByLocationUsers =
+          List<PeerPALUser> matchedByLocationUsers =
           _queryUsers(matchedByLocationDocuments);
       List<PeerPALUser> matchedByActivityUsers =
           _queryUsers(matchedByActivityDocuments);
