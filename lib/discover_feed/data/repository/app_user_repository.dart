@@ -60,17 +60,15 @@ class AppUserRepository {
     await _firestoreService.setDocumentData(privateDocRef, privateUserInfo);
   }
 
-  // ToDo: Move to cache service
-  void _storeUserInCache(String uid, PeerPALUserDTO userDTO) {
-    _cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
-  }
-
   Future<void> updateServerNameCache(userName) async {
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance
-        .collection('updateNameAtServer')
+        .collection(UserDatabaseContract.updateName)
         .doc()
-        .set({'userId': currentUserId, 'name': userName});
+        .set({
+      UserDatabaseContract.userId: currentUserId,
+      UserDatabaseContract.userName: userName
+    });
   }
 
   Future<PeerPALUser> getUser(String uid) async {
@@ -81,7 +79,7 @@ class AppUserRepository {
       {List<String> ignoreList = const []}) async {
     QuerySnapshot<Map<String, dynamic>> userSnapshots = await _firestore
         .collection(UserDatabaseContract.publicUsers)
-        .where('name', isEqualTo: userName)
+        .where(UserDatabaseContract.userName, isEqualTo: userName)
         .get();
 
     List<PeerPALUser> userList = <PeerPALUser>[];
@@ -96,6 +94,68 @@ class AppUserRepository {
     });
 
     return userList;
+  }
+
+
+  Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
+      String authenticatedUserId) async {
+    var appUser = await getCachedAppUser();
+
+    // Check if any discovery settings are empty and return an empty BehaviorSubject if true.
+    if (isDiscoverySettingsEmpty(appUser)) return BehaviorSubject();
+
+    // Build and run location and activity queries.
+    Stream<QuerySnapshot<Map<String, dynamic>>> locationStream = _getUsers(
+      whereFieldName: UserDatabaseContract.discoverLocations,
+      arrayContainsAny: appUser.discoverLocations!.map((e) => e.place).toList(),
+    );
+    Stream<QuerySnapshot<Map<String, dynamic>>> activityStream = _getUsers(
+      whereFieldName: UserDatabaseContract.discoverActivities,
+      arrayContainsAny: appUser.discoverActivitiesCodes!.map((e) => e).toList(),
+    );
+
+    // Combine both streams to generate a list of unique matched PeerPALUsers.
+    Stream<List<PeerPALUser>> combinedFilteredUserStream =
+        _combineLocationAndActivityStreams(locationStream, activityStream);
+
+    BehaviorSubject<List<PeerPALUser>> combinedFilteredUserStreamController =
+        BehaviorSubject();
+    combinedFilteredUserStreamController.addStream(combinedFilteredUserStream);
+
+    return combinedFilteredUserStreamController;
+  }
+
+  bool isDiscoverySettingsEmpty(PeerPALUser user) {
+    return user.discoverActivitiesCodes == null ||
+        user.discoverActivitiesCodes!.isEmpty ||
+        user.discoverLocations == null ||
+        user.discoverLocations!.isEmpty;
+  }
+
+
+  Future<PeerPALUser> getCachedAppUser() async {
+    firebase_auth.User? firebaseUser =
+        firebase_auth.FirebaseAuth.instance.currentUser;
+    String uid = firebaseUser!.uid;
+
+    PeerPALUser userInformation = PeerPALUser.empty;
+    PeerPALUserDTO? cachedUserDTO =
+        _cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
+    if (cachedUserDTO != null) {
+      userInformation = cachedUserDTO.toDomainObject();
+    } else {
+      PeerPALUserDTO downloadedUserDTO = await _downloadUserInformation(uid);
+
+      _cache.store<PeerPALUserDTO>(
+          key: '{$uid}-userinformation', value: downloadedUserDTO);
+      userInformation = downloadedUserDTO.toDomainObject();
+    }
+    return userInformation;
+  }
+
+  // ToDo: Move to cache service
+  void _storeUserInCache(String uid, PeerPALUserDTO userDTO) {
+    _cache.store<PeerPALUserDTO>(key: '{$uid}-userinformation', value: userDTO);
   }
 
   Future<PeerPALUserDTO> _downloadUserInformation(String uid) async {
@@ -146,41 +206,6 @@ class AppUserRepository {
         privateUserInformation: privateUserDataDTO ?? null,
         publicUserInformation: publicUserDataDTO);
     return peerPALUserDTO;
-  }
-
-  Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
-      String authenticatedUserId) async {
-    var appUser = await getCachedAppUser();
-
-    // Check if any discovery settings are empty and return an empty BehaviorSubject if true.
-    if (isDiscoverySettingsEmpty(appUser)) return BehaviorSubject();
-
-    // Build and run location and activity queries.
-    Stream<QuerySnapshot<Map<String, dynamic>>> locationStream = _getUsers(
-      whereFieldName: UserDatabaseContract.discoverLocations,
-      arrayContainsAny: appUser.discoverLocations!.map((e) => e.place).toList(),
-    );
-    Stream<QuerySnapshot<Map<String, dynamic>>> activityStream = _getUsers(
-      whereFieldName: UserDatabaseContract.discoverActivities,
-      arrayContainsAny: appUser.discoverActivitiesCodes!.map((e) => e).toList(),
-    );
-
-    // Combine both streams to generate a list of unique matched PeerPALUsers.
-    Stream<List<PeerPALUser>> combinedFilteredUserStream =
-        _combineLocationAndActivityStreams(locationStream, activityStream);
-
-    BehaviorSubject<List<PeerPALUser>> combinedFilteredUserStreamController =
-        BehaviorSubject();
-    combinedFilteredUserStreamController.addStream(combinedFilteredUserStream);
-
-    return combinedFilteredUserStreamController;
-  }
-
-  bool isDiscoverySettingsEmpty(PeerPALUser user) {
-    return user.discoverActivitiesCodes == null ||
-        user.discoverActivitiesCodes!.isEmpty ||
-        user.discoverLocations == null ||
-        user.discoverLocations!.isEmpty;
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> _getUsers(
@@ -248,26 +273,4 @@ class AppUserRepository {
     if (publicUser.id != _firebaseAuth.currentUser?.uid) return publicUser;
     return null;
   }
-
-  Future<PeerPALUser> getCachedAppUser() async {
-    firebase_auth.User? firebaseUser =
-        firebase_auth.FirebaseAuth.instance.currentUser;
-    String uid = firebaseUser!.uid;
-
-    PeerPALUser userInformation = PeerPALUser.empty;
-    PeerPALUserDTO? cachedUserDTO =
-        _cache.retrieve<PeerPALUserDTO>(key: '{$uid}-userinformation');
-    if (cachedUserDTO != null) {
-      userInformation = cachedUserDTO.toDomainObject();
-    } else {
-      PeerPALUserDTO downloadedUserDTO = await _downloadUserInformation(uid);
-
-      _cache.store<PeerPALUserDTO>(
-          key: '{$uid}-userinformation', value: downloadedUserDTO);
-      userInformation = downloadedUserDTO.toDomainObject();
-    }
-    return userInformation;
-  }
-
-
 }

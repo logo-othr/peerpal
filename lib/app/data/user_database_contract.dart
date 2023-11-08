@@ -20,6 +20,11 @@ class UserDatabaseContract {
   static const chatTimestamp = 'lastUpdated';
   static const deviceToken = 'pushToken';
   static const serverDeleteDeviceTokenQueue = 'deleteDeviceTokenFromServer';
+
+  // server queue
+  static const updateName = 'updateNameAtServer';
+
+  // Analytics
   static const serverUpdateDeviceTokenQueue = 'updateDeviceTokenAtServer';
   static const analytics_public_activity_click =
       'analytics_public_activity_click';
