@@ -29,8 +29,8 @@ class AppUserRepository {
   final FirestoreService _firestoreService;
   final userCacheString = 'userinformation';
 
-  Future<void> updateUser(PeerPALUser peerPALUser) async {
-    final uid = peerPALUser.id;
+  Future<void> updateUser(PeerPALUser updateUser) async {
+    final uid = updateUser.id;
 
     // Nullcheck
     if (uid == null) return; // ToDo: Throw exception
@@ -42,7 +42,7 @@ class AppUserRepository {
         _firestoreService.getDocument(UserDatabaseContract.privateUsers, uid);
 
     // Convert domain object to DTO and cache.
-    final PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(peerPALUser);
+    final PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(updateUser);
     _storeUserInCache(uid, userDTO);
 
     // Serializing DTO to JSON.
@@ -59,9 +59,12 @@ class AppUserRepository {
     // Setting data in Firestore.
     await _firestoreService.setDocumentData(publicDocRef, publicUserInfo);
     await _firestoreService.setDocumentData(privateDocRef, privateUserInfo);
+
+    _updateServerNameCache(userDTO.publicUserInformation?.name);
   }
 
-  Future<void> updateServerNameCache(userName) async {
+  Future<void> _updateServerNameCache(String? userName) async {
+    if (userName == null) return; //TODO: Throw error
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance
         .collection(UserDatabaseContract.updateName)
@@ -101,7 +104,6 @@ class AppUserRepository {
     return userList;
   }
 
-
   Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
       String authenticatedUserId) async {
     var appUser = await getCachedAppUser();
@@ -136,7 +138,6 @@ class AppUserRepository {
         user.discoverLocations == null ||
         user.discoverLocations!.isEmpty;
   }
-
 
   Future<PeerPALUser> getCachedAppUser() async {
     firebase_auth.User? firebaseUser =
