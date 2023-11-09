@@ -42,6 +42,8 @@ import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dar
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed/data/repository/firebase_discover_repository.dart';
+import 'package:peerpal/discover_feed/domain/repository/discover_repository.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/data/local_communication_repository.dart';
@@ -189,8 +191,14 @@ Future<void> setupDependencies() async {
   );
 
   // ============== Discover ====================
-  sl.registerLazySingleton(
-      () => FindPeers(userRepository: sl(), authenticationRepository: sl()));
+  sl.registerLazySingleton<DiscoverRepository>(
+    () => FirebaseDiscoverRepository(firestoreService: sl()),
+  );
+
+  sl.registerLazySingleton(() => FindPeers(
+      userRepository: sl(),
+      authenticationRepository: sl(),
+      discoverRepository: sl()));
   sl.registerLazySingleton(() => FindUserByName(userRepository: sl()));
   // ============== Activity ====================
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
