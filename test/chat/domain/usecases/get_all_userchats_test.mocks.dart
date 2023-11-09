@@ -215,7 +215,7 @@ class MockAppUserRepository extends _i1.Mock implements _i11.AppUserRepository {
       ) as _i7.Future<List<_i3.PeerPALUser>>);
 
   @override
-  _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>> findPeers(
+  _i7.Future<_i4.BehaviorSubject<List<_i3.PeerPALUser>>> discoverPeers(
     String? authenticatedUserId, {
     int? limit = 4,
   }) =>

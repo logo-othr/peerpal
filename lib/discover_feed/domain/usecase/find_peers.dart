@@ -15,6 +15,6 @@ class FindPeers {
 
   Future<BehaviorSubject<List<PeerPALUser>>> call() async {
     return await userRepository
-        .findPeers(authenticationRepository.currentUser.id);
+        .discoverPeers(authenticationRepository.currentUser.id);
   }
 }

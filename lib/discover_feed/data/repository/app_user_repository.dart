@@ -76,7 +76,6 @@ class AppUserRepository {
   }
 
   Future<PeerPALUser> getUser(String uid) async {
-    print("GET_USER");
     var userDTO = await _downloadUserInformation(uid);
     _storeUserInCache(uid, userDTO);
     var user = userDTO.toDomainObject();
@@ -104,9 +103,9 @@ class AppUserRepository {
     return userList;
   }
 
-  Future<BehaviorSubject<List<PeerPALUser>>> findPeers(
+  Future<BehaviorSubject<List<PeerPALUser>>> discoverPeers(
       String authenticatedUserId) async {
-    var appUser = await getCachedAppUser();
+    var appUser = await getAppUser();
 
     // Check if any discovery settings are empty and return an empty BehaviorSubject if true.
     if (isDiscoverySettingsEmpty(appUser)) return BehaviorSubject();
@@ -139,7 +138,7 @@ class AppUserRepository {
         user.discoverLocations!.isEmpty;
   }
 
-  Future<PeerPALUser> getCachedAppUser() async {
+  Future<PeerPALUser> getAppUser() async {
     firebase_auth.User? firebaseUser =
         firebase_auth.FirebaseAuth.instance.currentUser;
     String uid = firebaseUser!.uid;

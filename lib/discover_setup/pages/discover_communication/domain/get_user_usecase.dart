@@ -10,7 +10,7 @@ class GetAuthenticatedUser {
 
   Future<PeerPALUser> call() async {
     String currentUserId = authRepository.currentUser.id;
-    PeerPALUser currentUser = await userRepository.getCachedAppUser();
+    PeerPALUser currentUser = await userRepository.getAppUser();
     // When the user in the database doesn't exist, return a empty user object with the firebase auth id
     if (currentUser.id == null)
       currentUser = currentUser.copyWith(id: currentUserId);
