@@ -30,7 +30,7 @@ class FirestoreService {
     }
   }
 
-  CollectionReference collection(String path) {
+  CollectionReference<Map<String, dynamic>> collection(String path) {
     return _firestore.collection(path);
   }
 

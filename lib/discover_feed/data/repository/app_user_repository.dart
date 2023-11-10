@@ -15,16 +15,11 @@ import '../../../app_logger.dart';
 
 class AppUserRepository {
   AppUserRepository(
-      {firebase_auth.FirebaseAuth? firebaseAuth,
-      required Cache cache,
-      required FirestoreService firestoreService})
+      {required Cache cache, required FirestoreService firestoreService})
       : _cache = cache,
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         this._firestoreService = firestoreService;
 
   final Cache _cache;
-  final firebase_auth.FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirestoreService _firestoreService;
   final userCacheString = 'userinformation';
 
@@ -62,18 +57,6 @@ class AppUserRepository {
     _updateServerNameCache(userDTO.publicUserInformation?.name);
   }
 
-  Future<void> _updateServerNameCache(String? userName) async {
-    if (userName == null) return; //TODO: Throw error
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance
-        .collection(UserDatabaseContract.updateName)
-        .doc()
-        .set({
-      UserDatabaseContract.userId: currentUserId,
-      UserDatabaseContract.userName: userName
-    });
-  }
-
   Future<PeerPALUser> getUser(String uid) async {
     var userDTO = await _downloadUserInformation(uid);
     _storeUserInCache(uid, userDTO);
@@ -83,7 +66,7 @@ class AppUserRepository {
 
   Future<List<PeerPALUser>> findUserByName(String userName,
       {List<String> ignoreList = const []}) async {
-    QuerySnapshot<Map<String, dynamic>> userSnapshots = await _firestore
+    QuerySnapshot<Map<String, dynamic>> userSnapshots = await _firestoreService
         .collection(UserDatabaseContract.publicUsers)
         .where(UserDatabaseContract.userName, isEqualTo: userName)
         .get();
@@ -91,7 +74,7 @@ class AppUserRepository {
     List<PeerPALUser> userList = <PeerPALUser>[];
 
     userSnapshots.docs.forEach((document) {
-      var documentData = document.data();
+      Map<String, dynamic> documentData = document.data();
       var publicUserDTO = PublicUserInformationDTO.fromJson(documentData);
       var peerPALUserDTO = PeerPALUserDTO(publicUserInformation: publicUserDTO);
       var publicUser = peerPALUserDTO.toDomainObject();
@@ -127,8 +110,18 @@ class AppUserRepository {
   // ToDo: Move to cache service
   void _storeUserInCache(String uid, PeerPALUserDTO userDTO) {
     _cache.store<PeerPALUserDTO>(key: '$uid-$userCacheString', value: userDTO);
-    print("STORE_CACHE_PRINT" + _cache.toString());
-    print("STORE_USER_CACHED" + userDTO.toString());
+  }
+
+  Future<void> _updateServerNameCache(String? userName) async {
+    if (userName == null) return; //TODO: Throw error
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance
+        .collection(UserDatabaseContract.updateName)
+        .doc()
+        .set({
+      UserDatabaseContract.userId: currentUserId,
+      UserDatabaseContract.userName: userName
+    });
   }
 
   Future<PeerPALUserDTO> _downloadUserInformation(String uid) async {
@@ -136,14 +129,14 @@ class AppUserRepository {
     var publicUserDataDTO;
     var privateUserDataDTO;
 
-    var publicUserDocument = await _firestore
+    var publicUserDocument = await _firestoreService
         .collection(UserDatabaseContract.publicUsers)
         .doc(uid)
         .get();
 
     var privateUserDocument = null;
     try {
-      privateUserDocument = await _firestore
+      privateUserDocument = await _firestoreService
           .collection(UserDatabaseContract.privateUsers)
           .doc(uid)
           .get();
@@ -151,19 +144,6 @@ class AppUserRepository {
       logger.i('$e'); // ToDo: Use firebase error codes
       logger.i(e);
     }
-
-    /*
-     var publicUserDocument = _firestoreService.getDocument(
-        UserDatabaseContract.publicUsers, uid);
-
-    var privateUserDocument = null;
-
-    try {
-      privateUserDocument = _firestoreService.getDocument(
-          UserDatabaseContract.privateUsers, uid);
-    } on Exception catch (e) {
-      logger.i('$e'); // ToDo: Use firebase error codes
-    }*/
 
     if (publicUserDocument.exists && publicUserDocument.data() != null) {
       var publicUserData = publicUserDocument.data();
@@ -180,7 +160,4 @@ class AppUserRepository {
         publicUserInformation: publicUserDataDTO);
     return peerPALUserDTO;
   }
-
-
-
 }
