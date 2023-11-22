@@ -30,24 +30,22 @@ class AppUserRepository {
     if (uid == null) return; // ToDo: Throw exception
 
     // Fetching document references.
-    final DocumentReference<Object?> publicDocRef =
-        _firestoreService.getDocument(UserDatabaseContract.publicUsers, uid);
-    final DocumentReference<Object?> privateDocRef =
-        _firestoreService.getDocument(UserDatabaseContract.privateUsers, uid);
+    final publicDocRef =
+        _service.getDocument(UserDatabaseContract.publicUsers, uid);
+    final privateDocRef =
+        _service.getDocument(UserDatabaseContract.privateUsers, uid);
 
     // Convert domain object to DTO and cache.
     final PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(updateUser);
     _storeUserInCache(uid, userDTO);
 
     // Serializing DTO to JSON.
-    final Map<String, dynamic>? publicUserInfo =
-        userDTO.publicUserInformation?.toJson();
-    final Map<String, dynamic>? privateUserInfo =
-        userDTO.privateUserInformation?.toJson();
+    final publicUserJson = userDTO.publicUserInformation?.toJson();
+    final privateUserJson = userDTO.privateUserInformation?.toJson();
 
     // Nullcheck
-    if (publicUserInfo == null || privateUserInfo == null) {
-      return; // ToDo: Throw exception
+    if (publicUserJson == null || privateUserJson == null) {
+      return; // TODO: Throw exception
     }
 
     // Setting data in Firestore.
