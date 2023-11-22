@@ -17,10 +17,10 @@ class AppUserRepository {
   AppUserRepository(
       {required Cache cache, required FirestoreService firestoreService})
       : _cache = cache,
-        this._firestoreService = firestoreService;
+        this._service = firestoreService;
 
   final Cache _cache;
-  final FirestoreService _firestoreService;
+  final FirestoreService _service;
   final userCacheString = 'userinformation';
 
   Future<void> updateUser(PeerPALUser updateUser) async {
@@ -30,29 +30,27 @@ class AppUserRepository {
     if (uid == null) return; // ToDo: Throw exception
 
     // Fetching document references.
-    final DocumentReference<Object?> publicDocRef =
-        _firestoreService.getDocument(UserDatabaseContract.publicUsers, uid);
-    final DocumentReference<Object?> privateDocRef =
-        _firestoreService.getDocument(UserDatabaseContract.privateUsers, uid);
+    final publicDocRef =
+        _service.getDocument(UserDatabaseContract.publicUsers, uid);
+    final privateDocRef =
+        _service.getDocument(UserDatabaseContract.privateUsers, uid);
 
     // Convert domain object to DTO and cache.
     final PeerPALUserDTO userDTO = PeerPALUserDTO.fromDomainObject(updateUser);
     _storeUserInCache(uid, userDTO);
 
     // Serializing DTO to JSON.
-    final Map<String, dynamic>? publicUserInfo =
-        userDTO.publicUserInformation?.toJson();
-    final Map<String, dynamic>? privateUserInfo =
-        userDTO.privateUserInformation?.toJson();
+    final publicUserJson = userDTO.publicUserInformation?.toJson();
+    final privateUserJson = userDTO.privateUserInformation?.toJson();
 
     // Nullcheck
-    if (publicUserInfo == null || privateUserInfo == null) {
-      return; // ToDo: Throw exception
+    if (publicUserJson == null || privateUserJson == null) {
+      return; // TODO: Throw exception
     }
 
     // Setting data in Firestore.
-    await _firestoreService.setDocumentData(publicDocRef, publicUserInfo);
-    await _firestoreService.setDocumentData(privateDocRef, privateUserInfo);
+    await _service.setDocumentData(publicDocRef, publicUserJson);
+    await _service.setDocumentData(privateDocRef, privateUserJson);
 
     _updateServerNameCache(userDTO.publicUserInformation?.name);
   }
@@ -66,7 +64,7 @@ class AppUserRepository {
 
   Future<List<PeerPALUser>> findUserByName(String userName,
       {List<String> ignoreList = const []}) async {
-    QuerySnapshot<Map<String, dynamic>> userSnapshots = await _firestoreService
+    QuerySnapshot<Map<String, dynamic>> userSnapshots = await _service
         .collection(UserDatabaseContract.publicUsers)
         .where(UserDatabaseContract.userName, isEqualTo: userName)
         .get();
@@ -129,14 +127,14 @@ class AppUserRepository {
     var publicUserDataDTO;
     var privateUserDataDTO;
 
-    var publicUserDocument = await _firestoreService
+    var publicUserDocument = await _service
         .collection(UserDatabaseContract.publicUsers)
         .doc(uid)
         .get();
 
     var privateUserDocument = null;
     try {
-      privateUserDocument = await _firestoreService
+      privateUserDocument = await _service
           .collection(UserDatabaseContract.privateUsers)
           .doc(uid)
           .get();
