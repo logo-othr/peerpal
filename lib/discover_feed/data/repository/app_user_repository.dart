@@ -111,7 +111,7 @@ class AppUserRepository {
   }
 
   Future<void> _updateServerNameCache(String? userName) async {
-    if (userName == null) return; //TODO: Throw error
+    if (userName == null) return; //TODO: Throw errors
     var currentUserId = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance
         .collection(UserDatabaseContract.updateName)
