@@ -11,6 +11,8 @@ class StartRememberMeNotifications {
 
   Future<void> call() async {
     logger.i("Activate weekly reminders");
-    _rememberMeNotificationRepository.scheduleWeeklyReminders();
+    _rememberMeNotificationRepository.scheduleWeeklyReminders(
+        'Wöchentliche Erinnerung - PeerPAL',
+        'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!');
   }
 }

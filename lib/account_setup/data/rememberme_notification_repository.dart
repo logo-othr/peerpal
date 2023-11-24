@@ -6,11 +6,9 @@ class RememberMeNotificationRepository {
   RememberMeNotificationRepository({required notificationService})
       : _notificationService = notificationService;
 
-  void scheduleWeeklyReminders() async {
+  void scheduleWeeklyReminders(String title, String message) async {
     int notificationReminderId =
-        await _notificationService.scheduleWeeklyNotification(
-            'Wöchentliche Erinnerung - PeerPAL',
-            'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!');
+        await _notificationService.scheduleWeeklyNotification(title, message);
     if (notificationReminderId == -1)
       print("error: weekly reminder could not be scheduled.");
   }
