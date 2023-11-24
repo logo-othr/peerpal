@@ -173,23 +173,18 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   @override
-  Future<int> scheduleWeeklyNotification() async {
+  Future<int> scheduleWeeklyNotification(String title, String message) async {
     if (Platform.isIOS && (await hasPermission()) == false) return -1;
-// ToDo: Move title and message up
     bool weeklyRemindersActive = await isWeeklyReminderScheduled();
     if (!weeklyRemindersActive) {
       await _ensureInitialized();
       int notificationId = await _nextNotificationId();
       var datetime = _nextInstanceOfMondayTenAM();
-      await _flutterLocalNotificationsPlugin.zonedSchedule(
-          notificationId,
-          'Wöchentliche Erinnerung - PeerPAL',
-          'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!',
-          datetime,
-          _platformSpecificNotificationDetails(),
+      await _flutterLocalNotificationsPlugin.zonedSchedule(notificationId,
+          title, message, datetime, _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+              UILocalNotificationDateInterpretation.absoluteTime,
           payload: "weekly reminder: " + datetime.toString(),
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 

@@ -6,13 +6,11 @@ class RememberMeNotificationRepository {
   RememberMeNotificationRepository({required notificationService})
       : _notificationService = notificationService;
 
-  void activateReminders() {
-    _scheduleReminders();
-  }
-
-  Future<void> _scheduleReminders() async {
+  void scheduleWeeklyReminders() async {
     int notificationReminderId =
-        await _notificationService.scheduleWeeklyNotification();
+        await _notificationService.scheduleWeeklyNotification(
+            'Wöchentliche Erinnerung - PeerPAL',
+            'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!');
     if (notificationReminderId == -1)
       print("error: weekly reminder could not be scheduled.");
   }

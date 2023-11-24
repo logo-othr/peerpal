@@ -11,6 +11,6 @@ class StartRememberMeNotifications {
 
   Future<void> call() async {
     logger.i("Activate weekly reminders");
-    _rememberMeNotificationRepository.activateReminders();
+    _rememberMeNotificationRepository.scheduleWeeklyReminders();
   }
 }
