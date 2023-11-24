@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
-import 'package:peerpal/account_setup/data/rememberme_notification_repository.dart';
-import 'package:peerpal/account_setup/domain/start_rememberme_notifications.dart';
+import 'package:peerpal/account_setup/data/app_reminder_notification_repository.dart';
+import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/activity/data/repository/firebase_activity_repository.dart';
 import 'package:peerpal/activity/data/repository/local_activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
@@ -177,8 +177,8 @@ Future<void> setupDependencies() async {
           remoteNotificationForegroundHandler:
               _remoteNotificationForegroundHandler));
 
-  sl.registerLazySingleton<StartWeeklyAppReminderNotifications>(
-      () => StartWeeklyAppReminderNotifications(
+  sl.registerLazySingleton<StartWeeklyUsageReminderUseCase>(
+      () => StartWeeklyUsageReminderUseCase(
             repository: sl<AppReminderNotificationRepository>(),
           ));
 

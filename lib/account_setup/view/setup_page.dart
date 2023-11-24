@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/account_setup/domain/start_rememberme_notifications.dart';
+import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/app/presentation/tabview/view/tabview.dart';
@@ -29,7 +29,7 @@ class SetupPage extends StatelessWidget {
         context.read<AppUserRepository>(),
         sl<GetAuthenticatedUser>(),
         sl<StartRemoteNotifications>(),
-        sl<StartWeeklyAppReminderNotifications>(),
+        sl<StartWeeklyUsageReminderUseCase>(),
       )..loadCurrentSetupFlowState(),
       child: const SetupPageContent(),
     );

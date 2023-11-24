@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/account_setup/domain/start_rememberme_notifications.dart';
+import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -18,7 +18,7 @@ class SetupCubit extends Cubit<SetupState> {
   final AppUserRepository _appuserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
   final StartRemoteNotifications _startRemoteNotifications;
-  final StartWeeklyAppReminderNotifications _startRememberMeNotifications;
+  final StartWeeklyUsageReminderUseCase _startRememberMeNotifications;
 
   SetupCubit(this._appuserRepository, this._getAuthenticatedUser,
       this._startRemoteNotifications, this._startRememberMeNotifications)
