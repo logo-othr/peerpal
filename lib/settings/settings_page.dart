@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:peerpal/account_setup/domain/start_rememberme_notifications.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/app/data/resources/strings.dart';
@@ -29,6 +30,11 @@ import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
+  StartRememberMeNotifications _startRememberMeNotifications;
+
+  SettingsPage({required startRememberMeNotifications})
+      : this._startRememberMeNotifications = startRememberMeNotifications;
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -96,7 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       height: 120,
                       width: 120,
                       child:
-                      Image(image: AssetImage('assets/peerpal_logo.png')))),
+                          Image(image: AssetImage('assets/peerpal_logo.png')))),
               SizedBox(height: 10),
               Divider(thickness: 1, color: PeerPALAppColor.primaryColor),
               SizedBox(height: 10),
@@ -310,15 +316,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                           border: Border.all(
                                               width: 2,
                                               color:
-                                              PeerPALAppColor.primaryColor),
+                                                  PeerPALAppColor.primaryColor),
                                           borderRadius:
-                                          BorderRadius.circular(10)),
+                                              BorderRadius.circular(10)),
                                       height: 300,
                                       child: Column(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                            CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
                                             "Entwicklereinstellungen \n anschalten?",
@@ -334,57 +340,57 @@ class _SettingsPageState extends State<SettingsPage> {
                                             alignment: Alignment.center,
                                             child: Padding(
                                               padding:
-                                              const EdgeInsets.fromLTRB(
-                                                  0, 10, 0, 0),
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 10, 0, 0),
                                               child: Container(
                                                 color: Colors.transparent,
                                                 child: Column(
                                                   children: [
                                                     Padding(
                                                       padding: const EdgeInsets
-                                                          .fromLTRB(
+                                                              .fromLTRB(
                                                           15, 10, 0, 10),
                                                       child: CustomPeerPALHeading3(
                                                           text:
-                                                          "Passwort eingeben:",
+                                                              "Passwort eingeben:",
                                                           fontSize: 20,
                                                           color: Colors.black),
                                                     ),
                                                     Padding(
                                                       padding: const EdgeInsets
-                                                          .fromLTRB(
+                                                              .fromLTRB(
                                                           15, 5, 15, 0),
                                                       child: TextField(
                                                         textInputAction:
-                                                        TextInputAction
-                                                            .newline,
+                                                            TextInputAction
+                                                                .newline,
                                                         keyboardType:
-                                                        TextInputType
-                                                            .multiline,
+                                                            TextInputType
+                                                                .multiline,
                                                         minLines: 1,
                                                         maxLines: 5,
                                                         style: TextStyle(
                                                             fontSize: 18),
                                                         controller:
-                                                        passwordController,
+                                                            passwordController,
                                                         decoration:
-                                                        InputDecoration(
+                                                            InputDecoration(
                                                           contentPadding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                              left: 35,
-                                                              top: 35,
-                                                              right: 35),
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 35,
+                                                                  top: 35,
+                                                                  right: 35),
                                                           hintMaxLines: 3,
                                                           filled: true,
                                                           fillColor:
-                                                          Colors.white,
+                                                              Colors.white,
                                                           border:
-                                                          OutlineInputBorder(
+                                                              OutlineInputBorder(
                                                             borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                10),
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
                                                           ),
                                                         ),
                                                       ),
@@ -448,9 +454,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         CustomTableRow(
                           text: "(3) Wöchentliche Erinnerung aktivieren",
                           onPressed: () async => {
-                            sl<NotificationService>()
-                                .scheduleWeeklyNotification()
-                          },
+                            widget._startRememberMeNotifications()},
                         ),
                         CustomTableRow(
                           text:
@@ -459,8 +463,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             sl<NotificationService>().cancelAll();
                             sl<NotificationService>()
                                 .setWeeklyReminderScheduled(false);
-                            sl<NotificationService>()
-                                .scheduleWeeklyNotification();
+                            widget._startRememberMeNotifications;
                           },
                         ),
                         CustomTableRow(

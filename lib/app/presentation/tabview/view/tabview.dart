@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/account_setup/domain/start_rememberme_notifications.dart';
 import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
 import 'package:peerpal/activity/presentation/activity_feed/activity_feed_page.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
@@ -53,7 +54,9 @@ class _AppTabViewState extends State<AppTabView> {
     ),
     Center(
       child: Container(
-        child: SettingsPage(),
+        child: SettingsPage(
+          startRememberMeNotifications: sl<StartRememberMeNotifications>(),
+        ),
       ),
     ),
   ];
