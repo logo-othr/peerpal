@@ -177,16 +177,15 @@ Future<void> setupDependencies() async {
           remoteNotificationForegroundHandler:
               _remoteNotificationForegroundHandler));
 
-  sl.registerLazySingleton<StartRememberMeNotifications>(
-      () => StartRememberMeNotifications(
-            rememberMeNotificationRepository:
-                sl<RememberMeNotificationRepository>(),
+  sl.registerLazySingleton<StartWeeklyAppReminderNotifications>(
+      () => StartWeeklyAppReminderNotifications(
+            repository: sl<AppReminderNotificationRepository>(),
           ));
 
   // Repository
 
-  sl.registerLazySingleton<RememberMeNotificationRepository>(
-    () => RememberMeNotificationRepository(
+  sl.registerLazySingleton<AppReminderNotificationRepository>(
+    () => AppReminderNotificationRepository(
         notificationService: sl<NotificationService>()),
   );
 

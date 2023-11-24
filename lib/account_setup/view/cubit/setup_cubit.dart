@@ -18,7 +18,7 @@ class SetupCubit extends Cubit<SetupState> {
   final AppUserRepository _appuserRepository;
   final GetAuthenticatedUser _getAuthenticatedUser;
   final StartRemoteNotifications _startRemoteNotifications;
-  final StartRememberMeNotifications _startRememberMeNotifications;
+  final StartWeeklyAppReminderNotifications _startRememberMeNotifications;
 
   SetupCubit(this._appuserRepository, this._getAuthenticatedUser,
       this._startRemoteNotifications, this._startRememberMeNotifications)

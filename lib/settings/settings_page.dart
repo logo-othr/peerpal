@@ -30,7 +30,7 @@ import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  StartRememberMeNotifications _startRememberMeNotifications;
+  StartWeeklyAppReminderNotifications _startRememberMeNotifications;
 
   SettingsPage({required startRememberMeNotifications})
       : this._startRememberMeNotifications = startRememberMeNotifications;

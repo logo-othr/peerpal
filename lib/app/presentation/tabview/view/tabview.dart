@@ -55,7 +55,8 @@ class _AppTabViewState extends State<AppTabView> {
     Center(
       child: Container(
         child: SettingsPage(
-          startRememberMeNotifications: sl<StartRememberMeNotifications>(),
+          startRememberMeNotifications:
+              sl<StartWeeklyAppReminderNotifications>(),
         ),
       ),
     ),

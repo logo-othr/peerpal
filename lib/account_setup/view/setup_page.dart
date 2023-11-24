@@ -29,7 +29,7 @@ class SetupPage extends StatelessWidget {
         context.read<AppUserRepository>(),
         sl<GetAuthenticatedUser>(),
         sl<StartRemoteNotifications>(),
-        sl<StartRememberMeNotifications>(),
+        sl<StartWeeklyAppReminderNotifications>(),
       )..loadCurrentSetupFlowState(),
       child: const SetupPageContent(),
     );
