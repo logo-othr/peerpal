@@ -27,9 +27,9 @@ abstract class NotificationService {
 
   Future<void> cancelAll();
 
-  Future<void> setWeeklyReminderScheduled(bool isScheduled);
+  Future<void> storeWeeklyReminderId(int notificationId);
 
-  Future<void> scheduleDailyNotification();
+  // Future<void> scheduleDailyNotification();
 
   Future<bool> hasAskedForPermission();
 }

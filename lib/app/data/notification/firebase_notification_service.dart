@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:peerpal/app/data/notification/exceptions/notification_permission_exception.dart';
 import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app_logger.dart';
@@ -19,7 +20,7 @@ class FirebaseNotificationService implements NotificationService {
       'ACTIVITY_NOTIFICATION_ID_COUNTER';
   final String HAS_ASKED_FOR_PERMISSION = "HAS_ASKED_FOR_PERMISSION";
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -28,7 +29,7 @@ class FirebaseNotificationService implements NotificationService {
 
   Future<int> _nextNotificationId() async {
     final SharedPreferences _preferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     int currentNotificationId =
         _preferences.getInt(_ACTIVITY_NOTIFICATION_ID_COUNTER) ?? 0;
     int nextNotificationId = currentNotificationId + 1;
@@ -44,9 +45,9 @@ class FirebaseNotificationService implements NotificationService {
         .collection(UserDatabaseContract.serverDeleteDeviceTokenQueue)
         .doc()
         .set({UserDatabaseContract.userId: currentUserId}).onError((error,
-        stackTrace) =>
-        logger.e("${REMOVE_DEVICE_TOKEN_ERROR}. Error: ${error.toString()} "
-            "Stacktrace: ${stackTrace.toString()}"));
+                stackTrace) =>
+            logger.e("${REMOVE_DEVICE_TOKEN_ERROR}. Error: ${error.toString()} "
+                "Stacktrace: ${stackTrace.toString()}"));
   }
 
   @override
@@ -60,8 +61,8 @@ class FirebaseNotificationService implements NotificationService {
         UserDatabaseContract.userId: currentUserId,
         UserDatabaseContract.deviceToken: token
       }).onError((error, stackTrace) => logger
-          .e("${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
-          "Stacktrace: ${stackTrace.toString()}"));
+              .e("${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
+                  "Stacktrace: ${stackTrace.toString()}"));
     }).catchError((error) {
       logger.e(
           "${REGISTER_DEVICE_TOKEN_ERROR}. Error: ${error.payload.toString()}");
@@ -124,7 +125,7 @@ class FirebaseNotificationService implements NotificationService {
   TZDateTime _nextInstanceOfTenAM() {
     final TZDateTime now = TZDateTime.now(local);
     TZDateTime scheduledDate =
-    TZDateTime(local, now.year, now.month, now.day, 10, 00);
+        TZDateTime(local, now.year, now.month, now.day, 10, 00);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
@@ -146,10 +147,10 @@ class FirebaseNotificationService implements NotificationService {
   Future<String> printPendingNotifications() async {
     logger.i("pending notifications:");
     final List<PendingNotificationRequest> pendingNotificationRequests =
-    await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
+        await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
     String pendingNotifications = "";
     for (PendingNotificationRequest pendingNotificationRequest
-    in pendingNotificationRequests) {
+        in pendingNotificationRequests) {
       logger.i(
           "PendingNotificationRequest: id: ${pendingNotificationRequest.id}, body: ${pendingNotificationRequest.body} payload: ${pendingNotificationRequest.payload}, title: ${pendingNotificationRequest.title}");
       pendingNotifications +=
@@ -159,24 +160,26 @@ class FirebaseNotificationService implements NotificationService {
     return pendingNotifications;
   }
 
-  Future<void> setWeeklyReminderScheduled(bool isScheduled) async {
+  Future<void> storeWeeklyReminderId(int notificationId) async {
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
-    prefs.setBool("weekly-reminder", isScheduled);
+    prefs.setInt("weekly-reminder", notificationId);
   }
 
-  Future<bool> isWeeklyReminderScheduled() async {
+  Future<int?> getWeeklyReminderNotificationId() async {
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
-    bool? isWeeklyReminderScheduled = prefs.getBool("weekly-reminder");
-    return isWeeklyReminderScheduled ?? false;
+    int? isWeeklyReminderScheduled = prefs.getInt("weekly-reminder");
+    return isWeeklyReminderScheduled;
   }
 
   @override
   Future<int> scheduleWeeklyNotification(String title, String message) async {
-    if (Platform.isIOS && (await hasPermission()) == false) return -1;
-    bool weeklyRemindersActive = await isWeeklyReminderScheduled();
-    if (!weeklyRemindersActive) {
+    if (Platform.isIOS && (await hasPermission()) == false)
+      throw NotificationPermissionException("No ios notification permission");
+
+    int? weeklyReminderId = await getWeeklyReminderNotificationId();
+    if (weeklyReminderId == null) {
       await _ensureInitialized();
       int notificationId = await _nextNotificationId();
       var datetime = _nextInstanceOfMondayTenAM();
@@ -190,19 +193,23 @@ class FirebaseNotificationService implements NotificationService {
 
       logger.i(
           "Scheduled weekly notification with id $notificationId for weekly notification");
-      await setWeeklyReminderScheduled(true);
+      await storeWeeklyReminderId(notificationId);
       await printPendingNotifications();
       return notificationId;
     } else {
-      await printPendingNotifications();
-      logger.i("weekly reminders already active");
-      return -1;
+      // TODO: Get the existing notification id and return it
+      String pendingNotifications = await printPendingNotifications();
+      logger.i(
+          "Weekly Notification with title '$title' and message '$message' is "
+          "already scheduled. Scheduled Notifications: "
+          "'$pendingNotifications'");
+      return weeklyReminderId;
     }
   }
 
+/*
   @override
   Future<int> scheduleDailyNotification() async {
-// ToDo: Move title and message up
     bool weeklyRemindersActive = await isWeeklyReminderScheduled();
     if (!weeklyRemindersActive) {
       await _ensureInitialized();
@@ -216,7 +223,7 @@ class FirebaseNotificationService implements NotificationService {
           _platformSpecificNotificationDetails(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+              UILocalNotificationDateInterpretation.absoluteTime,
           payload: "daily reminder: " + datetime.toString(),
           matchDateTimeComponents: DateTimeComponents.time);
 
@@ -230,10 +237,11 @@ class FirebaseNotificationService implements NotificationService {
       logger.i("weekly reminders already active");
       return -1;
     }
-  }
+  }*/
 
   @override
-  Future<int> scheduleNotification(String title, String body, TZDateTime scheduledDateTime) async {
+  Future<int> scheduleNotification(
+      String title, String body, TZDateTime scheduledDateTime) async {
     await _ensureInitialized();
     int notificationId = await _nextNotificationId();
     await _flutterLocalNotificationsPlugin.zonedSchedule(
@@ -243,7 +251,7 @@ class FirebaseNotificationService implements NotificationService {
       scheduledDateTime,
       _platformSpecificNotificationDetails(),
       uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
+          UILocalNotificationDateInterpretation.absoluteTime,
       payload: scheduledDateTime.toString(),
       androidAllowWhileIdle: true,
     );
@@ -268,7 +276,7 @@ class FirebaseNotificationService implements NotificationService {
   @override
   Future<bool> hasPermission() async {
     NotificationSettings currentSettings =
-    await _firebaseMessaging.getNotificationSettings();
+        await _firebaseMessaging.getNotificationSettings();
 
     //https://firebase.flutter.dev/docs/messaging/permissions/
     if (currentSettings.authorizationStatus == AuthorizationStatus.authorized) {
@@ -286,7 +294,7 @@ class FirebaseNotificationService implements NotificationService {
   @override
   Future<bool> hasAskedForPermission() async {
     final SharedPreferences _preferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     return await _preferences.getBool(HAS_ASKED_FOR_PERMISSION) ?? false;
   }
 
@@ -296,13 +304,13 @@ class FirebaseNotificationService implements NotificationService {
       return true;
     }
     NotificationSettings newSettings =
-    await _firebaseMessaging.requestPermission(
+        await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
     );
     final SharedPreferences _preferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     _preferences.setBool(HAS_ASKED_FOR_PERMISSION, true);
 
     return newSettings.authorizationStatus == AuthorizationStatus.authorized;
@@ -311,9 +319,9 @@ class FirebaseNotificationService implements NotificationService {
   Future<void> _ensureInitialized() async {
     if (_isServiceInitialized) return;
     final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: _createAndroidNotificationSettings(),
-        iOS: _createIOSNotificationSettings());
+        InitializationSettings(
+            android: _createAndroidNotificationSettings(),
+            iOS: _createIOSNotificationSettings());
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
     _isServiceInitialized = true;
   }

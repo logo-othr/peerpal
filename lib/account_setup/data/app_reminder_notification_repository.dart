@@ -1,3 +1,4 @@
+import 'package:peerpal/app/data/notification/exceptions/notification_permission_exception.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 
 class AppReminderNotificationRepository {
@@ -7,9 +8,14 @@ class AppReminderNotificationRepository {
       : _notificationService = notificationService;
 
   void scheduleWeeklyReminders(String title, String message) async {
-    int notificationReminderId =
-        await _notificationService.scheduleWeeklyNotification(title, message);
-    if (notificationReminderId == -1)
-      print("error: weekly reminder could not be scheduled.");
+    try {
+      int notificationReminderId =
+          await _notificationService.scheduleWeeklyNotification(title, message);
+    } on NotificationPermissionException {
+      // No permission to schedule the notification.
+      // Store this information, to display that
+      // weekly notifications are off.
+      // Otherwise this catch block can be empty.
+    }
   }
 }

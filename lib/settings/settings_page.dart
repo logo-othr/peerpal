@@ -456,17 +456,17 @@ class _SettingsPageState extends State<SettingsPage> {
                           onPressed: () async => {
                             widget._startRememberMeNotifications()},
                         ),
-                        CustomTableRow(
+                        /* CustomTableRow(
                           text:
                               "(4) Alle löschen/Aktivieren: w. Benachrichtigung",
                           onPressed: () async {
                             sl<NotificationService>().cancelAll();
                             sl<NotificationService>()
-                                .setWeeklyReminderScheduled(false);
+                                .storeWeeklyReminderId(false);
                             widget._startRememberMeNotifications;
                           },
-                        ),
-                        CustomTableRow(
+                        ),*/
+                        /* CustomTableRow(
                           text:
                               "(5) Alle löschen/Aktivieren: tgl. Benachrichtgung",
                           onPressed: () async {
@@ -476,7 +476,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             sl<NotificationService>()
                                 .scheduleDailyNotification();
                           },
-                        ),
+                        ),*/
                         CustomTableRow(
                           text: "(6) Löschen: Benachrichtigungen",
                           onPressed: () async =>
