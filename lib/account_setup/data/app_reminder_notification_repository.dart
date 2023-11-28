@@ -1,21 +1,56 @@
-import 'package:peerpal/app/data/notification/exceptions/notification_permission_exception.dart';
+import 'package:peerpal/app/data/local_configuration_service.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
+import 'package:peerpal/app_logger.dart';
+import 'package:timezone/timezone.dart';
 
 class AppReminderNotificationRepository {
   final NotificationService _notificationService;
+  final LocalConfigurationService _localConfiguration;
 
-  AppReminderNotificationRepository({required notificationService})
-      : _notificationService = notificationService;
+  AppReminderNotificationRepository(
+      {required notificationService, required localConfiguration})
+      : _notificationService = notificationService,
+        _localConfiguration = localConfiguration;
 
   void scheduleWeeklyReminders(String title, String message) async {
-    try {
-      int notificationReminderId =
-          await _notificationService.scheduleWeeklyNotification(title, message);
-    } on NotificationPermissionException {
-      // No permission to schedule the notification.
-      // Store this information, to display that
-      // weekly notifications are off.
-      // Otherwise this catch block can be empty.
+    int? weeklyReminderId =
+        await _localConfiguration.getWeeklyReminderNotificationId();
+    if (weeklyReminderId != null) {
+      await _scheduleWeekly(title, message);
+    } else {
+      logger.i(
+          "Weekly Notification with title '$title' and message '$message' is "
+          "already scheduled.");
     }
+  }
+
+  Future<void> _scheduleWeekly(String title, String message) async {
+    var datetime = _nextInstanceOfMondayTenAM();
+    int weeklyReminderNotificationId = await _notificationService
+        .scheduleWeeklyNotification(title, message, datetime);
+    await _localConfiguration
+        .setWeeklyReminderNotificationId(weeklyReminderNotificationId);
+  }
+
+  // Source: flutter local notification documentation
+  // ToDo: test.
+  TZDateTime _nextInstanceOfMondayTenAM() {
+    TZDateTime scheduledDate = _nextInstanceOfTenAM();
+    while (scheduledDate.weekday != DateTime.monday) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  // Source: flutter local notification documentation
+  // ToDo: test.
+  TZDateTime _nextInstanceOfTenAM() {
+    final TZDateTime now = TZDateTime.now(local);
+    TZDateTime scheduledDate =
+        TZDateTime(local, now.year, now.month, now.day, 10, 00);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
   }
 }

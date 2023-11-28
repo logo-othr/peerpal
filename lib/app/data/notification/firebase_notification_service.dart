@@ -207,77 +207,23 @@ class FirebaseNotificationService implements NotificationService {
 
 
 
-  // Source: flutter local notification documentation
-  // ToDo: test.
-  TZDateTime _nextInstanceOfMondayTenAM() {
-    TZDateTime scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.monday) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
-
-  // Source: flutter local notification documentation
-  // ToDo: test.
-  TZDateTime _nextInstanceOfTenAM() {
-    final TZDateTime now = TZDateTime.now(local);
-    TZDateTime scheduledDate =
-        TZDateTime(local, now.year, now.month, now.day, 10, 00);
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
-
-
-
-
-  Future<void> storeWeeklyReminderId(int notificationId) async {
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    final SharedPreferences prefs = await _prefs;
-    prefs.setInt("weekly-reminder", notificationId);
-  }
-
-  Future<int?> _getWeeklyReminderNotificationId() async {
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    final SharedPreferences prefs = await _prefs;
-    int? isWeeklyReminderScheduled = prefs.getInt("weekly-reminder");
-    return isWeeklyReminderScheduled;
-  }
-
   @override
-  Future<int> scheduleWeeklyNotification(String title, String message) async {
-    int? weeklyReminderId = await _getWeeklyReminderNotificationId();
-    if (weeklyReminderId == null) {
-      await _ensureInitialized();
+  Future<int> scheduleWeeklyNotification(
+      String title, String message, TZDateTime datetime) async {
+    await _ensureInitialized();
+    int notificationId = await _nextNotificationId();
+    await _flutterLocalNotificationsPlugin.zonedSchedule(notificationId, title,
+        message, datetime, _platformSpecificNotificationDetails(),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: "weekly reminder: " + datetime.toString(),
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
-      var datetime = _nextInstanceOfMondayTenAM();
-      int notificationId = await _nextNotificationId();
-      await _flutterLocalNotificationsPlugin.zonedSchedule(notificationId,
-          title, message, datetime, _platformSpecificNotificationDetails(),
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          payload: "weekly reminder: " + datetime.toString(),
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
+    logger.i("Scheduled weekly notification with id $notificationId");
 
-      logger.i(
-          "Scheduled weekly notification with id $notificationId for weekly notification");
-      await storeWeeklyReminderId(notificationId);
-      await printPendingNotifications();
-      return notificationId;
-    } else {
-      // TODO: Get the existing notification id and return it
-      String pendingNotifications = await printPendingNotifications();
-      logger.i(
-          "Weekly Notification with title '$title' and message '$message' is "
-          "already scheduled. Scheduled Notifications: "
-          "'$pendingNotifications'");
-      return weeklyReminderId;
-    }
+    return notificationId;
   }
-
-
 
   AndroidInitializationSettings _createAndroidNotificationSettings() {
     return const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -291,16 +237,10 @@ class FirebaseNotificationService implements NotificationService {
     );
   }
 
-
-
   @override
   Future<bool> hasAskedForPermission() async {
     final SharedPreferences _preferences =
         await SharedPreferences.getInstance();
     return await _preferences.getBool(HAS_ASKED_FOR_PERMISSION) ?? false;
   }
-
-
-
-
 }

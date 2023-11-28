@@ -13,7 +13,8 @@ abstract class NotificationService {
   Future<int> scheduleNotification(
       String title, String body, TZDateTime scheduledDateTime);
 
-  Future<int> scheduleWeeklyNotification(String title, String message);
+  Future<int> scheduleWeeklyNotification(
+      String title, String message, TZDateTime datetime);
 
   Future<String> printPendingNotifications();
 
@@ -25,7 +26,7 @@ abstract class NotificationService {
 
   Future<void> cancelAll();
 
-  Future<void> storeWeeklyReminderId(int notificationId);
+  Future<void> _storeWeeklyReminderId(int notificationId);
 
   // Future<void> scheduleDailyNotification();
 
