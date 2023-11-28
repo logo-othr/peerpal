@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/account_setup/view/cubit/setup_cubit.dart';
+import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/app/presentation/tabview/view/tabview.dart';
 import 'package:peerpal/app_logger.dart';
@@ -30,6 +31,7 @@ class SetupPage extends StatelessWidget {
         sl<GetAuthenticatedUser>(),
         sl<StartRemoteNotifications>(),
         sl<StartWeeklyUsageReminderUseCase>(),
+        sl<IsIOSWithoutNotificationPermissionUseCase>(),
       )..loadCurrentSetupFlowState(),
       child: const SetupPageContent(),
     );

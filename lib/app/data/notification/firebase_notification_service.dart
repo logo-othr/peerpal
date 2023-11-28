@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:peerpal/app/data/notification/exceptions/notification_permission_exception.dart';
 import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app_logger.dart';
@@ -38,44 +35,12 @@ class FirebaseNotificationService implements NotificationService {
   }
 
   @override
-  Future<void> unregisterDeviceToken() async {
-    var currentUserId = _firebaseAuth.currentUser!.uid;
-    logger.i("Removing the device token...");
-    FirebaseFirestore.instance
-        .collection(UserDatabaseContract.serverDeleteDeviceTokenQueue)
-        .doc()
-        .set({UserDatabaseContract.userId: currentUserId}).onError((error,
-                stackTrace) =>
-            logger.e("${REMOVE_DEVICE_TOKEN_ERROR}. Error: ${error.toString()} "
-                "Stacktrace: ${stackTrace.toString()}"));
-  }
-
-  @override
-  Future<void> registerDeviceToken() async {
-    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseMessaging.instance.getToken().then((token) {
-      FirebaseFirestore.instance
-          .collection(UserDatabaseContract.serverUpdateDeviceTokenQueue)
-          .doc()
-          .set({
-        UserDatabaseContract.userId: currentUserId,
-        UserDatabaseContract.deviceToken: token
-      }).onError((error, stackTrace) => logger
-              .e("${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
-                  "Stacktrace: ${stackTrace.toString()}"));
-    }).catchError((error) {
-      logger.e(
-          "${REGISTER_DEVICE_TOKEN_ERROR}. Error: ${error.payload.toString()}");
-    });
-  }
-
-  @override
   Future<void> startRemoteNotificationBackgroundHandler(
       firebaseMessagingBackgroundHandler,
       firebaseMessagingForegroundHandler) async {
     if (!_isRemoteMessageHandlerStarted) {
-      _firebaseMessaging
-          .requestPermission(); // ToDo: Handle return value and errors
+      //  _firebaseMessaging
+      //      .requestPermission(); // ToDo: Handle return value and errors
       FirebaseMessaging.onBackgroundMessage(
           firebaseMessagingBackgroundHandler); // ToDo: Firebase shows the notification whether it is shown via local notification or not. Investigate. https://stackoverflow.com/questions/70921767/notification-show-twice-on-flutter/71461142#71461142
       FirebaseMessaging.onMessage.listen(firebaseMessagingForegroundHandler);
@@ -92,44 +57,6 @@ class FirebaseNotificationService implements NotificationService {
     FirebaseMessaging.onMessage.listen((msg) async {});
     FirebaseMessaging.onMessageOpenedApp.listen((msg) async {});
     _isRemoteMessageHandlerStarted = false;
-  }
-
-  @override
-  Future<int> showNotification(String title, String body,
-      {String payload = ""}) async {
-    await _ensureInitialized();
-    int notificationId = await _nextNotificationId();
-    await _flutterLocalNotificationsPlugin.show(
-      notificationId,
-      title,
-      body,
-      _platformSpecificNotificationDetails(),
-      payload: payload,
-    );
-    logger.i("Show notification nr. $notificationId");
-    return notificationId;
-  }
-
-  // Source: flutter local notification documentation
-  // ToDo: test.
-  TZDateTime _nextInstanceOfMondayTenAM() {
-    TZDateTime scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.monday) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
-
-  // Source: flutter local notification documentation
-  // ToDo: test.
-  TZDateTime _nextInstanceOfTenAM() {
-    final TZDateTime now = TZDateTime.now(local);
-    TZDateTime scheduledDate =
-        TZDateTime(local, now.year, now.month, now.day, 10, 00);
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
   }
 
   @override
@@ -160,85 +87,6 @@ class FirebaseNotificationService implements NotificationService {
     return pendingNotifications;
   }
 
-  Future<void> storeWeeklyReminderId(int notificationId) async {
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    final SharedPreferences prefs = await _prefs;
-    prefs.setInt("weekly-reminder", notificationId);
-  }
-
-  Future<int?> getWeeklyReminderNotificationId() async {
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-    final SharedPreferences prefs = await _prefs;
-    int? isWeeklyReminderScheduled = prefs.getInt("weekly-reminder");
-    return isWeeklyReminderScheduled;
-  }
-
-  @override
-  Future<int> scheduleWeeklyNotification(String title, String message) async {
-    if (Platform.isIOS && (await hasPermission()) == false)
-      throw NotificationPermissionException("No ios notification permission");
-
-    int? weeklyReminderId = await getWeeklyReminderNotificationId();
-    if (weeklyReminderId == null) {
-      await _ensureInitialized();
-      int notificationId = await _nextNotificationId();
-      var datetime = _nextInstanceOfMondayTenAM();
-      await _flutterLocalNotificationsPlugin.zonedSchedule(notificationId,
-          title, message, datetime, _platformSpecificNotificationDetails(),
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          payload: "weekly reminder: " + datetime.toString(),
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
-
-      logger.i(
-          "Scheduled weekly notification with id $notificationId for weekly notification");
-      await storeWeeklyReminderId(notificationId);
-      await printPendingNotifications();
-      return notificationId;
-    } else {
-      // TODO: Get the existing notification id and return it
-      String pendingNotifications = await printPendingNotifications();
-      logger.i(
-          "Weekly Notification with title '$title' and message '$message' is "
-          "already scheduled. Scheduled Notifications: "
-          "'$pendingNotifications'");
-      return weeklyReminderId;
-    }
-  }
-
-/*
-  @override
-  Future<int> scheduleDailyNotification() async {
-    bool weeklyRemindersActive = await isWeeklyReminderScheduled();
-    if (!weeklyRemindersActive) {
-      await _ensureInitialized();
-      int notificationId = await _nextNotificationId();
-      var datetime = _nextInstanceOfTenAM();
-      await _flutterLocalNotificationsPlugin.zonedSchedule(
-          notificationId,
-          'TÄGLICHE Erinnerung - PeerPAL',
-          'Hi, wir würden uns freuen, wenn du PeerPAL HEUTE nutzt!',
-          datetime,
-          _platformSpecificNotificationDetails(),
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          payload: "daily reminder: " + datetime.toString(),
-          matchDateTimeComponents: DateTimeComponents.time);
-
-      logger.i(
-          "Scheduled DAILY notification with id $notificationId for weekly notification");
-      await setWeeklyReminderScheduled(true);
-      await printPendingNotifications();
-      return notificationId;
-    } else {
-      await printPendingNotifications();
-      logger.i("weekly reminders already active");
-      return -1;
-    }
-  }*/
-
   @override
   Future<int> scheduleNotification(
       String title, String body, TZDateTime scheduledDateTime) async {
@@ -261,18 +109,6 @@ class FirebaseNotificationService implements NotificationService {
     return notificationId;
   }
 
-  AndroidInitializationSettings _createAndroidNotificationSettings() {
-    return const AndroidInitializationSettings('@mipmap/ic_launcher');
-  }
-
-  DarwinInitializationSettings _createIOSNotificationSettings() {
-    return const DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
-  }
-
   @override
   Future<bool> hasPermission() async {
     NotificationSettings currentSettings =
@@ -289,13 +125,6 @@ class FirebaseNotificationService implements NotificationService {
     }
     return currentSettings.authorizationStatus ==
         AuthorizationStatus.authorized;
-  }
-
-  @override
-  Future<bool> hasAskedForPermission() async {
-    final SharedPreferences _preferences =
-        await SharedPreferences.getInstance();
-    return await _preferences.getBool(HAS_ASKED_FOR_PERMISSION) ?? false;
   }
 
   @override
@@ -341,4 +170,137 @@ class FirebaseNotificationService implements NotificationService {
       ),
     );
   }
+
+// ===========
+
+  @override
+  Future<void> unregisterDeviceToken() async {
+    var currentUserId = _firebaseAuth.currentUser!.uid;
+    logger.i("Removing the device token...");
+    FirebaseFirestore.instance
+        .collection(UserDatabaseContract.serverDeleteDeviceTokenQueue)
+        .doc()
+        .set({UserDatabaseContract.userId: currentUserId}).onError((error,
+                stackTrace) =>
+            logger.e("${REMOVE_DEVICE_TOKEN_ERROR}. Error: ${error.toString()} "
+                "Stacktrace: ${stackTrace.toString()}"));
+  }
+
+  @override
+  Future<void> registerDeviceToken() async {
+    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseMessaging.instance.getToken().then((token) {
+      FirebaseFirestore.instance
+          .collection(UserDatabaseContract.serverUpdateDeviceTokenQueue)
+          .doc()
+          .set({
+        UserDatabaseContract.userId: currentUserId,
+        UserDatabaseContract.deviceToken: token
+      }).onError((error, stackTrace) => logger
+              .e("${REGISTER_DEVICE_TOKEN_ERROR}.  Error: ${error.toString()} "
+                  "Stacktrace: ${stackTrace.toString()}"));
+    }).catchError((error) {
+      logger.e(
+          "${REGISTER_DEVICE_TOKEN_ERROR}. Error: ${error.payload.toString()}");
+    });
+  }
+
+
+
+  // Source: flutter local notification documentation
+  // ToDo: test.
+  TZDateTime _nextInstanceOfMondayTenAM() {
+    TZDateTime scheduledDate = _nextInstanceOfTenAM();
+    while (scheduledDate.weekday != DateTime.monday) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  // Source: flutter local notification documentation
+  // ToDo: test.
+  TZDateTime _nextInstanceOfTenAM() {
+    final TZDateTime now = TZDateTime.now(local);
+    TZDateTime scheduledDate =
+        TZDateTime(local, now.year, now.month, now.day, 10, 00);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+
+
+
+  Future<void> storeWeeklyReminderId(int notificationId) async {
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt("weekly-reminder", notificationId);
+  }
+
+  Future<int?> getWeeklyReminderNotificationId() async {
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    int? isWeeklyReminderScheduled = prefs.getInt("weekly-reminder");
+    return isWeeklyReminderScheduled;
+  }
+
+  @override
+  Future<int> scheduleWeeklyNotification(String title, String message) async {
+    int? weeklyReminderId = await getWeeklyReminderNotificationId();
+    if (weeklyReminderId == null) {
+      await _ensureInitialized();
+
+      var datetime = _nextInstanceOfMondayTenAM();
+      int notificationId = await _nextNotificationId();
+      await _flutterLocalNotificationsPlugin.zonedSchedule(notificationId,
+          title, message, datetime, _platformSpecificNotificationDetails(),
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: "weekly reminder: " + datetime.toString(),
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
+
+      logger.i(
+          "Scheduled weekly notification with id $notificationId for weekly notification");
+      await storeWeeklyReminderId(notificationId);
+      await printPendingNotifications();
+      return notificationId;
+    } else {
+      // TODO: Get the existing notification id and return it
+      String pendingNotifications = await printPendingNotifications();
+      logger.i(
+          "Weekly Notification with title '$title' and message '$message' is "
+          "already scheduled. Scheduled Notifications: "
+          "'$pendingNotifications'");
+      return weeklyReminderId;
+    }
+  }
+
+
+
+  AndroidInitializationSettings _createAndroidNotificationSettings() {
+    return const AndroidInitializationSettings('@mipmap/ic_launcher');
+  }
+
+  DarwinInitializationSettings _createIOSNotificationSettings() {
+    return const DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+  }
+
+
+
+  @override
+  Future<bool> hasAskedForPermission() async {
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    return await _preferences.getBool(HAS_ASKED_FOR_PERMISSION) ?? false;
+  }
+
+
+
+
 }
