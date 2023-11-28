@@ -238,7 +238,7 @@ class FirebaseNotificationService implements NotificationService {
     prefs.setInt("weekly-reminder", notificationId);
   }
 
-  Future<int?> getWeeklyReminderNotificationId() async {
+  Future<int?> _getWeeklyReminderNotificationId() async {
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
     int? isWeeklyReminderScheduled = prefs.getInt("weekly-reminder");
@@ -247,7 +247,7 @@ class FirebaseNotificationService implements NotificationService {
 
   @override
   Future<int> scheduleWeeklyNotification(String title, String message) async {
-    int? weeklyReminderId = await getWeeklyReminderNotificationId();
+    int? weeklyReminderId = await _getWeeklyReminderNotificationId();
     if (weeklyReminderId == null) {
       await _ensureInitialized();
 
