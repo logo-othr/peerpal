@@ -455,7 +455,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         CustomTableRow(
                           text: "(3) Wöchentliche Erinnerung aktivieren",
                           onPressed: () async => {
-                            widget._startRememberMeNotifications()},
+                            widget._startRememberMeNotifications(
+                                'Wöchentliche Erinnerung - PeerPAL',
+                                'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!')
+                          },
                         ),
                         /* CustomTableRow(
                           text:

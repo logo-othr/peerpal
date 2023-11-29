@@ -56,7 +56,8 @@ class SetupCubit extends Cubit<SetupState> {
     } else {
       if (!await _isIOSWithoutNotificationPermissionUseCase()) {
         _startRemoteNotifications();
-        _startRememberMeNotifications();
+        _startRememberMeNotifications('Wöchentliche Erinnerung - PeerPAL',
+            'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!');
       }
       emit(SetupCompletedState(0));
     }

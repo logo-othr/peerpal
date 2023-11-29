@@ -190,13 +190,13 @@ Future<void> setupDependencies() async {
 
   sl.registerLazySingleton<WeeklyReminderUseCase>(() => WeeklyReminderUseCase(
         repository: sl<LocalAppReminderRepository>(),
+        service: sl<NotificationService>(),
       ));
 
   // Repository
 
   sl.registerLazySingleton<LocalAppReminderRepository>(
     () => LocalAppReminderRepository(
-        notificationService: sl<NotificationService>(),
         localConfiguration: sl<AppConfigurationRepository>()),
   );
 
