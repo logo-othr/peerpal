@@ -33,7 +33,6 @@ class AppReminderNotificationRepository {
   }
 
   // Source: flutter local notification documentation
-  // ToDo: test.
   TZDateTime _nextInstanceOfMondayTenAM() {
     TZDateTime scheduledDate = _nextInstanceOfTenAM();
     while (scheduledDate.weekday != DateTime.monday) {
@@ -43,7 +42,6 @@ class AppReminderNotificationRepository {
   }
 
   // Source: flutter local notification documentation
-  // ToDo: test.
   TZDateTime _nextInstanceOfTenAM() {
     final TZDateTime now = TZDateTime.now(local);
     TZDateTime scheduledDate =
