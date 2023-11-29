@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
+import 'package:peerpal/account_setup/domain/weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/app/data/notification/device_token_service.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
@@ -31,7 +31,7 @@ import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  StartWeeklyUsageReminderUseCase _startRememberMeNotifications;
+  WeeklyReminderUseCase _startRememberMeNotifications;
 
   SettingsPage({required startRememberMeNotifications})
       : this._startRememberMeNotifications = startRememberMeNotifications;

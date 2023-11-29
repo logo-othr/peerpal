@@ -2,10 +2,10 @@ import 'package:peerpal/account_setup/data/app_reminder_notification_repository.
 import 'package:peerpal/app_logger.dart';
 
 /// Starts a recurring notification that reminds the user to use the app.
-class StartWeeklyUsageReminderUseCase {
-  AppReminderNotificationRepository repository;
+class WeeklyReminderUseCase {
+  LocalAppReminderRepository repository;
 
-  StartWeeklyUsageReminderUseCase({
+  WeeklyReminderUseCase({
     required repository,
   }) : this.repository = repository;
 
