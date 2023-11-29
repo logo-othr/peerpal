@@ -1,27 +1,28 @@
-import 'package:peerpal/account_setup/data/app_reminder_notification_repository.dart';
+import 'package:peerpal/account_setup/domain/app_reminder_repository.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:timezone/timezone.dart';
 
 /// Starts a recurring notification that reminds the user to use the app.
 class WeeklyReminderUseCase {
-  final AppUsageReminderRepository _repository;
-  final NotificationService _service;
+  final AppReminderRepository _reminderRepository;
+  final NotificationService _notificationService;
 
   WeeklyReminderUseCase({
-    required repository,
-    required service,
-  })  : this._repository = repository,
-        this._service = service;
+    required appReminderRepository,
+    required notificationService,
+  })  : this._reminderRepository = appReminderRepository,
+        this._notificationService = notificationService;
 
   Future<void> call(String title, String message) async {
-    int? weeklyReminderId = await _repository.getWeeklyReminderNotificationId();
+    int? weeklyReminderId =
+        await _reminderRepository.getWeeklyReminderNotificationId();
 
     if (weeklyReminderId == null) {
       var datetime = _nextInstanceOfMondayTenAM();
-      int newReminderId =
-          await _service.scheduleWeeklyNotification(title, message, datetime);
-      await _repository.setWeeklyReminderNotificationId(newReminderId);
+      int newReminderId = await _notificationService.scheduleWeeklyNotification(
+          title, message, datetime);
+      await _reminderRepository.setWeeklyReminderNotificationId(newReminderId);
     } else {
       logger.i(
           "Weekly Notification with title '$title' and message '$message' is already scheduled.");

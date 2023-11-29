@@ -189,8 +189,8 @@ Future<void> setupDependencies() async {
           foregroundHandler: _remoteNotificationForegroundHandler));
 
   sl.registerLazySingleton<WeeklyReminderUseCase>(() => WeeklyReminderUseCase(
-        repository: sl<LocalAppReminderRepository>(),
-        service: sl<NotificationService>(),
+        appReminderRepository: sl<LocalAppReminderRepository>(),
+        notificationService: sl<NotificationService>(),
       ));
 
   // Repository
