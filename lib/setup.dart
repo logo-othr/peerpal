@@ -20,9 +20,10 @@ import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_jo
 import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_service.dart';
 import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
 import 'package:peerpal/app/data/app_configuration_repository';
+import 'package:peerpal/app/data/app_configuration_service.dart';
 import 'package:peerpal/app/data/core/memory_cache.dart';
 import 'package:peerpal/app/data/firestore/firestore_service.dart';
-import 'package:peerpal/app/data/local_app_configuration_repository.dart';
+import 'package:peerpal/app/data/local_app_configuration_service.dart';
 import 'package:peerpal/app/data/location/repository/local_location_repository.dart';
 import 'package:peerpal/app/data/notification/device_token_service.dart';
 import 'package:peerpal/app/data/notification/firebase_notification_service.dart';
@@ -165,8 +166,8 @@ Future<void> setupDependencies() async {
   );
 
   // =============== Configuration ==============
-  sl.registerLazySingleton<AppConfigurationRepository>(
-    () => LocalAppConfigurationRepository(),
+  sl.registerLazySingleton<AppConfigurationService>(
+    () => LocalAppConfigurationService(),
   );
 
   // =============== Notification ===============

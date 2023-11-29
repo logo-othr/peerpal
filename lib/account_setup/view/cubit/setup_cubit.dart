@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
-import 'package:peerpal/app/data/local_app_configuration_repository.dart';
+import 'package:peerpal/app/data/local_app_configuration_service.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -47,8 +47,7 @@ class SetupCubit extends Cubit<SetupState> {
       emit(DiscoverSetupState(userInformation));
     } else if (!(await _hasPermission()) &&
         Platform.isIOS &&
-        !(await sl<LocalAppConfigurationRepository>()
-            .hasAskedForPermission()) &&
+        !(await sl<LocalAppConfigurationService>().hasAskedForPermission()) &&
         !notificationRequestButtonClicked) {
       print("Is ios: " + Platform.isIOS.toString());
       // ToDo: await _hasPermission() or permissionAlreadyAsked (global?)

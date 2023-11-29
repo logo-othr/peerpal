@@ -1,7 +1,7 @@
-import 'package:peerpal/app/data/app_configuration_repository';
+import 'package:peerpal/app/data/app_configuration_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocalAppConfigurationRepository implements AppConfigurationRepository {
+class LocalAppConfigurationService implements AppConfigurationService {
   final String HAS_ASKED_FOR_PERMISSION = "HAS_ASKED_FOR_PERMISSION";
 
   @override

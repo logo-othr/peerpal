@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/app/data/local_app_configuration_repository.dart';
+import 'package:peerpal/app/data/local_app_configuration_service.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/setup.dart';
@@ -58,7 +58,7 @@ class _NotificationPageContentState extends State<NotificationPageContent> {
                       sl<NotificationService>();
                   bool hasPermission =
                       (await notificationService.requestPermission());
-                  sl<LocalAppConfigurationRepository>()
+                  sl<LocalAppConfigurationService>()
                       .setAskedForNotificationPermission(true);
 
                   Navigator.pop(context);
