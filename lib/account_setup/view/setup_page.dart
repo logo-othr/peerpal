@@ -7,7 +7,6 @@ import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/app/presentation/tabview/view/tabview.dart';
 import 'package:peerpal/app_logger.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/discover_wizard_flow.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/notification/presentation/notification_page.dart';
@@ -27,7 +26,6 @@ class SetupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SetupCubit(
-        context.read<AppUserRepository>(),
         sl<GetAuthenticatedUser>(),
         sl<StartRemoteNotifications>(),
         sl<WeeklyReminderUseCase>(),
