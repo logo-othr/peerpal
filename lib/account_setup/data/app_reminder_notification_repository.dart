@@ -1,11 +1,11 @@
-import 'package:peerpal/app/data/local_configuration_service.dart';
+import 'package:peerpal/app/data/local_app_configuration_repository.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:timezone/timezone.dart';
 
 class AppReminderNotificationRepository {
   final NotificationService _notificationService;
-  final LocalConfigurationService _localConfiguration;
+  final LocalAppConfigurationRepository _localConfiguration;
 
   AppReminderNotificationRepository(
       {required notificationService, required localConfiguration})

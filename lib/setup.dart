@@ -19,11 +19,12 @@ import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_re
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
 import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_service.dart';
 import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
-import 'package:peerpal/app/data/configuration_service.dart';
+import 'package:peerpal/app/data/app_configuration_repository';
 import 'package:peerpal/app/data/core/memory_cache.dart';
 import 'package:peerpal/app/data/firestore/firestore_service.dart';
-import 'package:peerpal/app/data/local_configuration_service.dart';
+import 'package:peerpal/app/data/local_app_configuration_repository.dart';
 import 'package:peerpal/app/data/location/repository/local_location_repository.dart';
+import 'package:peerpal/app/data/notification/device_token_service.dart';
 import 'package:peerpal/app/data/notification/firebase_notification_service.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
 import 'package:peerpal/app/domain/analytics/analytics_service.dart';
@@ -164,8 +165,8 @@ Future<void> setupDependencies() async {
   );
 
   // =============== Configuration ==============
-  sl.registerLazySingleton<ConfigurationService>(
-    () => LocalConfigurationService(),
+  sl.registerLazySingleton<AppConfigurationRepository>(
+    () => LocalAppConfigurationRepository(),
   );
 
   // =============== Notification ===============
@@ -174,15 +175,17 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<NotificationService>(
     () => FirebaseNotificationService(),
   );
+  sl.registerLazySingleton<DeviceTokenService>(
+    () => DeviceTokenService(),
+  );
 
   // UseCase
   sl.registerLazySingleton<StartRemoteNotifications>(() =>
       StartRemoteNotifications(
           notificationService: sl<NotificationService>(),
-          remoteNotificationBackgroundHandler:
-              _remoteNotificationBackgroundHandler,
-          remoteNotificationForegroundHandler:
-              _remoteNotificationForegroundHandler));
+          deviceTokenService: sl<DeviceTokenService>(),
+          backgroundHandler: _remoteNotificationBackgroundHandler,
+          foregroundHandler: _remoteNotificationForegroundHandler));
 
   sl.registerLazySingleton<StartWeeklyUsageReminderUseCase>(
       () => StartWeeklyUsageReminderUseCase(
@@ -194,7 +197,7 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton<AppReminderNotificationRepository>(
         () => AppReminderNotificationRepository(
         notificationService: sl<NotificationService>(),
-        localConfiguration: sl<ConfigurationService>()),
+        localConfiguration: sl<AppConfigurationRepository>()),
   );
 
   // ============== Discover ====================

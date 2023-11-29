@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/account_setup/domain/start_weekly_usage_reminder_usecase.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
+import 'package:peerpal/app/data/notification/device_token_service.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/app/data/resources/strings.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
@@ -204,7 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 logger.e(e);
                               }
                               try {
-                                sl<NotificationService>()
+                                sl<DeviceTokenService>()
                                     .unregisterDeviceToken();
                               } catch (e) {
                                 logger.e(e);
