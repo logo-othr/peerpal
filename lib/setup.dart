@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:peerpal/account_setup/data/app_reminder_notification_repository.dart';
-import 'package:peerpal/account_setup/domain/weekly_usage_reminder_usecase.dart';
+import 'package:peerpal/account_setup/domain/weekly_reminder_usecase.dart';
 import 'package:peerpal/activity/data/repository/firebase_activity_repository.dart';
 import 'package:peerpal/activity/data/repository/local_activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
@@ -19,7 +19,6 @@ import 'package:peerpal/activity/presentation/activity_requests/bloc/activity_re
 import 'package:peerpal/activity/presentation/joined_activities/bloc/activity_joined_list_bloc.dart';
 import 'package:peerpal/app/data/analytics/datasources/firebase_analytics_service.dart';
 import 'package:peerpal/app/data/analytics/repository/firebase_analytics_repository.dart';
-import 'package:peerpal/app/data/app_configuration_repository';
 import 'package:peerpal/app/data/app_configuration_service.dart';
 import 'package:peerpal/app/data/core/memory_cache.dart';
 import 'package:peerpal/app/data/firestore/firestore_service.dart';
@@ -196,8 +195,8 @@ Future<void> setupDependencies() async {
   // Repository
 
   sl.registerLazySingleton<LocalAppReminderRepository>(
-    () => LocalAppReminderRepository(
-        localConfiguration: sl<AppConfigurationRepository>()),
+        () => LocalAppReminderRepository(
+        localConfiguration: sl<LocalAppConfigurationService>()),
   );
 
   // ============== Discover ====================
