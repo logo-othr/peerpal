@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:peerpal/account_setup/domain/weekly_usage_reminder_usecase.dart';
+import 'package:peerpal/account_setup/domain/weekly_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/app/data/local_app_configuration_service.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';

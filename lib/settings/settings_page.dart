@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/account_setup/domain/weekly_usage_reminder_usecase.dart';
+import 'package:peerpal/account_setup/domain/weekly_reminder_usecase.dart';
 import 'package:peerpal/activity/presentation/activity_feed/bloc/activity_feed_bloc.dart';
 import 'package:peerpal/app/data/notification/device_token_service.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
