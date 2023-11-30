@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/account_setup/domain/weekly_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/app/data/local_app_configuration_service.dart';
-import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
@@ -20,13 +17,13 @@ class SetupCubit extends Cubit<SetupState> {
   final StartRemoteNotifications _startRemoteNotifications;
   final WeeklyReminderUseCase _startRememberMeNotifications;
   final IsIOSWithoutNotificationPermissionUseCase
-      _isIOSWithoutNotificationPermissionUseCase;
+      _isIOSWithoutNotificationPermission;
 
   SetupCubit(
       this._getAuthenticatedUser,
       this._startRemoteNotifications,
       this._startRememberMeNotifications,
-      this._isIOSWithoutNotificationPermissionUseCase)
+      this._isIOSWithoutNotificationPermission)
       : super(HomeInitial());
 
   Future<void> getCurrentUserInformation() async {
@@ -38,20 +35,24 @@ class SetupCubit extends Cubit<SetupState> {
 
   Future<void> loadCurrentSetupFlowState() async {
     PeerPALUser userInformation = await _getAuthenticatedUser();
+
+    // if the profile is not complete, start the profile setup
     if (userInformation.isProfileNotComplete) {
       emit(ProfileSetupState(userInformation));
-    } else if (userInformation.isDiscoverNotComplete) {
+    }
+    // if the discover setup is not complete, start the discover setup
+    else if (userInformation.isDiscoverNotComplete) {
       emit(DiscoverSetupState(userInformation));
-    } else if (!(await _hasPermission()) &&
-        Platform.isIOS &&
-        !(await sl<LocalAppConfigurationService>().hasAskedForPermission()) &&
-        !notificationRequestButtonClicked) {
-      print("Is ios: " + Platform.isIOS.toString());
-      // ToDo: await _hasPermission() or permissionAlreadyAsked (global?)
-
+    }
+    // if the platform is ios and the notification permission
+    // was never requested, start the notification setup
+    else if (await _isPermissionNotRequestedOnIOS()) {
       emit(NotificationSetupState(userInformation));
     } else {
-      if (!await _isIOSWithoutNotificationPermissionUseCase()) {
+      // Setup is complete
+      // Start the notification handler,
+      // unless the platform is iOS and no authorization has been granted.
+      if (!await _isIOSWithoutNotificationPermission()) {
         _startRemoteNotifications();
         _startRememberMeNotifications('Wöchentliche Erinnerung - PeerPAL',
             'Hi, wir würden uns freuen, wenn du PeerPAL diese Woche nutzt!');
@@ -60,10 +61,15 @@ class SetupCubit extends Cubit<SetupState> {
     }
   }
 
-  Future<bool> _hasPermission() async {
-    NotificationService notificationService = sl<NotificationService>();
-    bool hasPermission = (await notificationService.hasPermission());
-    return hasPermission;
+  Future<bool> _isPermissionNotRequestedOnIOS() async {
+    bool isIOSWithoutPermission = await _isIOSWithoutNotificationPermission();
+    bool hasAskedForPermission =
+        (await sl<LocalAppConfigurationService>().hasAskedForPermission());
+    bool hasClickedNotificationRequestButton = notificationRequestButtonClicked;
+
+    return (isIOSWithoutPermission &&
+        !hasAskedForPermission &&
+        !hasClickedNotificationRequestButton);
   }
 
   void indexChanged(int index) {
