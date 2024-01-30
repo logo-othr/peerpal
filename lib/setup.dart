@@ -100,6 +100,9 @@ Future<void> setupDependencies() async {
     () => sharedPreferences,
   );
 
+  sl.registerLazySingleton<AppConfigurationService>(
+      () => LocalAppConfigurationService());
+
   sl.registerLazySingleton<Cache>(() => InMemoryCache());
 
   sl.registerLazySingleton<AuthService>(
@@ -164,11 +167,6 @@ Future<void> setupDependencies() async {
     () => AuthenticationRepository(cache: sl(), authService: sl()),
   );
 
-  // =============== Configuration ==============
-  sl.registerLazySingleton<AppConfigurationService>(
-    () => LocalAppConfigurationService(),
-  );
-
   // =============== Notification ===============
 
   // Service
@@ -196,7 +194,7 @@ Future<void> setupDependencies() async {
 
   sl.registerLazySingleton<LocalAppReminderRepository>(
         () => LocalAppReminderRepository(
-        localConfiguration: sl<LocalAppConfigurationService>()),
+        localConfiguration: sl<AppConfigurationService>()),
   );
 
   // ============== Discover ====================

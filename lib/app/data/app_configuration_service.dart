@@ -6,4 +6,8 @@ abstract class AppConfigurationService {
   Future<bool> hasAskedForPermission();
 
   Future<void> setAskedForNotificationPermission(bool hasAsked);
+
+  Future<bool> isNotificationPermissionRequested();
+
+  Future<void> setNotificationPermissionRequested();
 }

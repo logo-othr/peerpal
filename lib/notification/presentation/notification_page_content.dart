@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/app/data/local_app_configuration_service.dart';
+import 'package:peerpal/app/data/app_configuration_service.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/app/domain/notification/notification_service.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
-
-bool notificationRequestButtonClicked = false;
 
 class NotificationPageContent extends StatefulWidget {
   @override
@@ -53,12 +51,11 @@ class _NotificationPageContentState extends State<NotificationPageContent> {
             CustomPeerPALButton(
                 text: 'Benachrichtigungen erlauben',
                 onPressed: () async {
-                  notificationRequestButtonClicked = true;
                   NotificationService notificationService =
                       sl<NotificationService>();
                   bool hasPermission =
                       (await notificationService.requestPermission());
-                  sl<LocalAppConfigurationService>()
+                  sl<AppConfigurationService>()
                       .setAskedForNotificationPermission(true);
 
                   Navigator.pop(context);

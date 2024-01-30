@@ -32,4 +32,19 @@ class LocalAppConfigurationService implements AppConfigurationService {
         await SharedPreferences.getInstance();
     await _preferences.setBool(HAS_ASKED_FOR_PERMISSION, hasAsked);
   }
+
+  @override
+  Future<bool> isNotificationPermissionRequested() async {
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    return await _preferences.getBool("notification-permission-requested") ??
+        false;
+  }
+
+  @override
+  Future<void> setNotificationPermissionRequested() async {
+    final SharedPreferences _preferences =
+        await SharedPreferences.getInstance();
+    await _preferences.setBool("notification-permission-requested", true);
+  }
 }

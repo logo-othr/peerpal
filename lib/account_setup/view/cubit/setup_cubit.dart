@@ -3,11 +3,10 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/account_setup/domain/weekly_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
-import 'package:peerpal/app/data/local_app_configuration_service.dart';
+import 'package:peerpal/app/data/app_configuration_service.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
-import 'package:peerpal/notification/presentation/notification_page_content.dart';
 import 'package:peerpal/setup.dart';
 
 part 'setup_state.dart';
@@ -64,12 +63,9 @@ class SetupCubit extends Cubit<SetupState> {
   Future<bool> _isPermissionNotRequestedOnIOS() async {
     bool isIOSWithoutPermission = await _isIOSWithoutNotificationPermission();
     bool hasAskedForPermission =
-        (await sl<LocalAppConfigurationService>().hasAskedForPermission());
-    bool hasClickedNotificationRequestButton = notificationRequestButtonClicked;
+        (await sl<AppConfigurationService>().hasAskedForPermission());
 
-    return (isIOSWithoutPermission &&
-        !hasAskedForPermission &&
-        !hasClickedNotificationRequestButton);
+    return (isIOSWithoutPermission && !hasAskedForPermission);
   }
 
   void indexChanged(int index) {
