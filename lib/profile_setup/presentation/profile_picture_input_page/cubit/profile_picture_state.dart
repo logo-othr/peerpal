@@ -1,65 +1,78 @@
 part of 'profile_picture_cubit.dart';
 
 abstract class ProfilePictureState extends Equatable {
-  const ProfilePictureState();
+  final PeerPALUser currentUser;
+
+  const ProfilePictureState(this.currentUser);
 
   @override
   List<Object?> get props => [];
 }
 
 class ProfilePictureInitial extends ProfilePictureState {
-  const ProfilePictureInitial();
+  const ProfilePictureInitial() : super(PeerPALUser.empty);
 
   @override
   List<Object?> get props => [];
+}
+
+class ProfilePictureLoaded extends ProfilePictureState {
+  const ProfilePictureLoaded(PeerPALUser currentUser) : super(currentUser);
+
+  @override
+  List<Object?> get props => [currentUser];
 }
 
 class ProfilePictureEmpty extends ProfilePictureState {
-  const ProfilePictureEmpty();
+  const ProfilePictureEmpty(PeerPALUser currentUser) : super(currentUser);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [currentUser];
 }
 
 class ProfilePicturePicking extends ProfilePictureState {
-  const ProfilePicturePicking();
+  const ProfilePicturePicking(PeerPALUser currentUser) : super(currentUser);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [currentUser];
 }
 
 class ProfilePicturePicked extends ProfilePictureState {
   final File? profilePicture;
 
-  const ProfilePicturePicked(this.profilePicture);
+  const ProfilePicturePicked(this.profilePicture, PeerPALUser currentUser)
+      : super(currentUser);
 
   @override
-  List<Object?> get props => [profilePicture];
+  List<Object?> get props => [currentUser, profilePicture];
 }
 
 class ProfilePicturePosting extends ProfilePictureState {
   final File? profilePicture;
 
-  ProfilePicturePosting(this.profilePicture);
+  ProfilePicturePosting(this.profilePicture, PeerPALUser currentUser)
+      : super(currentUser);
 
   @override
-  List<Object?> get props => [profilePicture];
+  List<Object?> get props => [currentUser, profilePicture];
 }
 
 class ProfilePicturePosted extends ProfilePictureState {
   final String profilePictureURL;
 
-  ProfilePicturePosted(this.profilePictureURL);
+  ProfilePicturePosted(this.profilePictureURL, PeerPALUser currentUser)
+      : super(currentUser);
 
   @override
-  List<Object?> get props => [profilePictureURL];
+  List<Object?> get props => [currentUser, profilePictureURL];
 }
 
 class ProfilePictureError extends ProfilePictureState {
   final String message;
 
-  ProfilePictureError(this.message);
+  ProfilePictureError(this.message, PeerPALUser currentUser)
+      : super(currentUser);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [currentUser, message];
 }

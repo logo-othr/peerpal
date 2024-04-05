@@ -25,6 +25,11 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
       this._userRepository, this._authRepository, this._getAuthenticatedUser)
       : super(ProfilePictureInitial());
 
+  Future<void> loadData() async {
+    var currentUser = await _getAuthenticatedUser();
+    emit(ProfilePictureLoaded(currentUser));
+  }
+
   Future<void> pickProfilePictureFromGallery() async {
     var profilePicture = (await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -93,7 +98,7 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
   }
 
   void profilePictureChanged(File? profilePicture) {
-    emit(ProfilePicturePicked(profilePicture));
+    emit(ProfilePicturePicked(profilePicture, state.currentUser));
   }
 
   Future<String> updateProfilePicture(File? profilePicture) async {
@@ -102,11 +107,11 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     if (profilePicture == null) {
       await _updateProfilePicturePath('');
     } else {
-      emit(ProfilePicturePosting(profilePicture));
+      emit(ProfilePicturePosting(profilePicture, state.currentUser));
       profilePictureURL = await _uploadProfilePicture(profilePicture);
       await _updateProfilePicturePath(profilePictureURL);
     }
-    emit(ProfilePicturePosted(profilePictureURL));
+    emit(ProfilePicturePosted(profilePictureURL, state.currentUser));
     return profilePictureURL;
   }
 
@@ -135,9 +140,8 @@ class ProfilePictureCubit extends Cubit<ProfilePictureState> {
     return returnURL;
   }
 
-  Future<String?> getProfilePicturePath() async {
-    var userInformation = await _getAuthenticatedUser();
-    return userInformation.imagePath;
+  String getProfilePicturePath() {
+    return state.currentUser.imagePath ?? "";
   }
 
   Future<void> _updateProfilePicturePath(String profilePicturePath) async {

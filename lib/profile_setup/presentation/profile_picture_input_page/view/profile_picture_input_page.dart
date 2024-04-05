@@ -36,7 +36,8 @@ class ProfilePictureInputPage extends StatelessWidget {
             return ProfilePictureCubit(
                 context.read<AppUserRepository>(),
                 context.read<AuthenticationRepository>(),
-                sl<GetAuthenticatedUser>());
+                sl<GetAuthenticatedUser>())
+              ..loadData();
           },
           child: ProfilePictureInputContent(isInFlowContext: isInFlowContext),
         ),

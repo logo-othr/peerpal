@@ -57,18 +57,22 @@ class ProfilePictureInputContent extends StatelessWidget {
   Future<void> updatePicture(
       ProfilePictureState state, BuildContext context) async {
     if (state is ProfilePicturePicked) {
+      // Upload the photo and update it in the database
       var profilePictureURL = await context
           .read<ProfilePictureCubit>()
           .updateProfilePicture(state.profilePicture);
+      // Was the page opened in the context of the profile setup?
       if (isInFlowContext) {
         await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProfileOverviewPage()),
         );
+        // Update the flow-object to continue the setup
         context
             .flow<PeerPALUser>()
             .complete((s) => s.copyWith(imagePath: profilePictureURL));
       } else {
+        //if not then close the page
         Navigator.pop(context);
       }
     }
@@ -99,33 +103,26 @@ class _Avatar extends StatelessWidget {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
       // ToDo: flatten conditional logic, refactor
-      return new FutureBuilder(
-          future: context.read<ProfilePictureCubit>().getProfilePicturePath(),
-          initialData: null,
-          builder:
-              (BuildContext context, AsyncSnapshot<String?> imageURLSnapshot) {
-            if (_isInitialOrPosted(state)) {
-              var imageURL = imageURLSnapshot.data;
-              if (imageURL == '') {
-                return _EmptyImageContainer();
-              }
-              if (_imageLinkExists(imageURL)) {
-                return _ImageContainerWithLink(
-                    image: CachedNetworkImageProvider(imageURL!));
-              }
-            } else if (state is ProfilePicturePicked) {
-              return _ImageContainerWithLink(
-                  image: FileImage(File(state.profilePicture!.path)));
-            } else if (state is ProfilePicturePosting) {
-              return _LoadingAvatar();
-            }
-            return _EmptyAvatar();
-          });
-    });
-  }
 
-  _isInitialOrPosted(ProfilePictureState state) {
-    return state is ProfilePictureInitial || state is ProfilePicturePosted;
+      String imageURL =
+          context.read<ProfilePictureCubit>().getProfilePicturePath();
+
+      if (state is ProfilePictureLoaded || state is ProfilePicturePosted) {
+        if (imageURL == '') {
+          return _EmptyImageContainer();
+        }
+        if (_imageLinkExists(imageURL)) {
+          return _ImageContainerWithLink(
+              image: CachedNetworkImageProvider(imageURL));
+        }
+      } else if (state is ProfilePicturePicked) {
+        return _ImageContainerWithLink(
+            image: FileImage(File(state.profilePicture!.path)));
+      } else if (state is ProfilePicturePosting) {
+        return _LoadingAvatar();
+      }
+      return _EmptyAvatar();
+    });
   }
 
   bool _imageLinkExists(String? imageURL) =>
