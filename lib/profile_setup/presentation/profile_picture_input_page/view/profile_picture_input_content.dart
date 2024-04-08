@@ -8,6 +8,7 @@ import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/cubit/profile_picture_cubit.dart';
+import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/custom_circle_avatar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -46,7 +47,7 @@ class ProfilePictureInputContent extends StatelessWidget {
                 },
               ),
               SizedBox(height: 10),
-              _SaveAndClosePageWithoutProfilePictureButton(isInFlowContext),
+              _SubmitWithoutPicture(isInFlowContext),
             ],
           ),
         ),
@@ -122,13 +123,12 @@ class _Avatar extends StatelessWidget {
   }
 
   Widget _LocalAvatar(String path) {
-    return _ImageContainerWithLink(image: FileImage(File(path)));
+    return CustomCircleAvatar(image: FileImage(File(path)));
   }
 
   Widget _NetworkAvatar(String imageURL) {
     if (_imageLinkExists(imageURL)) {
-      return _ImageContainerWithLink(
-          image: CachedNetworkImageProvider(imageURL));
+      return CustomCircleAvatar(image: CachedNetworkImageProvider(imageURL));
     } else {
       return _EmptyAvatar(
           icon: Icon(
@@ -193,36 +193,11 @@ class _LoadingAvatar extends StatelessWidget {
   }
 }
 
-class _ImageContainerWithLink extends StatelessWidget {
-  const _ImageContainerWithLink({Key? key, required this.image})
-      : super(key: key);
 
-  final ImageProvider image;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 150.0,
-      height: 150.0,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: image,
-        ),
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: PeerPALAppColor.primaryColor,
-          width: 4.0,
-        ),
-      ),
-    );
-  }
-}
-
-class _SaveAndClosePageWithoutProfilePictureButton extends StatelessWidget {
+class _SubmitWithoutPicture extends StatelessWidget {
   final bool isInFlowContext;
 
-  _SaveAndClosePageWithoutProfilePictureButton(this.isInFlowContext);
+  _SubmitWithoutPicture(this.isInFlowContext);
 
   @override
   Widget build(BuildContext context) {
@@ -231,14 +206,13 @@ class _SaveAndClosePageWithoutProfilePictureButton extends StatelessWidget {
         return CustomPeerPALButton2(
             text: 'Ich möchte kein Profilbild angeben',
             onPressed: () async {
-              await _saveAndClosePageWithoutProfilePicture(context);
+              await _submitWithoutPicture(context);
             });
       },
     );
   }
 
-  Future<void> _saveAndClosePageWithoutProfilePicture(
-      BuildContext context) async {
+  Future<void> _submitWithoutPicture(BuildContext context) async {
     await context.read<ProfilePictureCubit>().updateProfilePicture(null);
 
     if (isInFlowContext) {
