@@ -43,7 +43,7 @@ class ProfilePictureInputContent extends StatelessWidget {
                 },
               ),
               SizedBox(height: 10),
-              _SubmitWithoutPicture(isInFlowContext),
+              _SubmitWithoutPictureButton(isInFlowContext),
             ],
           ),
         ),
@@ -106,10 +106,10 @@ class _ImagePickerAvatar extends StatelessWidget {
 }
 
 
-class _SubmitWithoutPicture extends StatelessWidget {
+class _SubmitWithoutPictureButton extends StatelessWidget {
   final bool isInFlowContext;
 
-  _SubmitWithoutPicture(this.isInFlowContext);
+  _SubmitWithoutPictureButton(this.isInFlowContext);
 
   @override
   Widget build(BuildContext context) {
