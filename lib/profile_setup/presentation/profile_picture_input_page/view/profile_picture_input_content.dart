@@ -9,6 +9,7 @@ import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/cubit/profile_picture_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/custom_circle_avatar.dart';
+import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/empty_avatar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -113,7 +114,7 @@ class _Avatar extends StatelessWidget {
       } else if (state is ProfilePicturePosting) {
         return _LoadingAvatar();
       }
-      return _EmptyAvatar(
+      return EmptyAvatar(
           icon: Icon(
         Icons.camera_alt_outlined,
         size: 110,
@@ -130,7 +131,7 @@ class _Avatar extends StatelessWidget {
     if (_imageLinkExists(imageURL)) {
       return CustomCircleAvatar(image: CachedNetworkImageProvider(imageURL));
     } else {
-      return _EmptyAvatar(
+      return EmptyAvatar(
           icon: Icon(
         Icons.account_circle,
         size: 140,
@@ -141,34 +142,6 @@ class _Avatar extends StatelessWidget {
 
   bool _imageLinkExists(String? imageURL) =>
       imageURL != null && imageURL.isNotEmpty && imageURL != '';
-}
-
-class _EmptyAvatar extends StatelessWidget {
-  final Icon icon;
-
-  const _EmptyAvatar({
-    Key? key,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: 150.0,
-        height: 150.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: PeerPALAppColor.primaryColor,
-            width: 4.0,
-          ),
-        ),
-        child: Icon(
-          Icons.camera_alt_outlined,
-          size: 110,
-          color: PeerPALAppColor.primaryColor,
-        ));
-  }
 }
 
 class _LoadingAvatar extends StatelessWidget {
@@ -192,7 +165,6 @@ class _LoadingAvatar extends StatelessWidget {
     );
   }
 }
-
 
 class _SubmitWithoutPicture extends StatelessWidget {
   final bool isInFlowContext;
