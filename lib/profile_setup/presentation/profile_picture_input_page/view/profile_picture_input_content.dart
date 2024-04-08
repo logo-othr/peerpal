@@ -1,14 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile_overview_page.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/cubit/profile_picture_cubit.dart';
-import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/custom_circle_avatar.dart';
-import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/empty_avatar.dart';
-import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/local_avatar.dart';
+import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/avatar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -31,7 +27,7 @@ class ProfilePictureInputContent extends StatelessWidget {
               const SizedBox(height: 20),
               CustomPeerPALHeading1(headlineTxt),
               const Spacer(),
-              _AvatarBox(),
+              _ImagePickerAvatar(),
               const Spacer(),
               BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
                 builder: (context, state) {
@@ -55,8 +51,7 @@ class ProfilePictureInputContent extends StatelessWidget {
     );
   }
 
-  Future<void> updatePicture(
-      ProfilePictureState state, BuildContext context) async {
+  Future<void> updatePicture(ProfilePictureState state, BuildContext context) async {
     if (state is ProfilePicturePicked) {
       // Upload the photo and update it in the database
       var profilePictureURL = await context
@@ -80,8 +75,8 @@ class ProfilePictureInputContent extends StatelessWidget {
   }
 }
 
-class _AvatarBox extends StatelessWidget {
-  const _AvatarBox({
+class _ImagePickerAvatar extends StatelessWidget {
+  const _ImagePickerAvatar({
     Key? key,
   }) : super(key: key);
 
@@ -91,75 +86,25 @@ class _AvatarBox extends StatelessWidget {
       onTap: () async =>
           context.read<ProfilePictureCubit>().pickProfilePictureFromGallery(),
       customBorder: new CircleBorder(),
-      child: Container(child: _Avatar()),
+      child: Container(child:
+          BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
+              builder: (context, state) {
+        if (state is ProfilePictureLoaded || state is ProfilePicturePosted) {
+          String imageURL =
+              context.read<ProfilePictureCubit>().getProfilePicturePath();
+          return Avatar(avatarType: AvatarType.network, uri: imageURL);
+        } else if (state is ProfilePicturePicked) {
+          String imageURL = state.profilePicture!.path;
+          return Avatar(avatarType: AvatarType.local, uri: imageURL);
+        } else if (state is ProfilePicturePosting) {
+          return Avatar(avatarType: AvatarType.loading, uri: "");
+        } else
+          return Avatar(avatarType: AvatarType.empty, uri: "");
+      })),
     );
   }
 }
 
-class _Avatar extends StatelessWidget {
-  const _Avatar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
-        builder: (context, state) {
-      String imageURL =
-          context.read<ProfilePictureCubit>().getProfilePicturePath();
-
-      if (state is ProfilePictureLoaded || state is ProfilePicturePosted) {
-        return _NetworkAvatar(imageURL);
-      } else if (state is ProfilePicturePicked) {
-        return LocalAvatar(state.profilePicture!.path);
-      } else if (state is ProfilePicturePosting) {
-        return _LoadingAvatar();
-      }
-      return EmptyAvatar(
-          icon: Icon(
-        Icons.camera_alt_outlined,
-        size: 110,
-        color: PeerPALAppColor.primaryColor,
-      ));
-    });
-  }
-
-  Widget _NetworkAvatar(String imageURL) {
-    if (_imageLinkExists(imageURL)) {
-      return CustomCircleAvatar(image: CachedNetworkImageProvider(imageURL));
-    } else {
-      return EmptyAvatar(
-          icon: Icon(
-        Icons.account_circle,
-        size: 140,
-        color: Colors.grey,
-      ));
-    }
-  }
-
-  bool _imageLinkExists(String? imageURL) =>
-      imageURL != null && imageURL.isNotEmpty && imageURL != '';
-}
-
-class _LoadingAvatar extends StatelessWidget {
-  const _LoadingAvatar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 150.0,
-      height: 150.0,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: PeerPALAppColor.primaryColor,
-          width: 4.0,
-        ),
-      ),
-      child: const CircularProgressIndicator(),
-    );
-  }
-}
 
 class _SubmitWithoutPicture extends StatelessWidget {
   final bool isInFlowContext;
