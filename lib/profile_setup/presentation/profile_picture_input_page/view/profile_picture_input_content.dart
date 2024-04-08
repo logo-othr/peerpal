@@ -34,7 +34,7 @@ class ProfilePictureInputContent extends StatelessWidget {
                   return CustomPeerPALButton(
                     text: isInFlowContext ? 'Weiter' : 'Speichern',
                     onPressed: (state is ProfilePicturePicked)
-                        ? () async => updatePicture(
+                        ? () async => _updatePicture(
                               state,
                               context,
                             )
@@ -51,7 +51,8 @@ class ProfilePictureInputContent extends StatelessWidget {
     );
   }
 
-  Future<void> updatePicture(ProfilePictureState state, BuildContext context) async {
+  Future<void> _updatePicture(
+      ProfilePictureState state, BuildContext context) async {
     if (state is ProfilePicturePicked) {
       // Upload the photo and update it in the database
       var profilePictureURL = await context
