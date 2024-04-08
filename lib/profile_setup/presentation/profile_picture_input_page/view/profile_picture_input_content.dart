@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,7 @@ import 'package:peerpal/profile_setup/presentation/profile_overview/view/profile
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/cubit/profile_picture_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/custom_circle_avatar.dart';
 import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/empty_avatar.dart';
+import 'package:peerpal/profile_setup/presentation/profile_picture_input_page/widgets/local_avatar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
@@ -110,7 +109,7 @@ class _Avatar extends StatelessWidget {
       if (state is ProfilePictureLoaded || state is ProfilePicturePosted) {
         return _NetworkAvatar(imageURL);
       } else if (state is ProfilePicturePicked) {
-        return _LocalAvatar(state.profilePicture!.path);
+        return LocalAvatar(state.profilePicture!.path);
       } else if (state is ProfilePicturePosting) {
         return _LoadingAvatar();
       }
@@ -121,10 +120,6 @@ class _Avatar extends StatelessWidget {
         color: PeerPALAppColor.primaryColor,
       ));
     });
-  }
-
-  Widget _LocalAvatar(String path) {
-    return CustomCircleAvatar(image: FileImage(File(path)));
   }
 
   Widget _NetworkAvatar(String imageURL) {
