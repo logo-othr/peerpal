@@ -102,27 +102,41 @@ class _Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfilePictureCubit, ProfilePictureState>(
         builder: (context, state) {
-      // ToDo: flatten conditional logic, refactor
-
       String imageURL =
           context.read<ProfilePictureCubit>().getProfilePicturePath();
 
       if (state is ProfilePictureLoaded || state is ProfilePicturePosted) {
-        if (imageURL == '') {
-          return _EmptyImageContainer();
-        }
-        if (_imageLinkExists(imageURL)) {
-          return _ImageContainerWithLink(
-              image: CachedNetworkImageProvider(imageURL));
-        }
+        return _NetworkAvatar(imageURL);
       } else if (state is ProfilePicturePicked) {
-        return _ImageContainerWithLink(
-            image: FileImage(File(state.profilePicture!.path)));
+        return _LocalAvatar(state.profilePicture!.path);
       } else if (state is ProfilePicturePosting) {
         return _LoadingAvatar();
       }
-      return _EmptyAvatar();
+      return _EmptyAvatar(
+          icon: Icon(
+        Icons.camera_alt_outlined,
+        size: 110,
+        color: PeerPALAppColor.primaryColor,
+      ));
     });
+  }
+
+  Widget _LocalAvatar(String path) {
+    return _ImageContainerWithLink(image: FileImage(File(path)));
+  }
+
+  Widget _NetworkAvatar(String imageURL) {
+    if (_imageLinkExists(imageURL)) {
+      return _ImageContainerWithLink(
+          image: CachedNetworkImageProvider(imageURL));
+    } else {
+      return _EmptyAvatar(
+          icon: Icon(
+        Icons.account_circle,
+        size: 140,
+        color: Colors.grey,
+      ));
+    }
   }
 
   bool _imageLinkExists(String? imageURL) =>
@@ -130,8 +144,11 @@ class _Avatar extends StatelessWidget {
 }
 
 class _EmptyAvatar extends StatelessWidget {
+  final Icon icon;
+
   const _EmptyAvatar({
     Key? key,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -199,31 +216,6 @@ class _ImageContainerWithLink extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _EmptyImageContainer extends StatelessWidget {
-  const _EmptyImageContainer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: 150.0,
-        height: 150.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: PeerPALAppColor.primaryColor,
-            width: 4.0,
-          ),
-        ),
-        child: Icon(
-          Icons.account_circle,
-          size: 140,
-          color: Colors.grey,
-        ));
   }
 }
 
