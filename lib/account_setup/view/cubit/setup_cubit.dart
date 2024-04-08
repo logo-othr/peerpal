@@ -25,12 +25,6 @@ class SetupCubit extends Cubit<SetupState> {
       this._isIOSWithoutNotificationPermission)
       : super(HomeInitial());
 
-  Future<void> getCurrentUserInformation() async {
-    emit(HomeLoading());
-    final home = await _getAuthenticatedUser();
-    emit(HomeLoaded(home));
-    loadCurrentSetupFlowState();
-  }
 
   Future<void> loadCurrentSetupFlowState() async {
     PeerPALUser userInformation = await _getAuthenticatedUser();
