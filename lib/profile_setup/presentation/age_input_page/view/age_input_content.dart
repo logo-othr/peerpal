@@ -21,7 +21,7 @@ class AgeInputContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar("Alter",
-            hasBackButton: _isBackButtonRequired(),
+            hasBackButton: !isInFlowContext,
             actionButtonWidget: CustomSupportVideoDialog(
                 supportVideo:
                     SupportVideos.links[VideoIdentifier.settings_profile]!)),
@@ -44,7 +44,6 @@ class AgeInputContent extends StatelessWidget {
             }));
   }
 
-  bool _isBackButtonRequired() => (isInFlowContext) ? false : true;
 
   Future<void> _update(AgeInputState state, BuildContext context) async {
     if (isInFlowContext) {
