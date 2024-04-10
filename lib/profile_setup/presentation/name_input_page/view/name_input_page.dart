@@ -33,12 +33,12 @@ class NameInputPage extends StatelessWidget {
                     SupportVideos.links[VideoIdentifier.settings_profile]!)),
         body: BlocProvider(
           create: (_) {
-            return NameInputCubit(
-                context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
+            return UsernameCubit(
+                context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+              ..loadData();
           },
           child: NameInputContent(
             isInFlowContext: isInFlowContext,
-            pastName: pastName,
           ),
         ),
       ),
