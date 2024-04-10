@@ -5,10 +5,10 @@ import 'package:peerpal/profile_setup/presentation/name_input_page/widgets/usern
 import 'package:peerpal/profile_setup/presentation/name_input_page/widgets/username_submit_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-class NameInputContent extends StatelessWidget {
+class UsernameContent extends StatelessWidget {
   final bool isInFlowContext;
 
-  const NameInputContent({Key? key, required this.isInFlowContext})
+  const UsernameContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
   @override

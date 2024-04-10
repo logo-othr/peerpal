@@ -5,20 +5,20 @@ import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/presentation/name_input_page/cubit/name_input_cubit.dart';
-import 'package:peerpal/profile_setup/presentation/name_input_page/view/name_input_content.dart';
+import 'package:peerpal/profile_setup/presentation/name_input_page/view/username_content.dart';
 import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
 
-class NameInputPage extends StatelessWidget {
+class UsernamePage extends StatelessWidget {
   final bool isInFlowContext;
   final String pastName;
 
-  NameInputPage({required this.isInFlowContext, this.pastName = ''});
+  UsernamePage({required this.isInFlowContext, this.pastName = ''});
 
   static MaterialPage<void> page({required bool isInFlowContext}) {
     return MaterialPage<void>(
-        child: NameInputPage(isInFlowContext: isInFlowContext));
+        child: UsernamePage(isInFlowContext: isInFlowContext));
   }
 
   @override
@@ -37,7 +37,7 @@ class NameInputPage extends StatelessWidget {
                 context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
               ..loadData();
           },
-          child: NameInputContent(
+          child: UsernameContent(
             isInFlowContext: isInFlowContext,
           ),
         ),
