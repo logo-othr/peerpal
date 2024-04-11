@@ -14,10 +14,15 @@ class AgeInputCubit extends Cubit<AgeInputState> {
   final GetAuthenticatedUser _getAuthenticatedUser;
 
   void dataChanged(int selectedAge) {
-    emit(AgeInputInitial(selectedAge));
+    emit(AgeInputLoaded(selectedAge));
   }
 
-  Future<void> postData() async {
+  Future<void> loadData() async {
+    var currentUser = await _getAuthenticatedUser();
+    emit(AgeInputLoaded(currentUser.age ?? state.selectedAge));
+  }
+
+  Future<void> update() async {
     emit(AgeInputPosting(state.selectedAge));
 
     var userInformation = await _getAuthenticatedUser();

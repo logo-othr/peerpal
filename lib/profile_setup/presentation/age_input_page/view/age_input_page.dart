@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -24,7 +23,8 @@ class AgeInputPage extends StatelessWidget {
       child: BlocProvider(
         create: (_) {
           return AgeInputCubit(
-              context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
+              context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+            ..loadData();
         },
         child: AgeInputContent(isInFlowContext: isInFlowContext),
       ),

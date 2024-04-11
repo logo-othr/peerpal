@@ -16,6 +16,13 @@ class AgeInputInitial extends AgeInputState {
   List<Object?> get props => [selectedAge];
 }
 
+class AgeInputLoaded extends AgeInputState {
+  AgeInputLoaded(int selectedAge) : super(selectedAge);
+
+  @override
+  List<Object?> get props => [selectedAge];
+}
+
 class AgeInputPosting extends AgeInputState {
   AgeInputPosting(int selectedAge) : super(selectedAge);
 
