@@ -2,72 +2,61 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/domain/phone_input_page/models/phonenum_model.dart';
-import 'package:peerpal/profile_setup/presentation/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/phone_input_page/cubit/phone_input_cubit.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 import 'package:peerpal/widgets/custom_peerpal_heading.dart';
 
-class PhoneInputContent extends StatelessWidget {
+class PhoneNumberContent extends StatelessWidget {
   final bool isInFlowContext;
-  final String pastPhone;
 
-  PhoneInputContent(
-      {Key? key, required this.isInFlowContext, this.pastPhone = ""})
+  PhoneNumberContent({Key? key, required this.isInFlowContext})
       : super(key: key);
 
-  final TextEditingController nameController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
-    return BlocListener<PhoneInputCubit, PhoneInputState>(
-      listener: _errorMessage,
-      child: Align(
-          alignment: const Alignment(0, -1 / 3),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(10, 28, 10, 12),
-            child: _PageContent(
-                isInFlowContext: isInFlowContext, pastPhone: pastPhone),
-          )),
+    return BlocBuilder<PhoneInputCubit, PhoneInputState>(
+      builder: (context, state) {
+        if (state is PhoneInputInitial) {
+          return CircularProgressIndicator();
+        } else {
+          return PhoneNumberForm(
+              isInFlowContext: isInFlowContext,
+              currentPhoneNumber: state.currentUser.phoneNumber ?? '');
+        }
+      },
     );
-  }
-
-  void _errorMessage(context, state) {
-    const String errorTxt = "Fehler beim Speichern.";
-    if (state is PhoneInputError) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-              content:
-                  Text((state.message.isEmpty ? errorTxt : state.message))),
-        );
-    }
   }
 }
 
-class _PageContent extends StatelessWidget {
-  const _PageContent({
-    Key? key,
-    required this.isInFlowContext,
-    required this.pastPhone,
-  }) : super(key: key);
-
+class PhoneNumberForm extends StatelessWidget {
   final bool isInFlowContext;
-  final String pastPhone;
+  final String currentPhoneNumber;
+
+  const PhoneNumberForm(
+      {Key? key,
+      required this.isInFlowContext,
+      required this.currentPhoneNumber})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _Headline(),
-        _PhoneNumberInputField(isInFlowContext, pastPhone),
-        _SaveButtons(isInFlowContext: isInFlowContext)
-      ],
+    return Align(
+      alignment: const Alignment(0, -1 / 3),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 28, 10, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _Headline(),
+            _PhoneNumberInputField(isInFlowContext, currentPhoneNumber),
+            _SaveButtons(isInFlowContext: isInFlowContext)
+          ],
+        ),
+      ),
     );
   }
 }
@@ -115,33 +104,26 @@ class _PhoneNumberInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
         buildWhen: (previous, current) =>
-            _phoneNumberChanged(previous, current),
+            previous.phoneNumber != current.phoneNumber,
         builder: (context, state) {
           String? errorText = _errorTxtForIncorrectPhoneLength(state);
-          return new FutureBuilder(
-              future: context.read<PhoneInputCubit>().currentPhoneNumber(),
-              initialData: state.phoneNumber.value,
-              builder: (BuildContext context, AsyncSnapshot<String?> text) {
-                return Container(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
-                      child: _PhoneTextfield(
-                          pastPhone: pastPhone,
-                          errorText: errorText,
-                          state: state),
-                    ),
-                  ),
-                );
-              });
+          return Container(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
+                child: _PhoneTextfield(
+                    pastPhone: pastPhone, errorText: errorText, state: state),
+              ),
+            ),
+          );
         });
   }
 
   String? _errorTxtForIncorrectPhoneLength(PhoneInputState state) {
     String? errorText = "";
     var errorState = state.phoneNumber.error;
-    const String toLong = "länge einer gültigen Telefonnummer überschritten";
-    const String toShort = "Länge einer gültigen Telefennummer unterschritten";
+    const String toLong = "Die Nummer ist zu lang.";
+    const String toShort = "Die Nummer ist zu kurz.";
     switch (errorState) {
       case PhoneError.toLong:
         errorText = toLong;
@@ -149,15 +131,15 @@ class _PhoneNumberInputField extends StatelessWidget {
       case PhoneError.toShort:
         errorText = toShort;
         break;
+      case PhoneError.minimum:
+        errorText = '';
+        break;
       default:
         errorText = null;
         break;
     }
     return errorText;
   }
-
-  bool _phoneNumberChanged(PhoneInputState previous, PhoneInputState current) =>
-      previous.phoneNumber != current.phoneNumber;
 }
 
 class _PhoneTextfield extends StatelessWidget {
@@ -222,10 +204,11 @@ class _SaveAndCloseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneInputCubit, PhoneInputState>(
       builder: (context, state) {
-        if (state is AgeInputPosting) {
+        if (state.formValidationStatus == FormzStatus.submissionInProgress) {
           return const CircularProgressIndicator();
         } else {
           return CustomPeerPALButton(
+            color: state.phoneNumber.invalid ? Colors.blueGrey : null,
             text: 'Weiter',
             onPressed: !state.phoneNumber.invalid
                 ? () async {

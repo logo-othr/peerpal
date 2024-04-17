@@ -197,8 +197,7 @@ class _ChangePhonenumber extends StatelessWidget {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PhoneInputPage(
-                        isInFlowContext: false, pastPhone: phonenumber)),
+                    builder: (context) => PhoneInputPage(isInFlowContext: false)),
               ).then(
                   (value) => context.read<ProfileOverviewCubit>().loadData()),
             });

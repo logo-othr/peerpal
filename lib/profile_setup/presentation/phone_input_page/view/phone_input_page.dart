@@ -12,16 +12,14 @@ import 'package:peerpal/widgets/support_video_dialog.dart';
 
 class PhoneInputPage extends StatelessWidget {
   final bool isInFlowContext;
-  final String pastPhone;
 
-  PhoneInputPage({required this.isInFlowContext, required this.pastPhone});
+  PhoneInputPage({required this.isInFlowContext});
 
   static MaterialPage<void> page(
       {required bool isInFlowContext, required String pastPhone}) {
     return MaterialPage<void>(
         child: PhoneInputPage(
       isInFlowContext: isInFlowContext,
-      pastPhone: pastPhone,
     ));
   }
 
@@ -38,11 +36,11 @@ class PhoneInputPage extends StatelessWidget {
         body: BlocProvider(
           create: (_) {
             return PhoneInputCubit(
-                context.read<AppUserRepository>(), sl<GetAuthenticatedUser>());
+                context.read<AppUserRepository>(), sl<GetAuthenticatedUser>())
+              ..loadData();
           },
-          child: PhoneInputContent(
+          child: PhoneNumberContent(
             isInFlowContext: isInFlowContext,
-            pastPhone: pastPhone,
           ),
         ),
       ),
