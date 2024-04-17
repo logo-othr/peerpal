@@ -24,7 +24,7 @@ class PhoneNumberContent extends StatelessWidget {
         } else {
           return PhoneNumberForm(
               isInFlowContext: isInFlowContext,
-              currentPhoneNumber: state.currentUser.phoneNumber ?? '');
+              oldPhoneNumber: state.currentUser.phoneNumber ?? '');
         }
       },
     );
@@ -33,12 +33,11 @@ class PhoneNumberContent extends StatelessWidget {
 
 class PhoneNumberForm extends StatelessWidget {
   final bool isInFlowContext;
-  final String currentPhoneNumber;
+  final String oldPhoneNumber;
 
   const PhoneNumberForm(
       {Key? key,
-      required this.isInFlowContext,
-      required this.currentPhoneNumber})
+      required this.isInFlowContext, required this.oldPhoneNumber})
       : super(key: key);
 
   @override
@@ -52,8 +51,8 @@ class PhoneNumberForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _Headline(),
-            _PhoneNumberInputField(isInFlowContext, currentPhoneNumber),
-            _SaveButtons(isInFlowContext: isInFlowContext)
+            _PhoneNumberFormField(isInFlowContext, oldPhoneNumber),
+            _SubmitButtonGroup(isInFlowContext: isInFlowContext)
           ],
         ),
       ),
@@ -77,8 +76,8 @@ class _Headline extends StatelessWidget {
   }
 }
 
-class _SaveButtons extends StatelessWidget {
-  const _SaveButtons({
+class _SubmitButtonGroup extends StatelessWidget {
+  const _SubmitButtonGroup({
     Key? key,
     required this.isInFlowContext,
   }) : super(key: key);
@@ -88,17 +87,17 @@ class _SaveButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      _SaveAndCloseButton(isInFlowContext),
+      _SubmitButton(isInFlowContext),
       const SizedBox(height: 15),
-      _SaveAndClosePageWithoutPhoneNumberButton(isInFlowContext)
+      SubmitWithoutPhoneButton(isInFlowContext)
     ]);
   }
 }
 
-class _PhoneNumberInputField extends StatelessWidget {
-  const _PhoneNumberInputField(bool isInFlowContext, this.pastPhone);
+class _PhoneNumberFormField extends StatelessWidget {
+  const _PhoneNumberFormField(bool isInFlowContext, this.oldPhoneNumber);
 
-  final String pastPhone;
+  final String oldPhoneNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +111,9 @@ class _PhoneNumberInputField extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(25.0, 0, 25.0, 0),
                 child: _PhoneTextfield(
-                    pastPhone: pastPhone, errorText: errorText, state: state),
+                    pastPhone: oldPhoneNumber,
+                    errorText: errorText,
+                    state: state),
               ),
             ),
           );
@@ -195,10 +196,10 @@ class _PhoneTextfield extends StatelessWidget {
   }
 }
 
-class _SaveAndCloseButton extends StatelessWidget {
+class _SubmitButton extends StatelessWidget {
   final bool isInFlowContext;
 
-  const _SaveAndCloseButton(this.isInFlowContext);
+  const _SubmitButton(this.isInFlowContext);
 
   @override
   Widget build(BuildContext context) {
@@ -239,11 +240,11 @@ class _SaveAndCloseButton extends StatelessWidget {
   }
 }
 
-class _SaveAndClosePageWithoutPhoneNumberButton extends StatelessWidget {
+class SubmitWithoutPhoneButton extends StatelessWidget {
   final bool isInFlowContext;
   final String buttonTxt = 'Ich möchte keine Telefonnummer angeben';
 
-  const _SaveAndClosePageWithoutPhoneNumberButton(this.isInFlowContext);
+  const SubmitWithoutPhoneButton(this.isInFlowContext);
 
   @override
   Widget build(BuildContext context) {
