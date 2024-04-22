@@ -1,13 +1,8 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_bottom_bar.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
@@ -20,7 +15,6 @@ import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/setup.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatLoaded extends StatelessWidget {
   final ChatLoadedState _state;
@@ -74,7 +68,9 @@ class ChatLoaded extends StatelessWidget {
   Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
       String content, BuildContext context) async {
     var image = await pickPictureFromGallery();
-    String url = await postPicture(image, _state.currentChat);
+    String url = await context
+        .read<ChatLoadedCubit>()
+        .postPicture(image, _state.currentChat);
     context.read<ChatLoadedCubit>().sendMessage(
         chatPartner: chatPartner,
         chatId: chatId,
@@ -82,31 +78,6 @@ class ChatLoaded extends StatelessWidget {
         messageType: MessageType.image);
   }
 
-  Future<String> postPicture(XFile? chatImage, UserChat? userChat) async {
-    var uid = Uuid();
-
-    firebase_storage.UploadTask uploadTask;
-    var ref = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('User-Chat-Image')
-        .child(userChat!.chat.chatId)
-        .child(DateTime.now().millisecondsSinceEpoch.toString())
-        .child('${uid.v4()}.jpg');
-
-    final metadata = firebase_storage.SettableMetadata(
-        contentType: 'image/jpeg',
-        customMetadata: {'file-path': chatImage!.path});
-
-    uploadTask = ref.putFile(File(chatImage.path), metadata);
-
-    var returnURL = '';
-    await Future.value(uploadTask);
-    await ref.getDownloadURL().then((fileURL) {
-      returnURL = fileURL;
-    });
-    logger.i(returnURL);
-    return returnURL;
-  }
 
   @override
   Widget build(BuildContext context) {
