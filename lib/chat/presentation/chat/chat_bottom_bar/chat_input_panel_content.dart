@@ -10,7 +10,7 @@ import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
-class ChatInputPanel extends StatefulWidget {
+class ChatInputPanelContent extends StatefulWidget {
   final String currentUserId;
   final UserChat userChat;
   final PeerPALUser appUser;
@@ -18,7 +18,7 @@ class ChatInputPanel extends StatefulWidget {
   final TextEditingController chatMessageController;
   final ChatMessageInputField chatMessageInputField;
 
-  const ChatInputPanel(
+  const ChatInputPanelContent(
       {required this.currentUserId,
       required this.userChat,
       required this.appUser,
@@ -29,10 +29,10 @@ class ChatInputPanel extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ChatInputPanel> createState() => _ChatInputPanelState();
+  State<ChatInputPanelContent> createState() => _ChatInputPanelContentState();
 }
 
-class _ChatInputPanelState extends State<ChatInputPanel> {
+class _ChatInputPanelContentState extends State<ChatInputPanelContent> {
   late final ChatInputPanelCubit _cubit;
 
   @override
