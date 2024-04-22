@@ -7,7 +7,7 @@ import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 part 'chat_input_panel_state.dart';
 
-class ChatBottomBarCubit extends Cubit<ChatBottomBarState> {
+class ChatInputPanelCubit extends Cubit<ChatInputPanelState> {
   final ChatRepository chatRepository;
   final String currentUserId;
   final UserChat userChat;
@@ -15,13 +15,13 @@ class ChatBottomBarCubit extends Cubit<ChatBottomBarState> {
   final PeerPALUser chatPartner;
   StreamSubscription? messageCountSubscription;
 
-  ChatBottomBarCubit({
+  ChatInputPanelCubit({
     required this.chatRepository,
     required this.currentUserId,
     required this.userChat,
     required this.appUser,
     required this.chatPartner,
-  }) : super(ChatBottomBarInitialState()) {
+  }) : super(ChatInputPanelInitialState()) {
     loadChat();
   }
 
@@ -32,14 +32,14 @@ class ChatBottomBarCubit extends Cubit<ChatBottomBarState> {
 
     messageCountSubscription =
         chatRepository.messageCountForChat(userChat.chat.chatId).listen(
-              (messageCount) => emit(ChatBottomBarLoadedState(
-                messageCount: messageCount,
+          (messageCount) => emit(ChatInputPanelLoadedState(
+            messageCount: messageCount,
                 isChatNotStartedByAppUser: isChatNotStartedByAppUser,
                 isChatRequestNotAccepted: isChatRequestNotAccepted,
               )),
               onError: (error) =>
-                  emit(ChatBottomBarErrorState(errorMessage: error.toString())),
-            );
+              emit(ChatInputPanelErrorState(errorMessage: error.toString())),
+        );
   }
 
   Future<void> sendChatRequestResponse(bool response) async {
@@ -50,7 +50,7 @@ class ChatBottomBarCubit extends Cubit<ChatBottomBarState> {
         userChat.chat.chatId,
       );
     } catch (e) {
-      emit(ChatBottomBarErrorState(errorMessage: e.toString()));
+      emit(ChatInputPanelErrorState(errorMessage: e.toString()));
     }
   }
 

@@ -1,25 +1,25 @@
 part of 'chat_input_panel_cubit.dart';
 
-abstract class ChatBottomBarState {}
+abstract class ChatInputPanelState {}
 
-class ChatBottomBarInitialState extends ChatBottomBarState {}
+class ChatInputPanelInitialState extends ChatInputPanelState {}
 
-class ChatBottomBarLoadingState extends ChatBottomBarState {}
+class ChatInputPanelLoadingState extends ChatInputPanelState {}
 
-class ChatBottomBarLoadedState extends ChatBottomBarState {
+class ChatInputPanelLoadedState extends ChatInputPanelState {
   final int messageCount;
   final bool isChatNotStartedByAppUser;
   final bool isChatRequestNotAccepted;
 
-  ChatBottomBarLoadedState({
+  ChatInputPanelLoadedState({
     required this.messageCount,
     required this.isChatNotStartedByAppUser,
     required this.isChatRequestNotAccepted,
   });
 }
 
-class ChatBottomBarErrorState extends ChatBottomBarState {
+class ChatInputPanelErrorState extends ChatInputPanelState {
   final String errorMessage;
 
-  ChatBottomBarErrorState({required this.errorMessage});
+  ChatInputPanelErrorState({required this.errorMessage});
 }

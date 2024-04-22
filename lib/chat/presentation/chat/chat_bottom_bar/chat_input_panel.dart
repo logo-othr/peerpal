@@ -33,12 +33,12 @@ class ChatInputPanel extends StatefulWidget {
 }
 
 class _ChatInputPanelState extends State<ChatInputPanel> {
-  late final ChatBottomBarCubit _cubit;
+  late final ChatInputPanelCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-    _cubit = ChatBottomBarCubit(
+    _cubit = ChatInputPanelCubit(
       chatRepository: sl<ChatRepository>(),
       currentUserId: widget.currentUserId,
       userChat: widget.userChat,
@@ -50,12 +50,12 @@ class _ChatInputPanelState extends State<ChatInputPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBottomBarCubit, ChatBottomBarState>(
+    return BlocBuilder<ChatInputPanelCubit, ChatInputPanelState>(
       bloc: _cubit,
       builder: (context, state) {
-        if (state is ChatBottomBarLoadingState) {
+        if (state is ChatInputPanelLoadingState) {
           return CustomLoadingIndicator(text: "Chat wird geladen..");
-        } else if (state is ChatBottomBarLoadedState) {
+        } else if (state is ChatInputPanelLoadedState) {
           if (state.isChatRequestNotAccepted &&
               state.isChatNotStartedByAppUser) {
             return _chatRequestReplyButtons(context);
@@ -64,7 +64,7 @@ class _ChatInputPanelState extends State<ChatInputPanel> {
           } else {
             return _bottomBarContent();
           }
-        } else if (state is ChatBottomBarErrorState) {
+        } else if (state is ChatInputPanelErrorState) {
           return Text('Error: ${state.errorMessage}');
         } else {
           return Container(); // fallback if none of the above states match
