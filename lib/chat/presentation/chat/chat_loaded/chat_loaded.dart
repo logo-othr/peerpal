@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_bottom_bar.dart';
+import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/chat_input_panel.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/chat_message_input_field.dart';
@@ -90,7 +90,7 @@ class ChatLoaded extends StatelessWidget {
           friendRepository: sl<FriendRepository>(),
         ),
         MessageList(state: _state),
-        ChatBottomBar(
+        ChatInputPanel(
           appUser: _state.currentUser,
           chatMessageController: _textEditingController,
           chatPartner: _state.currentChat!.user,

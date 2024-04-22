@@ -1,4 +1,4 @@
-part of 'chat_bottom_bar_cubit.dart';
+part of 'chat_input_panel_cubit.dart';
 
 abstract class ChatBottomBarState {}
 

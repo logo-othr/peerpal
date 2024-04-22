@@ -5,7 +5,7 @@ import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
-part 'chat_bottom_bar_state.dart';
+part 'chat_input_panel_state.dart';
 
 class ChatBottomBarCubit extends Cubit<ChatBottomBarState> {
   final ChatRepository chatRepository;

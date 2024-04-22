@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/domain/repository/chat_repository.dart';
-import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/cubit/chat_bottom_bar_cubit.dart';
+import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/cubit/chat_input_panel_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/chat_message_input_field.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
@@ -10,7 +10,7 @@ import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
-class ChatBottomBar extends StatefulWidget {
+class ChatInputPanel extends StatefulWidget {
   final String currentUserId;
   final UserChat userChat;
   final PeerPALUser appUser;
@@ -18,7 +18,7 @@ class ChatBottomBar extends StatefulWidget {
   final TextEditingController chatMessageController;
   final ChatMessageInputField chatMessageInputField;
 
-  const ChatBottomBar(
+  const ChatInputPanel(
       {required this.currentUserId,
       required this.userChat,
       required this.appUser,
@@ -29,10 +29,10 @@ class ChatBottomBar extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ChatBottomBar> createState() => _ChatBottomBarState();
+  State<ChatInputPanel> createState() => _ChatInputPanelState();
 }
 
-class _ChatBottomBarState extends State<ChatBottomBar> {
+class _ChatInputPanelState extends State<ChatInputPanel> {
   late final ChatBottomBarCubit _cubit;
 
   @override
