@@ -55,7 +55,7 @@ class ChatLoaded extends StatelessWidget {
         messageType: MessageType.text);
   }
 
-  Future<XFile> pickPictureFromGallery() async {
+  Future<XFile> _pickPictureFromGallery() async {
     var profilePicture = (await ImagePicker().pickImage(
       source: ImageSource.gallery,
       maxHeight: 1280,
@@ -67,7 +67,7 @@ class ChatLoaded extends StatelessWidget {
 
   Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
       String content, BuildContext context) async {
-    var image = await pickPictureFromGallery();
+    var image = await _pickPictureFromGallery();
     String url = await context
         .read<ChatLoadedCubit>()
         .postPicture(image, _state.currentChat);
