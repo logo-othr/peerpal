@@ -1,7 +1,6 @@
 import 'package:timezone/timezone.dart';
 
 abstract class NotificationService {
-
   Future<void> startRemoteNotificationBackgroundHandler(
       firebaseMessagingBackgroundHandler, firebaseMessagingForegroundHandler);
 
@@ -22,5 +21,4 @@ abstract class NotificationService {
   Future<void> cancelNotification(int notificationId);
 
   Future<void> cancelAll();
-
 }

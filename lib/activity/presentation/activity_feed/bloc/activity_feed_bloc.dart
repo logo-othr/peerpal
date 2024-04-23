@@ -13,7 +13,6 @@ import 'package:peerpal/setup.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'activity_feed_event.dart';
-
 part 'activity_feed_state.dart';
 
 class ActivityFeedBloc extends Bloc<ActivityFeedEvent, ActivityFeedState> {

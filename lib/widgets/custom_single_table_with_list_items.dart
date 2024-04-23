@@ -88,7 +88,7 @@ class CustomSingleTableWithListItems extends StatelessWidget {
                         ),
                         isArrowIconVisible
                             ? Icon(
-                          Icons.arrow_forward_ios,
+                                Icons.arrow_forward_ios,
                                 size: 15,
                                 color: PeerPALAppColor.secondaryColor,
                               )

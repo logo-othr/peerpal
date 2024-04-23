@@ -20,9 +20,8 @@ class ChatLoadedCubit extends Cubit<ChatLoadedState> {
   })  : this._sendMessage = sendMessage,
         super(chatLoadedState);
 
-  Future<void> sendMessage({
-      required String payload,
-      required MessageType messageType}) async {
+  Future<void> sendMessage(
+      {required String payload, required MessageType messageType}) async {
     var chatPartner = state.chatPartner;
     var chatId = state.currentChat.chat.chatId;
 

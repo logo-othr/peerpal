@@ -106,7 +106,6 @@ class _ImagePickerAvatar extends StatelessWidget {
   }
 }
 
-
 class _SubmitWithoutPictureButton extends StatelessWidget {
   final bool isInFlowContext;
 

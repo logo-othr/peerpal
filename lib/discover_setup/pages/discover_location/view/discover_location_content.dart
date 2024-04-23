@@ -259,6 +259,7 @@ class _LocationListItem extends StatelessWidget {
 class _LocationSearchListItem extends StatelessWidget {
   const _LocationSearchListItem(
       {required this.location, required this.searchBarController});
+
   final TextEditingController searchBarController;
 
   final Location location;

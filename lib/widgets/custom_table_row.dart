@@ -33,7 +33,7 @@ class CustomTableRow extends StatelessWidget {
               ),
               isArrowVisible
                   ? Icon(
-                Icons.arrow_forward_ios,
+                      Icons.arrow_forward_ios,
                       size: 15,
                       color: PeerPALAppColor.secondaryColor,
                     )

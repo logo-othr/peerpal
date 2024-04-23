@@ -442,7 +442,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               password == "1234"
                   ? Column(
-                children: [
+                      children: [
                         CustomTableRow(
                           text:
                               "(1) ID: ${sl.get<AuthenticationRepository>().currentUser.id}",
@@ -587,7 +587,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                       ],
-              )
+                    )
                   : Container(),
             ],
           ),

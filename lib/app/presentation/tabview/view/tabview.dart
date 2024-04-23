@@ -91,7 +91,7 @@ class _AppTabViewState extends State<AppTabView> {
               ),
               BlocProvider<FriendsOverviewCubit>(
                 create: (context) =>
-                FriendsOverviewCubit(sl<FriendRepository>())
+                    FriendsOverviewCubit(sl<FriendRepository>())
                       ..getFriendsFromUser(),
               ),
             ],

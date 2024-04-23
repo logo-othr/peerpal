@@ -33,7 +33,7 @@ class _ChatButtonsState extends State<ChatButtons> {
     // Subscribe
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
-          logger.i('Keyboard visibility update. Is visible: $visible');
+      logger.i('Keyboard visibility update. Is visible: $visible');
       if (visible) {
         setState(() {
           isAnswerKeyboardVisible = false;

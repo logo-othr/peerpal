@@ -95,7 +95,7 @@ class CustomSingleCreatorTable extends StatelessWidget {
                           child: isOwnCreatedActivity
                               ? Container()
                               : Icon(
-                            tapIcon,
+                                  tapIcon,
                                   size: 30,
                                   color: PeerPALAppColor.primaryColor,
                                 ),

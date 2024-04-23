@@ -110,7 +110,7 @@ class _DatePickerState extends State<_DatePicker> {
   Widget build(BuildContext context) {
     return BlocBuilder<DateInputCubit, DateInputState>(
         builder: (context, state) {
-          dateController.text = state.date;
+      dateController.text = state.date;
       return TextFormField(
         autofocus: false,
         readOnly: true,
@@ -124,7 +124,7 @@ class _DatePickerState extends State<_DatePicker> {
                     DatePicker.showDatePicker(context,
                         showTitleActions: true,
                         minTime: DateTime.now(), onChanged: (date) {
-                          logger.i('change $date');
+                      logger.i('change $date');
                     }, onConfirm: (date) {
                       String formattedDate =
                           DateFormat('dd.MM.yyyy').format(date);
@@ -134,22 +134,22 @@ class _DatePickerState extends State<_DatePicker> {
                           .dataChanged(formattedDate, state.time);
                     }, currentTime: DateTime.now(), locale: LocaleType.de)
                   },
-                  icon: Icon(Icons.edit)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: PeerPALAppColor.primaryColor,
+              icon: Icon(Icons.edit)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: PeerPALAppColor.primaryColor,
             ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: PeerPALAppColor.primaryColor,
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: PeerPALAppColor.primaryColor,
                 width: 3,
               )),
-            ),
-          );
-        });
+        ),
+      );
+    });
   }
 }
 
@@ -185,7 +185,7 @@ class _TimePickerState extends State<_TimePicker> {
           onPressed: () => {
                 DatePicker.showPicker(context, showTitleActions: true,
                     onChanged: (date) {
-                      logger.i('change $date');
+                  logger.i('change $date');
                 }, onConfirm: (date) {
                   String formattedTime = DateFormat('HH:mm').format(date);
                   var array = formattedTime.split(":");

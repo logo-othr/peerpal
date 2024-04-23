@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/friends/friends_overview_page/view/friends_overview_content.dart';
 

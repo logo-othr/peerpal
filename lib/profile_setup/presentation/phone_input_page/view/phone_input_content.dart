@@ -36,8 +36,7 @@ class PhoneNumberForm extends StatelessWidget {
   final String oldPhoneNumber;
 
   const PhoneNumberForm(
-      {Key? key,
-      required this.isInFlowContext, required this.oldPhoneNumber})
+      {Key? key, required this.isInFlowContext, required this.oldPhoneNumber})
       : super(key: key);
 
   @override

@@ -88,4 +88,3 @@ class SetupCompletedState extends SetupState {
   // TODO: implement stringify
   bool? get stringify => throw UnimplementedError();
 }
-

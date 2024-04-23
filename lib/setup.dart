@@ -192,7 +192,7 @@ Future<void> setupDependencies() async {
   // Repository
 
   sl.registerLazySingleton<LocalAppReminderRepository>(
-        () => LocalAppReminderRepository(
+    () => LocalAppReminderRepository(
         localConfiguration: sl<AppConfigurationService>()),
   );
 

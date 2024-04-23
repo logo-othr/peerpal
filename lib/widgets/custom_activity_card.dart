@@ -194,12 +194,12 @@ class _CustomActivityCardState extends State<CustomActivityCard> {
                       return ListTile(
                           title: _expanded
                               ? CustomPeerPALHeading3(
-                            text: 'Beschreibung ausblenden',
+                                  text: 'Beschreibung ausblenden',
                                   color: PeerPALAppColor.primaryColor,
                                   fontWeight: FontWeight.bold,
                                 )
                               : CustomPeerPALHeading3(
-                            text: 'Beschreibung anzeigen',
+                                  text: 'Beschreibung anzeigen',
                                   color: PeerPALAppColor.primaryColor,
                                   fontWeight: FontWeight.bold,
                                 ));

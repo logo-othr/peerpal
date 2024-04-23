@@ -120,5 +120,4 @@ class ChatRepositoryFirebase implements ChatRepository {
   ChatMessage _fromJsonToChatMessage(Map<String, dynamic> jsonData) {
     return ChatMessageDTO.fromJson(jsonData);
   }
-
 }
