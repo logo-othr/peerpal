@@ -5,26 +5,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
-import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
 import 'package:uuid/uuid.dart';
 
 part 'chat_loaded_state.dart';
 
-class ChatLoadedCubit extends Cubit<ChatLoadedBasicState> {
+class ChatLoadedCubit extends Cubit<ChatLoadedState> {
   final SendChatMessageUseCase _sendMessage;
 
   ChatLoadedCubit({
     required sendMessage,
+    required chatLoadedState,
   })  : this._sendMessage = sendMessage,
-        super(InitialChatLoadedState());
+        super(chatLoadedState);
 
-  Future<void> sendMessage(
-      {required PeerPALUser chatPartner,
-      required String? chatId,
+  Future<void> sendMessage({
       required String payload,
       required MessageType messageType}) async {
+    var chatPartner = state.chatPartner;
+    var chatId = state.currentChat.chat.chatId;
+
     if (payload.trim() != '') {
       await _sendMessage(
         chatPartner,
@@ -35,14 +36,14 @@ class ChatLoadedCubit extends Cubit<ChatLoadedBasicState> {
     }
   }
 
-  Future<String> postPicture(XFile? chatImage, UserChat? userChat) async {
+  Future<String> postPicture(XFile? chatImage) async {
+    var currentChat = state.currentChat;
     var uid = Uuid();
-
     firebase_storage.UploadTask uploadTask;
     var ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('User-Chat-Image')
-        .child(userChat!.chat.chatId)
+        .child(currentChat!.chat.chatId)
         .child(DateTime.now().millisecondsSinceEpoch.toString())
         .child('${uid.v4()}.jpg');
 

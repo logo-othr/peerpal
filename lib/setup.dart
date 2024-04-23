@@ -41,7 +41,6 @@ import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/get_all_userchats.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
-import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
@@ -124,9 +123,9 @@ Future<void> setupDependencies() async {
         authenticationRepository: sl()),
   );
 
-  sl.registerFactory(
+  /*sl.registerFactory(
     () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
-  );
+  );*/
   sl.registerFactory(
     () => ChatListCubit(sl(), sl()),
   );

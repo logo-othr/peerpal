@@ -1,5 +1,5 @@
 part of 'chat_loaded_cubit.dart';
-
+/*
 abstract class ChatLoadedBasicState {}
 
 class InitialChatLoadedState extends ChatLoadedBasicState {
@@ -9,3 +9,4 @@ class InitialChatLoadedState extends ChatLoadedBasicState {
 class UpdatedChatLoadedState extends ChatLoadedBasicState {
   UpdatedChatLoadedState() : super();
 }
+*/

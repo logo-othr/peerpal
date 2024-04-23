@@ -17,17 +17,14 @@ import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/setup.dart';
 
 class ChatLoaded extends StatelessWidget {
-  final ChatLoadedState _state;
   final TextEditingController _textEditingController;
   final FocusNode _focus;
 
   const ChatLoaded(
       {Key? key,
-      required ChatLoadedState state,
       required TextEditingController textEditingController,
       required FocusNode focus})
-      : this._state = state,
-        this._textEditingController = textEditingController,
+      : this._textEditingController = textEditingController,
         this._focus = focus,
         super(key: key);
 
@@ -35,24 +32,21 @@ class ChatLoaded extends StatelessWidget {
     return ChatHeaderBar(
         chatPartner: chatPartner,
         onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserInformationPage(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserInformationPage(
                   chatPartner.id!,
                   hasMessageButton: false,
                 ),
-          ),
-        ));
+              ),
+            ));
   }
 
-  Future<void> _sendTextMessage(PeerPALUser chatPartner, String? chatId,
-      String content, BuildContext context) async {
+  Future<void> _sendTextMessage(String content, BuildContext context) async {
     _textEditingController.clear();
-    context.read<ChatLoadedCubit>().sendMessage(
-        chatPartner: chatPartner,
-        chatId: chatId,
-        payload: content,
-        messageType: MessageType.text);
+    context
+        .read<ChatLoadedCubit>()
+        .sendMessage(payload: content, messageType: MessageType.text);
   }
 
   Future<XFile> _pickPictureFromGallery() async {
@@ -65,53 +59,45 @@ class ChatLoaded extends StatelessWidget {
     return profilePicture;
   }
 
-  Future<void> _sendImageMessage(PeerPALUser chatPartner, String? chatId,
-      String content, BuildContext context) async {
+  Future<void> _sendImageMessage(String content, BuildContext context) async {
     var image = await _pickPictureFromGallery();
-    String url = await context
+    String url = await context.read<ChatLoadedCubit>().postPicture(image);
+    context
         .read<ChatLoadedCubit>()
-        .postPicture(image, _state.currentChat);
-    context.read<ChatLoadedCubit>().sendMessage(
-        chatPartner: chatPartner,
-        chatId: chatId,
-        payload: url,
-        messageType: MessageType.image);
+        .sendMessage(payload: url, messageType: MessageType.image);
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _chatHeaderBar(context, _state.currentChat.user),
-        FriendRequestButton(
-          chatPartner: _state.currentChat.user,
-          appUserRepository: sl<AppUserRepository>(),
-          friendRepository: sl<FriendRepository>(),
-        ),
-        MessageList(state: _state),
-        ChatInputPanelContent(
-          appUser: _state.currentUser,
-          chatMessageController: _textEditingController,
-          chatPartner: _state.currentChat!.user,
-          chatMessageInputField: ChatMessageInputField(
-            sendImageMessage: () => _sendImageMessage(
-                _state.currentChat!.user,
-                _state.currentChat!.chat.chatId,
-                _textEditingController.text,
-                context),
-            textEditingController: _textEditingController,
-            focus: _focus,
-            sendTextMessage: () => _sendTextMessage(
-                _state.currentChat.user,
-                _state.currentChat.chat.chatId,
-                _textEditingController.text,
-                context),
-          ),
-          userChat: _state.currentChat,
-          currentUserId: sl<AuthenticationRepository>().currentUser.id,
-        ),
-      ],
+    return BlocBuilder<ChatLoadedCubit, ChatLoadedState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            _chatHeaderBar(context, state.currentChat.user),
+            FriendRequestButton(
+              chatPartner: state.currentChat.user,
+              appUserRepository: sl<AppUserRepository>(),
+              friendRepository: sl<FriendRepository>(),
+            ),
+            MessageList(state: state),
+            ChatInputPanelContent(
+              appUser: state.currentUser,
+              chatMessageController: _textEditingController,
+              chatPartner: state.currentChat!.user,
+              chatMessageInputField: ChatMessageInputField(
+                sendImageMessage: () =>
+                    _sendImageMessage(_textEditingController.text, context),
+                textEditingController: _textEditingController,
+                focus: _focus,
+                sendTextMessage: () =>
+                    _sendTextMessage(_textEditingController.text, context),
+              ),
+              userChat: state.currentChat,
+              currentUserId: sl<AuthenticationRepository>().currentUser.id,
+            ),
+          ],
+        );
+      },
     );
   }
 }

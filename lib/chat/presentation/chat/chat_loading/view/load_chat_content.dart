@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loaded/chat_loaded_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
@@ -18,21 +19,24 @@ class LoadChatContent extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: BlocBuilder<ChatPageCubit, ChatPageState>(
-            builder: (context, state) {
-          if (state is ChatPageInitial || state is ChatLoadingState) {
+            builder: (context, chatPageState) {
+          if (chatPageState is ChatPageInitial ||
+              chatPageState is ChatLoadingState) {
             return CircularProgressIndicator();
-          } else if (state is ChatLoadedState) {
+          } else if (chatPageState is ChatLoadedState) {
             return BlocProvider(
-              create: (context) => sl<ChatLoadedCubit>(),
+              create: (context) => ChatLoadedCubit(
+                chatLoadedState: chatPageState,
+                sendMessage: sl<SendChatMessageUseCase>(),
+              ),
               child: ChatLoaded(
-                state: state,
                 focus: _focus,
                 textEditingController: _textEditingController,
               ),
             );
-          } else if (state is NewChatState) {
+          } else if (chatPageState is NewChatState) {
             return NewChat(
-              state: state,
+              state: chatPageState,
               focusNode: _focus,
               textEditingController: _textEditingController,
             );
