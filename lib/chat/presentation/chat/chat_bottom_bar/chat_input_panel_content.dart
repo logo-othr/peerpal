@@ -33,25 +33,15 @@ class ChatInputPanelContent extends StatefulWidget {
 }
 
 class _ChatInputPanelContentState extends State<ChatInputPanelContent> {
-  late final ChatInputPanelCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-    _cubit = ChatInputPanelCubit(
-      chatRepository: sl<ChatRepository>(),
-      currentUserId: widget.currentUserId,
-      userChat: widget.userChat,
-      appUser: widget.appUser,
-      chatPartner: widget.chatPartner,
-    );
-    _cubit.loadChat();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatInputPanelCubit, ChatInputPanelState>(
-      bloc: _cubit,
       builder: (context, state) {
         if (state is ChatInputPanelLoadingState) {
           return CustomLoadingIndicator(text: "Chat wird geladen..");
@@ -136,14 +126,18 @@ class _ChatInputPanelContentState extends State<ChatInputPanelContent> {
             CustomPeerPALButton(
                 text: "Annehmen",
                 onPressed: () {
-                  _cubit.sendChatRequestResponse(true);
+                  context
+                      .read<ChatInputPanelCubit>()
+                      .sendChatRequestResponse(true);
                   Navigator.pop(context);
                 }),
             SizedBox(height: 8),
             CustomPeerPALButton(
                 text: "Ablehnen",
                 onPressed: () {
-                  _cubit.sendChatRequestResponse(false);
+                  context
+                      .read<ChatInputPanelCubit>()
+                      .sendChatRequestResponse(false);
                   Navigator.pop(context);
                 }),
           ],
