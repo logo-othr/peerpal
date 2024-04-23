@@ -5,8 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/chat/domain/message_type.dart';
+import 'package:peerpal/chat/domain/models/chat_message.dart';
+import 'package:peerpal/chat/domain/models/user_chat.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat/chat_loading/cubit/chat_page_cubit.dart';
+import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:uuid/uuid.dart';
 
 part 'chat_loaded_state.dart';
