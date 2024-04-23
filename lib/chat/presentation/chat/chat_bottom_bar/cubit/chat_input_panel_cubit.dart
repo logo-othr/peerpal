@@ -22,7 +22,6 @@ class ChatInputPanelCubit extends Cubit<ChatInputPanelState> {
     required this.appUser,
     required this.chatPartner,
   }) : super(ChatInputPanelInitialState()) {
-    loadChat();
   }
 
   void loadChat() {
