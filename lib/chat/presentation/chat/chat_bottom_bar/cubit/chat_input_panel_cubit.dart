@@ -26,17 +26,16 @@ class ChatInputPanelCubit extends Cubit<ChatInputPanelState> {
   }
 
   void loadChat() {
-    final bool isChatNotStartedByAppUser =
-        userChat.chat.startedBy != appUser.id;
-    final bool isChatRequestNotAccepted = !userChat.chat.chatRequestAccepted;
+    final bool isStartedByMe = userChat.chat.startedBy == appUser.id;
+    final bool isRequestAccepted = userChat.chat.chatRequestAccepted;
 
     messageCountSubscription = chatRepository
         .messageCountForChat(userChat.chat.chatId)
         .listen(
           (messageCount) => emit(ChatInputPanelLoadedState(
             messageCount: messageCount,
-            isChatNotStartedByAppUser: isChatNotStartedByAppUser,
-            isChatRequestNotAccepted: isChatRequestNotAccepted,
+            isChatNotStartedByAppUser: !isStartedByMe,
+            isChatRequestNotAccepted: !isRequestAccepted,
           )),
           onError: (error) =>
               emit(ChatInputPanelErrorState(errorMessage: error.toString())),
