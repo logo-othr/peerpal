@@ -11,9 +11,9 @@ PublicUserInformationDTO _$PublicUserInformationDTOFromJson(
     PublicUserInformationDTO(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      age: json['age'] as int?,
-      discoverFromAge: json['discoverFromAge'] as int?,
-      discoverToAge: json['discoverToAge'] as int?,
+      age: (json['age'] as num?)?.toInt(),
+      discoverFromAge: (json['discoverFromAge'] as num?)?.toInt(),
+      discoverToAge: (json['discoverToAge'] as num?)?.toInt(),
       hasPhoneCommunicationPreference:
           json['hasPhoneCommunicationPreference'] as bool? ?? false,
       hasChatCommunicationPreference:

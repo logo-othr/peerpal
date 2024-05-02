@@ -14,7 +14,7 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
       description: json['description'] as String?,
       creatorId: json['creatorId'] as String?,
       creatorName: json['creatorName'] as String?,
-      date: json['date'] as int?,
+      date: (json['date'] as num?)?.toInt(),
       location: json['location'] == null
           ? null
           : Location.fromJson(json['location'] as Map<String, dynamic>),

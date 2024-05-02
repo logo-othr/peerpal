@@ -23,7 +23,7 @@ class ChatListCubit extends Cubit<ChatListState> {
         return userChat.chat.startedBy == userId ||
             userChat.chat.chatRequestAccepted;
       }).toList();
-
+// hier in neuer chatv2 implementierung die user zu den chats holen
       emit(state.copyWith(
           chats: filteredUserChats, status: ChatListStatus.success));
     });
