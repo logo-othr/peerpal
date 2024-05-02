@@ -36,7 +36,7 @@ class _ChatAnswerKeyboardState extends State<ChatAnswerKeyboard> {
         ),
         Expanded(
           child: Scrollbar(
-            isAlwaysShown: true,
+            //isAlwaysShown: true,
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(

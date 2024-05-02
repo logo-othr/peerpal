@@ -90,7 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
           actionButtonWidget: CustomSupportVideoDialog(
               supportVideo: SupportVideos.links[VideoIdentifier.settings]!)),
       body: Scrollbar(
-        isAlwaysShown: true,
+        //isAlwaysShown: true,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

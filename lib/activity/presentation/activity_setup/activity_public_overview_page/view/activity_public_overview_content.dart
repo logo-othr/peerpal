@@ -98,7 +98,7 @@ class _ActivityPublicOverviewContentState
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                       child: Container(
                         child: Scrollbar(
-                          isAlwaysShown: true,
+                          //isAlwaysShown: true,
                           child: SingleChildScrollView(
                             child: Column(
                               children: <Widget>[

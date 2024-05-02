@@ -250,7 +250,7 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   Widget _buildUserListView(List<PeerPALUser> users) {
     return Expanded(
       child: Scrollbar(
-        isAlwaysShown: true,
+        //isAlwaysShown: true,
         child: SingleChildScrollView(
           child: ListView.builder(
             shrinkWrap: true,
