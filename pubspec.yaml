@@ -39,7 +39,7 @@ dependencies:
   flutter_local_notifications: ^11.0.0
   rxdart: ^0.27.3
   get_it: ^7.2.0
-  flutter_datetime_picker: ^1.5.1
+  flutter_datetime_picker_plus: ^2.1.0
   shared_preferences: ^2.0.12
   change_app_package_name: ^1.0.0
   flutter_keyboard_visibility: ^5.2.0
