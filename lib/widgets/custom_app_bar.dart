@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'custom_peerpal_text.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
