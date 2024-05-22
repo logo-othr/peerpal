@@ -40,31 +40,33 @@ class ChatroomContent extends StatelessWidget {
   }
 
 
-  Widget _chatroomLoading(ChatroomLoading state, BuildContext chatroomContext) {
+  Widget _chatroomLoading(ChatroomLoading state, BuildContext roomCtx) {
     return Column(
       children: [
         ChatHeader(
           chatPartner: state.chatPartner,
-          onBackButtonPressed
-              : () => Navigator.of(chatroomContext).pop(),
-          onBarPressed: () =>
-              Navigator.push(
-                chatroomContext,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      UserInformationPage(
-                        state.chatPartner.id!,
-                        hasMessageButton: false,
-                      ),
-                ),
-              ),
+          onBackButtonPressed: () => Navigator.of(roomCtx).pop(),
+          onBarPressed: () => _openUserpage(roomCtx, state.chatPartner.id!),
           // TODO: Use a controller or cubit for header and friend request button
-          getFriendList: chatroomContext.read<GetFriendList>(),
-          cancelFriendRequest: chatroomContext.read<CancelFriendRequest>(),
-          getSentFriendRequests: chatroomContext.read<GetSentFriendRequests>(),
-          sendFriendRequest: chatroomContext.read<SendFriendRequest>(),)
+          getFriendList: roomCtx.read<GetFriendList>(),
+          cancelFriendRequest: roomCtx.read<CancelFriendRequest>(),
+          getSentFriendRequests: roomCtx.read<GetSentFriendRequests>(),
+          sendFriendRequest: roomCtx.read<SendFriendRequest>(),)
       ],
     );
+  }
+
+  void _openUserpage(BuildContext chatroomContext, String userId) {
+    Navigator.push(
+      chatroomContext,
+      MaterialPageRoute(
+        builder: (context) =>
+            UserInformationPage(
+              userId,
+              hasMessageButton: false,
+            ),
+      ),
+    )
   }
 
   Widget _chatroomUninitialized() {
