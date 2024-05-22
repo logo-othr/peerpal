@@ -67,7 +67,7 @@ class ChatroomCubit extends Cubit<ChatroomState> {
   }
 
   _setChatUninitializedState() {
-    emit(ChatUninitialized(
+    emit(ChatroomUninitialized(
         appUser: state.appUser, chatPartner: state.chatPartner));
   }
 
