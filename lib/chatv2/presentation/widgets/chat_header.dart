@@ -4,7 +4,7 @@ import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_sent_friend_requests.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/send_friend_request.dart';
-import 'package:peerpal/chatv2/presentation/widgets/friend_request_button.dart';
+import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_button.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 class ChatHeader extends StatelessWidget {
