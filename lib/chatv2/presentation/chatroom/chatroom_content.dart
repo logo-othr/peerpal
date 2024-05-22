@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/get_sent_friend_requests.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/send_friend_request.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/chatroom_cubit.dart';
 import 'package:peerpal/chatv2/presentation/widgets/chat_header.dart';
 
@@ -39,7 +43,8 @@ class ChatroomContent extends StatelessWidget {
   Widget _chatroomLoading(ChatroomLoading state, BuildContext chatroomContext) {
     return Column(
       children: [
-        ChatHeader(chatPartner: state.chatPartner,
+        ChatHeader(
+          chatPartner: state.chatPartner,
           onBackButtonPressed
               : () => Navigator.of(chatroomContext).pop(),
           onBarPressed: () =>
@@ -52,7 +57,12 @@ class ChatroomContent extends StatelessWidget {
                         hasMessageButton: false,
                       ),
                 ),
-              ),)
+              ),
+          // TODO: Use a controller or cubit for header and friend request button
+          getFriendList: chatroomContext.read<GetFriendList>(),
+          cancelFriendRequest: chatroomContext.read<CancelFriendRequest>(),
+          getSentFriendRequests: chatroomContext.read<GetSentFriendRequests>(),
+          sendFriendRequest: chatroomContext.read<SendFriendRequest>(),)
       ],
     );
   }
