@@ -47,11 +47,6 @@ class ChatroomContent extends StatelessWidget {
           chatPartner: state.chatPartner,
           onBackButtonPressed: () => Navigator.of(roomCtx).pop(),
           onBarPressed: () => _openUserpage(roomCtx, state.chatPartner.id!),
-          // TODO: Use a controller or cubit for header and friend request button
-          getFriendList: roomCtx.read<GetFriendList>(),
-          cancelFriendRequest: roomCtx.read<CancelFriendRequest>(),
-          getSentFriendRequests: roomCtx.read<GetSentFriendRequests>(),
-          sendFriendRequest: roomCtx.read<SendFriendRequest>(),)
       ],
     );
   }
