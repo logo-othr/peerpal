@@ -43,6 +43,11 @@ import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/get_sent_friend_requests.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/send_friend_request.dart';
+import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/firebase_discover_repository.dart';
 import 'package:peerpal/discover_feed/domain/repository/discover_repository.dart';
@@ -112,6 +117,15 @@ Future<void> setupDependencies() async {
 
   // =============== Chat ===============
   // Bloc
+
+  sl.registerFactory(
+    () => FriendRequestCubit(
+        getFriendList: sl(),
+        cancelFriendRequest: sl(),
+        getSentFriendRequests: sl(),
+        sendFriendRequest: sl()),
+  );
+
   sl.registerFactory(
     () => ChatRequestsCubit(sl(), sl()),
   );
@@ -122,6 +136,14 @@ Future<void> setupDependencies() async {
         userRepository: sl(),
         authenticationRepository: sl()),
   );
+
+  sl.registerLazySingleton(() => GetFriendList(sl()));
+  sl.registerLazySingleton(() => CancelFriendRequest(sl(), sl()));
+  sl.registerLazySingleton(() => GetSentFriendRequests(sl()));
+  sl.registerLazySingleton(() => SendFriendRequest(
+        sl(),
+        sl(),
+      ));
 
   /*sl.registerFactory(
     () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
