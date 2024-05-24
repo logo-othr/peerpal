@@ -1,29 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
-import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
-import 'package:peerpal/chatv2/domain/core-usecases/get_sent_friend_requests.dart';
-import 'package:peerpal/chatv2/domain/core-usecases/send_friend_request.dart';
-import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_cubit.dart';
+import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/smart_friend_request_button.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/setup.dart';
 
 class ChatHeader extends StatelessWidget {
   final PeerPALUser chatPartner;
   final VoidCallback? onBackButtonPressed;
   final VoidCallback onBarPressed;
-  final GetFriendList getFriendList;
-  final CancelFriendRequest cancelFriendRequest;
-  final GetSentFriendRequests getSentFriendRequests;
-  final SendFriendRequest sendFriendRequest;
 
   const ChatHeader({
     required this.chatPartner,
     required this.onBackButtonPressed,
     required this.onBarPressed,
-    required this.getFriendList,
-    required this.cancelFriendRequest,
-    required this.getSentFriendRequests,
-    required this.sendFriendRequest,
     Key? key,
   }) : super(key: key);
 
@@ -31,29 +22,27 @@ class ChatHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ChatHeaderBar(
+        _ChatHeaderBar(
           chatPartner: chatPartner,
           onBackButtonPressed: onBackButtonPressed,
           onBarPressed: onBarPressed,
         ),
-        FriendRequestButton(
-          chatPartner: chatPartner,
-          getFriendList: getFriendList,
-          cancelFriendRequest: cancelFriendRequest,
-          getSentFriendRequests: getSentFriendRequests,
-          sendFriendRequest: sendFriendRequest,
+        BlocProvider(
+          create: (context) => sl<FriendRequestCubit>()
+            ..loadFriendRequestButton(chatPartner.id!),
+          child: SmartFriendRequestButton(),
         )
       ],
     );
   }
 }
 
-class ChatHeaderBar extends StatelessWidget {
+class _ChatHeaderBar extends StatelessWidget {
   final PeerPALUser chatPartner;
   final VoidCallback? onBackButtonPressed;
   final VoidCallback? onBarPressed;
 
-  const ChatHeaderBar({
+  const _ChatHeaderBar({
     required this.chatPartner,
     required this.onBackButtonPressed,
     required this.onBarPressed,
