@@ -6,6 +6,7 @@ import 'package:peerpal/chatv2/domain/enums/message_type.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/chatroom_cubit.dart';
 import 'package:peerpal/chatv2/presentation/widgets/chat_buttons.dart';
 import 'package:peerpal/chatv2/presentation/widgets/chat_header.dart';
+import 'package:peerpal/chatv2/presentation/widgets/message_list.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
 class ChatroomContent extends StatelessWidget {
@@ -97,7 +98,10 @@ class ChatroomContent extends StatelessWidget {
           onBarPressed: () =>
               _openUserpage(roomCtx, loadedState.chatPartner.id!),
         ),
-        //MessageList(state: state),
+        MessageList(
+          appUser: loadedState.appUser,
+          messages: loadedState.messages,
+        ),
         isChatRequest
             ? _chatRequestResponsePanel(roomCtx)
             : _chatMessagePanel(roomCtx),
