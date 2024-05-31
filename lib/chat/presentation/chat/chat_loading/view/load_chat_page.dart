@@ -10,10 +10,10 @@ import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_u
 import 'package:peerpal/setup.dart';
 
 class LoadChatPage extends StatelessWidget {
-  final String userId;
+  final String chatPartnerId;
   final UserChat? userChat;
 
-  const LoadChatPage({required this.userId, this.userChat, Key? key})
+  const LoadChatPage({required this.chatPartnerId, this.userChat, Key? key})
       : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class LoadChatPage extends StatelessWidget {
             chatRepository: sl<ChatRepository>(),
             getAuthenticatedUser: sl<GetAuthenticatedUser>(),
             getAllUserChats: sl<GetAllUserChats>(),
-            chatPartnerId: userId)
+            chatPartnerId: chatPartnerId)
           ..loadChat(),
         child: LoadChatContent(),
       ),
