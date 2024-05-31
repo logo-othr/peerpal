@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:peerpal/chat/domain/models/chat.dart';
+import 'package:peerpal/chatv2/domain/models/chat.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 
 class UserChat extends Equatable {
