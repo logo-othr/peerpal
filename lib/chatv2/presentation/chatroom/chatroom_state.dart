@@ -33,11 +33,26 @@ class ChatroomUninitialized extends ChatroomState {
   List<Object> get props => [chatPartner, appUser];
 }
 
-class ChatLoaded extends ChatroomState {
+class ChatroomRequested extends ChatroomState {
   final Chat chat;
   final List<ChatMessage> messages;
 
-  ChatLoaded(
+  ChatroomRequested(
+      {required this.chat,
+      required this.messages,
+      required chatPartner,
+      required appUser})
+      : super(chatPartner: chatPartner, appUser: appUser);
+
+  @override
+  List<Object> get props => [chat, messages, chatPartner, appUser];
+}
+
+class ChatroomLoaded extends ChatroomState {
+  final Chat chat;
+  final List<ChatMessage> messages;
+
+  ChatroomLoaded(
       {required this.chat,
       required this.messages,
       required chatPartner,
