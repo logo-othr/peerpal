@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chat/domain/models/user_chat.dart';
-import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/presentation/chat/chat_bottom_bar/cubit/chat_input_panel_cubit.dart';
 import 'package:peerpal/chat/presentation/chat/widgets/chat_message_input_field.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
-import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/chat_buttons.dart';
 import 'package:peerpal/widgets/custom_loading_indicator.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
@@ -63,21 +61,6 @@ class _ChatInputPanelContentState extends State<ChatInputPanelContent> {
     );
   }
 
-  Widget _chatBottomBar() {
-    return StreamBuilder<int>(
-      stream:
-          sl<ChatRepository>().messageCountForChat(widget.userChat.chat.chatId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return CustomLoadingIndicator(text: "Chat wird geladen..");
-        } else if (snapshot.data == 0) {
-          return _chatDoesNotExist();
-        } else {
-          return _bottomBarContent();
-        }
-      },
-    );
-  }
 
   bool get isChatNotStartedByAppUser =>
       widget.userChat.chat.startedBy != widget.appUser.id;
