@@ -62,7 +62,7 @@ class _ChatRequestListContentState extends State<ChatRequestListContent> {
                   MaterialPageRoute(
                     builder: (context) => LoadChatPage(
                       userChat: state.requests[index],
-                      userId: state.requests[index].user.id!,
+                      chatPartnerId: state.requests[index].user.id!,
                     ),
                   ),
                 );
