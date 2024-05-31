@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_button_layout.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/friend_request_button_layout.dart';
 
 class CancelFriendRequestButton extends StatelessWidget {
   final String buttonText;

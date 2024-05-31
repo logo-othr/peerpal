@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/cancel_friend_request_button.dart';
-import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_cubit.dart';
-import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/send_friend_request_button.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/cancel_friend_request_button.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/friend_request_cubit.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/send_friend_request_button.dart';
 
 class SmartFriendRequestButton extends StatelessWidget {
   const SmartFriendRequestButton({
