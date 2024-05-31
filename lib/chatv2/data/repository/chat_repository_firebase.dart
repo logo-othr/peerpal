@@ -30,6 +30,21 @@ class ChatRepositoryFirebase implements ChatRepository {
   final Map<String, BehaviorSubject<List<ChatMessage>>> _messageStreamCache =
       {};
 
+  //ToDo: Remove. Old relict from chatv1
+
+  Stream<List<Chat>> getChats() async* {
+    String currentUserId = await _authService.getCurrentUserId();
+    Stream<QuerySnapshot> chatStream = _firestoreService
+        .collection(UserDatabaseContract.chat)
+        .where(UserDatabaseContract.chatUids, arrayContains: currentUserId)
+        .orderBy(UserDatabaseContract.chatTimestamp, descending: true)
+        .snapshots();
+    logger.i("Chat-Stream created.");
+
+    yield* _firestoreService.convertSnapshotStreamToModelListStream(
+        chatStream, _fromJsonToChat);
+  }
+
   ChatRepositoryFirebase({
     required FirestoreService firestoreService,
     required AuthService authService,
