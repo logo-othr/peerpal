@@ -36,17 +36,23 @@ import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/domain/auth_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
-import 'package:peerpal/chat/data/repository/chat_repository_firebase.dart';
-import 'package:peerpal/chat/domain/repository/chat_repository.dart';
 import 'package:peerpal/chat/domain/usecases/get_all_userchats.dart';
 import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
 import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
+import 'package:peerpal/chatv2/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_sent_friend_requests.dart';
+import 'package:peerpal/chatv2/domain/core-usecases/send_chat_request_response.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/send_friend_request.dart';
+import 'package:peerpal/chatv2/domain/repositorys/chat_repository.dart';
+import 'package:peerpal/chatv2/domain/usecases/get_chats.dart';
+import 'package:peerpal/chatv2/domain/usecases/get_messages.dart';
+import 'package:peerpal/chatv2/domain/usecases/get_user.dart';
+import 'package:peerpal/chatv2/domain/usecases/send_message.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/chatroom_cubit.dart';
 import 'package:peerpal/chatv2/presentation/widgets/friend_request_button/friend_request_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/firebase_discover_repository.dart';
@@ -126,24 +132,45 @@ Future<void> setupDependencies() async {
         sendFriendRequest: sl()),
   );
 
+  sl.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
+  );
+
+  sl.registerLazySingleton<GetFriendList>(() => GetFriendList(sl()));
+  sl.registerLazySingleton<CancelFriendRequest>(
+      () => CancelFriendRequest(sl(), sl()));
+  sl.registerLazySingleton<GetSentFriendRequests>(
+      () => GetSentFriendRequests(sl()));
+  sl.registerLazySingleton<SendFriendRequest>(() => SendFriendRequest(
+        sl(),
+        sl(),
+      ));
+  sl.registerLazySingleton<GetChats>(() => GetChats(sl()));
+  sl.registerLazySingleton<GetMessages>(() => GetMessages(sl()));
+  sl.registerLazySingleton<SendChatRequestResponse>(
+      () => SendChatRequestResponse(sl()));
+  sl.registerLazySingleton<SendMessage>(() => SendMessage(sl()));
+  sl.registerLazySingleton<GetUser>(() => GetUser(sl()));
+  sl.registerFactory(() => ChatroomCubit(
+        getChats: sl(),
+        getMessages: sl(),
+        getUser: sl(),
+        getAppUser: sl(),
+        sendChatRequestResponse: sl(),
+        sendMessage: sl(),
+      ));
+
   sl.registerFactory(
     () => ChatRequestsCubit(sl(), sl()),
   );
 
+// Todo: change to singleton
   sl.registerFactory(
     () => GetAllUserChats(
         chatRepository: sl(),
         userRepository: sl(),
         authenticationRepository: sl()),
   );
-
-  sl.registerLazySingleton(() => GetFriendList(sl()));
-  sl.registerLazySingleton(() => CancelFriendRequest(sl(), sl()));
-  sl.registerLazySingleton(() => GetSentFriendRequests(sl()));
-  sl.registerLazySingleton(() => SendFriendRequest(
-        sl(),
-        sl(),
-      ));
 
   /*sl.registerFactory(
     () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
@@ -169,9 +196,6 @@ Future<void> setupDependencies() async {
   sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
 
   // Repo
-  sl.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryFirebase(firestoreService: sl(), authService: sl()),
-  );
 
   // =============== User ===============
 
