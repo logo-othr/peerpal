@@ -52,7 +52,7 @@ import 'package:peerpal/chatv2/domain/usecases/get_chats.dart';
 import 'package:peerpal/chatv2/domain/usecases/get_messages.dart';
 import 'package:peerpal/chatv2/domain/usecases/get_user.dart';
 import 'package:peerpal/chatv2/domain/usecases/send_message.dart';
-import 'package:peerpal/chatv2/presentation/chatroom/chatroom_cubit.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/cubit/chatroom_cubit.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/friend_request_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/data/repository/firebase_discover_repository.dart';
