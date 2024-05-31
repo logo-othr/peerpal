@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
-import 'package:peerpal/chat/presentation/chat/chat_loading/view/load_chat_page.dart';
 import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
 import 'package:peerpal/chat/presentation/chat_list/widgets/chat_list_row.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_requests_banner.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/chatroom_page.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
 
@@ -89,9 +89,8 @@ class ChatList extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoadChatPage(
-                          userChat: state.chats[index],
-                          userId: state.chats[index].user.id!,
+                        builder: (context) => ChatroomPage(
+                          chatPartnerId: state.chats[index].user.id!,
                         ),
                       ),
                     );
