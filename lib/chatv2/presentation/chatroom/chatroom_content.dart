@@ -82,7 +82,7 @@ class ChatroomContent extends StatelessWidget {
               "Schreibe eine Nachricht, um ${state.chatPartner.name} eine Chat-Anfrage zu schicken"),
         )),
         Spacer(),
-        _chatRequestResponsePanel(roomCtx),
+        _chatMessagePanel(roomCtx),
       ],
     );
   }
