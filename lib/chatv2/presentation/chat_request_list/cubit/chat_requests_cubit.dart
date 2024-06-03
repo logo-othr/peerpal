@@ -22,7 +22,7 @@ class ChatRequestsCubit extends Cubit<ChatRequestsState> {
 
     _requestsSubscription = userChatsStream.listen((chats) {
       final filteredUserChats = chats.where((chat) {
-        return chat.startedBy != userId && chat.chatRequestAccepted;
+        return chat.startedBy != userId && !chat.chatRequestAccepted;
       }).toList();
 
       emit(state.copyWith(

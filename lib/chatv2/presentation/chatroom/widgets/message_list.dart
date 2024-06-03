@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
-import 'package:peerpal/chat/domain/message_type.dart';
+import 'package:peerpal/chatv2/domain/enums/message_type.dart';
 import 'package:peerpal/chatv2/domain/models/chat_message.dart';
 import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:url_launcher/url_launcher.dart';

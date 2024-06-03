@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/chat/presentation/chat/widgets/chat_message_input_field.dart';
-import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/chatv2/domain/enums/message_type.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/cubit/chatroom_cubit.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/widgets/chat_buttons.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/widgets/chat_header.dart';
+import 'package:peerpal/chatv2/presentation/chatroom/widgets/chat_message_input_field.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/widgets/message_list.dart';
+import 'package:peerpal/chatv2/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
 
 class ChatroomContent extends StatelessWidget {

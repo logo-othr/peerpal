@@ -36,9 +36,6 @@ import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/domain/auth_service.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/authentication/persistence/firebase_auth_service.dart';
-import 'package:peerpal/chat/domain/usecases/get_all_userchats.dart';
-import 'package:peerpal/chat/domain/usecases/get_chat_requests_usecase.dart';
-import 'package:peerpal/chat/domain/usecases/send_chat_message_usecase.dart';
 import 'package:peerpal/chatv2/data/repository/chat_repository_firebase.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
@@ -164,13 +161,6 @@ Future<void> setupDependencies() async {
     () => ChatRequestsCubit(sl(), sl()),
   );
 
-// Todo: change to singleton
-  sl.registerFactory(
-    () => GetAllUserChats(
-        chatRepository: sl(),
-        userRepository: sl(),
-        authenticationRepository: sl()),
-  );
 
   /*sl.registerFactory(
     () => ChatLoadedCubit(sendMessage: sl<SendChatMessageUseCase>()),
@@ -192,8 +182,6 @@ Future<void> setupDependencies() async {
   );
 
   // UseCase
-  sl.registerLazySingleton(() => GetChatRequestsUseCase(sl(), sl(), sl()));
-  sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
 
   // Repo
 
