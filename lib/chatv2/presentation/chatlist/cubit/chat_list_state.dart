@@ -9,11 +9,11 @@ class ChatListState extends Equatable {
   });
 
   final ChatListStatus status;
-  final List<UserChat> chats;
+  final List<Chat> chats;
 
   ChatListState copyWith({
     ChatListStatus? status,
-    List<UserChat>? chats,
+    List<Chat>? chats,
   }) {
     return ChatListState(
         status: status ?? this.status, chats: chats ?? this.chats);

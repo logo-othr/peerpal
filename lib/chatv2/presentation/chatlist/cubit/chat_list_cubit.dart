@@ -3,29 +3,27 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/chat/domain/models/user_chat.dart';
-import 'package:peerpal/chat/domain/usecases/get_all_userchats.dart';
+import 'package:peerpal/chatv2/domain/models/chat.dart';
+import 'package:peerpal/chatv2/domain/usecases/get_chats.dart';
 
 part 'chat_list_state.dart';
 
 class ChatListCubit extends Cubit<ChatListState> {
-  final GetAllUserChats _getAllUserChats;
+  final GetChats _getChats;
   final AuthenticationRepository _authenticationRepository;
-  StreamSubscription<List<UserChat>>? _chatSubscription;
+  StreamSubscription<List<Chat>>? _chatSubscription;
 
-  ChatListCubit(this._getAllUserChats, this._authenticationRepository)
+  ChatListCubit(this._getChats, this._authenticationRepository)
       : super(ChatListState());
 
   void loadChatList() {
     String userId = _authenticationRepository.currentUser.id;
-    _chatSubscription = _getAllUserChats().listen((userChats) {
-      final filteredUserChats = userChats.where((userChat) {
-        return userChat.chat.startedBy == userId ||
-            userChat.chat.chatRequestAccepted;
+    _chatSubscription = _getChats(userId).listen((chats) {
+      final filteredChats = chats.where((chat) {
+        return chat.startedBy == userId || chat.chatRequestAccepted;
       }).toList();
-// hier in neuer chatv2 implementierung die user zu den chats holen
-      emit(state.copyWith(
-          chats: filteredUserChats, status: ChatListStatus.success));
+
+      emit(state.copyWith(chats: filteredChats, status: ChatListStatus.success));
     });
   }
 

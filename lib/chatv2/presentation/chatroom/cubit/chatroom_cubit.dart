@@ -24,7 +24,7 @@ class ChatroomCubit extends Cubit<ChatroomState> {
   final SendMessage _sendMessage;
   final SendChatRequestResponse _sendChatRequestResponse;
 
-  late final StreamSubscription? _messageStream;
+  StreamSubscription? _messageStream;
   late final StreamSubscription? _chatsStream;
 
   ChatroomCubit({required GetChats getChats,
@@ -69,6 +69,14 @@ class ChatroomCubit extends Cubit<ChatroomState> {
         chat: chat,
         appUser: state.appUser,
       ));
+      // ToDo: Currently the message stream is reinitialized when a new message
+      // is send or received, because the lastMessage property in chat is updated
+      // and then the message list is refreshed which leads to a chats update
+      // and then the message stream is reinitialized. That is not a problem
+      // because the message stream is cached by the repository, but it is no
+      // elegant solution. Currently there is no other solution because
+      // we need to check if a chat is deleted. This can happen is a message
+      // request is rejected.
       _messageStream = _getMessages(chat.chatId).listen(_onMessagesUpdate);
     }
   }

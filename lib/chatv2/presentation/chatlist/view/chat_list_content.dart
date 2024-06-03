@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
-import 'package:peerpal/chat/presentation/chat_list/cubit/chat_list_cubit.dart';
-import 'package:peerpal/chat/presentation/chat_list/widgets/chat_list_row.dart';
 import 'package:peerpal/chat/presentation/chat_request_list/chat_requests_banner.dart';
-import 'package:peerpal/chatv2/presentation/chatroom/chatroom_page.dart';
+import 'package:peerpal/chatv2/domain/usecases/get_user.dart';
+import 'package:peerpal/chatv2/presentation/chatlist/cubit/chat_list_cubit.dart';
+import 'package:peerpal/chatv2/presentation/chatlist/widgets/chat_row.dart';
+import 'package:peerpal/chatv2/presentation/chatlist/widgets/chat_row_cubit.dart';
+import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
+import 'package:peerpal/setup.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/support_video_dialog.dart';
 
@@ -84,19 +87,12 @@ class ChatList extends StatelessWidget {
         } else {
           return Scrollbar(
             child: ListView.builder(
-              itemBuilder: (context, index) => ChatListRow(
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatroomPage(
-                          chatPartnerId: state.chats[index].user.id!,
-                        ),
-                      ),
-                    );
-                  },
-                  userChat: state.chats[index],
-                  newMessageIndicator: false),
+              itemBuilder: (context, index) => BlocProvider(
+                create: (context) =>
+                    ChatRowCubit(sl<GetUser>(), sl<GetAuthenticatedUser>())
+                      ..loadChatRow(state.chats[index]),
+                child: ChatListRow(),
+              ),
               itemCount: state.chats.length,
               controller: listScrollController,
             ),
