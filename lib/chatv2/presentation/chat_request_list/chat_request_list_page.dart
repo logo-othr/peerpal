@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/chat/presentation/chat_request_list/chat_request_list_content.dart';
-import 'package:peerpal/chat/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
+import 'package:peerpal/chatv2/presentation/chat_request_list/chat_request_list_content.dart';
+import 'package:peerpal/chatv2/presentation/chat_request_list/cubit/chat_requests_cubit.dart';
 import 'package:peerpal/setup.dart';
 
 class ChatRequestListPage extends StatelessWidget {
