@@ -118,9 +118,9 @@ class ChatroomCubit extends Cubit<ChatroomState> {
 
   Future<void> sendMessage(String text, MessageType messageType) async {
     if (state is ChatroomUninitialized) {
-      await _sendMessage(state.appUser.id!, null, text, MessageType.text);
+      await _sendMessage(state.chatPartner.id!, null, text, MessageType.text);
     } else if (state is ChatroomLoaded) {
-      await _sendMessage(state.appUser.id!,
+      await _sendMessage(state.chatPartner.id!,
           (state as ChatroomLoaded).chat.chatId, text, MessageType.text);
     }
   }
