@@ -11,7 +11,7 @@ import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/app/presentation/app/bloc/app_bloc.dart';
 import 'package:peerpal/app_logger.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/chatv2/presentation/chatlist/cubit/chat_list_cubit.dart';
+import 'package:peerpal/chat/presentation/chatlist/cubit/chat_list_cubit.dart';
 import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';

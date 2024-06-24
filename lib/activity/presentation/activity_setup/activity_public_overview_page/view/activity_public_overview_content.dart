@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:peerpal/activity/data/resources/activity_icon_data.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_public_overview_page/cubit/activity_public_overview_cubit.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
-import 'package:peerpal/chatv2/presentation/user_detail_page/user_detail_page.dart';
+import 'package:peerpal/chat/presentation/user_detail_page/user_detail_page.dart';
 import 'package:peerpal/widgets/custom_activity_participations_dialog.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';
