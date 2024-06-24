@@ -6,7 +6,7 @@ import 'package:peerpal/chatv2/domain/core-usecases/cancel_friend_request.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_friend_list.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/get_sent_friend_requests.dart';
 import 'package:peerpal/chatv2/domain/core-usecases/send_friend_request.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 
 part 'friend_request_button_state.dart';
 

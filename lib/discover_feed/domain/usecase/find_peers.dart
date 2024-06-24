@@ -1,7 +1,7 @@
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/domain/repository/discover_repository.dart';
+import 'package:peerpal/discover_feed_v2/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:rxdart/subjects.dart';
 
 class FindPeers {

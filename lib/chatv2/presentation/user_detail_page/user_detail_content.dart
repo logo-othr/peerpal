@@ -5,7 +5,7 @@ import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/chatroom_page.dart';
 import 'package:peerpal/chatv2/presentation/user_detail_page/cubit/user_detail_cubit.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
 import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 import 'package:peerpal/setup.dart';

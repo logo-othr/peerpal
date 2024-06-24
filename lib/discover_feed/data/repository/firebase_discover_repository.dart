@@ -6,8 +6,8 @@ import 'package:peerpal/app/data/firestore/firestore_service.dart';
 import 'package:peerpal/app/data/user_database_contract.dart';
 import 'package:peerpal/discover_feed/data/dto/peerpal_user_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/public_user_information_dto.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/domain/repository/discover_repository.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FirebaseDiscoverRepository implements DiscoverRepository {

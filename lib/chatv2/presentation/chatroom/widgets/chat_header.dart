@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/friend_request_cubit.dart';
 import 'package:peerpal/chatv2/presentation/chatroom/widgets/friend_request_button/smart_friend_request_button.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/setup.dart';
 
 class ChatHeader extends StatelessWidget {

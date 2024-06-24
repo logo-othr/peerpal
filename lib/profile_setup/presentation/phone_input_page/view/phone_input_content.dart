@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/domain/phone_input_page/models/phonenum_model.dart';
 import 'package:peerpal/profile_setup/presentation/phone_input_page/cubit/phone_input_cubit.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peerpal/app/data/firestore/firestore_service.dart';
 import 'package:peerpal/discover_feed/data/dto/peerpal_user_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/public_user_information_dto.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/friends/domain/repository/friend_repository.dart';
 
 class FirebaseFriendRepository implements FriendRepository {

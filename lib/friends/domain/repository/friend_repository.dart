@@ -1,4 +1,4 @@
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 
 abstract class FriendRepository {
   Future<void> sendFriendRequestToUser(PeerPALUser user);

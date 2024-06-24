@@ -1,7 +1,7 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/widgets/peerpal_complete_page_button.dart';
 

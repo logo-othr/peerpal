@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:peerpal/app/domain/analytics/analytics_repository.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_peers.dart';
 import 'package:peerpal/discover_feed/domain/usecase/find_user_by_name.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 import 'package:rxdart/subjects.dart';
@@ -36,6 +36,7 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
 
     // Emit result
     emit(DiscoverFeedLoaded(
+      searchActive: false,
       searchResults: state.searchResults,
       userStream: _userStream!.stream,
       isSearchEmpty: state.isSearchEmpty,
@@ -57,6 +58,7 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
 
     // Emit result
     return emit(DiscoverFeedLoaded(
+      searchActive: true,
       searchResults: usersFound,
       userStream: state.userStream,
       isSearchEmpty: state.isSearchEmpty,
@@ -66,6 +68,7 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
 
   void setSearchFocused(bool isSearchFocused) {
     emit(DiscoverFeedLoaded(
+        searchActive: false,
         userStream: state.userStream,
         searchResults: state.searchResults,
         isSearchEmpty: state.isSearchEmpty,
@@ -74,6 +77,7 @@ class DiscoverFeedCubit extends Cubit<DiscoverFeedState> {
 
   void setSearchEmpty(bool isSearchEmpty) {
     emit(DiscoverFeedLoaded(
+        searchActive: false,
         userStream: state.userStream,
         searchResults: state.searchResults,
         isSearchEmpty: isSearchEmpty,

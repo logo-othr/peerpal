@@ -6,7 +6,7 @@ import 'package:peerpal/app/data/resources/strings.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chatv2/presentation/user_detail_page/user_detail_page.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/friends/custom_friend_list_item_user.dart';
 import 'package:peerpal/friends/friend_request_page/view/friend_requests_page.dart';
 import 'package:peerpal/friends/friends_overview_page/cubit/friends_overview_cubit.dart';

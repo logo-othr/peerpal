@@ -5,7 +5,7 @@ import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/app/domain/location/location_repository.dart';
 import 'package:peerpal/authentication/persistence/authentication_repository.dart';
 import 'package:peerpal/chatv2/domain/repositorys/chat_repository.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed_v2/data/repository/app_user_repository.dart';
 import 'package:peerpal/setup.dart';
 
 import 'app/app.dart';

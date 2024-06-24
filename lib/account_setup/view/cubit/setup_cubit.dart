@@ -5,7 +5,7 @@ import 'package:peerpal/account_setup/domain/weekly_reminder_usecase.dart';
 import 'package:peerpal/activity/domain/usecase/has_ios_notification_permission_usecase.dart';
 import 'package:peerpal/app/data/app_configuration_service.dart';
 import 'package:peerpal/app/domain/notification/usecase/start_remote_notifications.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/setup.dart';
 

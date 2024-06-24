@@ -2,7 +2,7 @@ import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/profile_setup/domain/name_input_page/models/username_model.dart';
 import 'package:peerpal/profile_setup/presentation/name_input_page/cubit/name_input_cubit.dart';
 import 'package:peerpal/widgets/custom_peerpal_button.dart';

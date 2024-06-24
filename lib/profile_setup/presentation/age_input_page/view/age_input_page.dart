@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed_v2/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/cubit/age_input_cubit.dart';
 import 'package:peerpal/profile_setup/presentation/age_input_page/view/age_input_content.dart';

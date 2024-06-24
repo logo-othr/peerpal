@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/chatv2/domain/enums/message_type.dart';
 import 'package:peerpal/chatv2/domain/models/chat_message.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MessageList extends StatelessWidget {

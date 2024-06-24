@@ -11,7 +11,7 @@ import 'package:peerpal/chatv2/domain/usecases/get_chats.dart';
 import 'package:peerpal/chatv2/domain/usecases/get_messages.dart';
 import 'package:peerpal/chatv2/domain/usecases/get_user.dart';
 import 'package:peerpal/chatv2/domain/usecases/send_message.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 
 part 'chatroom_state.dart';

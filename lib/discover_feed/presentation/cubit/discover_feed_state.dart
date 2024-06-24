@@ -42,12 +42,14 @@ class DiscoverFeedLoaded extends DiscoverFeedState {
   final List<PeerPALUser> searchResults;
   final bool isSearchEmpty;
   final bool isSearchFocused;
+  final bool searchActive;
 
   DiscoverFeedLoaded(
       {required this.userStream,
       required this.searchResults,
       required this.isSearchEmpty,
-      required this.isSearchFocused})
+      required this.isSearchFocused,
+      required this.searchActive})
       : super(
             userStream: Stream.empty(),
             searchResults: [],
@@ -56,7 +58,7 @@ class DiscoverFeedLoaded extends DiscoverFeedState {
 
   @override
   List<Object?> get props =>
-      [userStream, searchResults, isSearchEmpty, isSearchFocused];
+      [userStream, searchResults, isSearchEmpty, isSearchFocused, searchActive];
 
   @override
   bool? get stringify => true;

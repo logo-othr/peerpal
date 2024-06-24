@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_age/cubit/discover_age_cubit.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_from_to_age_picker.dart';

@@ -5,8 +5,8 @@ import 'package:peerpal/app/data/resources/colors.dart';
 import 'package:peerpal/app/data/support_videos/resources/support_video_links.dart';
 import 'package:peerpal/app/domain/support_videos/support_video_enum.dart';
 import 'package:peerpal/chatv2/presentation/user_detail_page/user_detail_page.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
 import 'package:peerpal/discover_feed/presentation/cubit/discover_feed_cubit.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_interests_overview/view/discover_interests_overview_page.dart';
 import 'package:peerpal/widgets/custom_app_bar.dart';
 import 'package:peerpal/widgets/custom_cupertino_search_bar.dart';
@@ -135,6 +135,11 @@ class _DiscoverTabViewState extends State<DiscoverTabView> {
   }
 
   Widget _buildSearchResultList(List<PeerPALUser> searchResults) {
+    if (discoverFeedCubit.state is DiscoverFeedLoaded) {
+      DiscoverFeedLoaded loaded = discoverFeedCubit.state as DiscoverFeedLoaded;
+      if (loaded.searchActive == true && searchResults.isEmpty)
+        return Container();
+    }
     return Container(
       child: ListView.builder(
         shrinkWrap: true,

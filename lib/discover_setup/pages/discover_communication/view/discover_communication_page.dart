@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed_v2/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/cubit/discover_communication_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/repository/communication_repository.dart';

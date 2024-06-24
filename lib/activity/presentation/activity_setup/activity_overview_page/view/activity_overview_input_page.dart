@@ -4,7 +4,7 @@ import 'package:peerpal/activity/domain/models/activity.dart';
 import 'package:peerpal/activity/domain/repository/activity_reminder_repository.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
 import 'package:peerpal/activity/presentation/activity_setup/activity_overview_page/cubit/activity_overview_cubit.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed_v2/data/repository/app_user_repository.dart';
 
 import 'activity_overview_input_content.dart';
 

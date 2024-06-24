@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:peerpal/activity/domain/repository/activity_repository.dart';
-import 'package:peerpal/discover_feed/data/repository/app_user_repository.dart';
+import 'package:peerpal/discover_feed_v2/data/repository/app_user_repository.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/cubit/discover_activities_cubit.dart';
 import 'package:peerpal/discover_setup/pages/discover_activities/view/discover_activities_content.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/get_user_usecase.dart';

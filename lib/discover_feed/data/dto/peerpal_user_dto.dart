@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:peerpal/app/data/location/dto/location.dart';
 import 'package:peerpal/discover_feed/data/dto/private_user_information_dto.dart';
 import 'package:peerpal/discover_feed/data/dto/public_user_information_dto.dart';
-import 'package:peerpal/discover_feed/domain/peerpal_user.dart';
+import 'package:peerpal/discover_feed_v2/domain/peerpal_user.dart';
 import 'package:peerpal/discover_setup/pages/discover_communication/domain/enum/communication_type.dart';
 
 part 'peerpal_user_dto.g.dart';
