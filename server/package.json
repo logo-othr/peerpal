@@ -1,5 +1,26 @@
 {
+  "name": "firebase-admin",
+  "version": "11.2.0",
+  "description": "Firebase Admin Node.js SDK",
+  "main": "app.js",
   "dependencies": {
-    "firebase-admin": "^10.0.0"
-  }
+    "firebase-admin": "^11.2.0",
+    "moment": "^2.29.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "Admin-SDK": "npm install --save firebase-admin",
+    "moment": "npm i moment"
+  },
+  "repository": {
+    "type": "git",
+    "url-firebase": "github.com/firebase/firebase-admin-node",
+    "url-moment": "github.com/moment/moment"
+  },
+  "keywords": [
+    "firebase-admin-sdk",
+    "moment"
+  ],
+  "author": "firebase",
+  "license": "Apache License version 2.0, MIT "
 }
