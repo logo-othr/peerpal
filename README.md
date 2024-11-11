@@ -95,7 +95,39 @@ Diese Personen waren an der Erstellung des Projektes beteiligt und haben ihr Ein
 - Prof.in Dr. Norina Lauer
 - Prof.in Dr. Sabine Corsten
 
-< Wird noch ergänzt >
+### Wissenschaftliche Mitarbeitende:
+
+Maria Knieriemen
+
+Almut Plath
+
+Maren Nickel
+
+Christina Kurfeß
+
+### Technische Mitarbeitende:
+
+Daniel Kreiter
+
+### Studentische Hilfskräfte und Bacheloranden:
+
+Franziska Gärtner
+
+Sarah Gomez
+
+Anna Holzammer
+
+Larisa Malanchev
+
+Isabell Starke
+
+Viktoria Thedens
+
+Lena Werner
+
+Andreas Rothballer
+
+
 
 Es gab weitere Mitwirkende, die aber namentlich nicht genannt werden möchten.
 
@@ -274,7 +306,38 @@ The following individuals were involved in the creation of the project and have 
 Prof. Dr. Norina Lauer  
 Prof. Dr. Sabine Corsten  
 
-< To be added >
+### Scientific employees:
+
+Maria Knieriemen
+
+Almut Plath
+
+Maren Nickel
+
+Christina Kurfeß
+
+### Technical employees:
+
+Daniel Kreiter
+
+### Student assistants and bachelor students:
+
+Franziska Gärtner
+
+Sarah Gomez
+
+Anna Holzammer
+
+Larisa Malanchev
+
+Isabell Starke
+
+Viktoria Thedens
+
+Lena Werner
+
+Andreas Rothballer
+
 
 There were additional contributors who prefer not to be named. Thank you very much for your support of the project!
 
@@ -357,6 +420,8 @@ E-Mail: sabine.corsten@kh-mz.de
 Katholische Hochschule Mainz (KH)  
 Saarstr. 3  
 55122 Mainz
+
+
 
 
 # Table with all bugs and additional improvements, mentioned by the participants
