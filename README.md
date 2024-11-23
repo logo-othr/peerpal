@@ -97,13 +97,14 @@ Diese Personen waren an der Erstellung des Projektes beteiligt und haben ihr Ein
 
 ### Wissenschaftliche Mitarbeitende:
 
+Christina Kurfeß
+
 Maria Knieriemen
 
 Almut Plath
 
 Maren Nickel
 
-Christina Kurfeß
 
 ### Technische Mitarbeitende:
 
@@ -308,13 +309,14 @@ Prof. Dr. Sabine Corsten
 
 ### Scientific employees:
 
+Christina Kurfeß
+
 Maria Knieriemen
 
 Almut Plath
 
 Maren Nickel
 
-Christina Kurfeß
 
 ### Technical employees:
 
